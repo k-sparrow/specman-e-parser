@@ -36,8 +36,65 @@
 
 }
 
-%token <std::string> ID
+/* ------------------ Keywords ------------------ */
+%token WHILE
+%token FOR
+%token IN 
+%token DO 
+%token WITH
+%token WHEN
+%token STRUCT	  
+%token UNIT	    
+%token ENCLOSING
+%token USING	   
+%token EACH	    
+%token PREV	    
+%token INDEX	   
+%token WITHIN	  
+%token GEN	     
+%token BEFORE	  
+%token IN_TABLE 
+%token IS	      
+%token A	       
+%token NOT	     
+%token RANGE	   
+%token EMPTY	   
+%token NOW	     
+%token OR	      
+%token AND	     
+%token NXOR	    
+%token XOR	     
+%token NOR	     
+%token NAND	    
+%token ALL	     
+%token FIRST	   
+%token OF	      
+%token ME	      
+%token KEEPING  
+%token KEEP     
+%token LIKE
+%token EXTEND
+%token BIND
+%token SIMPLE
+%token PORT
+%token METHOD
+%token LIST
+%token BITS
+%token BYTES
+%token TYPE
+
+
+%token NULL_
+%token UNDEF
+%token TRUE
+%token FALSE
+/* ------------------ Keywords ------------------ */
+
+/* ------------------ Literals ------------------ */
 %token <std::string> STRING_LITERAL
+/* ------------------ Literals ------------------ */
+
+%token <std::string> ID
 %token <int> NUMBER
 %token END 0 
 
