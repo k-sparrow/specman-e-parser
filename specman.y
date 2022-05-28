@@ -36,16 +36,21 @@
 
 }
 
-%token <std::string>  ID
+%token <std::string> ID
+%token <std::string> STRING_LITERAL
 %token <int> NUMBER
 %token END 0 
+
 %nterm <int> program
 
 %start program
 
 %%
 
-program : NUMBER { cout <<  "Hello" << endl; };
+program : NUMBER { 
+        $$ = $1;
+        cout <<  "ID: " << $$ << " and Parsing ended" << endl; 
+    };
 
 %%
 

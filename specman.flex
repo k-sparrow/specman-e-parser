@@ -6,55 +6,44 @@
 
 %{
     #include <iostream>
+    #include <string>
+
     #include "parser.hpp"
     #include "driver.hpp"
     using namespace std;
     int mylineno = 0;
     
     #define yyterminate() yy::parser::make_END(yy::location())
+
+    using yy::location;
 %}
 
 
 string  \"[^\n"]+\"
 
-ws      [ \t]+
+ws      [ \t\f\v]+
 
 alpha   [A-Za-z]
 dig     [0-9]
 name    ({alpha}|{dig}|\$)({alpha}|{dig}|[_.\-/$])*
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
-number  {num1}|{num2}
+/* number  {num1}|{num2} */
+number  [0-9]+
 
 %%
 
 {ws}    /* skip blanks and tabs */
 
-"/*"    {
-        int c;
-
-        while((c = yyinput()) != 0)
-            {
-            if(c == '\n')
-                ++mylineno;
-
-            else if(c == '*')
-                {
-                if((c = yyinput()) == '/')
-                    break;
-                else
-                    unput(c);
-                }
-            }
-        }
-
-{number}  cout << "number " << YYText() << '\n';
-
 \n        mylineno++;
 
-{name}    cout << "name " << YYText() << '\n';
+{number}  { return yy::parser::make_NUMBER(std::stoi(YYText()), location()); }
 
-{string}  cout << "string " << YYText() << '\n';
+{name}    { return yy::parser::make_ID(YYText(), location()); }
+
+{string}  { return yy::parser::make_STRING_LITERAL(YYText(), location()); }
+
+<<EOF>>   { return yyterminate(); }
 
 %%
 
