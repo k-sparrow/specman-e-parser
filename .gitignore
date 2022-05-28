@@ -1,0 +1,5 @@
+.vscode/
+*.e
+*.hh
+parser*
+scanner.cpp
