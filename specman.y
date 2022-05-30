@@ -82,13 +82,75 @@
 %token BITS
 %token BYTES
 %token TYPE
-
+%token CYCLE
+%token DETACH
+%token TRUE
+%token FALSE
+%token RISE 
+%token FALL 
+%token CHANGE
+%token DELAY
+%token CONSUME
+%token FAIL 
+%token EVENTUAL
+%token START
+%token WAIT
+%token SYNC
+%token ONLY
+%token ALSO
+%token UNDEFINED
+%token EVENT
+%token PACKAGE
+%token PRIVATE
+%token PROTECTED
+%token SEQUENCE
+%token THAT
+%token ASSUME
+%token EXPECT
+%token ASSERT
+%token STEP
 
 %token NULL_
 %token UNDEF
-%token TRUE
-%token FALSE
+%token TRUE_LITERAL
+%token FALSE_LITERAL
 /* ------------------ Keywords ------------------ */
+
+/* ------------------ Operators ----------------- */
+%token XOR_OP
+%token BITWISE_AND_OP
+%token VERILOG_EQ      
+%token VERILOG_NEQ     
+%token EQ          
+%token NEQ         
+%token ASSIGN      
+%token LOGICAL_AND_OP  
+%token BTWS_AND_OP 
+%token LOGICAL_OR_OP   
+%token BTWS_OR_OP  
+%token BTWS_NOT_OP 
+%token LOGICAL_NOT_OP  
+%token PLUS        
+%token MINUS       
+%token LSHIFT      
+%token RSHIFT      
+%token GTE         
+%token GT          
+%token LTE         
+%token LT          
+%token MUL         
+%token DIV         
+%token REMAINDER      
+%token HWP         
+
+%token LPAREN      
+%token RPAREN      
+%token LBRACKET    
+%token RBRACKET    
+%token LBRACE      
+%token RBRACE      
+%token SNG_QUOTE   
+/* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
 %token <std::string> STRING_LITERAL

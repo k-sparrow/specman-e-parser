@@ -64,11 +64,73 @@ list        (list)
 bits        (bits)
 bytes       (bytes)
 type        (type)
+cycle	    (cycle)
+detach	    (detach)
+true	    (true)
+false	    (false)
+rise	    (rise) 
+fall	    (fall) 
+change	    (change)
+delay	    (delay)
+consume	    (consume)
+fail	    (fail) 
+eventual	(eventual)
+start	    (start)
+wait	    (wait)
+sync	    (sync)
+only	    (only)
+also	    (also)
+undefined	(undefined)
+event	    (event)
+package	    (package)
+private	    (private)
+protected	(protected)
+sequence	(sequence)
+that	    (that)
+assume	    (assume)
+expect	    (expect)
+assert	    (assert)
+step	    (step)
 
-null	    (NULL)
-true	    (TRUE)
-false	    (FALSE)
+
+null	      (NULL)
+true_literal  (TRUE)
+false_literal (FALSE)
 /* ------------------ Keywords ------------------ */
+
+/* ------------------ Operators ----------------- */
+ver_eq      ===
+ver_neq     !{ver_eq}
+eq          ==
+neq         !{eq}
+assign      =
+xor_op      \^
+log_and_op      \&\&
+btws_and_op     \&
+log_or_op       \|\|
+btws_or_op      \|
+btws_not_op     ~
+log_not_op      !
+plus            \+
+minus           \-
+lshift          >>
+rshift          <<
+gte             >=
+gt              >
+lte             <=
+lt              <
+mul             \*
+div             \/
+rem             %
+hwp             \$
+
+lparen          \(
+rparen          \)
+lbracket        \[
+rbracket        \]
+lbrace          \{
+rbrace          \}
+sng_quote       \'
 
 string  \"[^\n"]+\"
 
@@ -135,13 +197,78 @@ number  [0-9]+
 {bytes}     { return yy::parser::make_BYTES(location());  }
 {type}      { return yy::parser::make_TYPE(location());  }
 
-{null}	    { return yy::parser::make_NULL_(location()); }
-{true}	    { return yy::parser::make_TRUE(location()); }    
+{cycle}	    { return yy::parser::make_CYCLE(location()); }
+{detach}	{ return yy::parser::make_DETACH(location()); }
+{true}	    { return yy::parser::make_TRUE(location()); }
 {false}	    { return yy::parser::make_FALSE(location()); }
+{rise}	    { return yy::parser::make_RISE(location()); } 
+{fall}	    { return yy::parser::make_FALL(location()); } 
+{change}	{ return yy::parser::make_CHANGE(location()); }
+{delay}	    { return yy::parser::make_DELAY(location()); }
+{consume}	{ return yy::parser::make_CONSUME(location()); }
+
+{fail}	    { return yy::parser::make_FAIL(location()); } 
+{eventual}	{ return yy::parser::make_EVENTUAL(location()); }
+{start}	    { return yy::parser::make_START(location()); }
+{wait}	    { return yy::parser::make_WAIT(location()); }
+{sync}	    { return yy::parser::make_SYNC(location()); }
+{only}	    { return yy::parser::make_ONLY(location()); }
+{also}	    { return yy::parser::make_ALSO(location()); }
+{undefined}	{ return yy::parser::make_UNDEFINED(location()); }
+{event}	    { return yy::parser::make_EVENT(location()); }
+{package}	{ return yy::parser::make_PACKAGE(location()); }
+{private}	{ return yy::parser::make_PRIVATE(location()); }
+{protected}	{ return yy::parser::make_PROTECTED(location()); }
+{sequence}	{ return yy::parser::make_SEQUENCE(location()); }
+{that}	    { return yy::parser::make_THAT(location()); }
+{assume}	{ return yy::parser::make_ASSUME(location()); }
+{expect}	{ return yy::parser::make_EXPECT(location()); }
+{assert}	{ return yy::parser::make_ASSERT(location()); }
+{step}	    { return yy::parser::make_STEP(location()); }
+
+{null}	    { return yy::parser::make_NULL_(location()); }
+{true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
+{false_literal}	{ return yy::parser::make_FALSE_LITERAL(location()); }
 
     /* ------------------ Keywords ------------------ */
     /* ------------------ Literals ------------------ */
     /* ------------------ Literals ------------------ */
+    /* ------------------ Operators ----------------- */
+
+{xor_op}        { return yy::parser::make_XOR_OP(location()); } 
+{ver_eq}	    { return yy::parser::make_VERILOG_EQ(location()); }      
+{ver_neq}	    { return yy::parser::make_VERILOG_NEQ(location()); }     
+{eq}	        { return yy::parser::make_EQ(location()); }          
+{neq}	        { return yy::parser::make_NEQ(location()); }         
+{assign}	    { return yy::parser::make_ASSIGN(location()); }      
+{log_and_op}	{ return yy::parser::make_LOGICAL_AND_OP(location()); }  
+{btws_and_op}   { return yy::parser::make_BITWISE_AND_OP(location()); } 
+{log_or_op}	    { return yy::parser::make_LOGICAL_OR_OP(location()); }   
+{btws_or_op}	{ return yy::parser::make_BTWS_OR_OP(location()); }  
+{btws_not_op}	{ return yy::parser::make_BTWS_NOT_OP(location()); } 
+{log_not_op}	{ return yy::parser::make_LOGICAL_NOT_OP(location()); }  
+{plus}	        { return yy::parser::make_PLUS(location()); }        
+{minus}	        { return yy::parser::make_MINUS(location()); }       
+{lshift}	    { return yy::parser::make_LSHIFT(location()); }      
+{rshift}	    { return yy::parser::make_RSHIFT(location()); }      
+{gte}	        { return yy::parser::make_GTE(location()); }         
+{gt}	        { return yy::parser::make_GT(location()); }          
+{lte}	        { return yy::parser::make_LTE(location()); }         
+{lt}	        { return yy::parser::make_LT(location()); }          
+{mul}	        { return yy::parser::make_MUL(location()); }         
+{div}	        { return yy::parser::make_DIV(location()); }         
+{rem}	        { return yy::parser::make_REMAINDER(location()); }         
+{hwp}	        { return yy::parser::make_HWP(location()); }         
+
+{lparen}	{ return yy::parser::make_LPAREN(location()); }      
+{rparen}	{ return yy::parser::make_RPAREN(location()); }      
+{lbracket}	{ return yy::parser::make_LBRACKET(location()); }    
+{rbracket}	{ return yy::parser::make_RBRACKET(location()); }    
+{lbrace}	{ return yy::parser::make_LBRACE(location()); }      
+{rbrace}	{ return yy::parser::make_RBRACE(location()); }      
+{sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
+
+    /* ------------------ Operators ----------------- */
 {number}  { return yy::parser::make_NUMBER(std::stoi(YYText()), location()); }
 
 {name}    { return yy::parser::make_ID(YYText(), location()); }

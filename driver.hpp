@@ -55,6 +55,7 @@ namespace yy {
         friend class parser;
         friend class scanner;
         
+        yy::scanner& getScanner() { return m_scanner; }
     private:
         
         // Used internally by Scanner YY_USER_ACTION to update location indicator

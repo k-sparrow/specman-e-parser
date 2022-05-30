@@ -15,6 +15,9 @@ OBJS = parser
 ${FLEX}: ${FSRC}
 	${FLEX} -o ${FCSRC} $<
 
+flex-main: ${FSRC}
+	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp main-flex.cpp -o $@
+
 ${BISON}: ${BSRC}
 	${BISON} -o ${BCSRC} $<
 
@@ -24,4 +27,7 @@ ${OBJS}:
 
 clean:
 	rm -rf ${GCSRC} ${OBJS} 
-	rm -rf parser.hpp *.hh 
+	rm -rf parser.hpp *.hh
+
+clean-flex-main:
+	rm flex-main
