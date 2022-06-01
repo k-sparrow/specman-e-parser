@@ -14,6 +14,7 @@ int main (int argc, char** argv) {
         type = tok.type;
     } while (type > 0);
     
+    driver.dump_symbols();
     
     return 0;
 }

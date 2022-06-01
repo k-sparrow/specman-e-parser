@@ -32,6 +32,7 @@ namespace yy {
         scanner(driver &driver) : m_driver(driver) {}
         virtual ~scanner() {}
         virtual yy::parser::symbol_type get_next_token();
+
             
     private:
         driver &m_driver;

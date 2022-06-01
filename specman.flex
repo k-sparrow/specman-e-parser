@@ -136,15 +136,16 @@ string  \"[^\n"]+\"
 
 ws      [ \t\f\v]+
 
-alpha   [A-Za-z]
+alpha   [A-Za-z_]
 dig     [0-9]
-name    ({alpha}|{dig}|\$)({alpha}|{dig}|[_.\-/$])*
+alphanum ({alpha}|{dig})
+name    ({alpha}{alphanum}*)
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 /* number  {num1}|{num2} */
 number  [0-9]+
-
 %%
+
 
 {ws}    /* skip blanks and tabs */
 
@@ -269,11 +270,29 @@ number  [0-9]+
 {sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
 
     /* ------------------ Operators ----------------- */
-{number}  { return yy::parser::make_NUMBER(std::stoi(YYText()), location()); }
+    /* ------------------ Names & Numbers & String Literals ----------------- */
+{number}  { 
+    std::string number(YYText());
+    if(m_driver.inttable.find(number) == std::end(m_driver.inttable)) {
+        m_driver.inttable[number] = elex::Symbol(new elex::Entry(number, number.length()));
+    }
+    return yy::parser::make_NUMBER(std::stoi(YYText()), location()); 
+}
 
-{name}    { return yy::parser::make_ID(YYText(), location()); }
+{name}    { 
+    std::string id(YYText());
+    if(m_driver.idtable.find(id) == std::end(m_driver.idtable)) {
+        m_driver.idtable[id] = elex::Symbol(new elex::Entry(id, id.length()));
+    }
+    return yy::parser::make_ID(YYText(), location()); 
+}
 
-{string}  { return yy::parser::make_STRING_LITERAL(YYText(), location()); }
+{string}  { 
+    std::string str(YYText());
+    if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
+        m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
+    }
+    return yy::parser::make_STRING_LITERAL(YYText(), location()); }
 
 <<EOF>>   { return yyterminate(); }
 

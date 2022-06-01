@@ -9,6 +9,8 @@
 // if your IDE can't resolve it - call make first
 #include "parser.hpp"
 
+#include "strtab.hpp"
+
 namespace yy {
 
     /**
@@ -49,6 +51,12 @@ namespace yy {
         void switchInputStream(std::istream *is);
         
         /**
+         * dump table symbols
+         * 
+         */
+        auto dump_symbols() const -> void;
+
+        /**
          * This is needed so that Scanner and Parser can call some
          * methods that we want to keep hidden from the end user.
          */
@@ -68,6 +76,13 @@ namespace yy {
         scanner m_scanner;
         parser m_parser;
         unsigned int m_location;          // Used by scanner
+
+        // symbol table for strings, ids & integers
+        // will be accessed directly by the scanner
+        // flex rules to add symbols
+        elex::SymTable strtable;
+        elex::SymTable inttable;
+        elex::SymTable idtable;
     };
 
 }

@@ -7,7 +7,7 @@ FCSRC = scanner.cpp
 BSRC  = ${LANG}.y
 BCSRC = parser.cpp
 GCSRC = ${FCSRC} ${BCSRC} 
-CSRC = ${GCSRC} driver.cpp main.cpp
+CSRC = ${GCSRC} driver.cpp main.cpp strtab.cpp
 FLEX = flex
 BISON = bison
 OBJS = parser
@@ -16,7 +16,7 @@ ${FLEX}: ${FSRC}
 	${FLEX} -o ${FCSRC} $<
 
 flex-main: ${FSRC}
-	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp main-flex.cpp -o $@
+	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp strtab.cpp main-flex.cpp -o $@
 
 ${BISON}: ${BSRC}
 	${BISON} -o ${BCSRC} $<
