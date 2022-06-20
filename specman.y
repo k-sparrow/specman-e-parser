@@ -12,7 +12,10 @@
 %parse-param { yy::scanner& lexer }
 %parse-param { yy::driver& driver }
 
+/* goes inside header file */
 %code requires {
+    
+    #include "specman-tree.hpp"
     using namespace std;
 
     namespace yy {
@@ -21,6 +24,7 @@
     }
 }
 
+/* goes inside implementation file */
 %code top{
     #include <iostream>
     #include <string>
@@ -153,23 +157,46 @@
 /* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
-%token <std::string> STRING_LITERAL
+%token <elex::Symbol_> STRING_LITERAL
 /* ------------------ Literals ------------------ */
 
-%token <std::string> ID
+%token <elex::Symbol_> ID
 %token <int> NUMBER
 %token END 0 
 
-%nterm <int> program
+%nterm <elex::Module>     module
+%nterm <elex::Statements> statements
+%nterm <elex::Statement>  statement
+%nterm <elex::Statement>  unit
+%nterm <elex::Statement>  struct_
+%nterm <elex::Statement>  extend
 
-%start program
+%start module
 
 %%
 
-program : NUMBER { 
-        $$ = $1;
-        cout <<  "ID: " << $$ << " and Parsing ended" << endl; 
+module : statement { 
+        $$ = module_($1);
+        driver.set_root($$);
     };
+
+statements : statement      {}// TODO: add implementations
+    | statements statement  {}
+    ; 
+
+statement : 
+    unit        { $$ = $1; }
+    | struct_   { $$ = $1; }
+    | extend    { $$ = $1; }
+    ;
+
+unit : UNIT ID { $$ = elex::unit($2); };
+ 
+struct_ : STRUCT ID { $$ = elex::struct_($2); }
+    ;
+ 
+extend :  EXTEND ID LIKE ID { $$ = elex::extend_like($2, $4); }
+    ;
 
 %%
 

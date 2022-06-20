@@ -7,7 +7,8 @@
 
 namespace elex {
     class Entry;
-    typedef std::unique_ptr<Entry> Symbol;
+    typedef std::shared_ptr<Entry> Symbol; // main representation in symbol table
+    typedef std::weak_ptr<Entry> Symbol_; // internal usage by bison
 
     class Entry {
     protected:
@@ -26,6 +27,7 @@ namespace elex {
     // comparison operator between entries
     auto operator == (Entry const&, Entry const&) -> bool;
     auto operator == (Symbol const&, Symbol const&) -> bool;
+    auto operator == (Symbol_ const&, Symbol_ const&) -> bool;
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& ;
 
     typedef std::map<std::string, Symbol> SymTable;

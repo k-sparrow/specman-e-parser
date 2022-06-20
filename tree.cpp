@@ -1,7 +1,7 @@
 
 #include "tree.hpp"
 
-tree_node::tree_node(int lineno = 1) : m_line_number(lineno) {}
+tree_node::tree_node(int lineno) : m_line_number(lineno) {}
 
 auto tree_node::get_line_number() const -> int {
     return m_line_number;

@@ -15,10 +15,10 @@ class tree_node {
 protected:
     int m_line_number;
 public:
-    tree_node(int lineno);
+    tree_node(int lineno = 1);
     virtual ~tree_node() { }
 
-    virtual auto copy() -> p_tree_node = 0;
+    //virtual auto copy() -> p_tree_node = 0;
     virtual auto dump(std::ostream& stream, int n) -> void = 0;
 
     auto get_line_number() const -> int;
@@ -27,23 +27,37 @@ public:
 
 // class for listed parser elements
 template <class Elem> 
-class listed_tree_node : public tree_node
+class list_tree_node : public tree_node
 {
 private:
     std::vector<Elem> m_elems;
 public:
-    listed_tree_node() : m_elems({}), tree_node(0) {}
-    listed_tree_node(listed_tree_node const& cp) : m_elems(cp.m_elems), tree_node(cp.get_line_number()) {}
-    ~listed_tree_node() { m_elems.clear(); }
+    list_tree_node() : tree_node(0), m_elems({}){}
+    list_tree_node(list_tree_node<Elem> const& cp) : tree_node(cp.get_line_number()), m_elems(cp.m_elems){}
+    ~list_tree_node() { m_elems.clear(); }
+
+    virtual auto copy() -> p_tree_node {
+        return p_tree_node(new list_tree_node<Elem>(*this));
+    }
+
+    virtual auto dump(std::ostream& stream, int n) -> void {
+        for (auto const& elem : m_elems)
+        {
+            stream << elem << std::endl;
+        }
+        
+    }
 protected:
-    listed_tree_node(listed_tree_node const& base, listed_tree_node const& ext) : m_elems(base.m_elems), tree_node(base.get_line_number()) {
+    list_tree_node(list_tree_node<Elem> const& base, 
+                     list_tree_node<Elem> const& ext) : tree_node(base.get_line_number()), m_elems(base.m_elems){
         m_elems.reserve(m_elems.size() + distance(begin(ext), end(ext)));
         m_elems.insert(end(m_elems), begin(ext), end(ext));
     }
 
 
 public:
-    static auto list_tree_node_append(listed_tree_node const& base, listed_tree_node const& ext) -> listed_tree_node* {
-        return new listed_tree_node(base, ext); // TODO: potential memory leak, switch to shared_ptr
+    static auto list_tree_node_append(list_tree_node<Elem> const& base,
+                                      list_tree_node<Elem> const& ext) -> list_tree_node* {
+        return new list_tree_node<Elem>(base, ext); // TODO: potential memory leak, switch to shared_ptr
     }
 };

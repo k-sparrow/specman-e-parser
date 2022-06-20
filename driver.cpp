@@ -23,6 +23,7 @@ void driver::clear() {
 
 std::string driver::str() const {
     std::stringstream s;
+    ast_root->dump(s, 0);
     return s.str();
 }
 
@@ -37,6 +38,10 @@ void driver::increaseLocation(unsigned int loc) {
 
 unsigned int driver::location() const {
     return m_location;
+}
+
+auto driver::set_root(elex::Module root) -> void {
+    ast_root = root;
 }
 
 auto driver::dump_symbols() const -> void {

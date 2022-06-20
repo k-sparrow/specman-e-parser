@@ -7,5 +7,5 @@
 int main(int argc, char **arg) {
     yy::driver drv;
     auto i = drv.parse();
-    cout << "Main" << endl;
+    cout << drv.str() << endl;
 }

@@ -22,6 +22,11 @@ namespace elex {
         return *lhs == *rhs;
     }
 
+    auto operator == (Symbol_ const& lhs, Symbol_ const& rhs) -> bool {
+        
+        return lhs.lock() == rhs.lock();
+    }
+
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& {
         return out << "Symbol: " << rhs->Str() << ", " << " Length: " << rhs->Length();
     }

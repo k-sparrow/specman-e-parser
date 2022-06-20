@@ -284,7 +284,7 @@ number  [0-9]+
     if(m_driver.idtable.find(id) == std::end(m_driver.idtable)) {
         m_driver.idtable[id] = elex::Symbol(new elex::Entry(id, id.length()));
     }
-    return yy::parser::make_ID(YYText(), location()); 
+    return yy::parser::make_ID(m_driver.idtable[id], location()); 
 }
 
 {string}  { 
@@ -292,11 +292,8 @@ number  [0-9]+
     if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
         m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
     }
-    return yy::parser::make_STRING_LITERAL(YYText(), location()); }
+    return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], location()); }
 
 <<EOF>>   { return yyterminate(); }
 
 %%
-
-// This include is required if main() is an another source file.
-//#include <FlexLexer.h>
