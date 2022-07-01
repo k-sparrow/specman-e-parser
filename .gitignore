@@ -4,3 +4,4 @@
 parser*
 flex-main
 scanner.cpp
+*.log
