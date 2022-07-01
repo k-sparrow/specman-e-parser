@@ -13,13 +13,39 @@
 namespace elex { 
     
 
-auto module__class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "module_" << std::endl;
-    stmt->dump(stream, n+2);
+/* implementations for Statements */
+auto nil_Statements() -> Statements {
+    return Statements(new list_tree_node<Statement>());
 }
 
-auto module_(Statement stmt) -> Module {
-    return Module(new module__class(stmt));
+auto single_Statements(Statement p) -> Statements {
+    return Statements(new list_tree_node<Statement>(p));
+}
+
+auto append_Statements(Statements p1, Statements p2) -> Statements {
+    return Statements(new list_tree_node<Statement>(*p1, *p2));
+}
+
+/* implementations for Expressions */
+auto nil_Expressions() -> Expressions {
+    return Expressions(new list_tree_node<Expression>());
+}
+
+auto single_Expressions(Expression p) -> Expressions {
+    return Expressions(new list_tree_node<Expression>(p));
+}
+
+auto append_Expressions(Expressions p1, Expressions p2) -> Expressions {
+    return Expressions(new list_tree_node<Expression>(*p1, *p2));
+}
+
+auto module__class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "module_" << std::endl;
+    stmts->dump(stream, n+2);
+}
+
+auto module_(Statements stmts) -> Module {
+    return Module(new module__class(stmts));
 }
 
 auto unit_class::dump(std::ostream& stream, int n) -> void {

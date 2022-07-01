@@ -175,12 +175,12 @@
 
 %%
 
-module : statement { 
+module : statements { 
         $$ = module_($1);
         driver.set_root($$);
     };
 
-statements : statement      {}// TODO: add implementations
+statements : statement      { $$ = elex::single_Statements($1); }// TODO: add implementations
     | statements statement  {}
     ; 
 

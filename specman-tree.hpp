@@ -31,6 +31,10 @@ class Statement_class : public tree_node {
 typedef list_tree_node<Statement> Statements_class;
 typedef std::shared_ptr<Statements_class> Statements;
 
+auto nil_Statements() -> Statements;
+auto single_Statements(Statement) -> Statements;
+auto append_Statements(Statements, Statements) -> Statements;
+
 class Expression_class;
 typedef std::shared_ptr<Expression_class> Expression;
 
@@ -41,18 +45,22 @@ class Expression_class : public tree_node {
 typedef list_tree_node<Expression> Expressions_class;
 typedef std::shared_ptr<Expressions_class> Expressions;
 
+auto nil_Expressions() -> Expressions;
+auto single_Expressions(Expression) -> Expressions;
+auto append_Expressions(Expressions, Expressions) -> Expressions;
+
 class module__class : public Module_class {
     protected:
-        Statement stmt;
+        Statements stmts;
     public:
-        module__class(Statement stmt) {
-            this->stmt = stmt;
+        module__class(Statements stmts) {
+            this->stmts = stmts;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 };
 
-auto module_(Statement stmt) -> Module;
+auto module_(Statements stmts) -> Module;
 
 class unit_class : public Statement_class {
     protected:
