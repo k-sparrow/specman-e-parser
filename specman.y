@@ -154,6 +154,11 @@
 %token LBRACE      
 %token RBRACE      
 %token SNG_QUOTE   
+
+%token COMMA 
+%token COLON
+%token SEMICOLON
+%token DOT 
 /* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
@@ -181,7 +186,7 @@ module : statements {
     };
 
 statements : statement      { $$ = elex::single_Statements($1); }// TODO: add implementations
-    | statements statement  {}
+    | statements statement  { $$ = elex::append_Statements($1, elex::single_Statements($2)); }
     ; 
 
 statement : 
@@ -190,12 +195,12 @@ statement :
     | extend    { $$ = $1; }
     ;
 
-unit : UNIT ID { $$ = elex::unit($2); };
+unit : UNIT ID LBRACE RBRACE SEMICOLON { $$ = elex::unit($2); };
  
-struct_ : STRUCT ID { $$ = elex::struct_($2); }
+struct_ : STRUCT ID LBRACE RBRACE SEMICOLON { $$ = elex::struct_($2); }
     ;
  
-extend :  EXTEND ID LIKE ID { $$ = elex::extend_like($2, $4); }
+extend :  EXTEND ID LIKE ID LBRACE RBRACE SEMICOLON  { $$ = elex::extend_like($2, $4); }
     ;
 
 %%

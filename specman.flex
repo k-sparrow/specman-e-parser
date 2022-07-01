@@ -132,6 +132,11 @@ lbrace          \{
 rbrace          \}
 sng_quote       \'
 
+dot             \.
+colon           \:
+semicolon       \;
+comma           \,
+
 string  \"[^\n"]+\"
 
 ws      [ \t\f\v]+
@@ -268,6 +273,11 @@ number  [0-9]+
 {lbrace}	{ return yy::parser::make_LBRACE(location()); }      
 {rbrace}	{ return yy::parser::make_RBRACE(location()); }      
 {sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
+
+{comma}     { return yy::parser::make_COMMA(location()); }
+{colon}     { return yy::parser::make_COLON(location()); }
+{semicolon} { return yy::parser::make_SEMICOLON(location()); }
+{dot}       { return yy::parser::make_DOT(location()); }
 
     /* ------------------ Operators ----------------- */
     /* ------------------ Names & Numbers & String Literals ----------------- */
