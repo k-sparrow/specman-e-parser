@@ -1,7 +1,7 @@
 
 LANG=specman
 CC = g++-9
-CFLAGS = -std=c++17 -g -Wall -Wno-unused -Wno-write-strings -Wno-sign-compare
+CFLAGS = -std=c++17 -ggdb3 -Wall -Wno-unused -Wno-write-strings -Wno-sign-compare
 FSRC  = ${LANG}.flex
 FCSRC = scanner.cpp
 BSRC  = ${LANG}.y
@@ -25,7 +25,6 @@ ${BISON}: ${BSRC}
 	${BISON} -o ${BCSRC} $<
 
 ${OBJS}: 
-	${APS} --lang ${LANG} --lang-file ${ASTSRC} --out-dir .
 	${FLEX} -o ${FCSRC} ${FSRC}
 	${BISON} -o ${BCSRC} ${BSRC}
 	${CC} ${CFLAGS} ${CSRC} -o $@
