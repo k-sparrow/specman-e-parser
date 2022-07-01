@@ -15,31 +15,31 @@ namespace elex {
     
 
 class Module_class;
-typedef Module_class *Module;
+typedef std::shared_ptr<Module_class> Module;
 
 class Module_class : public tree_node {
     public:
 };
 
 class Statement_class;
-typedef Statement_class *Statement;
+typedef std::shared_ptr<Statement_class> Statement;
 
 class Statement_class : public tree_node {
     public:
 };
 
 typedef list_tree_node<Statement> Statements_class;
-typedef Statements_class *Statements;
+typedef std::shared_ptr<Statements_class> Statements;
 
 class Expression_class;
-typedef Expression_class *Expression;
+typedef std::shared_ptr<Expression_class> Expression;
 
 class Expression_class : public tree_node {
     public:
 };
 
 typedef list_tree_node<Expression> Expressions_class;
-typedef Expressions_class *Expressions;
+typedef std::shared_ptr<Expressions_class> Expressions;
 
 class module__class : public Module_class {
     protected:

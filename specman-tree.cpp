@@ -19,7 +19,7 @@ auto module__class::dump(std::ostream& stream, int n) -> void {
 }
 
 auto module_(Statement stmt) -> Module {
-    return new module__class(stmt);
+    return Module(new module__class(stmt));
 }
 
 auto unit_class::dump(std::ostream& stream, int n) -> void {
@@ -28,7 +28,7 @@ auto unit_class::dump(std::ostream& stream, int n) -> void {
 }
 
 auto unit(Symbol_ unit_name) -> Statement {
-    return new unit_class(unit_name);
+    return Statement(new unit_class(unit_name));
 }
 
 auto struct__class::dump(std::ostream& stream, int n) -> void {
@@ -37,7 +37,7 @@ auto struct__class::dump(std::ostream& stream, int n) -> void {
 }
 
 auto struct_(Symbol_ struct_name) -> Statement {
-    return new struct__class(struct_name);
+    return Statement(new struct__class(struct_name));
 }
 
 auto extend_like_class::dump(std::ostream& stream, int n) -> void {
@@ -47,6 +47,6 @@ auto extend_like_class::dump(std::ostream& stream, int n) -> void {
 }
 
 auto extend_like(Symbol_ uos_name, Symbol_ base_uos_name) -> Statement {
-    return new extend_like_class(uos_name, base_uos_name);
+    return Statement(new extend_like_class(uos_name, base_uos_name));
 } 
 }
