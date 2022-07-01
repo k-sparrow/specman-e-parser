@@ -2,4 +2,5 @@
 *.e
 *.hh
 parser*
+flex-main
 scanner.cpp
