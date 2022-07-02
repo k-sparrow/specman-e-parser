@@ -169,12 +169,43 @@
 %token <int> NUMBER
 %token END 0 
 
+/* ------------------ helpers ------------------ */
+%nterm <elex::Symbol_>    OPT_SEMICOLON
+%nterm <elex::Symbol_>    OPT_PACKAGE
+
+/* ------------------  rules  ------------------ */
 %nterm <elex::Module>     module
 %nterm <elex::Statements> statements
 %nterm <elex::Statement>  statement
-%nterm <elex::Statement>  unit
-%nterm <elex::Statement>  struct_
-%nterm <elex::Statement>  extend
+%nterm <elex::Statement>  non_term_statement
+
+%nterm <elex::Statement>  struct_statement
+%nterm <elex::Statement>  package_statement
+%nterm <elex::Statement>  extend_struct_unit_statement
+%nterm <elex::Statement>  type_statement
+%nterm <elex::Statement>  extend_type_statement
+// %nterm <elex::Statement>  routine_statement
+// %nterm <elex::Statement>  simulator_statement
+%nterm <elex::Statement>  unit_statement
+%nterm <elex::Statement>  sequence_statement
+// %nterm <elex::Statement>  method_statement
+%nterm <elex::Statement>  c_export_statement
+ 
+/* Struct Members */
+%nterm <elex::StructMembers> struct_members
+%nterm <elex::StructMember>  struct_member
+%nterm <elex::StructMember>  non_term_struct_member
+
+/* Expressions */
+%nterm <elex::Expressions>   expressions
+%nterm <elex::Expression>    expression
+%nterm <elex::Expression>    non_term_expression
+
+%nterm <elex::Expression> id_expr
+%nterm <elex::Expression> type_scalar
+%nterm <elex::Expression> enum_type_expr
+%nterm <elex::Expressions> enum_list_exprs
+%nterm <elex::Expression> enum_list_item
 
 %start module
 
@@ -185,24 +216,96 @@ module : statements {
         driver.set_root($$);
     };
 
-statements : statement      { $$ = elex::single_Statements($1); }// TODO: add implementations
+statements : 
+    %empty                  { $$ = elex::nil_Statements(); }
     | statements statement  { $$ = elex::append_Statements($1, elex::single_Statements($2)); }
     ; 
 
-statement : 
-    unit        { $$ = $1; }
-    | struct_   { $$ = $1; }
-    | extend    { $$ = $1; }
+/* Statements */
+statement : non_term_statement SEMICOLON { $$ = $1; }
+
+non_term_statement : 
+      package_statement { $$ = $1; }
+    | struct_statement  { $$ = $1; }
+    | unit_statement    { $$ = $1; }
+    | extend_struct_unit_statement { $$ = $1; }
+    | type_statement    { $$ = $1; }
     ;
 
-unit : UNIT ID LBRACE RBRACE SEMICOLON { $$ = elex::unit($2); };
- 
-struct_ : STRUCT ID LBRACE RBRACE SEMICOLON { $$ = elex::struct_($2); }
-    ;
- 
-extend :  EXTEND ID LIKE ID LBRACE RBRACE SEMICOLON  { $$ = elex::extend_like($2, $4); }
+struct_statement : 
+    STRUCT ID LBRACE struct_members RBRACE { $$ = elex::struct_($2, $4); }
     ;
 
+unit_statement   : 
+    UNIT ID LBRACE struct_members RBRACE   { $$ = elex::unit($2, $4); }
+    ;
+
+package_statement : PACKAGE ID                     { $$ = elex::package($2); }
+    ;
+
+extend_struct_unit_statement : 
+    EXTEND ID LIKE ID LBRACE struct_members RBRACE { $$ = elex::extend_like($2, $4, $6); }
+    | EXTEND ID LBRACE struct_members RBRACE       { $$ = elex::extend_when($2, $4); }
+    ;
+
+type_statement : 
+    OPT_PACKAGE TYPE ID COLON type_scalar          { $$ = elex::type_($3, $5); }
+    ;
+
+
+/* Struct Members */
+struct_members : 
+    %empty                         { $$ = elex::nil_StructMembers();  }
+    | struct_members struct_member { $$ = elex::append_StructMembers($1, elex::single_StructMembers($2)); }
+    ;
+
+struct_member : non_term_struct_member SEMICOLON { $$ = $1; }
+    ;
+
+non_term_struct_member : ID {}; // TODO: correctly implement this
+
+/* Expressions */
+expressions : 
+    %empty                         { $$ = elex::nil_Expressions();  }
+    | expressions expression       { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
+    ;
+
+expression : non_term_expression SEMICOLON { $$ = $1; }
+    ;
+
+non_term_expression :  type_scalar { $$ = $1; }
+    ; // TODO: correctly implement this
+
+type_scalar: 
+    id_expr          { $$ = $1; } 
+    | enum_type_expr { $$ = $1; } 
+    ;
+
+enum_type_expr : LBRACKET enum_list_exprs RBRACKET { $$ = elex::enum_type_expr($2); }
+    ;
+
+enum_list_exprs :     
+    enum_list_item                         { $$ = elex::single_Expressions($1); }
+    | enum_list_exprs COMMA enum_list_item { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    | %empty                               { $$ = elex::nil_Expressions(); }
+    ;
+
+enum_list_item : 
+    ID EQ ID    { $$ = elex::enum_list_item($1, elex::id_expr($3)); }
+    | ID        { $$ = elex::enum_list_item($1, elex::no_expr()); }
+    ;
+id_expr : ID { $$ = elex::id_expr($1); }
+
+
+OPT_PACKAGE : 
+    PACKAGE  { }
+    | %empty { }
+    ;
+
+OPT_SEMICOLON : 
+    SEMICOLON  { }
+    | %empty   { }
+    ;
 %%
 
 void yy::parser::error(location const& location, std::string const& message){

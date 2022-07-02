@@ -7,12 +7,23 @@ module Specman begin
         phylum Statement;
         phylum Statements = LIST[Statement];
 
+        phylum StructMember;
+        phylum StructMembers = LIST[StructMember];
+
         phylum Expression;
         phylum Expressions = LIST[Expression];
 
         constructor module_(stmts: Statements) : Module;
-        constructor unit(unit_name: Symbol_) : Statement;
-        constructor struct_(struct_name: Symbol_) : Statement;
-        constructor extend_like(uos_name: Symbol_; base_uos_name: Symbol_) : Statement;
+        constructor package(pkg_name: Symbol_) : Statement;
+        constructor unit(unit_name: Symbol_; members: StructMembers) : Statement;
+        constructor struct_(struct_name: Symbol_; members: StructMembers) : Statement;
+        constructor extend_like(uos_name: Symbol_; base_uos_name: Symbol_; members: StructMembers) : Statement;
+        constructor extend_when(uos_name: Symbol_; members: StructMembers) : Statement;
+        constructor type_(type_id: Symbol_; type_expr: Expression)  : Statement;
 
+        constructor id_expr(id: Symbol_) : Expression;
+        
+        constructor enum_type_expr(enum_list_expr: Expressions) : Expression;
+        constructor enum_list_item(id: Symbol_; expr: Expression) : Expression;
+        constructor no_expr() : Expression;
 end;
