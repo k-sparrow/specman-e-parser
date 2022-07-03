@@ -99,12 +99,12 @@ false_literal (FALSE)
 /* ------------------ Keywords ------------------ */
 
 /* ------------------ Operators ----------------- */
-ver_eq      ===
-ver_neq     !{ver_eq}
-eq          ==
-neq         !{eq}
-assign      =
-xor_op      \^
+ver_eq          ===
+ver_neq         !{ver_eq}
+eq              ==
+neq             !{eq}
+assign          =
+xor_op          \^
 log_and_op      \&\&
 btws_and_op     \&
 log_or_op       \|\|
@@ -132,10 +132,12 @@ lbrace          \{
 rbrace          \}
 sng_quote       \'
 
+ddot            \.\.
 dot             \.
 colon           \:
 semicolon       \;
 comma           \,
+implication     =>
 
 string  \"[^\n"]+\"
 
@@ -248,7 +250,7 @@ number  [0-9]+
 {neq}	        { return yy::parser::make_NEQ(location()); }         
 {assign}	    { return yy::parser::make_ASSIGN(location()); }      
 {log_and_op}	{ return yy::parser::make_LOGICAL_AND_OP(location()); }  
-{btws_and_op}   { return yy::parser::make_BITWISE_AND_OP(location()); } 
+{btws_and_op}   { return yy::parser::make_BTWS_AND_OP(location()); } 
 {log_or_op}	    { return yy::parser::make_LOGICAL_OR_OP(location()); }   
 {btws_or_op}	{ return yy::parser::make_BTWS_OR_OP(location()); }  
 {btws_not_op}	{ return yy::parser::make_BTWS_NOT_OP(location()); } 
@@ -274,10 +276,12 @@ number  [0-9]+
 {rbrace}	{ return yy::parser::make_RBRACE(location()); }      
 {sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
 
-{comma}     { return yy::parser::make_COMMA(location()); }
-{colon}     { return yy::parser::make_COLON(location()); }
-{semicolon} { return yy::parser::make_SEMICOLON(location()); }
-{dot}       { return yy::parser::make_DOT(location()); }
+{comma}       { return yy::parser::make_COMMA(location()); }
+{colon}       { return yy::parser::make_COLON(location()); }
+{semicolon}   { return yy::parser::make_SEMICOLON(location()); }
+{ddot}        { return yy::parser::make_DDOT(location()); }
+{dot}         { return yy::parser::make_DOT(location()); }
+{implication} { return yy::parser::make_IMPLICATION(location()); }
 
     /* ------------------ Operators ----------------- */
     /* ------------------ Names & Numbers & String Literals ----------------- */

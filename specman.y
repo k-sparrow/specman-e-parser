@@ -122,7 +122,6 @@
 
 /* ------------------ Operators ----------------- */
 %token XOR_OP
-%token BITWISE_AND_OP
 %token VERILOG_EQ      
 %token VERILOG_NEQ     
 %token EQ          
@@ -158,7 +157,9 @@
 %token COMMA 
 %token COLON
 %token SEMICOLON
+%token DDOT
 %token DOT 
+%token IMPLICATION 
 /* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
@@ -197,15 +198,48 @@
 %nterm <elex::StructMember>  non_term_struct_member
 
 /* Expressions */
-%nterm <elex::Expressions>   expressions
-%nterm <elex::Expression>    expression
-%nterm <elex::Expression>    non_term_expression
+%nterm <elex::Expressions>  expressions
+%nterm <elex::Expression>   expression
+%nterm <elex::Expression>   non_term_expression
 
-%nterm <elex::Expression> id_expr
-%nterm <elex::Expression> type_scalar
-%nterm <elex::Expression> enum_type_expr
-%nterm <elex::Expressions> enum_list_exprs
-%nterm <elex::Expression> enum_list_item
+/* Bitwise Expressions */
+%nterm <elex::Expression>   bitwise_expression
+%nterm <elex::Expression>   unary_bitwise_expression
+%nterm <elex::Expression>   binary_bitwise_expression
+%nterm <elex::Expression>   shift_expression
+
+/* Logical (Boolean) Expressions */
+%nterm <elex::Expression>   logical_expression
+%nterm <elex::Expression>   unary_logical_expression
+%nterm <elex::Expression>   binary_logical_expression
+%nterm <elex::Expression>   comparison_expression
+%nterm <elex::Expression>   inclusion_expression
+%nterm <elex::Expression>   implication_expression
+
+/* Arithmetic Expressions */ 
+%nterm <elex::Expression>   arithmetic_expression
+%nterm <elex::Expression>   unary_arithmetic_expression
+%nterm <elex::Expression>   binary_arithmetic_expression
+
+/* Object Expressions */
+%nterm <elex::Expression>   list_indexing_expression
+%nterm <elex::Expression>   list_slicing_expression
+%nterm <elex::Expression>   list_splicing_expression
+%nterm <elex::Expression>   list_concatenation_expression
+%nterm <elex::Expressions>  list_concat_expressions
+%nterm <elex::Expression>   bit_concatenation_expression
+%nterm <elex::Expressions>  bit_concat_expressions
+
+%nterm <elex::Expression>   id_expr
+%nterm <elex::Expression>   type_scalar
+%nterm <elex::Expression>   enum_type_expr
+%nterm <elex::Expressions>  enum_list_exprs
+%nterm <elex::Expression>   enum_list_item
+
+%nterm <elex::Expression>   str_expression
+
+%nterm <elex::Expression>   opt_expr
+%nterm <elex::Expression>   opt_slice_expr
 
 %start module
 
@@ -273,7 +307,10 @@ expressions :
 expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
-non_term_expression :  type_scalar { $$ = $1; }
+non_term_expression :  
+      type_scalar        { $$ = $1; }
+    | bitwise_expression { $$ = $1; }
+    | logical_expression { $$ = $1; }
     ; // TODO: correctly implement this
 
 type_scalar: 
@@ -296,6 +333,125 @@ enum_list_item :
     ;
 id_expr : ID { $$ = elex::id_expr($1); }
 
+bitwise_expression : 
+      unary_bitwise_expression  { $$ = $1;}
+    | binary_bitwise_expression { $$ = $1;}
+    | shift_expression          { $$ = $1;}
+    ;
+
+unary_bitwise_expression : 
+    BTWS_NOT_OP expression { $$ = elex::bitwise_not_expr($2); }
+    // TODO: $2 should be numeric or HDL pathname only - refactor this
+    ;
+
+binary_bitwise_expression : 
+      expression BTWS_AND_OP expression { $$ = elex::bitwise_and_expr($1, $3); }
+    | expression BTWS_OR_OP expression  { $$ = elex::bitwise_or_expr($1, $3); }
+    | expression XOR_OP expression      { $$ = elex::bitwise_xor_expr($1, $3); }
+    ;
+
+shift_expression : 
+      expression LSHIFT expression { $$ = elex::shift_left_expr($1, $3); }
+    | expression RSHIFT expression { $$ = elex::right_left_expr($1, $3); }
+    ;
+
+logical_expression : 
+      unary_logical_expression  { $$ = $1; }
+    | binary_logical_expression { $$ = $1; }
+    | implication_expression    { $$ = $1; }
+    | comparison_expression     { $$ = $1; }
+    | inclusion_expression      { $$ = $1; }
+    ;
+
+unary_logical_expression : 
+    LOGICAL_NOT_OP expression   { $$ = elex::logical_not_expr($2); }
+    ;
+
+binary_logical_expression : 
+      expression LOGICAL_AND_OP expression { $$ = elex::logical_and_expr($1, $3); }
+    | expression AND expression            { $$ = elex::logical_and_expr($1, $3); }
+    | expression LOGICAL_OR_OP expression  { $$ = elex::logical_or_expr($1, $3); }
+    | expression OR expression             { $$ = elex::logical_or_expr($1, $3); }
+    ;
+
+implication_expression : 
+    expression IMPLICATION expression { $$ = elex::implication_expr($1, $3); }
+    ;
+
+inclusion_expression : 
+    expression IN expression          { $$ = elex::in_expr($1, $3); }
+    ;
+
+arithmetic_expression : 
+      unary_arithmetic_expression  { $$ = $1; }
+    | binary_arithmetic_expression { $$ = $1; }
+    ;
+
+unary_arithmetic_expression : 
+      PLUS expression  { $$ = elex::unary_positive_expr($2); }
+    | MINUS expression { $$ = elex::unary_negative_expr($2); }
+    ;
+
+binary_arithmetic_expression : 
+      expression PLUS      expression { $$ = elex::binary_add_expr($1, $3); }
+    | expression MINUS     expression { $$ = elex::binary_sub_expr($1, $3); }
+    | expression MUL       expression { $$ = elex::binary_mul_expr($1, $3); }
+    | expression DIV       expression { $$ = elex::binary_div_expr($1, $3); }
+    | expression REMAINDER expression { $$ = elex::binary_remainder_expr($1, $3); }
+    ;
+
+comparison_expression : 
+      expression GT expression  { $$ = elex::greater_then_expr($1, $3); }
+    | expression LT expression  { $$ = elex::less_then_expr($1, $3); }
+    | expression GTE expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
+    | expression LTE expression { $$ = elex::less_then_or_equal_expr($1, $3); }
+    | expression EQ expression  { $$ = elex::equality_expr($1, $3); }
+    | expression NEQ expression { $$ = elex::non_equality_expr($1, $3); }
+    | expression VERILOG_EQ expression  { $$ = elex::hdl_equality_expr($1, $3); }
+    | expression VERILOG_NEQ expression { $$ = elex::hdl_non_equality_expr($1, $3); }
+    | expression BTWS_NOT_OP expression                { $$ = elex::str_match_expr($1, $3); } // "str" ~ "pattern"
+    | expression LOGICAL_NOT_OP BTWS_NOT_OP expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
+    ;
+
+list_indexing_expression : 
+    expression LBRACKET expression RBRACKET { $$ = elex::list_indexing_expr($1, $3); }
+    ;
+
+list_slicing_expression : 
+    expression LBRACKET opt_expr COLON opt_expr opt_slice_expr RBRACKET { $$ = elex::list_slicing_expr($1, $3, $5, $6); }
+    ;
+
+list_splicing_expression : 
+    expression LBRACKET opt_expr DDOT opt_expr RBRACKET { $$ = elex::list_splicing_expr($1, $3, $5); }
+    ;
+    
+list_concatenation_expression : 
+    LBRACE list_concat_expressions RBRACE { $$ = elex::list_concat_expr($2); }
+    ;
+
+list_concat_expressions : 
+      expression                                   { $$ = elex::single_Expressions($1); }
+    | list_concat_expressions SEMICOLON expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    ;
+
+bit_concatenation_expression : 
+    REMAINDER LBRACE bit_concat_expressions RBRACE { $$ = elex::bit_concat_expr($3); }
+
+bit_concat_expressions : 
+      expression                              { $$ = elex::single_Expressions($1); }
+    | bit_concat_expressions COMMA expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    ;
+
+opt_slice_expr : 
+      %empty            { $$ = elex::no_expr(); }
+    | COLON expression  { $$ = $2; }
+
+opt_expr : 
+      %empty        { $$ = elex::no_expr(); }
+    | expression    { $$ = $1; }
+    ;
+str_expression : STRING_LITERAL { $$ = elex::str_match_expr($1); }
+    ;
 
 OPT_PACKAGE : 
     PACKAGE  { }

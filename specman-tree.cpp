@@ -149,6 +149,332 @@ auto enum_list_item(Symbol_ id, Expression expr) -> Expression {
     return Expression(new enum_list_item_class(id, expr));
 }
 
+auto bitwise_not_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bitwise_not_expr" << std::endl;
+    e->dump(stream, n+2);
+}
+
+auto bitwise_not_expr(Expression e) -> Expression {
+    return Expression(new bitwise_not_expr_class(e));
+}
+
+auto bitwise_and_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bitwise_and_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto bitwise_and_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new bitwise_and_expr_class(e1, e2));
+}
+
+auto bitwise_or_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bitwise_or_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto bitwise_or_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new bitwise_or_expr_class(e1, e2));
+}
+
+auto bitwise_xor_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bitwise_xor_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto bitwise_xor_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new bitwise_xor_expr_class(e1, e2));
+}
+
+auto shift_left_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "shift_left_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto shift_left_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new shift_left_expr_class(e1, e2));
+}
+
+auto right_left_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "right_left_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto right_left_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new right_left_expr_class(e1, e2));
+}
+
+auto logical_not_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "logical_not_expr" << std::endl;
+    e->dump(stream, n+2);
+}
+
+auto logical_not_expr(Expression e) -> Expression {
+    return Expression(new logical_not_expr_class(e));
+}
+
+auto logical_and_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "logical_and_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto logical_and_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new logical_and_expr_class(e1, e2));
+}
+
+auto logical_or_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "logical_or_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto logical_or_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new logical_or_expr_class(e1, e2));
+}
+
+auto implication_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "implication_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto implication_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new implication_expr_class(e1, e2));
+}
+
+auto unary_positive_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "unary_positive_expr" << std::endl;
+    e->dump(stream, n+2);
+}
+
+auto unary_positive_expr(Expression e) -> Expression {
+    return Expression(new unary_positive_expr_class(e));
+}
+
+auto unary_negative_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "unary_negative_expr" << std::endl;
+    e->dump(stream, n+2);
+}
+
+auto unary_negative_expr(Expression e) -> Expression {
+    return Expression(new unary_negative_expr_class(e));
+}
+
+auto binary_add_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "binary_add_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto binary_add_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new binary_add_expr_class(e1, e2));
+}
+
+auto binary_sub_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "binary_sub_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto binary_sub_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new binary_sub_expr_class(e1, e2));
+}
+
+auto binary_mul_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "binary_mul_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto binary_mul_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new binary_mul_expr_class(e1, e2));
+}
+
+auto binary_remainder_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "binary_remainder_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new binary_remainder_expr_class(e1, e2));
+}
+
+auto less_then_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "less_then_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto less_then_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new less_then_expr_class(e1, e2));
+}
+
+auto greater_then_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "greater_then_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto greater_then_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new greater_then_expr_class(e1, e2));
+}
+
+auto less_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "less_then_or_equal_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto less_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new less_then_or_equal_expr_class(e1, e2));
+}
+
+auto greater_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "greater_then_or_equal_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto greater_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new greater_then_or_equal_expr_class(e1, e2));
+}
+
+auto equality_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "equality_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto equality_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new equality_expr_class(e1, e2));
+}
+
+auto non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "non_equality_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto non_equality_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new non_equality_expr_class(e1, e2));
+}
+
+auto hdl_equality_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "hdl_equality_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto hdl_equality_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new hdl_equality_expr_class(e1, e2));
+}
+
+auto hdl_non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "hdl_non_equality_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto hdl_non_equality_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new hdl_non_equality_expr_class(e1, e2));
+}
+
+auto str_match_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "str_match_expr" << std::endl;
+    str_expr->dump(stream, n+2);
+    pattern_expr->dump(stream, n+2);
+}
+
+auto str_match_expr(Expression str_expr, Expression pattern_expr) -> Expression {
+    return Expression(new str_match_expr_class(str_expr, pattern_expr));
+}
+
+auto str_does_not_match_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "str_does_not_match_expr" << std::endl;
+    str_expr->dump(stream, n+2);
+    pattern_expr->dump(stream, n+2);
+}
+
+auto str_does_not_match_expr(Expression str_expr, Expression pattern_expr) -> Expression {
+    return Expression(new str_does_not_match_expr_class(str_expr, pattern_expr));
+}
+
+auto in_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "in_expr" << std::endl;
+    exp->dump(stream, n+2);
+    inside->dump(stream, n+2);
+}
+
+auto in_expr(Expression exp, Expression inside) -> Expression {
+    return Expression(new in_expr_class(exp, inside));
+}
+
+auto list_indexing_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_indexing_expr" << std::endl;
+    list_exp->dump(stream, n+2);
+    idx_expr->dump(stream, n+2);
+}
+
+auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression {
+    return Expression(new list_indexing_expr_class(list_exp, idx_expr));
+}
+
+auto list_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_slicing_expr" << std::endl;
+    list_exp->dump(stream, n+2);
+    high_expr->dump(stream, n+2);
+    low_expr->dump(stream, n+2);
+    slice_expr->dump(stream, n+2);
+}
+
+auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) -> Expression {
+    return Expression(new list_slicing_expr_class(list_exp, high_expr, low_expr, slice_expr));
+}
+
+auto list_splicing_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_splicing_expr" << std::endl;
+    list_exp->dump(stream, n+2);
+    low_expr->dump(stream, n+2);
+    high_expr->dump(stream, n+2);
+}
+
+auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression high_expr) -> Expression {
+    return Expression(new list_splicing_expr_class(list_exp, low_expr, high_expr));
+}
+
+auto list_concat_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_concat_expr" << std::endl;
+    list_concat_items->dump(stream, n+2);
+}
+
+auto list_concat_expr(Expressions list_concat_items) -> Expression {
+    return Expression(new list_concat_expr_class(list_concat_items));
+}
+
+auto bit_concat_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bit_concat_expr" << std::endl;
+    bit_concat_items->dump(stream, n+2);
+}
+
+auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
+    return Expression(new bit_concat_expr_class(bit_concat_items));
+}
+
+auto str_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "str_expr" << std::endl;
+    dump_Symbol_(stream, n+2, str);
+}
+
+auto str_expr(Symbol_ str) -> Expression {
+    return Expression(new str_expr_class(str));
+}
+
 auto no_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_expr" << std::endl;
 }
