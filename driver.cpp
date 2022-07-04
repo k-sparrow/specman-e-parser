@@ -9,7 +9,7 @@ driver::driver() :
     m_parser(m_scanner, *this),
     m_location(0)
 {
-
+    this->idtable["NO SYMBOL"] = Symbol(new Entry("NO SYMBOL", 0));
 }
 
 int driver::parse() {

@@ -49,6 +49,20 @@ auto nil_StructMembers() -> StructMembers;
 auto single_StructMembers(StructMember) -> StructMembers;
 auto append_StructMembers(StructMembers, StructMembers) -> StructMembers;
 
+class Action_class;
+typedef std::shared_ptr<Action_class> Action;
+
+class Action_class : public tree_node {
+    public:
+};
+
+typedef list_tree_node<Action> Actions_class;
+typedef std::shared_ptr<Actions_class> Actions;
+
+auto nil_Actions() -> Actions;
+auto single_Actions(Action) -> Actions;
+auto append_Actions(Actions, Actions) -> Actions;
+
 class Expression_class;
 typedef std::shared_ptr<Expression_class> Expression;
 
@@ -62,6 +76,20 @@ typedef std::shared_ptr<Expressions_class> Expressions;
 auto nil_Expressions() -> Expressions;
 auto single_Expressions(Expression) -> Expressions;
 auto append_Expressions(Expressions, Expressions) -> Expressions;
+
+class Formal_class;
+typedef std::shared_ptr<Formal_class> Formal;
+
+class Formal_class : public tree_node {
+    public:
+};
+
+typedef list_tree_node<Formal> Formals_class;
+typedef std::shared_ptr<Formals_class> Formals;
+
+auto nil_Formals() -> Formals;
+auto single_Formals(Formal) -> Formals;
+auto append_Formals(Formals, Formals) -> Formals;
 
 class module__class : public Module_class {
     protected:
@@ -165,6 +193,170 @@ class type__class : public Statement_class {
 };
 
 auto type_(Symbol_ type_id, Expression type_expr) -> Statement;
+
+class import_class : public Statement_class {
+    protected:
+        Symbol_ pkg_id;
+    public:
+        import_class(Symbol_ pkg_id) {
+            this->pkg_id = pkg_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto import(Symbol_ pkg_id) -> Statement;
+
+class formal_class : public Formal_class {
+    protected:
+        Symbol_ name;
+        Symbol_ type_;
+    public:
+        formal_class(Symbol_ name, Symbol_ type_) {
+            this->name = name;
+            this->type_ = type_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto formal(Symbol_ name, Symbol_ type_) -> Formal;
+
+class struct_field_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Symbol_ type;
+    public:
+        struct_field_sm_class(Symbol_ id, Symbol_ type) {
+            this->id = id;
+            this->type = type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember;
+
+class method_dec_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Actions actions_;
+    public:
+        method_dec_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+
+class method_dec_also_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Actions actions_;
+    public:
+        method_dec_also_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+
+class method_dec_first_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Actions actions_;
+    public:
+        method_dec_first_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+
+class method_dec_only_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Actions actions_;
+    public:
+        method_dec_only_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+
+class method_dec_empty_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+    public:
+        method_dec_empty_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
+
+class method_dec_undef_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+    public:
+        method_dec_undef_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
+
+class no_action_class : public Action_class {
+    protected:
+    public:
+        no_action_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto no_action() -> Action;
 
 class id_expr_class : public Expression_class {
     protected:
@@ -680,6 +872,239 @@ class bit_concat_expr_class : public Expression_class {
 };
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression;
+
+class range_modifier_expr_class : public Expression_class {
+    protected:
+        Expressions range_modifier_elements_list;
+    public:
+        range_modifier_expr_class(Expressions range_modifier_elements_list) {
+            this->range_modifier_elements_list = range_modifier_elements_list;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression;
+
+class sized_bits_scalar_expr_class : public Expression_class {
+    protected:
+        Expression width_expr;
+    public:
+        sized_bits_scalar_expr_class(Expression width_expr) {
+            this->width_expr = width_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto sized_bits_scalar_expr(Expression width_expr) -> Expression;
+
+class sized_bytes_scalar_expr_class : public Expression_class {
+    protected:
+        Expression width_expr;
+    public:
+        sized_bytes_scalar_expr_class(Expression width_expr) {
+            this->width_expr = width_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto sized_bytes_scalar_expr(Expression width_expr) -> Expression;
+
+class allocate_expr_class : public Expression_class {
+    protected:
+        Expression opt_struct_type_block;
+    public:
+        allocate_expr_class(Expression opt_struct_type_block) {
+            this->opt_struct_type_block = opt_struct_type_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto allocate_expr(Expression opt_struct_type_block) -> Expression;
+
+class struct_type_expr_with_opt_action_block_class : public Expression_class {
+    protected:
+        Expression struct_id_expr;
+        Expression opt_action_block_expt;
+    public:
+        struct_type_expr_with_opt_action_block_class(Expression struct_id_expr, Expression opt_action_block_expt) {
+            this->struct_id_expr = struct_id_expr;
+            this->opt_action_block_expt = opt_action_block_expt;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expression opt_action_block_expt) -> Expression;
+
+class named_action_block_class : public Expression_class {
+    protected:
+        Expression struct_id_expr;
+        Actions action_block;
+    public:
+        named_action_block_class(Expression struct_id_expr, Actions action_block) {
+            this->struct_id_expr = struct_id_expr;
+            this->action_block = action_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expression;
+
+class struct_type_id_class : public Expression_class {
+    protected:
+        Expressions struct_type_modifiers;
+        Expression struct_id_expr;
+    public:
+        struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr) {
+            this->struct_type_modifiers = struct_type_modifiers;
+            this->struct_id_expr = struct_id_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression;
+
+class struct_type_modifier_class : public Expression_class {
+    protected:
+        Expression value;
+        Expression id;
+    public:
+        struct_type_modifier_class(Expression value, Expression id) {
+            this->value = value;
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_type_modifier(Expression value, Expression id) -> Expression;
+
+class struct_hier_ref_expr_class : public Expression_class {
+    protected:
+        Expressions hiers;
+    public:
+        struct_hier_ref_expr_class(Expressions hiers) {
+            this->hiers = hiers;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_hier_ref_expr(Expressions hiers) -> Expression;
+
+class hdl_path_name_expr_class : public Expression_class {
+    protected:
+        Expressions hdl_hiers;
+    public:
+        hdl_path_name_expr_class(Expressions hdl_hiers) {
+            this->hdl_hiers = hdl_hiers;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto hdl_path_name_expr(Expressions hdl_hiers) -> Expression;
+
+class ternary_operator_expr_class : public Expression_class {
+    protected:
+        Expression condition;
+        Expression true_expr;
+        Expression false_expr;
+    public:
+        ternary_operator_expr_class(Expression condition, Expression true_expr, Expression false_expr) {
+            this->condition = condition;
+            this->true_expr = true_expr;
+            this->false_expr = false_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression;
+
+class cast_operator_expr_class : public Expression_class {
+    protected:
+        Expression casted_expr;
+        Expression dest_type_expr;
+    public:
+        cast_operator_expr_class(Expression casted_expr, Expression dest_type_expr) {
+            this->casted_expr = casted_expr;
+            this->dest_type_expr = dest_type_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression;
+
+class constraint_expr_class : public Expression_class {
+    protected:
+        Expression bool_expr;
+    public:
+        constraint_expr_class(Expression bool_expr) {
+            this->bool_expr = bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto constraint_expr(Expression bool_expr) -> Expression;
+
+class soft_constraint_expr_class : public Expression_class {
+    protected:
+        Expression bool_expr;
+    public:
+        soft_constraint_expr_class(Expression bool_expr) {
+            this->bool_expr = bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto soft_constraint_expr(Expression bool_expr) -> Expression;
+
+class method_call_expr_class : public Expression_class {
+    protected:
+        Expression base;
+        Expressions arguments;
+    public:
+        method_call_expr_class(Expression base, Expressions arguments) {
+            this->base = base;
+            this->arguments = arguments;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto method_call_expr(Expression base, Expressions arguments) -> Expression;
+
+class me_expr_class : public Expression_class {
+    protected:
+    public:
+        me_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto me_expr() -> Expression;
+
+class it_expr_class : public Expression_class {
+    protected:
+    public:
+        it_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto it_expr() -> Expression;
 
 class str_expr_class : public Expression_class {
     protected:

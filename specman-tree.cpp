@@ -39,6 +39,19 @@ auto append_StructMembers(StructMembers p1, StructMembers p2) -> StructMembers {
     return StructMembers(new list_tree_node<StructMember>(*p1, *p2));
 }
 
+/* implementations for Actions */
+auto nil_Actions() -> Actions {
+    return Actions(new list_tree_node<Action>());
+}
+
+auto single_Actions(Action p) -> Actions {
+    return Actions(new list_tree_node<Action>(p));
+}
+
+auto append_Actions(Actions p1, Actions p2) -> Actions {
+    return Actions(new list_tree_node<Action>(*p1, *p2));
+}
+
 /* implementations for Expressions */
 auto nil_Expressions() -> Expressions {
     return Expressions(new list_tree_node<Expression>());
@@ -50,6 +63,19 @@ auto single_Expressions(Expression p) -> Expressions {
 
 auto append_Expressions(Expressions p1, Expressions p2) -> Expressions {
     return Expressions(new list_tree_node<Expression>(*p1, *p2));
+}
+
+/* implementations for Formals */
+auto nil_Formals() -> Formals {
+    return Formals(new list_tree_node<Formal>());
+}
+
+auto single_Formals(Formal p) -> Formals {
+    return Formals(new list_tree_node<Formal>(p));
+}
+
+auto append_Formals(Formals p1, Formals p2) -> Formals {
+    return Formals(new list_tree_node<Formal>(*p1, *p2));
 }
 
 auto module__class::dump(std::ostream& stream, int n) -> void {
@@ -119,6 +145,113 @@ auto type__class::dump(std::ostream& stream, int n) -> void {
 
 auto type_(Symbol_ type_id, Expression type_expr) -> Statement {
     return Statement(new type__class(type_id, type_expr));
+}
+
+auto import_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "import" << std::endl;
+    dump_Symbol_(stream, n+2, pkg_id);
+}
+
+auto import(Symbol_ pkg_id) -> Statement {
+    return Statement(new import_class(pkg_id));
+}
+
+auto formal_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "formal" << std::endl;
+    dump_Symbol_(stream, n+2, name);
+    dump_Symbol_(stream, n+2, type_);
+}
+
+auto formal(Symbol_ name, Symbol_ type_) -> Formal {
+    return Formal(new formal_class(name, type_));
+}
+
+auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_field_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    dump_Symbol_(stream, n+2, type);
+}
+
+auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember {
+    return StructMember(new struct_field_sm_class(id, type));
+}
+
+auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    actions_->dump(stream, n+2);
+}
+
+auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+    return StructMember(new method_dec_sm_class(id, arguments, return_type, actions_));
+}
+
+auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_also_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    actions_->dump(stream, n+2);
+}
+
+auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+    return StructMember(new method_dec_also_sm_class(id, arguments, return_type, actions_));
+}
+
+auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_first_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    actions_->dump(stream, n+2);
+}
+
+auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+    return StructMember(new method_dec_first_sm_class(id, arguments, return_type, actions_));
+}
+
+auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_only_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    actions_->dump(stream, n+2);
+}
+
+auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+    return StructMember(new method_dec_only_sm_class(id, arguments, return_type, actions_));
+}
+
+auto method_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_empty_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+}
+
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember {
+    return StructMember(new method_dec_empty_sm_class(id, arguments, return_type));
+}
+
+auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_dec_undef_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+}
+
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember {
+    return StructMember(new method_dec_undef_sm_class(id, arguments, return_type));
+}
+
+auto no_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "no_action" << std::endl;
+}
+
+auto no_action() -> Action {
+    return Action(new no_action_class());
 }
 
 auto id_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -464,6 +597,165 @@ auto bit_concat_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
     return Expression(new bit_concat_expr_class(bit_concat_items));
+}
+
+auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "range_modifier_expr" << std::endl;
+    range_modifier_elements_list->dump(stream, n+2);
+}
+
+auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression {
+    return Expression(new range_modifier_expr_class(range_modifier_elements_list));
+}
+
+auto sized_bits_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sized_bits_scalar_expr" << std::endl;
+    width_expr->dump(stream, n+2);
+}
+
+auto sized_bits_scalar_expr(Expression width_expr) -> Expression {
+    return Expression(new sized_bits_scalar_expr_class(width_expr));
+}
+
+auto sized_bytes_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sized_bytes_scalar_expr" << std::endl;
+    width_expr->dump(stream, n+2);
+}
+
+auto sized_bytes_scalar_expr(Expression width_expr) -> Expression {
+    return Expression(new sized_bytes_scalar_expr_class(width_expr));
+}
+
+auto allocate_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "allocate_expr" << std::endl;
+    opt_struct_type_block->dump(stream, n+2);
+}
+
+auto allocate_expr(Expression opt_struct_type_block) -> Expression {
+    return Expression(new allocate_expr_class(opt_struct_type_block));
+}
+
+auto struct_type_expr_with_opt_action_block_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_type_expr_with_opt_action_block" << std::endl;
+    struct_id_expr->dump(stream, n+2);
+    opt_action_block_expt->dump(stream, n+2);
+}
+
+auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expression opt_action_block_expt) -> Expression {
+    return Expression(new struct_type_expr_with_opt_action_block_class(struct_id_expr, opt_action_block_expt));
+}
+
+auto named_action_block_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "named_action_block" << std::endl;
+    struct_id_expr->dump(stream, n+2);
+    action_block->dump(stream, n+2);
+}
+
+auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expression {
+    return Expression(new named_action_block_class(struct_id_expr, action_block));
+}
+
+auto struct_type_id_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_type_id" << std::endl;
+    struct_type_modifiers->dump(stream, n+2);
+    struct_id_expr->dump(stream, n+2);
+}
+
+auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression {
+    return Expression(new struct_type_id_class(struct_type_modifiers, struct_id_expr));
+}
+
+auto struct_type_modifier_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_type_modifier" << std::endl;
+    value->dump(stream, n+2);
+    id->dump(stream, n+2);
+}
+
+auto struct_type_modifier(Expression value, Expression id) -> Expression {
+    return Expression(new struct_type_modifier_class(value, id));
+}
+
+auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_hier_ref_expr" << std::endl;
+    hiers->dump(stream, n+2);
+}
+
+auto struct_hier_ref_expr(Expressions hiers) -> Expression {
+    return Expression(new struct_hier_ref_expr_class(hiers));
+}
+
+auto hdl_path_name_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "hdl_path_name_expr" << std::endl;
+    hdl_hiers->dump(stream, n+2);
+}
+
+auto hdl_path_name_expr(Expressions hdl_hiers) -> Expression {
+    return Expression(new hdl_path_name_expr_class(hdl_hiers));
+}
+
+auto ternary_operator_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "ternary_operator_expr" << std::endl;
+    condition->dump(stream, n+2);
+    true_expr->dump(stream, n+2);
+    false_expr->dump(stream, n+2);
+}
+
+auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression {
+    return Expression(new ternary_operator_expr_class(condition, true_expr, false_expr));
+}
+
+auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "cast_operator_expr" << std::endl;
+    casted_expr->dump(stream, n+2);
+    dest_type_expr->dump(stream, n+2);
+}
+
+auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression {
+    return Expression(new cast_operator_expr_class(casted_expr, dest_type_expr));
+}
+
+auto constraint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "constraint_expr" << std::endl;
+    bool_expr->dump(stream, n+2);
+}
+
+auto constraint_expr(Expression bool_expr) -> Expression {
+    return Expression(new constraint_expr_class(bool_expr));
+}
+
+auto soft_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "soft_constraint_expr" << std::endl;
+    bool_expr->dump(stream, n+2);
+}
+
+auto soft_constraint_expr(Expression bool_expr) -> Expression {
+    return Expression(new soft_constraint_expr_class(bool_expr));
+}
+
+auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_call_expr" << std::endl;
+    base->dump(stream, n+2);
+    arguments->dump(stream, n+2);
+}
+
+auto method_call_expr(Expression base, Expressions arguments) -> Expression {
+    return Expression(new method_call_expr_class(base, arguments));
+}
+
+auto me_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "me_expr" << std::endl;
+}
+
+auto me_expr() -> Expression {
+    return Expression(new me_expr_class());
+}
+
+auto it_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "it_expr" << std::endl;
+}
+
+auto it_expr() -> Expression {
+    return Expression(new it_expr_class());
 }
 
 auto str_expr_class::dump(std::ostream& stream, int n) -> void {

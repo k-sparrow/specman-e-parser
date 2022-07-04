@@ -51,6 +51,7 @@ all	        (all)
 first	    (first)
 of	        (of)
 me	        (me) 
+it	        (it) 
 keeping     (keeping)
 keep        (keep)
 like        (like)
@@ -91,6 +92,10 @@ assume	    (assume)
 expect	    (expect)
 assert	    (assert)
 step	    (step)
+new         (new)
+as_a        (as_a)
+soft        (soft)
+import      (import)
 
 
 null	      (NULL)
@@ -121,6 +126,7 @@ lte             <=
 lt              <
 mul             \*
 div             \/
+slash           \\
 rem             %
 hwp             \$
 
@@ -138,6 +144,7 @@ colon           \:
 semicolon       \;
 comma           \,
 implication     =>
+ternary         \?
 
 string  \"[^\n"]+\"
 
@@ -192,6 +199,7 @@ number  [0-9]+
 {first}	    { return yy::parser::make_FIRST(location()); }
 {of}	    { return yy::parser::make_OF(location()); }
 {me}	    { return yy::parser::make_ME(location()); } 
+{it}	    { return yy::parser::make_IT(location()); } 
 {keeping}   { return yy::parser::make_KEEPING(location());  }
 {keep}      { return yy::parser::make_KEEP(location());  }
 {bind}      { return yy::parser::make_BIND(location());  }
@@ -233,6 +241,10 @@ number  [0-9]+
 {expect}	{ return yy::parser::make_EXPECT(location()); }
 {assert}	{ return yy::parser::make_ASSERT(location()); }
 {step}	    { return yy::parser::make_STEP(location()); }
+{new}	    { return yy::parser::make_NEW(location()); }
+{as_a}	    { return yy::parser::make_AS_A(location()); }
+{soft}	    { return yy::parser::make_SOFT(location()); }
+{import}	{ return yy::parser::make_IMPORT(location()); }
 
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
@@ -265,8 +277,10 @@ number  [0-9]+
 {lt}	        { return yy::parser::make_LT(location()); }          
 {mul}	        { return yy::parser::make_MUL(location()); }         
 {div}	        { return yy::parser::make_DIV(location()); }         
+{slash}	        { return yy::parser::make_SLASH(location()); }         
 {rem}	        { return yy::parser::make_REMAINDER(location()); }         
 {hwp}	        { return yy::parser::make_HWP(location()); }         
+{ternary}       { return yy::parser::make_TERNARY(location()); }         
 
 {lparen}	{ return yy::parser::make_LPAREN(location()); }      
 {rparen}	{ return yy::parser::make_RPAREN(location()); }      
