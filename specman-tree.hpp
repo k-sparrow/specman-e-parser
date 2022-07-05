@@ -381,6 +381,128 @@ class method_dec_undef_sm_class : public StructMember_class {
 
 auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
 
+class tcm_dec_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+        Actions actions_;
+    public:
+        tcm_dec_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+
+class tcm_dec_also_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+        Actions actions_;
+    public:
+        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+
+class tcm_dec_first_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+        Actions actions_;
+    public:
+        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+
+class tcm_dec_only_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+        Actions actions_;
+    public:
+        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+            this->actions_ = actions_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+
+class tcm_dec_empty_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+    public:
+        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
+
+class tcm_dec_undef_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Formals arguments;
+        Symbol_ return_type;
+        Expression event_id_expr;
+    public:
+        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) {
+            this->id = id;
+            this->arguments = arguments;
+            this->return_type = return_type;
+            this->event_id_expr = event_id_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
+
 class when_subtype_sm_class : public StructMember_class {
     protected:
         Expressions subtype_mods;

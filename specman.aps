@@ -42,7 +42,15 @@ module Specman begin
         constructor method_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: Symbol_) : StructMember;
         constructor method_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: Symbol_) : StructMember;
 
+        constructor tcm_dec_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression ;actions_: Actions) : StructMember;
+        constructor tcm_dec_also_sm (id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_first_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_only_sm (id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression) : StructMember;
+        constructor tcm_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression) : StructMember;
+
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
+        
         constructor no_action() : Action;
 
         constructor id_expr(id: Symbol_) : Expression;

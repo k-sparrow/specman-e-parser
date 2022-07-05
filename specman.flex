@@ -146,6 +146,7 @@ semicolon       \;
 comma           \,
 implication     =>
 ternary         \?
+at              \@
 
 string  \"[^\n"]+\"
 
@@ -291,6 +292,7 @@ number  [0-9]+
 {lbrace}	{ return yy::parser::make_LBRACE(location()); }      
 {rbrace}	{ return yy::parser::make_RBRACE(location()); }      
 {sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
+{at}	    { return yy::parser::make_AT(location()); }   
 
 {comma}       { return yy::parser::make_COMMA(location()); }
 {colon}       { return yy::parser::make_COLON(location()); }

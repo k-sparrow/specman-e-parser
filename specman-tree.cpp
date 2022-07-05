@@ -268,6 +268,82 @@ auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> 
     return StructMember(new method_dec_undef_sm_class(id, arguments, return_type));
 }
 
+auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+    actions_->dump(stream, n+2);
+}
+
+auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+    return StructMember(new tcm_dec_sm_class(id, arguments, return_type, event_id_expr, actions_));
+}
+
+auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_also_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+    actions_->dump(stream, n+2);
+}
+
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+    return StructMember(new tcm_dec_also_sm_class(id, arguments, return_type, event_id_expr, actions_));
+}
+
+auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_first_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+    actions_->dump(stream, n+2);
+}
+
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+    return StructMember(new tcm_dec_first_sm_class(id, arguments, return_type, event_id_expr, actions_));
+}
+
+auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_only_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+    actions_->dump(stream, n+2);
+}
+
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+    return StructMember(new tcm_dec_only_sm_class(id, arguments, return_type, event_id_expr, actions_));
+}
+
+auto tcm_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_empty_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+}
+
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
+    return StructMember(new tcm_dec_empty_sm_class(id, arguments, return_type, event_id_expr));
+}
+
+auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "tcm_dec_undef_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    arguments->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, return_type);
+    event_id_expr->dump(stream, n+2);
+}
+
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
+    return StructMember(new tcm_dec_undef_sm_class(id, arguments, return_type, event_id_expr));
+}
+
 auto when_subtype_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "when_subtype_sm" << std::endl;
     subtype_mods->dump(stream, n+2);

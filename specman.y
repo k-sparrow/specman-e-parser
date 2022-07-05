@@ -169,6 +169,7 @@
 %token REMAINDER      
 %token HWP
 %token TERNARY   
+%token AT
 
 %token LPAREN      
 %token RPAREN      
@@ -193,6 +194,11 @@
 %token <elex::Symbol_> ID
 %token <int> NUMBER
 %token END 0 
+
+/* token precedence */
+%nonassoc EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
+%left IN IS OR AND LOGICAL_AND_OP LOGICAL_OR_OP BTWS_AND_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
+%right LOGICAL_NOT_OP BTWS_NOT_OP
 
 /* ------------------ helpers ------------------ */
 %nterm <elex::Symbol_>    OPT_SEMICOLON
@@ -224,6 +230,7 @@
 
 %nterm <elex::StructMember>  field_declaration
 %nterm <elex::StructMember>  method_declaration
+%nterm <elex::StructMember>  tcm_declaration
 %nterm <elex::StructMember>  event_declaration
 %nterm <elex::StructMember>  coverage_group_declaration
 %nterm <elex::StructMember>  when_subtype_declaration
@@ -389,6 +396,7 @@ struct_member : non_term_struct_member SEMICOLON { $$ = $1; }
 non_term_struct_member : 
       field_declaration        { $$ = $1; }
     | method_declaration       { $$ = $1; }
+    | tcm_declaration          { $$ = $1; }
     | when_subtype_declaration { $$ = $1; }
 //   | event_declaration { $$ = $1; }
 //   | coverage_group_declaration { $$ = $1; }
@@ -476,6 +484,53 @@ method_declaration :
       }
     ;     
 
+tcm_declaration : 
+      /*
+        method([arguments]) [: return_type] @event is [also|only|first] { action; ...}
+      */
+      ID[id] LPAREN formals[args] RPAREN opt_return_type[return_type] AT hier_ref_expression[event] IS opt_method_extension_modifier[method_modifier] action_block[actions_]       
+      { 
+          switch($method_modifier) {
+            case eNone: {  // method([arguments]) [: return_type] @event is { action; ...}
+              $$ = elex::tcm_dec_sm($id, $args, $return_type, $event, $actions_); 
+              break;  
+            }
+
+            case eOnly: {  // method([arguments]) [: return_type] @event is only { action; ...}
+              $$ = elex::tcm_dec_only_sm($id, $args, $return_type, $event, $actions_); 
+              break;  
+            }
+
+            case eAlso: { // method([arguments]) [: return_type] @event is also { action; ...}
+              $$ = elex::tcm_dec_also_sm($id, $args, $return_type, $event, $actions_); 
+              break;  
+            }
+
+            case eFirst: { // method([arguments]) [: return_type] @event is first { action; ...}
+              $$ = elex::tcm_dec_first_sm($id, $args, $return_type, $event, $actions_); 
+              break;  
+            }
+          }
+      }
+
+      /*
+        method([arguments]) [: return_type] @event is empty|undefined
+      */
+    | ID[id] LPAREN formals[args] RPAREN opt_return_type[return_type] AT hier_ref_expression[event] IS opt_method_introduction_modifier[intro_modifier]
+      {
+          switch($intro_modifier) {
+            case eEmpty: {  // method([arguments]) [: return_type] @event is empty
+              $$ = elex::tcm_dec_empty_sm($id, $args, $return_type, $event);
+              break;
+            }
+            
+            case eUndefined : { // method([arguments]) [: return_type] @event is undefined
+              $$ = elex::tcm_dec_undef_sm($id, $args, $return_type, $event); 
+            }
+          }
+      }
+    ;
+
 opt_method_extension_modifier : 
       %empty { $$ = eNone; }
     | ONLY   { $$ = eOnly; }
@@ -527,11 +582,11 @@ non_term_expression :
       type_scalar        { $$ = $1; }
     | bitwise_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
-    ; // TODO: correctly implement this
+    | id_expr            { $$ = $1; }
+    ; // TODO: fully implement this
 
-type_scalar: 
-    id_expr          { $$ = $1; } 
-    | enum_type_expr { $$ = $1; } 
+type_scalar: // TODO: fully implement this
+    enum_type_expr { $$ = $1; } 
     ;
 
 enum_type_expr : LBRACKET enum_list_exprs RBRACKET { $$ = elex::enum_type_expr($2); }
@@ -561,14 +616,14 @@ unary_bitwise_expression :
     ;
 
 binary_bitwise_expression : 
-      expression BTWS_AND_OP expression { $$ = elex::bitwise_and_expr($1, $3); }
-    | expression BTWS_OR_OP expression  { $$ = elex::bitwise_or_expr($1, $3); }
-    | expression XOR_OP expression      { $$ = elex::bitwise_xor_expr($1, $3); }
+      non_term_expression BTWS_AND_OP non_term_expression { $$ = elex::bitwise_and_expr($1, $3); }
+    | non_term_expression BTWS_OR_OP  non_term_expression { $$ = elex::bitwise_or_expr($1, $3); }
+    | non_term_expression XOR_OP      non_term_expression { $$ = elex::bitwise_xor_expr($1, $3); }
     ;
 
 shift_expression : 
-      expression LSHIFT expression { $$ = elex::shift_left_expr($1, $3); }
-    | expression RSHIFT expression { $$ = elex::right_left_expr($1, $3); }
+      non_term_expression LSHIFT non_term_expression { $$ = elex::shift_left_expr($1, $3); }
+    | non_term_expression RSHIFT non_term_expression { $$ = elex::right_left_expr($1, $3); }
     ;
 
 logical_expression : 
@@ -580,22 +635,22 @@ logical_expression :
     ;
 
 unary_logical_expression : 
-    LOGICAL_NOT_OP expression   { $$ = elex::logical_not_expr($2); }
+    LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
     ;
 
 binary_logical_expression : 
-      expression LOGICAL_AND_OP expression { $$ = elex::logical_and_expr($1, $3); }
-    | expression AND expression            { $$ = elex::logical_and_expr($1, $3); }
-    | expression LOGICAL_OR_OP expression  { $$ = elex::logical_or_expr($1, $3); }
-    | expression OR expression             { $$ = elex::logical_or_expr($1, $3); }
+      non_term_expression LOGICAL_AND_OP non_term_expression { $$ = elex::logical_and_expr($1, $3); }
+    | non_term_expression AND non_term_expression            { $$ = elex::logical_and_expr($1, $3); }
+    | non_term_expression LOGICAL_OR_OP non_term_expression  { $$ = elex::logical_or_expr($1, $3); }
+    | non_term_expression OR non_term_expression             { $$ = elex::logical_or_expr($1, $3); }
     ;
 
 implication_expression : 
-    expression IMPLICATION expression { $$ = elex::implication_expr($1, $3); }
+    non_term_expression IMPLICATION non_term_expression { $$ = elex::implication_expr($1, $3); }
     ;
 
 inclusion_expression : 
-    expression IN expression          { $$ = elex::in_expr($1, $3); }
+    non_term_expression IN non_term_expression          { $$ = elex::in_expr($1, $3); }
     ;
 
 arithmetic_expression : 
@@ -604,41 +659,41 @@ arithmetic_expression :
     ;
 
 unary_arithmetic_expression : 
-      PLUS expression  { $$ = elex::unary_positive_expr($2); }
-    | MINUS expression { $$ = elex::unary_negative_expr($2); }
+      PLUS non_term_expression  { $$ = elex::unary_positive_expr($2); }
+    | MINUS non_term_expression { $$ = elex::unary_negative_expr($2); }
     ;
 
 binary_arithmetic_expression : 
-      expression PLUS      expression { $$ = elex::binary_add_expr($1, $3); }
-    | expression MINUS     expression { $$ = elex::binary_sub_expr($1, $3); }
-    | expression MUL       expression { $$ = elex::binary_mul_expr($1, $3); }
-    | expression DIV       expression { $$ = elex::binary_div_expr($1, $3); }
-    | expression REMAINDER expression { $$ = elex::binary_remainder_expr($1, $3); }
+      non_term_expression PLUS      non_term_expression { $$ = elex::binary_add_expr($1, $3); }
+    | non_term_expression MINUS     non_term_expression { $$ = elex::binary_sub_expr($1, $3); }
+    | non_term_expression MUL       non_term_expression { $$ = elex::binary_mul_expr($1, $3); }
+    | non_term_expression DIV       non_term_expression { $$ = elex::binary_div_expr($1, $3); }
+    | non_term_expression REMAINDER non_term_expression { $$ = elex::binary_remainder_expr($1, $3); }
     ;
 
 comparison_expression : 
-      expression GT expression  { $$ = elex::greater_then_expr($1, $3); }
-    | expression LT expression  { $$ = elex::less_then_expr($1, $3); }
-    | expression GTE expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
-    | expression LTE expression { $$ = elex::less_then_or_equal_expr($1, $3); }
-    | expression EQ expression  { $$ = elex::equality_expr($1, $3); }
-    | expression NEQ expression { $$ = elex::non_equality_expr($1, $3); }
-    | expression VERILOG_EQ expression  { $$ = elex::hdl_equality_expr($1, $3); }
-    | expression VERILOG_NEQ expression { $$ = elex::hdl_non_equality_expr($1, $3); }
-    | expression BTWS_NOT_OP expression                { $$ = elex::str_match_expr($1, $3); } // "str" ~ "pattern"
-    | expression LOGICAL_NOT_OP BTWS_NOT_OP expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
+      non_term_expression GT non_term_expression  { $$ = elex::greater_then_expr($1, $3); }
+    | non_term_expression LT non_term_expression  { $$ = elex::less_then_expr($1, $3); }
+    | non_term_expression GTE non_term_expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
+    | non_term_expression LTE non_term_expression { $$ = elex::less_then_or_equal_expr($1, $3); }
+    | non_term_expression EQ non_term_expression  { $$ = elex::equality_expr($1, $3); }
+    | non_term_expression NEQ non_term_expression { $$ = elex::non_equality_expr($1, $3); }
+    | non_term_expression VERILOG_EQ non_term_expression  { $$ = elex::hdl_equality_expr($1, $3); }
+    | non_term_expression VERILOG_NEQ non_term_expression { $$ = elex::hdl_non_equality_expr($1, $3); }
+    | non_term_expression BTWS_NOT_OP non_term_expression                { $$ = elex::str_match_expr($1, $3); } // "str" ~ "pattern"
+    | non_term_expression LOGICAL_NOT_OP BTWS_NOT_OP non_term_expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
     ;
 
 list_indexing_expression : 
-    expression LBRACKET expression RBRACKET { $$ = elex::list_indexing_expr($1, $3); }
+    non_term_expression LBRACKET non_term_expression RBRACKET { $$ = elex::list_indexing_expr($1, $3); }
     ;
 
 list_slicing_expression : 
-    expression LBRACKET opt_expr COLON opt_expr opt_slice_expr RBRACKET { $$ = elex::list_slicing_expr($1, $3, $5, $6); }
+    non_term_expression LBRACKET opt_expr COLON opt_expr opt_slice_expr RBRACKET { $$ = elex::list_slicing_expr($1, $3, $5, $6); }
     ;
 
 list_splicing_expression : 
-    expression LBRACKET opt_expr DDOT opt_expr RBRACKET { $$ = elex::list_splicing_expr($1, $3, $5); }
+    non_term_expression LBRACKET opt_expr DDOT opt_expr RBRACKET { $$ = elex::list_splicing_expr($1, $3, $5); }
     ;
     
 list_concatenation_expression : 
@@ -646,8 +701,8 @@ list_concatenation_expression :
     ;
 
 list_concat_expressions : 
-      expression                                   { $$ = elex::single_Expressions($1); }
-    | list_concat_expressions SEMICOLON expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      non_term_expression                                   { $$ = elex::single_non_term_expressions($1); }
+    | list_concat_expressions SEMICOLON non_term_expression { $$ = elex::append_non_term_expressions($1, elex::single_non_term_expressions($3)); }
     ;
 
 bit_concatenation_expression : 
@@ -659,8 +714,8 @@ range_modifier_expression :
     ;
 
 comma_separated_expressions : 
-      expression                                   { $$ = elex::single_Expressions($1); }
-    | comma_separated_expressions COMMA expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      non_term_expression                                   { $$ = elex::single_non_term_expressions($1); }
+    | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_non_term_expressions($1, elex::single_non_term_expressions($3)); }
     ;
 
 sized_scalar_expr : 
@@ -690,6 +745,7 @@ struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
 
         auto struct_id = $modifiers.m_elems.back();
         $modifiers.m_elems.pop_back();
+
         $$ = elex::struct_type_id_expr($modifiers, struct_id); 
     }
     ;
@@ -720,11 +776,11 @@ opt_iterated_id_expr : // [[ (name) ]]
 
 opt_slice_expr : // [[: slice]]
       %empty            { $$ = elex::no_expr(); }
-    | COLON expression  { $$ = $2; } 
+    | COLON non_term_expression  { $$ = $2; } 
 
 opt_expr :  // [[ expr ]]
       %empty        { $$ = elex::no_expr(); }
-    | expression    { $$ = $1; }
+    | non_term_expression    { $$ = $1; }
     ;
 
 str_expression : 
@@ -736,8 +792,8 @@ hier_ref_expression :
     ;
 
 dot_separated_expressions : 
-      expression                                { $$ = elex::single_Expressions($1); }
-    | dot_separated_expressions DOT expression  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      non_term_expression                                { $$ = elex::single_Expressions($1); }
+    | dot_separated_expressions DOT non_term_expression  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 hdl_pathname_expression : 
@@ -746,17 +802,17 @@ hdl_pathname_expression :
     ; 
 
 slash_separated_expressions : 
-      expression                                   { $$ = elex::single_Expressions($1); }
-    | slash_separated_expressions SLASH expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      non_term_expression                                   { $$ = elex::single_Expressions($1); }
+    | slash_separated_expressions SLASH non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 
 ternary_operator_expression :
-    expression[cond] TERNARY expression[true_exp] COLON expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
+    non_term_expression[cond] TERNARY non_term_expression[true_exp] COLON non_term_expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
     ;   
 
 casting_operator_expression :
-    expression[casted] DOT AS_A LPAREN expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
+    non_term_expression[casted] DOT AS_A LPAREN non_term_expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
     ;
 
 constraint_expression : 
@@ -765,7 +821,7 @@ constraint_expression :
     ;
 
 method_call_expression : 
-    expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
+    non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
     ;
 
 me_expression : 

@@ -5,3 +5,5 @@ parser*
 flex-main
 scanner.cpp
 *.log
+*.xml
+*.html
