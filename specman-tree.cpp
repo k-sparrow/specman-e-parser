@@ -176,6 +176,28 @@ auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember {
     return StructMember(new struct_field_sm_class(id, type));
 }
 
+auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_field_list_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    len_expr->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, list_type);
+}
+
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, Symbol_ list_type) -> StructMember {
+    return StructMember(new struct_field_list_sm_class(id, len_expr, list_type));
+}
+
+auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_field_assoc_list_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    key_type->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, list_type);
+}
+
+auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Symbol_ list_type) -> StructMember {
+    return StructMember(new struct_field_assoc_list_sm_class(id, key_type, list_type));
+}
+
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
@@ -244,6 +266,16 @@ auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
 
 auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember {
     return StructMember(new method_dec_undef_sm_class(id, arguments, return_type));
+}
+
+auto when_subtype_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "when_subtype_sm" << std::endl;
+    subtype_mods->dump(stream, n+2);
+    subtype_members->dump(stream, n+2);
+}
+
+auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember {
+    return StructMember(new when_subtype_sm_class(subtype_mods, subtype_members));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

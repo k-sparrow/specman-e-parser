@@ -43,6 +43,7 @@
 %code top{
     #include <iostream>
     #include <string>
+    #include <exception>
     #include "scanner.hpp"
     #include "parser.hpp"
     #include "driver.hpp"
@@ -133,6 +134,7 @@
 %token NEW
 %token AS_A    
 %token IMPORT    
+%token KEY    
 
 %token NULL_
 %token UNDEF
@@ -229,6 +231,10 @@
 %nterm <elex::StructMember>  constraint_definition
 %nterm <elex::StructMember>  expect_definition
 
+%nterm <elex::StructMember>  scalar_field_declaration
+%nterm <elex::StructMember>  list_field_declaration
+%nterm <elex::StructMember>  keyed_list_field_declaration
+
 /* Actions */
 %nterm <elex::Actions> actions
 %nterm <elex::Actions> action_block
@@ -275,7 +281,8 @@
 %nterm <elex::Expressions>  opt_struct_type_expr_with_opt_action_block
 %nterm <elex::Expression>   opt_struct_type_id_expression
 %nterm <elex::Expression>   struct_type_id_expression
-%nterm <elex::Expression>   opt_struct_type_modifiers
+%nterm <elex::Expressions>  struct_type_modifiers
+%nterm <elex::Expressions>  opt_struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
 %nterm <elex::Expression>   named_action_block
 %nterm <elex::Expression>   opt_iterated_id_expr
@@ -317,6 +324,7 @@
 %nterm <elex::e_method_int_mod> opt_method_introduction_modifier
 %nterm <elex::e_method_ext_mod> opt_method_extension_modifier
 
+%nterm <elex::Expression>   opt_len_expr
 %start module
 
 %%
@@ -379,20 +387,48 @@ struct_member : non_term_struct_member SEMICOLON { $$ = $1; }
     ;
 
 non_term_struct_member : 
-      field_declaration { $$ = $1; }
-    | method_declaration { $$ = $1; }
+      field_declaration        { $$ = $1; }
+    | method_declaration       { $$ = $1; }
+    | when_subtype_declaration { $$ = $1; }
 //   | event_declaration { $$ = $1; }
 //   | coverage_group_declaration { $$ = $1; }
-//   | when_subtype_declaration { $$ = $1; }
 //   | on_event_definition { $$ = $1; }
 //   | constraint_definition { $$ = $1; }
 //   | expect_definition { $$ = $1; }
     ; // TODO: correctly implement this
 
 field_declaration : 
-    ID[name] COLON ID[type_] { $$ = elex::struct_field_sm($name, $type_); }
+      scalar_field_declaration      { $$ = $1; }
+    | list_field_declaration        { $$ = $1; }
+    | keyed_list_field_declaration  { $$ = $1; }
     ;
 
+// name : type
+
+// TODO: type should not only be an id expression but also a struct name qualifier
+// TODO: add optional physical and do-not-randomize modifiers
+// TODO: add optional const modifier
+// TODO: add optional bits|bytes length specification
+scalar_field_declaration : 
+    ID[name] COLON ID[type_] { $$ = elex::struct_field_sm($name, $type_); }     
+    ;
+
+// list-name[[len]] : list of type
+
+// TODO: make $len optional
+// TODO: type should not only be an id expression but also a struct name qualifier
+// TODO: add optional physical and do-not-randomize modifiers
+list_field_declaration : 
+    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF ID[type_] { $$ = elex::struct_field_list_sm($name, $len, $type_); }
+    ;
+
+// list-name : list(key: key-name) of list-type
+
+// TODO: type should not only be an id expression but also a struct name qualifier
+// TODO: add optional physical and do-not-randomize modifiers
+keyed_list_field_declaration : 
+    ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF ID[list_type] { $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type); }
+    ;
 
 method_declaration : 
       /*
@@ -450,6 +486,18 @@ opt_method_extension_modifier :
 opt_method_introduction_modifier : 
       EMPTY     { $$ = eEmpty; }
     | UNDEFINED { $$ = eUndefined; }
+
+// when VALUE'id,... [base-struct-type] { member; ...}
+when_subtype_declaration :
+    WHEN struct_type_modifiers[subtype_mods] LBRACE struct_members[members] RBRACE 
+    {
+        // base-type should be the last element, but is optional
+        // if it exists, semantic analysis should be checking that the last element id
+        // is an id_expr and its value equals to the struct type
+        $$ = elex::when_subtype_sm($subtype_mods, $members); 
+    }
+    ;
+
 /* Actions */
 actions : 
       %empty         { $$ = elex::nil_Actions(); }
@@ -635,13 +683,25 @@ opt_struct_type_id_expression : // [[struct_id]]
     ;
 
 struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
-    opt_struct_type_modifiers[modifiers] id_expr[id] { $$ = elex::struct_type_id_expr($modifiers, $id); }
+    struct_type_modifiers[modifiers] 
+    { 
+        if($modifiers.m_elems.empty())
+           yy::parser::error(@modifiers, "struct type modifier must have at least a single identifier or modifier");
+
+        auto struct_id = $modifiers.m_elems.back();
+        $modifiers.m_elems.pop_back();
+        $$ = elex::struct_type_id_expr($modifiers, struct_id); 
+    }
     ;
 
 opt_struct_type_modifiers : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]]
-      %empty                                         { $$ = elex::nil_Expressions(); }
-    | struct_type_modifier                           { $$ = elex::single_Expressions($1); }
-    | opt_struct_type_modifiers struct_type_modifier { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
+      %empty                 { $$ = elex::nil_Expressions(); }
+    | struct_type_modifiers  { $$ = $1;}
+    ;
+
+struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
+      struct_type_modifier                       { $$ = elex::single_Expressions($1); }
+    | struct_type_modifiers struct_type_modifier { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
     ;
 
 struct_type_modifier : // VALUE'id | id

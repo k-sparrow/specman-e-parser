@@ -96,6 +96,7 @@ new         (new)
 as_a        (as_a)
 soft        (soft)
 import      (import)
+key         (key)
 
 
 null	      (NULL)
@@ -245,6 +246,7 @@ number  [0-9]+
 {as_a}	    { return yy::parser::make_AS_A(location()); }
 {soft}	    { return yy::parser::make_SOFT(location()); }
 {import}	{ return yy::parser::make_IMPORT(location()); }
+{key}   	{ return yy::parser::make_KEY(location()); }
 
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    

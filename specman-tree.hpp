@@ -237,6 +237,40 @@ class struct_field_sm_class : public StructMember_class {
 
 auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember;
 
+class struct_field_list_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Expression len_expr;
+        Symbol_ list_type;
+    public:
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Symbol_ list_type) {
+            this->id = id;
+            this->len_expr = len_expr;
+            this->list_type = list_type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, Symbol_ list_type) -> StructMember;
+
+class struct_field_assoc_list_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Expression key_type;
+        Symbol_ list_type;
+    public:
+        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Symbol_ list_type) {
+            this->id = id;
+            this->key_type = key_type;
+            this->list_type = list_type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Symbol_ list_type) -> StructMember;
+
 class method_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
@@ -346,6 +380,21 @@ class method_dec_undef_sm_class : public StructMember_class {
 };
 
 auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
+
+class when_subtype_sm_class : public StructMember_class {
+    protected:
+        Expressions subtype_mods;
+        StructMembers subtype_members;
+    public:
+        when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members) {
+            this->subtype_mods = subtype_mods;
+            this->subtype_members = subtype_members;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember;
 
 class no_action_class : public Action_class {
     protected:
