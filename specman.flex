@@ -106,9 +106,9 @@ false_literal (FALSE)
 
 /* ------------------ Operators ----------------- */
 ver_eq          ===
-ver_neq         !{ver_eq}
+ver_neq         !==
 eq              ==
-neq             !{eq}
+neq             !=
 assign          =
 xor_op          \^
 log_and_op      \&\&
@@ -308,7 +308,8 @@ number  [0-9]+
     if(m_driver.inttable.find(number) == std::end(m_driver.inttable)) {
         m_driver.inttable[number] = elex::Symbol(new elex::Entry(number, number.length()));
     }
-    return yy::parser::make_NUMBER(std::stoi(YYText()), location()); 
+    // return yy::parser::make_NUMBER(std::stoi(YYText()), location()); 
+    return yy::parser::make_NUMBER(m_driver.inttable[number], location()); 
 }
 
 {name}    { 

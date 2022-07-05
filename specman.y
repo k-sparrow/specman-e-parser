@@ -192,11 +192,11 @@
 /* ------------------ Literals ------------------ */
 
 %token <elex::Symbol_> ID
-%token <int> NUMBER
+%token <elex::Symbol_> NUMBER
 %token END 0 
 
 /* token precedence */
-%nonassoc EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
+%left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %left IN IS OR AND LOGICAL_AND_OP LOGICAL_OR_OP BTWS_AND_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %right LOGICAL_NOT_OP BTWS_NOT_OP
 
@@ -321,6 +321,7 @@
 %nterm <elex::Expression>   sized_scalar_expr
 
 %nterm <elex::Expression>   str_expression
+%nterm <elex::Expression>   int_expression
 %nterm <elex::Expression>   me_expression
 %nterm <elex::Expression>   it_expression
 
@@ -401,7 +402,7 @@ non_term_struct_member :
 //   | event_declaration { $$ = $1; }
 //   | coverage_group_declaration { $$ = $1; }
 //   | on_event_definition { $$ = $1; }
-//   | constraint_definition { $$ = $1; }
+    | constraint_definition { $$ = $1; }
 //   | expect_definition { $$ = $1; }
     ; // TODO: correctly implement this
 
@@ -553,7 +554,11 @@ when_subtype_declaration :
     }
     ;
 
-/* Actions */
+constraint_definition :
+    KEEP constraint_expression { $$ = elex::constraint_def_sm($2); }
+    ;
+
+/* Actions */ 
 actions : 
       %empty         { $$ = elex::nil_Actions(); }
     | actions action { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
@@ -583,6 +588,7 @@ non_term_expression :
     | bitwise_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     | id_expr            { $$ = $1; }
+    | int_expression     { $$ = $1; }
     ; // TODO: fully implement this
 
 type_scalar: // TODO: fully implement this
@@ -672,11 +678,11 @@ binary_arithmetic_expression :
     ;
 
 comparison_expression : 
-      non_term_expression GT non_term_expression  { $$ = elex::greater_then_expr($1, $3); }
-    | non_term_expression LT non_term_expression  { $$ = elex::less_then_expr($1, $3); }
+      non_term_expression GT  non_term_expression { $$ = elex::greater_then_expr($1, $3); }
+    | non_term_expression LT  non_term_expression { $$ = elex::less_then_expr($1, $3); }
     | non_term_expression GTE non_term_expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
     | non_term_expression LTE non_term_expression { $$ = elex::less_then_or_equal_expr($1, $3); }
-    | non_term_expression EQ non_term_expression  { $$ = elex::equality_expr($1, $3); }
+    | non_term_expression EQ  non_term_expression { $$ = elex::equality_expr($1, $3); }
     | non_term_expression NEQ non_term_expression { $$ = elex::non_equality_expr($1, $3); }
     | non_term_expression VERILOG_EQ non_term_expression  { $$ = elex::hdl_equality_expr($1, $3); }
     | non_term_expression VERILOG_NEQ non_term_expression { $$ = elex::hdl_non_equality_expr($1, $3); }
@@ -701,8 +707,8 @@ list_concatenation_expression :
     ;
 
 list_concat_expressions : 
-      non_term_expression                                   { $$ = elex::single_non_term_expressions($1); }
-    | list_concat_expressions SEMICOLON non_term_expression { $$ = elex::append_non_term_expressions($1, elex::single_non_term_expressions($3)); }
+      non_term_expression                                   { $$ = elex::single_Expressions($1); }
+    | list_concat_expressions SEMICOLON non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 bit_concatenation_expression : 
@@ -714,8 +720,8 @@ range_modifier_expression :
     ;
 
 comma_separated_expressions : 
-      non_term_expression                                   { $$ = elex::single_non_term_expressions($1); }
-    | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_non_term_expressions($1, elex::single_non_term_expressions($3)); }
+      non_term_expression                                   { $$ = elex::single_Expressions($1); }
+    | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 sized_scalar_expr : 
@@ -785,6 +791,10 @@ opt_expr :  // [[ expr ]]
 
 str_expression : 
     STRING_LITERAL { $$ = elex::str_expr($1); }
+    ;
+
+int_expression : 
+    NUMBER { $$ = elex::int_expr($1); }
     ;
 
 hier_ref_expression : 

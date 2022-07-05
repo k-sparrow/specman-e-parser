@@ -50,6 +50,7 @@ module Specman begin
         constructor tcm_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; event_id_expr: Expression) : StructMember;
 
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
+        constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
         
         constructor no_action() : Action;
 
@@ -116,5 +117,6 @@ module Specman begin
         constructor me_expr() : Expression;
         constructor it_expr() : Expression;
         constructor str_expr(str: Symbol_) : Expression;
+        constructor int_expr(int_: Symbol_) : Expression;
         constructor no_expr() : Expression;
 end;

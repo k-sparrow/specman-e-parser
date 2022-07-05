@@ -354,6 +354,15 @@ auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) ->
     return StructMember(new when_subtype_sm_class(subtype_mods, subtype_members));
 }
 
+auto constraint_def_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "constraint_def_sm" << std::endl;
+    constraint_expr->dump(stream, n+2);
+}
+
+auto constraint_def_sm(Expression constraint_expr) -> StructMember {
+    return StructMember(new constraint_def_sm_class(constraint_expr));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }
@@ -873,6 +882,15 @@ auto str_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto str_expr(Symbol_ str) -> Expression {
     return Expression(new str_expr_class(str));
+}
+
+auto int_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "int_expr" << std::endl;
+    dump_Symbol_(stream, n+2, int_);
+}
+
+auto int_expr(Symbol_ int_) -> Expression {
+    return Expression(new int_expr_class(int_));
 }
 
 auto no_expr_class::dump(std::ostream& stream, int n) -> void {

@@ -518,6 +518,19 @@ class when_subtype_sm_class : public StructMember_class {
 
 auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember;
 
+class constraint_def_sm_class : public StructMember_class {
+    protected:
+        Expression constraint_expr;
+    public:
+        constraint_def_sm_class(Expression constraint_expr) {
+            this->constraint_expr = constraint_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto constraint_def_sm(Expression constraint_expr) -> StructMember;
+
 class no_action_class : public Action_class {
     protected:
     public:
@@ -1289,6 +1302,19 @@ class str_expr_class : public Expression_class {
 };
 
 auto str_expr(Symbol_ str) -> Expression;
+
+class int_expr_class : public Expression_class {
+    protected:
+        Symbol_ int_;
+    public:
+        int_expr_class(Symbol_ int_) {
+            this->int_ = int_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto int_expr(Symbol_ int_) -> Expression;
 
 class no_expr_class : public Expression_class {
     protected:
