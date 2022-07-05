@@ -588,6 +588,7 @@ non_term_expression :
     | bitwise_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     | id_expr            { $$ = $1; }
+    | str_expression     { $$ = $1; }
     | int_expression     { $$ = $1; }
     ; // TODO: fully implement this
 
