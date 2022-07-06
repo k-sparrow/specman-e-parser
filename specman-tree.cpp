@@ -545,6 +545,16 @@ auto binary_mul_expr(Expression e1, Expression e2) -> Expression {
     return Expression(new binary_mul_expr_class(e1, e2));
 }
 
+auto binary_div_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "binary_div_expr" << std::endl;
+    e1->dump(stream, n+2);
+    e2->dump(stream, n+2);
+}
+
+auto binary_div_expr(Expression e1, Expression e2) -> Expression {
+    return Expression(new binary_div_expr_class(e1, e2));
+}
+
 auto binary_remainder_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_remainder_expr" << std::endl;
     e1->dump(stream, n+2);

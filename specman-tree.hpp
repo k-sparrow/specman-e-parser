@@ -800,6 +800,21 @@ class binary_mul_expr_class : public Expression_class {
 
 auto binary_mul_expr(Expression e1, Expression e2) -> Expression;
 
+class binary_div_expr_class : public Expression_class {
+    protected:
+        Expression e1;
+        Expression e2;
+    public:
+        binary_div_expr_class(Expression e1, Expression e2) {
+            this->e1 = e1;
+            this->e2 = e2;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+};
+
+auto binary_div_expr(Expression e1, Expression e2) -> Expression;
+
 class binary_remainder_expr_class : public Expression_class {
     protected:
         Expression e1;

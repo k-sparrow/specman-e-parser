@@ -198,6 +198,7 @@
 /* token precedence */
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %left IN IS OR AND LOGICAL_AND_OP LOGICAL_OR_OP BTWS_AND_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
+    DIV MUL PLUS MINUS REMAINDER
 %right LOGICAL_NOT_OP BTWS_NOT_OP
 
 /* ------------------ helpers ------------------ */
@@ -584,12 +585,13 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-      type_scalar        { $$ = $1; }
-    | bitwise_expression { $$ = $1; }
-    | logical_expression { $$ = $1; }
-    | id_expr            { $$ = $1; }
-    | str_expression     { $$ = $1; }
-    | int_expression     { $$ = $1; }
+      type_scalar           { $$ = $1; }
+    | bitwise_expression    { $$ = $1; }
+    | logical_expression    { $$ = $1; }
+    | arithmetic_expression { $$ = $1; }
+    | id_expr               { $$ = $1; }
+    | str_expression        { $$ = $1; }
+    | int_expression        { $$ = $1; }
     ; // TODO: fully implement this
 
 type_scalar: // TODO: fully implement this
