@@ -12,6 +12,8 @@ GCSRC = ${FCSRC} ${BCSRC} ${TSRC}
 CSRC = ${GCSRC} driver.cpp main.cpp strtab.cpp tree.cpp utils.cpp
 FLEX = flex
 BISON = bison
+BISON_BIN_DIR := $(shell bison --print-datadir)
+XSLT = xsltproc
 APS = ~/PycharmProjects/apsgen/apsgen.py
 OBJS = parser
 
@@ -22,11 +24,14 @@ ${FLEX}: ${FSRC}
 	${FLEX} -o ${FCSRC} $<
 
 ${BISON}: ${BSRC}
-	${BISON} -o ${BCSRC} $<
+	${BISON} -o ${BCSRC} $< --xml=${LANG}.xml
+	${XSLT} ${BISON_BIN_DIR}/xslt/xml2xhtml.xsl ${LANG}.xml > ${LANG}.html
+
 
 ${OBJS}: 
 	${FLEX} -o ${FCSRC} ${FSRC}
-	${BISON} -o ${BCSRC} ${BSRC}
+	${BISON} -o ${BCSRC} ${BSRC} --xml=${LANG}.xml
+	${XSLT} ${BISON_BIN_DIR}/xslt/xml2xhtml.xsl ${LANG}.xml > ${LANG}.html
 	${CC} ${CFLAGS} ${CSRC} -o $@
 
 flex-main: ${FSRC}
