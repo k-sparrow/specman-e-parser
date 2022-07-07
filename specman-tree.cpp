@@ -859,6 +859,15 @@ auto soft_constraint_expr(Expression bool_expr) -> Expression {
     return Expression(new soft_constraint_expr_class(bool_expr));
 }
 
+auto all_of_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "all_of_constraint_expr" << std::endl;
+    constraints->dump(stream, n+2);
+}
+
+auto all_of_constraint_expr(Expressions constraints) -> Expression {
+    return Expression(new all_of_constraint_expr_class(constraints));
+}
+
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_call_expr" << std::endl;
     base->dump(stream, n+2);

@@ -1832,6 +1832,26 @@ class soft_constraint_expr_class : public Expression_class {
 
 auto soft_constraint_expr(Expression bool_expr) -> Expression;
 
+class all_of_constraint_expr_class : public Expression_class {
+    protected:
+        Expressions constraints;
+    public:
+        all_of_constraint_expr_class(Expressions constraints) {
+            this->constraints = constraints;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef all_of_constraint_expr_EXTRAS
+    all_of_constraint_expr_EXTRAS
+#endif
+};
+
+auto all_of_constraint_expr(Expressions constraints) -> Expression;
+
 class method_call_expr_class : public Expression_class {
     protected:
         Expression base;

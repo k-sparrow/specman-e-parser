@@ -320,6 +320,8 @@
 %nterm <elex::Expression>   range_modifier_expression
 
 %nterm <elex::Expression>   constraint_expression
+%nterm <elex::Expression>   terminated_constraint_expression
+%nterm <elex::Expressions>  constriant_expression_block
 /* %nterm <elex::Expression>   method_call_expression */
 
 %nterm <elex::Expression>   sized_scalar_expr
@@ -832,10 +834,23 @@ casting_operator_expression :
     ; */
 
 constraint_expression : 
-      logical_expression         { $$ = elex::constraint_expr($1); }
-    | SOFT constraint_expression { $$ = elex::soft_constraint_expr($2); }
+      logical_expression                               { $$ = elex::constraint_expr($1); }
+    | SOFT constraint_expression                       { $$ = elex::soft_constraint_expr($2); }
+    | ALL OF LBRACE constriant_expression_block RBRACE { $$ = elex::all_of_constraint_expr($4); } 
     ;
 
+terminated_constraint_expression : 
+    constraint_expression SEMICOLON { $$ = $1; }
+    ;
+
+constriant_expression_block : 
+      terminated_constraint_expression { 
+          $$ = elex::single_Expressions($1); 
+      }
+    | constriant_expression_block terminated_constraint_expression {
+        $$ = elex::append_Expressions($1, elex::single_Expressions($2));
+      }
+    ;
 /* method_call_expression : 
     non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
     ; */
