@@ -197,7 +197,8 @@
 
 /* token precedence */
 %left IN IS OR AND LOGICAL_AND_OP LOGICAL_OR_OP BTWS_AND_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
-    DIV MUL PLUS MINUS REMAINDER
+%left PLUS MINUS
+%left DIV MUL REMAINDER
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP
 
@@ -298,6 +299,7 @@
 %nterm <elex::Expression>   iterated_id_expr
 
 %nterm <elex::Expression>   id_expr
+%nterm <elex::Expression>   identifier_expression
 %nterm <elex::Expression>   type_scalar
 %nterm <elex::Expression>   enum_type_expr
 %nterm <elex::Expressions>  enum_list_exprs
@@ -590,7 +592,7 @@ non_term_expression :
     | bitwise_expression    { $$ = $1; }
     | logical_expression    { $$ = $1; }
     | arithmetic_expression { $$ = $1; }
-    | id_expr               { $$ = $1; }
+    | identifier_expression { $$ = $1; }
     | str_expression        { $$ = $1; }
     | int_expression        { $$ = $1; }
     ; // TODO: fully implement this
@@ -613,11 +615,6 @@ enum_list_item :
     | ID        { $$ = elex::enum_list_item($1, elex::no_expr()); }
     ;
 
-id_expr : 
-      ID            { $$ = elex::id_expr($1); }
-    | me_expression { $$ = $1; }
-    | it_expression { $$ = $1; }
-    ;
 
 bitwise_expression : 
       unary_bitwise_expression  { $$ = $1;}
@@ -842,6 +839,16 @@ constraint_expression :
 /* method_call_expression : 
     non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
     ; */
+
+identifier_expression : 
+      hier_ref_expression { $$ = $1; }
+    ;
+
+id_expr : 
+      ID            { $$ = elex::id_expr($1); }
+    | me_expression { $$ = $1; }
+    | it_expression { $$ = $1; }
+    ;
 
 me_expression : 
     ME { $$ = elex::me_expr(); }
