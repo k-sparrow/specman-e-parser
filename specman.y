@@ -134,6 +134,7 @@
 %token NEW
 %token AS_A    
 %token IMPORT    
+%token SELECT    
 %token KEY    
 
 %token NULL_
@@ -330,6 +331,10 @@
 %nterm <elex::Expression>   int_expression
 %nterm <elex::Expression>   me_expression
 %nterm <elex::Expression>   it_expression
+
+%nterm <elex::Cases>        weight_value_pairs               
+%nterm <elex::Case>         terminated_weight_value_pair
+%nterm <elex::Case>         weight_value_pair
 
 %nterm <elex::Formals>      formals
 %nterm <elex::Formal>       formal
@@ -860,6 +865,12 @@ constraint_expression :
       {
           $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint);
       }
+    | SOFT hier_ref_expression[gen_item] SELECT LBRACE weight_value_pairs[distribution] RBRACE 
+      // in order to avoid shift/reduce conflicts with `hier_ref_expression . EQ -> identifier_expression`
+      // the SELECT keyword was changed to EQ[WS]SELECT (see scanner .l file)
+      {
+          $$ = elex::distribution_constraint_expr($gen_item, $distribution);
+      }
     ;
 
 terminated_constraint_expression : 
@@ -894,6 +905,19 @@ me_expression :
 
 it_expression : 
     IT { $$ = elex::it_expr(); }
+    ;
+
+weight_value_pairs:
+      terminated_weight_value_pair                    { $$ = elex::single_Cases($1); }
+    | weight_value_pairs terminated_weight_value_pair { $$ = elex::append_Cases($1, elex::single_Cases($2)); }
+    ;
+
+terminated_weight_value_pair : 
+    weight_value_pair SEMICOLON { $$ = $1; }
+    ;
+
+weight_value_pair : 
+    int_expression[int_] COLON non_term_expression[value] { $$ = elex::distribution_branch_case($int_, $value); } 
     ;
 
 formals:

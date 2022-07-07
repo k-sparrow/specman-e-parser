@@ -19,6 +19,7 @@
 %}
 
 /* ------------------ Keywords ------------------ */
+
 while       (while)
 for         (for)
 in          (in)
@@ -96,6 +97,7 @@ new         (new)
 as_a        (as_a)
 soft        (soft)
 import      (import)
+select      (==[ \t\f\v]*select)
 key         (key)
 
 
@@ -247,6 +249,7 @@ number  [0-9]+
 {as_a}	    { return yy::parser::make_AS_A(location()); }
 {soft}	    { return yy::parser::make_SOFT(location()); }
 {import}	{ return yy::parser::make_IMPORT(location()); }
+{select}	{ return yy::parser::make_SELECT(location()); }
 {key}   	{ return yy::parser::make_KEY(location()); }
 
 {null}	    { return yy::parser::make_NULL_(location()); }

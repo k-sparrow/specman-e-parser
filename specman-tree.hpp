@@ -116,6 +116,24 @@ auto nil_Formals() -> Formals;
 auto single_Formals(Formal) -> Formals;
 auto append_Formals(Formals, Formals) -> Formals;
 
+class Case_class;
+typedef std::shared_ptr<Case_class> Case;
+
+class Case_class : public tree_node {
+    public:
+
+#ifdef Case_EXTRAS
+    Case_EXTRAS
+#endif
+};
+
+typedef list_tree_node<Case> Cases_class;
+typedef std::shared_ptr<Cases_class> Cases;
+
+auto nil_Cases() -> Cases;
+auto single_Cases(Case) -> Cases;
+auto append_Cases(Cases, Cases) -> Cases;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -1792,6 +1810,28 @@ class cast_operator_expr_class : public Expression_class {
 
 auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression;
 
+class method_call_expr_class : public Expression_class {
+    protected:
+        Expression base;
+        Expressions arguments;
+    public:
+        method_call_expr_class(Expression base, Expressions arguments) {
+            this->base = base;
+            this->arguments = arguments;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef method_call_expr_EXTRAS
+    method_call_expr_EXTRAS
+#endif
+};
+
+auto method_call_expr(Expression base, Expressions arguments) -> Expression;
+
 class constraint_expr_class : public Expression_class {
     protected:
         Expression bool_expr;
@@ -1876,14 +1916,14 @@ class list_items_constraint_expr_class : public Expression_class {
 
 auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression;
 
-class method_call_expr_class : public Expression_class {
+class distribution_constraint_expr_class : public Expression_class {
     protected:
-        Expression base;
-        Expressions arguments;
+        Expression gen_item;
+        Cases distribution;
     public:
-        method_call_expr_class(Expression base, Expressions arguments) {
-            this->base = base;
-            this->arguments = arguments;
+        distribution_constraint_expr_class(Expression gen_item, Cases distribution) {
+            this->gen_item = gen_item;
+            this->distribution = distribution;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1891,12 +1931,34 @@ class method_call_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef method_call_expr_EXTRAS
-    method_call_expr_EXTRAS
+#ifdef distribution_constraint_expr_EXTRAS
+    distribution_constraint_expr_EXTRAS
 #endif
 };
 
-auto method_call_expr(Expression base, Expressions arguments) -> Expression;
+auto distribution_constraint_expr(Expression gen_item, Cases distribution) -> Expression;
+
+class distribution_branch_case_class : public Case_class {
+    protected:
+        Expression int_;
+        Expression value;
+    public:
+        distribution_branch_case_class(Expression int_, Expression value) {
+            this->int_ = int_;
+            this->value = value;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Case_SHARED_EXTRAS
+    Case_SHARED_EXTRAS
+#endif
+#ifdef distribution_branch_case_EXTRAS
+    distribution_branch_case_EXTRAS
+#endif
+};
+
+auto distribution_branch_case(Expression int_, Expression value) -> Case;
 
 class me_expr_class : public Expression_class {
     protected:

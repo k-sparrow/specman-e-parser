@@ -78,6 +78,19 @@ auto append_Formals(Formals p1, Formals p2) -> Formals {
     return Formals(new list_tree_node<Formal>(*p1, *p2));
 }
 
+/* implementations for Cases */
+auto nil_Cases() -> Cases {
+    return Cases(new list_tree_node<Case>());
+}
+
+auto single_Cases(Case p) -> Cases {
+    return Cases(new list_tree_node<Case>(p));
+}
+
+auto append_Cases(Cases p1, Cases p2) -> Cases {
+    return Cases(new list_tree_node<Case>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
     stmts->dump(stream, n+2);
@@ -841,6 +854,16 @@ auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Ex
     return Expression(new cast_operator_expr_class(casted_expr, dest_type_expr));
 }
 
+auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_call_expr" << std::endl;
+    base->dump(stream, n+2);
+    arguments->dump(stream, n+2);
+}
+
+auto method_call_expr(Expression base, Expressions arguments) -> Expression {
+    return Expression(new method_call_expr_class(base, arguments));
+}
+
 auto constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "constraint_expr" << std::endl;
     bool_expr->dump(stream, n+2);
@@ -879,14 +902,24 @@ auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expre
     return Expression(new list_items_constraint_expr_class(item_name, gen_item, constraint));
 }
 
-auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "method_call_expr" << std::endl;
-    base->dump(stream, n+2);
-    arguments->dump(stream, n+2);
+auto distribution_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "distribution_constraint_expr" << std::endl;
+    gen_item->dump(stream, n+2);
+    distribution->dump(stream, n+2);
 }
 
-auto method_call_expr(Expression base, Expressions arguments) -> Expression {
-    return Expression(new method_call_expr_class(base, arguments));
+auto distribution_constraint_expr(Expression gen_item, Cases distribution) -> Expression {
+    return Expression(new distribution_constraint_expr_class(gen_item, distribution));
+}
+
+auto distribution_branch_case_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "distribution_branch_case" << std::endl;
+    int_->dump(stream, n+2);
+    value->dump(stream, n+2);
+}
+
+auto distribution_branch_case(Expression int_, Expression value) -> Case {
+    return Case(new distribution_branch_case_class(int_, value));
 }
 
 auto me_expr_class::dump(std::ostream& stream, int n) -> void {
