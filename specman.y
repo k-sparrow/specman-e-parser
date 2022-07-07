@@ -202,7 +202,7 @@
 %right LOGICAL_NOT_OP BTWS_NOT_OP
 
 /* ------------------ helpers ------------------ */
-%nterm <elex::Symbol_>    OPT_SEMICOLON
+/* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
 
 /* ------------------  rules  ------------------ */
@@ -246,12 +246,12 @@
 /* Actions */
 %nterm <elex::Actions> actions
 %nterm <elex::Actions> action_block
-%nterm <elex::Actions> opt_with_action_block
+/* %nterm <elex::Actions> opt_with_action_block */
 %nterm <elex::Action>  action
 %nterm <elex::Action>  non_term_action
 
 /* Expressions */
-%nterm <elex::Expressions>  expressions
+/* %nterm <elex::Expressions>  expressions */
 %nterm <elex::Expression>   expression
 %nterm <elex::Expression>   non_term_expression
 
@@ -277,23 +277,24 @@
 %nterm <elex::Expression>   binary_arithmetic_expression
 
 /* Object Expressions */
-%nterm <elex::Expression>   list_indexing_expression
+/* %nterm <elex::Expression>   list_indexing_expression
 %nterm <elex::Expression>   list_slicing_expression
 %nterm <elex::Expression>   list_splicing_expression
 %nterm <elex::Expression>   list_concatenation_expression
 %nterm <elex::Expressions>  list_concat_expressions
 %nterm <elex::Expression>   bit_concatenation_expression
-%nterm <elex::Expressions>  bit_concat_expressions
+%nterm <elex::Expressions>  bit_concat_expressions */
 
-%nterm <elex::Expressions>  allocate_expression
+/* %nterm <elex::Expressions>  allocate_expression
 %nterm <elex::Expressions>  opt_struct_type_expr_with_opt_action_block
-%nterm <elex::Expression>   opt_struct_type_id_expression
+%nterm <elex::Expression>   opt_struct_type_id_expression 
 %nterm <elex::Expression>   struct_type_id_expression
-%nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expressions>  opt_struct_type_modifiers
+*/
+%nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
 %nterm <elex::Expression>   named_action_block
-%nterm <elex::Expression>   opt_iterated_id_expr
+/* %nterm <elex::Expression>   opt_iterated_id_expr */
 %nterm <elex::Expression>   iterated_id_expr
 
 %nterm <elex::Expression>   id_expr
@@ -304,20 +305,20 @@
 
 %nterm <elex::Expression>   hier_ref_expression
 %nterm <elex::Expressions>  dot_separated_expressions
-%nterm <elex::Expression>   hdl_pathname_expression
-%nterm <elex::Expression>   slash_separated_expressions
+/* %nterm <elex::Expression>   hdl_pathname_expression */
+/* %nterm <elex::Expression>   slash_separated_expressions */
 
-%nterm <elex::expression>   ternary_operator_expression   
-%nterm <elex::expression>   casting_operator_expression   
+/* %nterm <elex::expression>   ternary_operator_expression   
+%nterm <elex::expression>   casting_operator_expression    */
 
-%nterm <elex::Expression>   opt_expr
-%nterm <elex::Expression>   opt_slice_expr
+/* %nterm <elex::Expression>   opt_expr
+%nterm <elex::Expression>   opt_slice_expr */
 %nterm <elex::Expression>   opt_struct_type_id
 
 %nterm <elex::Expression>   range_modifier_expression
 
 %nterm <elex::Expression>   constraint_expression
-%nterm <elex::Expression>   method_call_expression
+/* %nterm <elex::Expression>   method_call_expression */
 
 %nterm <elex::Expression>   sized_scalar_expr
 
@@ -576,10 +577,10 @@ non_term_action : %empty { $$ = elex::no_action(); } //TODO: implement
     ;
 
 /* Expressions */
-expressions : 
+/* expressions : 
     %empty                         { $$ = elex::nil_Expressions();  }
     | expressions expression       { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
-    ;
+    ; */
 
 expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
@@ -611,7 +612,12 @@ enum_list_item :
       ID EQ ID  { $$ = elex::enum_list_item($1, elex::id_expr($3)); }
     | ID        { $$ = elex::enum_list_item($1, elex::no_expr()); }
     ;
-id_expr : ID { $$ = elex::id_expr($1); }
+
+id_expr : 
+      ID            { $$ = elex::id_expr($1); }
+    | me_expression { $$ = $1; }
+    | it_expression { $$ = $1; }
+    ;
 
 bitwise_expression : 
       unary_bitwise_expression  { $$ = $1;}
@@ -693,7 +699,7 @@ comparison_expression :
     | non_term_expression LOGICAL_NOT_OP BTWS_NOT_OP non_term_expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
     ;
 
-list_indexing_expression : 
+/* list_indexing_expression : 
     non_term_expression LBRACKET non_term_expression RBRACKET { $$ = elex::list_indexing_expr($1, $3); }
     ;
 
@@ -739,9 +745,9 @@ allocate_expression : // new [struct-type [[(name)] with {action;...}]]
 opt_struct_type_expr_with_opt_action_block : // [struct-type [[(name)] with {action;...}]]
       %empty                                   { $$ = elex::no_expr(); }
     | opt_struct_type_id_expression opt_with_action_block { $$ = elex::struct_type_expr_with_opt_action_block($1, $2); }
-    ;
+    ; */
 
-opt_struct_type_id_expression : // [[struct_id]]
+/* opt_struct_type_id_expression : // [[struct_id]]
       %empty          { $$ = elex::no_expr(); }
     | struct_type_id_expression  { $$ = $1; }                      
     ;
@@ -762,7 +768,7 @@ struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
 opt_struct_type_modifiers : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]]
       %empty                 { $$ = elex::nil_Expressions(); }
     | struct_type_modifiers  { $$ = $1;}
-    ;
+    ; */
 
 struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
       struct_type_modifier                       { $$ = elex::single_Expressions($1); }
@@ -774,23 +780,23 @@ struct_type_modifier : // VALUE'id | id
     | id_expr[value]                       { $$ = elex::struct_type_modifier($value, elex::no_expr()); }
     ;
 
-opt_with_action_block : // [[ [[(name)]] with {action; ...}]]
+/* opt_with_action_block : // [[ [[(name)]] with {action; ...}]]
       %empty                                              { $$ = elex::no_expr(); }
     | opt_iterated_id_expr[id] WITH action_block[actions] { $$ = elex::named_action_block($id, $actions); }
-    ;
+    ; */
 
-opt_iterated_id_expr : // [[ (name) ]]
+/* opt_iterated_id_expr : // [[ (name) ]]
       %empty                { $$ = elex::no_expr(); }
     | LPAREN id_expr RPAREN { $$ = $2; }
 
 opt_slice_expr : // [[: slice]]
       %empty            { $$ = elex::no_expr(); }
-    | COLON non_term_expression  { $$ = $2; } 
+    | COLON non_term_expression  { $$ = $2; }  */
 
-opt_expr :  // [[ expr ]]
+/* opt_expr :  // [[ expr ]]
       %empty        { $$ = elex::no_expr(); }
     | non_term_expression    { $$ = $1; }
-    ;
+    ; */
 
 str_expression : 
     STRING_LITERAL { $$ = elex::str_expr($1); }
@@ -805,37 +811,37 @@ hier_ref_expression :
     ;
 
 dot_separated_expressions : 
-      non_term_expression                                { $$ = elex::single_Expressions($1); }
-    | dot_separated_expressions DOT non_term_expression  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      id_expr                                { $$ = elex::single_Expressions($1); }
+    | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
-hdl_pathname_expression : 
+/* hdl_pathname_expression : 
       SNG_QUOTE slash_separated_expressions SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
     | SNG_QUOTE dot_separated_expressions   SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
     ; 
 
 slash_separated_expressions : 
       non_term_expression                                   { $$ = elex::single_Expressions($1); }
-    | slash_separated_expressions SLASH non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    | slash_separated_expressions SLASH non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); } */
     ;
 
 
-ternary_operator_expression :
+/* ternary_operator_expression :
     non_term_expression[cond] TERNARY non_term_expression[true_exp] COLON non_term_expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
     ;   
 
 casting_operator_expression :
     non_term_expression[casted] DOT AS_A LPAREN non_term_expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
-    ;
+    ; */
 
 constraint_expression : 
       logical_expression         { $$ = elex::constraint_expr($1); }
     | SOFT constraint_expression { $$ = elex::soft_constraint_expr($2); }
     ;
 
-method_call_expression : 
+/* method_call_expression : 
     non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
-    ;
+    ; */
 
 me_expression : 
     ME { $$ = elex::me_expr(); }
@@ -864,10 +870,10 @@ OPT_PACKAGE :
     | %empty { }
     ;
 
-OPT_SEMICOLON : 
+/* OPT_SEMICOLON : 
       SEMICOLON  { }
     | %empty   { }
-    ;
+    ; */
 %%
 
 void yy::parser::error(location const& location, std::string const& message){

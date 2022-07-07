@@ -9,6 +9,7 @@
 #pragma once
 
 #include "tree.hpp"
+#include "specman-tree-handcode.hpp"
 #include "strtab.hpp"
 
 namespace elex { 
@@ -19,6 +20,10 @@ typedef std::shared_ptr<Module_class> Module;
 
 class Module_class : public tree_node {
     public:
+
+#ifdef Module_EXTRAS
+    Module_EXTRAS
+#endif
 };
 
 class Statement_class;
@@ -26,6 +31,10 @@ typedef std::shared_ptr<Statement_class> Statement;
 
 class Statement_class : public tree_node {
     public:
+
+#ifdef Statement_EXTRAS
+    Statement_EXTRAS
+#endif
 };
 
 typedef list_tree_node<Statement> Statements_class;
@@ -40,6 +49,10 @@ typedef std::shared_ptr<StructMember_class> StructMember;
 
 class StructMember_class : public tree_node {
     public:
+
+#ifdef StructMember_EXTRAS
+    StructMember_EXTRAS
+#endif
 };
 
 typedef list_tree_node<StructMember> StructMembers_class;
@@ -54,6 +67,10 @@ typedef std::shared_ptr<Action_class> Action;
 
 class Action_class : public tree_node {
     public:
+
+#ifdef Action_EXTRAS
+    Action_EXTRAS
+#endif
 };
 
 typedef list_tree_node<Action> Actions_class;
@@ -68,6 +85,10 @@ typedef std::shared_ptr<Expression_class> Expression;
 
 class Expression_class : public tree_node {
     public:
+
+#ifdef Expression_EXTRAS
+    Expression_EXTRAS
+#endif
 };
 
 typedef list_tree_node<Expression> Expressions_class;
@@ -82,6 +103,10 @@ typedef std::shared_ptr<Formal_class> Formal;
 
 class Formal_class : public tree_node {
     public:
+
+#ifdef Formal_EXTRAS
+    Formal_EXTRAS
+#endif
 };
 
 typedef list_tree_node<Formal> Formals_class;
@@ -100,6 +125,13 @@ class module__class : public Module_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Module_SHARED_EXTRAS
+    Module_SHARED_EXTRAS
+#endif
+#ifdef module__EXTRAS
+    module__EXTRAS
+#endif
 };
 
 auto module_(Statements stmts) -> Module;
@@ -113,6 +145,13 @@ class package_class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef package_EXTRAS
+    package_EXTRAS
+#endif
 };
 
 auto package(Symbol_ pkg_name) -> Statement;
@@ -128,6 +167,13 @@ class unit_class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef unit_EXTRAS
+    unit_EXTRAS
+#endif
 };
 
 auto unit(Symbol_ unit_name, StructMembers members) -> Statement;
@@ -143,6 +189,13 @@ class struct__class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef struct__EXTRAS
+    struct__EXTRAS
+#endif
 };
 
 auto struct_(Symbol_ struct_name, StructMembers members) -> Statement;
@@ -160,6 +213,13 @@ class extend_like_class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef extend_like_EXTRAS
+    extend_like_EXTRAS
+#endif
 };
 
 auto extend_like(Symbol_ uos_name, Symbol_ base_uos_name, StructMembers members) -> Statement;
@@ -175,6 +235,13 @@ class extend_when_class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef extend_when_EXTRAS
+    extend_when_EXTRAS
+#endif
 };
 
 auto extend_when(Symbol_ uos_name, StructMembers members) -> Statement;
@@ -190,6 +257,13 @@ class type__class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef type__EXTRAS
+    type__EXTRAS
+#endif
 };
 
 auto type_(Symbol_ type_id, Expression type_expr) -> Statement;
@@ -203,6 +277,13 @@ class import_class : public Statement_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef import_EXTRAS
+    import_EXTRAS
+#endif
 };
 
 auto import(Symbol_ pkg_id) -> Statement;
@@ -218,6 +299,13 @@ class formal_class : public Formal_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Formal_SHARED_EXTRAS
+    Formal_SHARED_EXTRAS
+#endif
+#ifdef formal_EXTRAS
+    formal_EXTRAS
+#endif
 };
 
 auto formal(Symbol_ name, Symbol_ type_) -> Formal;
@@ -233,6 +321,13 @@ class struct_field_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef struct_field_sm_EXTRAS
+    struct_field_sm_EXTRAS
+#endif
 };
 
 auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember;
@@ -250,6 +345,13 @@ class struct_field_list_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef struct_field_list_sm_EXTRAS
+    struct_field_list_sm_EXTRAS
+#endif
 };
 
 auto struct_field_list_sm(Symbol_ id, Expression len_expr, Symbol_ list_type) -> StructMember;
@@ -267,6 +369,13 @@ class struct_field_assoc_list_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef struct_field_assoc_list_sm_EXTRAS
+    struct_field_assoc_list_sm_EXTRAS
+#endif
 };
 
 auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Symbol_ list_type) -> StructMember;
@@ -286,6 +395,13 @@ class method_dec_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_sm_EXTRAS
+    method_dec_sm_EXTRAS
+#endif
 };
 
 auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
@@ -305,6 +421,13 @@ class method_dec_also_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_also_sm_EXTRAS
+    method_dec_also_sm_EXTRAS
+#endif
 };
 
 auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
@@ -324,6 +447,13 @@ class method_dec_first_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_first_sm_EXTRAS
+    method_dec_first_sm_EXTRAS
+#endif
 };
 
 auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
@@ -343,6 +473,13 @@ class method_dec_only_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_only_sm_EXTRAS
+    method_dec_only_sm_EXTRAS
+#endif
 };
 
 auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
@@ -360,6 +497,13 @@ class method_dec_empty_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_empty_sm_EXTRAS
+    method_dec_empty_sm_EXTRAS
+#endif
 };
 
 auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
@@ -377,6 +521,13 @@ class method_dec_undef_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef method_dec_undef_sm_EXTRAS
+    method_dec_undef_sm_EXTRAS
+#endif
 };
 
 auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
@@ -398,6 +549,13 @@ class tcm_dec_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_sm_EXTRAS
+    tcm_dec_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
@@ -419,6 +577,13 @@ class tcm_dec_also_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_also_sm_EXTRAS
+    tcm_dec_also_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
@@ -440,6 +605,13 @@ class tcm_dec_first_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_first_sm_EXTRAS
+    tcm_dec_first_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
@@ -461,6 +633,13 @@ class tcm_dec_only_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_only_sm_EXTRAS
+    tcm_dec_only_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
@@ -480,6 +659,13 @@ class tcm_dec_empty_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_empty_sm_EXTRAS
+    tcm_dec_empty_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
@@ -499,6 +685,13 @@ class tcm_dec_undef_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef tcm_dec_undef_sm_EXTRAS
+    tcm_dec_undef_sm_EXTRAS
+#endif
 };
 
 auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
@@ -514,6 +707,13 @@ class when_subtype_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef when_subtype_sm_EXTRAS
+    when_subtype_sm_EXTRAS
+#endif
 };
 
 auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember;
@@ -527,6 +727,13 @@ class constraint_def_sm_class : public StructMember_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef constraint_def_sm_EXTRAS
+    constraint_def_sm_EXTRAS
+#endif
 };
 
 auto constraint_def_sm(Expression constraint_expr) -> StructMember;
@@ -538,6 +745,13 @@ class no_action_class : public Action_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef no_action_EXTRAS
+    no_action_EXTRAS
+#endif
 };
 
 auto no_action() -> Action;
@@ -551,6 +765,13 @@ class id_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef id_expr_EXTRAS
+    id_expr_EXTRAS
+#endif
 };
 
 auto id_expr(Symbol_ id) -> Expression;
@@ -564,6 +785,13 @@ class enum_type_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef enum_type_expr_EXTRAS
+    enum_type_expr_EXTRAS
+#endif
 };
 
 auto enum_type_expr(Expressions enum_list_expr) -> Expression;
@@ -579,6 +807,13 @@ class enum_list_item_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef enum_list_item_EXTRAS
+    enum_list_item_EXTRAS
+#endif
 };
 
 auto enum_list_item(Symbol_ id, Expression expr) -> Expression;
@@ -592,6 +827,13 @@ class bitwise_not_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bitwise_not_expr_EXTRAS
+    bitwise_not_expr_EXTRAS
+#endif
 };
 
 auto bitwise_not_expr(Expression e) -> Expression;
@@ -607,6 +849,13 @@ class bitwise_and_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bitwise_and_expr_EXTRAS
+    bitwise_and_expr_EXTRAS
+#endif
 };
 
 auto bitwise_and_expr(Expression e1, Expression e2) -> Expression;
@@ -622,6 +871,13 @@ class bitwise_or_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bitwise_or_expr_EXTRAS
+    bitwise_or_expr_EXTRAS
+#endif
 };
 
 auto bitwise_or_expr(Expression e1, Expression e2) -> Expression;
@@ -637,6 +893,13 @@ class bitwise_xor_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bitwise_xor_expr_EXTRAS
+    bitwise_xor_expr_EXTRAS
+#endif
 };
 
 auto bitwise_xor_expr(Expression e1, Expression e2) -> Expression;
@@ -652,6 +915,13 @@ class shift_left_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef shift_left_expr_EXTRAS
+    shift_left_expr_EXTRAS
+#endif
 };
 
 auto shift_left_expr(Expression e1, Expression e2) -> Expression;
@@ -667,6 +937,13 @@ class right_left_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef right_left_expr_EXTRAS
+    right_left_expr_EXTRAS
+#endif
 };
 
 auto right_left_expr(Expression e1, Expression e2) -> Expression;
@@ -680,6 +957,13 @@ class logical_not_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef logical_not_expr_EXTRAS
+    logical_not_expr_EXTRAS
+#endif
 };
 
 auto logical_not_expr(Expression e) -> Expression;
@@ -695,6 +979,13 @@ class logical_and_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef logical_and_expr_EXTRAS
+    logical_and_expr_EXTRAS
+#endif
 };
 
 auto logical_and_expr(Expression e1, Expression e2) -> Expression;
@@ -710,6 +1001,13 @@ class logical_or_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef logical_or_expr_EXTRAS
+    logical_or_expr_EXTRAS
+#endif
 };
 
 auto logical_or_expr(Expression e1, Expression e2) -> Expression;
@@ -725,6 +1023,13 @@ class implication_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef implication_expr_EXTRAS
+    implication_expr_EXTRAS
+#endif
 };
 
 auto implication_expr(Expression e1, Expression e2) -> Expression;
@@ -738,6 +1043,13 @@ class unary_positive_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef unary_positive_expr_EXTRAS
+    unary_positive_expr_EXTRAS
+#endif
 };
 
 auto unary_positive_expr(Expression e) -> Expression;
@@ -751,6 +1063,13 @@ class unary_negative_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef unary_negative_expr_EXTRAS
+    unary_negative_expr_EXTRAS
+#endif
 };
 
 auto unary_negative_expr(Expression e) -> Expression;
@@ -766,6 +1085,13 @@ class binary_add_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef binary_add_expr_EXTRAS
+    binary_add_expr_EXTRAS
+#endif
 };
 
 auto binary_add_expr(Expression e1, Expression e2) -> Expression;
@@ -781,6 +1107,13 @@ class binary_sub_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef binary_sub_expr_EXTRAS
+    binary_sub_expr_EXTRAS
+#endif
 };
 
 auto binary_sub_expr(Expression e1, Expression e2) -> Expression;
@@ -796,6 +1129,13 @@ class binary_mul_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef binary_mul_expr_EXTRAS
+    binary_mul_expr_EXTRAS
+#endif
 };
 
 auto binary_mul_expr(Expression e1, Expression e2) -> Expression;
@@ -811,6 +1151,13 @@ class binary_div_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef binary_div_expr_EXTRAS
+    binary_div_expr_EXTRAS
+#endif
 };
 
 auto binary_div_expr(Expression e1, Expression e2) -> Expression;
@@ -826,6 +1173,13 @@ class binary_remainder_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef binary_remainder_expr_EXTRAS
+    binary_remainder_expr_EXTRAS
+#endif
 };
 
 auto binary_remainder_expr(Expression e1, Expression e2) -> Expression;
@@ -841,6 +1195,13 @@ class less_then_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef less_then_expr_EXTRAS
+    less_then_expr_EXTRAS
+#endif
 };
 
 auto less_then_expr(Expression e1, Expression e2) -> Expression;
@@ -856,6 +1217,13 @@ class greater_then_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef greater_then_expr_EXTRAS
+    greater_then_expr_EXTRAS
+#endif
 };
 
 auto greater_then_expr(Expression e1, Expression e2) -> Expression;
@@ -871,6 +1239,13 @@ class less_then_or_equal_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef less_then_or_equal_expr_EXTRAS
+    less_then_or_equal_expr_EXTRAS
+#endif
 };
 
 auto less_then_or_equal_expr(Expression e1, Expression e2) -> Expression;
@@ -886,6 +1261,13 @@ class greater_then_or_equal_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef greater_then_or_equal_expr_EXTRAS
+    greater_then_or_equal_expr_EXTRAS
+#endif
 };
 
 auto greater_then_or_equal_expr(Expression e1, Expression e2) -> Expression;
@@ -901,6 +1283,13 @@ class equality_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef equality_expr_EXTRAS
+    equality_expr_EXTRAS
+#endif
 };
 
 auto equality_expr(Expression e1, Expression e2) -> Expression;
@@ -916,6 +1305,13 @@ class non_equality_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef non_equality_expr_EXTRAS
+    non_equality_expr_EXTRAS
+#endif
 };
 
 auto non_equality_expr(Expression e1, Expression e2) -> Expression;
@@ -931,6 +1327,13 @@ class hdl_equality_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef hdl_equality_expr_EXTRAS
+    hdl_equality_expr_EXTRAS
+#endif
 };
 
 auto hdl_equality_expr(Expression e1, Expression e2) -> Expression;
@@ -946,6 +1349,13 @@ class hdl_non_equality_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef hdl_non_equality_expr_EXTRAS
+    hdl_non_equality_expr_EXTRAS
+#endif
 };
 
 auto hdl_non_equality_expr(Expression e1, Expression e2) -> Expression;
@@ -961,6 +1371,13 @@ class str_match_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef str_match_expr_EXTRAS
+    str_match_expr_EXTRAS
+#endif
 };
 
 auto str_match_expr(Expression str_expr, Expression pattern_expr) -> Expression;
@@ -976,6 +1393,13 @@ class str_does_not_match_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef str_does_not_match_expr_EXTRAS
+    str_does_not_match_expr_EXTRAS
+#endif
 };
 
 auto str_does_not_match_expr(Expression str_expr, Expression pattern_expr) -> Expression;
@@ -991,6 +1415,13 @@ class in_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef in_expr_EXTRAS
+    in_expr_EXTRAS
+#endif
 };
 
 auto in_expr(Expression exp, Expression inside) -> Expression;
@@ -1006,6 +1437,13 @@ class list_indexing_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_indexing_expr_EXTRAS
+    list_indexing_expr_EXTRAS
+#endif
 };
 
 auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression;
@@ -1025,6 +1463,13 @@ class list_slicing_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_slicing_expr_EXTRAS
+    list_slicing_expr_EXTRAS
+#endif
 };
 
 auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) -> Expression;
@@ -1042,6 +1487,13 @@ class list_splicing_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_splicing_expr_EXTRAS
+    list_splicing_expr_EXTRAS
+#endif
 };
 
 auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression high_expr) -> Expression;
@@ -1055,6 +1507,13 @@ class list_concat_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_concat_expr_EXTRAS
+    list_concat_expr_EXTRAS
+#endif
 };
 
 auto list_concat_expr(Expressions list_concat_items) -> Expression;
@@ -1068,6 +1527,13 @@ class bit_concat_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bit_concat_expr_EXTRAS
+    bit_concat_expr_EXTRAS
+#endif
 };
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression;
@@ -1081,6 +1547,13 @@ class range_modifier_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef range_modifier_expr_EXTRAS
+    range_modifier_expr_EXTRAS
+#endif
 };
 
 auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression;
@@ -1094,6 +1567,13 @@ class sized_bits_scalar_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef sized_bits_scalar_expr_EXTRAS
+    sized_bits_scalar_expr_EXTRAS
+#endif
 };
 
 auto sized_bits_scalar_expr(Expression width_expr) -> Expression;
@@ -1107,6 +1587,13 @@ class sized_bytes_scalar_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef sized_bytes_scalar_expr_EXTRAS
+    sized_bytes_scalar_expr_EXTRAS
+#endif
 };
 
 auto sized_bytes_scalar_expr(Expression width_expr) -> Expression;
@@ -1120,6 +1607,13 @@ class allocate_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef allocate_expr_EXTRAS
+    allocate_expr_EXTRAS
+#endif
 };
 
 auto allocate_expr(Expression opt_struct_type_block) -> Expression;
@@ -1135,6 +1629,13 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef struct_type_expr_with_opt_action_block_EXTRAS
+    struct_type_expr_with_opt_action_block_EXTRAS
+#endif
 };
 
 auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expression opt_action_block_expt) -> Expression;
@@ -1150,6 +1651,13 @@ class named_action_block_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef named_action_block_EXTRAS
+    named_action_block_EXTRAS
+#endif
 };
 
 auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expression;
@@ -1165,6 +1673,13 @@ class struct_type_id_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef struct_type_id_EXTRAS
+    struct_type_id_EXTRAS
+#endif
 };
 
 auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression;
@@ -1180,6 +1695,13 @@ class struct_type_modifier_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef struct_type_modifier_EXTRAS
+    struct_type_modifier_EXTRAS
+#endif
 };
 
 auto struct_type_modifier(Expression value, Expression id) -> Expression;
@@ -1193,6 +1715,13 @@ class struct_hier_ref_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef struct_hier_ref_expr_EXTRAS
+    struct_hier_ref_expr_EXTRAS
+#endif
 };
 
 auto struct_hier_ref_expr(Expressions hiers) -> Expression;
@@ -1206,6 +1735,13 @@ class hdl_path_name_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef hdl_path_name_expr_EXTRAS
+    hdl_path_name_expr_EXTRAS
+#endif
 };
 
 auto hdl_path_name_expr(Expressions hdl_hiers) -> Expression;
@@ -1223,6 +1759,13 @@ class ternary_operator_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef ternary_operator_expr_EXTRAS
+    ternary_operator_expr_EXTRAS
+#endif
 };
 
 auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression;
@@ -1238,6 +1781,13 @@ class cast_operator_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef cast_operator_expr_EXTRAS
+    cast_operator_expr_EXTRAS
+#endif
 };
 
 auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression;
@@ -1251,6 +1801,13 @@ class constraint_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef constraint_expr_EXTRAS
+    constraint_expr_EXTRAS
+#endif
 };
 
 auto constraint_expr(Expression bool_expr) -> Expression;
@@ -1264,6 +1821,13 @@ class soft_constraint_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef soft_constraint_expr_EXTRAS
+    soft_constraint_expr_EXTRAS
+#endif
 };
 
 auto soft_constraint_expr(Expression bool_expr) -> Expression;
@@ -1279,6 +1843,13 @@ class method_call_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef method_call_expr_EXTRAS
+    method_call_expr_EXTRAS
+#endif
 };
 
 auto method_call_expr(Expression base, Expressions arguments) -> Expression;
@@ -1290,6 +1861,13 @@ class me_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef me_expr_EXTRAS
+    me_expr_EXTRAS
+#endif
 };
 
 auto me_expr() -> Expression;
@@ -1301,6 +1879,13 @@ class it_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef it_expr_EXTRAS
+    it_expr_EXTRAS
+#endif
 };
 
 auto it_expr() -> Expression;
@@ -1314,6 +1899,13 @@ class str_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef str_expr_EXTRAS
+    str_expr_EXTRAS
+#endif
 };
 
 auto str_expr(Symbol_ str) -> Expression;
@@ -1327,6 +1919,13 @@ class int_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef int_expr_EXTRAS
+    int_expr_EXTRAS
+#endif
 };
 
 auto int_expr(Symbol_ int_) -> Expression;
@@ -1338,6 +1937,13 @@ class no_expr_class : public Expression_class {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef no_expr_EXTRAS
+    no_expr_EXTRAS
+#endif
 };
 
 auto no_expr() -> Expression;
