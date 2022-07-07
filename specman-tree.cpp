@@ -868,6 +868,17 @@ auto all_of_constraint_expr(Expressions constraints) -> Expression {
     return Expression(new all_of_constraint_expr_class(constraints));
 }
 
+auto list_items_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_items_constraint_expr" << std::endl;
+    item_name->dump(stream, n+2);
+    gen_item->dump(stream, n+2);
+    constraint->dump(stream, n+2);
+}
+
+auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression {
+    return Expression(new list_items_constraint_expr_class(item_name, gen_item, constraint));
+}
+
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_call_expr" << std::endl;
     base->dump(stream, n+2);

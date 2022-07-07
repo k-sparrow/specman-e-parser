@@ -295,7 +295,7 @@
 %nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
 %nterm <elex::Expression>   named_action_block
-/* %nterm <elex::Expression>   opt_iterated_id_expr */
+%nterm <elex::Expression>   opt_iterated_id_expr
 %nterm <elex::Expression>   iterated_id_expr
 
 %nterm <elex::Expression>   id_expr
@@ -784,10 +784,11 @@ struct_type_modifier : // VALUE'id | id
     | opt_iterated_id_expr[id] WITH action_block[actions] { $$ = elex::named_action_block($id, $actions); }
     ; */
 
-/* opt_iterated_id_expr : // [[ (name) ]]
+opt_iterated_id_expr : // [[ (name) ]]
       %empty                { $$ = elex::no_expr(); }
     | LPAREN id_expr RPAREN { $$ = $2; }
 
+/*
 opt_slice_expr : // [[: slice]]
       %empty            { $$ = elex::no_expr(); }
     | COLON non_term_expression  { $$ = $2; }  */
@@ -833,10 +834,32 @@ casting_operator_expression :
     non_term_expression[casted] DOT AS_A LPAREN non_term_expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
     ; */
 
+/*
+Hard constraint:
+    protocol == USB
+
+Soft constraint:
+    soft protocol == USB
+
+All of constraints:
+    all of { 
+        soft protocol == USB; 
+        kind == HOST;
+    }
+
+List items constraint
+    for each (ag) in usb_agents { 
+        ag.kind == HOST; 
+    }
+*/
 constraint_expression : 
       logical_expression                               { $$ = elex::constraint_expr($1); }
     | SOFT constraint_expression                       { $$ = elex::soft_constraint_expr($2); }
     | ALL OF LBRACE constriant_expression_block RBRACE { $$ = elex::all_of_constraint_expr($4); } 
+    | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE terminated_constraint_expression[constraint] RBRACE 
+      {
+          $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint);
+      }
     ;
 
 terminated_constraint_expression : 

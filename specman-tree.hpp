@@ -1852,6 +1852,30 @@ class all_of_constraint_expr_class : public Expression_class {
 
 auto all_of_constraint_expr(Expressions constraints) -> Expression;
 
+class list_items_constraint_expr_class : public Expression_class {
+    protected:
+        Expression item_name;
+        Expression gen_item;
+        Expression constraint;
+    public:
+        list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expression constraint) {
+            this->item_name = item_name;
+            this->gen_item = gen_item;
+            this->constraint = constraint;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_items_constraint_expr_EXTRAS
+    list_items_constraint_expr_EXTRAS
+#endif
+};
+
+auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression;
+
 class method_call_expr_class : public Expression_class {
     protected:
         Expression base;
