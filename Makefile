@@ -37,6 +37,11 @@ ${OBJS}:
 flex-main: ${FSRC}
 	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp strtab.cpp main-flex.cpp -o $@
 
+test: 
+	cat example.e | ./${OBJS}
+
+memcheck: 
+	cat example.e |  valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./${OBJS}
 clean:
 	rm -rf ${GCSRC} ${OBJS} 
 	rm -rf parser.hpp *.hh
