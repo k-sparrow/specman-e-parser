@@ -182,10 +182,10 @@ auto formal(Symbol_ name, Symbol_ type_) -> Formal {
 auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    dump_Symbol_(stream, n+2, type);
+    type->dump(stream, n+2);
 }
 
-auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember {
+auto struct_field_sm(Symbol_ id, Expression type) -> StructMember {
     return StructMember(new struct_field_sm_class(id, type));
 }
 
@@ -954,6 +954,62 @@ auto int_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto int_expr(Symbol_ int_) -> Expression {
     return Expression(new int_expr_class(int_));
+}
+
+auto predefined_type_int_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_int_expr" << std::endl;
+}
+
+auto predefined_type_int_expr() -> Expression {
+    return Expression(new predefined_type_int_expr_class());
+}
+
+auto predefined_type_uint_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_uint_expr" << std::endl;
+}
+
+auto predefined_type_uint_expr() -> Expression {
+    return Expression(new predefined_type_uint_expr_class());
+}
+
+auto predefined_type_bool_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_bool_expr" << std::endl;
+}
+
+auto predefined_type_bool_expr() -> Expression {
+    return Expression(new predefined_type_bool_expr_class());
+}
+
+auto predefined_type_bit_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_bit_expr" << std::endl;
+}
+
+auto predefined_type_bit_expr() -> Expression {
+    return Expression(new predefined_type_bit_expr_class());
+}
+
+auto predefined_type_byte_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_byte_expr" << std::endl;
+}
+
+auto predefined_type_byte_expr() -> Expression {
+    return Expression(new predefined_type_byte_expr_class());
+}
+
+auto predefined_type_nibble_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_nibble_expr" << std::endl;
+}
+
+auto predefined_type_nibble_expr() -> Expression {
+    return Expression(new predefined_type_nibble_expr_class());
+}
+
+auto predefined_type_time_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_type_time_expr" << std::endl;
+}
+
+auto predefined_type_time_expr() -> Expression {
+    return Expression(new predefined_type_time_expr_class());
 }
 
 auto no_expr_class::dump(std::ostream& stream, int n) -> void {

@@ -35,7 +35,7 @@ module Specman begin
         
         constructor formal(name: Symbol_; type_: Symbol_) : Formal;
 
-        constructor struct_field_sm(id: Symbol_; type: Symbol_) : StructMember;
+        constructor struct_field_sm(id: Symbol_; type: Expression) : StructMember;
         constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; list_type: Symbol_) : StructMember;
         constructor struct_field_assoc_list_sm(id: Symbol_; key_type: Expression; list_type: Symbol_) : StructMember;
 
@@ -129,5 +129,14 @@ module Specman begin
         constructor it_expr() : Expression;
         constructor str_expr(str: Symbol_) : Expression;
         constructor int_expr(int_: Symbol_) : Expression;
+        
+        constructor predefined_type_int_expr() : Expression;
+        constructor predefined_type_uint_expr() : Expression;
+        constructor predefined_type_bool_expr() : Expression;
+        constructor predefined_type_bit_expr() : Expression;
+        constructor predefined_type_byte_expr() : Expression;
+        constructor predefined_type_nibble_expr() : Expression;
+        constructor predefined_type_time_expr() : Expression;
+
         constructor no_expr() : Expression;
 end;

@@ -36,6 +36,18 @@
             eEmpty,
             eUndefined
         };
+        
+        enum e_scalar_predefined_type {
+            eInt,
+            eUint, 
+            eBool,
+            eBit,
+            eByte,
+            eNibble,
+            eTime,
+            eNotPredefined 
+        };
+
     };
 }
 
@@ -55,6 +67,57 @@
     }
 
 }
+
+%{
+/*     auto decodeTypeStr() -> e_scalar_predefined_type {
+    } */
+    namespace elex {
+        auto decodeTypeStr(Symbol_ token) -> elex::e_scalar_predefined_type {              
+            auto token_str = token.lock()->Str();
+
+            if(token_str == "int")          return eInt;
+            else if (token_str == "uint")   return eUint;
+            else if (token_str == "bool")   return eBool;
+            else if (token_str == "bit")    return eBit;
+            else if (token_str == "byte")   return eByte;
+            else if (token_str == "nibble") return eNibble;
+            else if (token_str == "time")   return eTime;
+            else                            return eNotPredefined;
+        }
+
+        auto decodeType(Symbol_ token) -> elex::Expression {
+          switch(decodeTypeStr(token)) {
+              case eInt: {
+                  return elex::predefined_type_int_expr();
+              } 
+              case eUint: {
+                  return elex::predefined_type_uint_expr();
+              } 
+              case eBool: {
+                  return elex::predefined_type_bool_expr();
+              } 
+              case eBit: {
+                  return elex::predefined_type_bit_expr();
+              } 
+              case eByte: {
+                  return elex::predefined_type_byte_expr();
+              }
+              case eNibble: {
+                  return elex::predefined_type_nibble_expr();
+              } 
+              case eTime: {
+                  return elex::predefined_type_time_expr();
+              } 
+              case eNotPredefined: {
+                  return elex::id_expr(token);
+              } 
+              default: {
+                  return elex::id_expr(token);
+              }
+          }
+        }
+    }
+%}
 
 /* ------------------ Keywords ------------------ */
 %token WHILE
@@ -430,7 +493,7 @@ field_declaration :
 // TODO: add optional const modifier
 // TODO: add optional bits|bytes length specification
 scalar_field_declaration : 
-    ID[name] COLON ID[type_] { $$ = elex::struct_field_sm($name, $type_); }     
+    ID[name] COLON id_expr[type_] { $$ = elex::struct_field_sm($name, $type_); }
     ;
 
 // list-name[[len]] : list of type
@@ -894,7 +957,10 @@ identifier_expression :
     ;
 
 id_expr : 
-      ID            { $$ = elex::id_expr($1); }
+      ID // a workaround for the lexer, somehow predefined types are not recognized as distinct tokens
+      { 
+          $$ = elex::decodeType($1);
+      }
     | me_expression { $$ = $1; }
     | it_expression { $$ = $1; }
     ;

@@ -331,9 +331,9 @@ auto formal(Symbol_ name, Symbol_ type_) -> Formal;
 class struct_field_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
-        Symbol_ type;
+        Expression type;
     public:
-        struct_field_sm_class(Symbol_ id, Symbol_ type) {
+        struct_field_sm_class(Symbol_ id, Expression type) {
             this->id = id;
             this->type = type;
         }
@@ -348,7 +348,7 @@ class struct_field_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_sm(Symbol_ id, Symbol_ type) -> StructMember;
+auto struct_field_sm(Symbol_ id, Expression type) -> StructMember;
 
 class struct_field_list_sm_class : public StructMember_class {
     protected:
@@ -2035,6 +2035,132 @@ class int_expr_class : public Expression_class {
 };
 
 auto int_expr(Symbol_ int_) -> Expression;
+
+class predefined_type_int_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_int_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_int_expr_EXTRAS
+    predefined_type_int_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_int_expr() -> Expression;
+
+class predefined_type_uint_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_uint_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_uint_expr_EXTRAS
+    predefined_type_uint_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_uint_expr() -> Expression;
+
+class predefined_type_bool_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_bool_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_bool_expr_EXTRAS
+    predefined_type_bool_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_bool_expr() -> Expression;
+
+class predefined_type_bit_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_bit_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_bit_expr_EXTRAS
+    predefined_type_bit_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_bit_expr() -> Expression;
+
+class predefined_type_byte_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_byte_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_byte_expr_EXTRAS
+    predefined_type_byte_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_byte_expr() -> Expression;
+
+class predefined_type_nibble_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_nibble_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_nibble_expr_EXTRAS
+    predefined_type_nibble_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_nibble_expr() -> Expression;
+
+class predefined_type_time_expr_class : public Expression_class {
+    protected:
+    public:
+        predefined_type_time_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef predefined_type_time_expr_EXTRAS
+    predefined_type_time_expr_EXTRAS
+#endif
+};
+
+auto predefined_type_time_expr() -> Expression;
 
 class no_expr_class : public Expression_class {
     protected:
