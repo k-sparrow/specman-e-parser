@@ -99,6 +99,7 @@ soft        (soft)
 import      (import)
 select      (==[ \t\f\v]*select)
 key         (key)
+on          (on)
 
 
 null	      (NULL)
@@ -251,6 +252,7 @@ number  [0-9]+
 {import}	{ return yy::parser::make_IMPORT(location()); }
 {select}	{ return yy::parser::make_SELECT(location()); }
 {key}   	{ return yy::parser::make_KEY(location()); }
+{on}   	    { return yy::parser::make_ON(location()); }
 
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    

@@ -199,6 +199,7 @@
 %token IMPORT    
 %token SELECT    
 %token KEY    
+%token ON
 
 %token NULL_
 %token UNDEF
@@ -475,7 +476,7 @@ non_term_struct_member :
     | when_subtype_declaration { $$ = $1; }
 //   | event_declaration { $$ = $1; }
 //   | coverage_group_declaration { $$ = $1; }
-//   | on_event_definition { $$ = $1; }
+    | on_event_definition   { $$ = $1; }
     | constraint_definition { $$ = $1; }
 //   | expect_definition { $$ = $1; }
     ; // TODO: correctly implement this
@@ -630,6 +631,10 @@ when_subtype_declaration :
 
 constraint_definition :
     KEEP constraint_expression { $$ = elex::constraint_def_sm($2); }
+    ;
+
+on_event_definition : 
+    ON hier_ref_expression[event_name] action_block[actions] { $$ = elex::on_event_sm($event_name, $actions); }
     ;
 
 /* Actions */ 

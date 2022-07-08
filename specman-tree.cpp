@@ -376,6 +376,16 @@ auto constraint_def_sm(Expression constraint_expr) -> StructMember {
     return StructMember(new constraint_def_sm_class(constraint_expr));
 }
 
+auto on_event_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "on_event_sm" << std::endl;
+    event_name->dump(stream, n+2);
+    action_block->dump(stream, n+2);
+}
+
+auto on_event_sm(Expression event_name, Actions action_block) -> StructMember {
+    return StructMember(new on_event_sm_class(event_name, action_block));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

@@ -55,6 +55,7 @@ module Specman begin
 
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
         constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
+        constructor on_event_sm(event_name: Expression; action_block: Actions) : StructMember;
         
         constructor no_action() : Action;
 

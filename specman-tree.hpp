@@ -756,6 +756,28 @@ class constraint_def_sm_class : public StructMember_class {
 
 auto constraint_def_sm(Expression constraint_expr) -> StructMember;
 
+class on_event_sm_class : public StructMember_class {
+    protected:
+        Expression event_name;
+        Actions action_block;
+    public:
+        on_event_sm_class(Expression event_name, Actions action_block) {
+            this->event_name = event_name;
+            this->action_block = action_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef on_event_sm_EXTRAS
+    on_event_sm_EXTRAS
+#endif
+};
+
+auto on_event_sm(Expression event_name, Actions action_block) -> StructMember;
+
 class no_action_class : public Action_class {
     protected:
     public:
