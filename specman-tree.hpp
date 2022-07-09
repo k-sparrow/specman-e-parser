@@ -864,6 +864,26 @@ class temporal_expr_class : public Expression_class {
 
 auto temporal_expr(Expression temporal, Expression sample_event) -> Expression;
 
+class event_ref_expr_class : public Expression_class {
+    protected:
+        Expression event_name;
+    public:
+        event_ref_expr_class(Expression event_name) {
+            this->event_name = event_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef event_ref_expr_EXTRAS
+    event_ref_expr_EXTRAS
+#endif
+};
+
+auto event_ref_expr(Expression event_name) -> Expression;
+
 class not_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
@@ -1110,12 +1130,14 @@ class sequence_temporal_expr_class : public Expression_class {
 
 auto sequence_temporal_expr(Expressions temporals) -> Expression;
 
-class event_ref_expr_class : public Expression_class {
+class fixed_repetition_expr_class : public Expression_class {
     protected:
-        Expression event_name;
+        Expression rep;
+        Expression temporal;
     public:
-        event_ref_expr_class(Expression event_name) {
-            this->event_name = event_name;
+        fixed_repetition_expr_class(Expression rep, Expression temporal) {
+            this->rep = rep;
+            this->temporal = temporal;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1123,12 +1145,12 @@ class event_ref_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef event_ref_expr_EXTRAS
-    event_ref_expr_EXTRAS
+#ifdef fixed_repetition_expr_EXTRAS
+    fixed_repetition_expr_EXTRAS
 #endif
 };
 
-auto event_ref_expr(Expression event_name) -> Expression;
+auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression;
 
 class cycle_temporal_expr_class : public Expression_class {
     protected:

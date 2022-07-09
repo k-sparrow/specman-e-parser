@@ -348,13 +348,17 @@
 /* Temporal Expressions */
 %nterm <elex::Expression>   temporal_expression
 %nterm <elex::Expression>   temporal_expression_base
+%nterm <elex::Expressions>  temporal_expression_base_items
 %nterm <elex::Expression>   sampling_event_expression
 %nterm <elex::Expression>   unary_temporal_expression_base
 %nterm <elex::Expression>   binary_temporal_expression_base
 %nterm <elex::Expression>   edge_triggered_temporal_expression_base
 
 %nterm <elex::Expression>   sequence_temporal_expression_base
-%nterm <elex::Expressions>  temporal_expression_base_items
+%nterm <elex::Expression>   fixed_repetition_temporal_expression_base
+%nterm <elex::Expression>   first_match_repetition_temporal_expression_base
+%nterm <elex::Expression>   true_match_repetition_temporal_expression_base
+
 
 /* Object Expressions */
 /* %nterm <elex::Expression>   list_indexing_expression
@@ -680,6 +684,9 @@ temporal_expression_base:
     | edge_triggered_temporal_expression_base
       { $$ = $1; }
 
+    | fixed_repetition_temporal_expression_base
+      { $$ = $1; }
+
     | sequence_temporal_expression_base
       { $$ = $1; }
       
@@ -730,7 +737,8 @@ edge_triggered_temporal_expression_base :
 
   | CHANGE LPAREN hdl_pathname_expression RPAREN
     { $$ = elex::change_temporal_expr($3); }  
-
+  ;
+  
 sequence_temporal_expression_base : 
   LBRACE temporal_expression_base_items RBRACE 
   { $$ = elex::sequence_temporal_expr($2); }
@@ -742,6 +750,14 @@ temporal_expression_base_items :
 
   | temporal_expression_base_items SEMICOLON temporal_expression_base
     { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+  ;
+
+fixed_repetition_temporal_expression_base : 
+    LBRACKET int_expression[rep] RBRACKET 
+    { $$ = elex::fixed_repetition_expr($rep, elex::cycle_temporal_expr()); }
+  
+  | LBRACKET int_expression[rep] RBRACKET MUL temporal_expression_base[temporal]
+    { $$ = elex::fixed_repetition_expr($rep, $temporal); }
   ;
 
 /* Actions */ 

@@ -425,6 +425,15 @@ auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
     return Expression(new temporal_expr_class(temporal, sample_event));
 }
 
+auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "event_ref_expr" << std::endl;
+    event_name->dump(stream, n+2);
+}
+
+auto event_ref_expr(Expression event_name) -> Expression {
+    return Expression(new event_ref_expr_class(event_name));
+}
+
 auto not_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "not_temporal_expr" << std::endl;
     temporal->dump(stream, n+2);
@@ -536,13 +545,14 @@ auto sequence_temporal_expr(Expressions temporals) -> Expression {
     return Expression(new sequence_temporal_expr_class(temporals));
 }
 
-auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "event_ref_expr" << std::endl;
-    event_name->dump(stream, n+2);
+auto fixed_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "fixed_repetition_expr" << std::endl;
+    rep->dump(stream, n+2);
+    temporal->dump(stream, n+2);
 }
 
-auto event_ref_expr(Expression event_name) -> Expression {
-    return Expression(new event_ref_expr_class(event_name));
+auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression {
+    return Expression(new fixed_repetition_expr_class(rep, temporal));
 }
 
 auto cycle_temporal_expr_class::dump(std::ostream& stream, int n) -> void {

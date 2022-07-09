@@ -63,6 +63,7 @@ module Specman begin
         constructor event_def_override_sm(id: Symbol_; temporal: Expression) : StructMember;
         
         constructor temporal_expr(temporal: Expression; sample_event: Expression) : Expression;
+        constructor event_ref_expr(event_name: Expression) : Expression;
         constructor not_temporal_expr(temporal: Expression) : Expression;
         constructor fail_temporal_expr(temporal: Expression) : Expression;
         constructor eventually_temporal_expr(temporal: Expression) : Expression;
@@ -75,7 +76,7 @@ module Specman begin
         constructor and_temporal_expr(te1: Expression; te2: Expression) : Expression;
         constructor or_temporal_expr(te1: Expression; te2: Expression) : Expression;
         constructor sequence_temporal_expr(temporals: Expressions) : Expression;
-        constructor event_ref_expr(event_name: Expression) : Expression;
+        constructor fixed_repetition_expr(rep: Expression; temporal: Expression) : Expression;
 
         constructor cycle_temporal_expr() : Expression;
         constructor no_action() : Action;
