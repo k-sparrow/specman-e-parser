@@ -74,6 +74,7 @@ module Specman begin
         constructor change_temporal_expr(hdl_path: Expression) : Expression;
         constructor and_temporal_expr(te1: Expression; te2: Expression) : Expression;
         constructor or_temporal_expr(te1: Expression; te2: Expression) : Expression;
+        constructor sequence_temporal_expr(temporals: Expressions) : Expression;
         constructor event_ref_expr(event_name: Expression) : Expression;
 
         constructor cycle_temporal_expr() : Expression;

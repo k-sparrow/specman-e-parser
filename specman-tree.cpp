@@ -527,6 +527,15 @@ auto or_temporal_expr(Expression te1, Expression te2) -> Expression {
     return Expression(new or_temporal_expr_class(te1, te2));
 }
 
+auto sequence_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_temporal_expr" << std::endl;
+    temporals->dump(stream, n+2);
+}
+
+auto sequence_temporal_expr(Expressions temporals) -> Expression {
+    return Expression(new sequence_temporal_expr_class(temporals));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     event_name->dump(stream, n+2);

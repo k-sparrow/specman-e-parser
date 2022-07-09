@@ -1090,6 +1090,26 @@ class or_temporal_expr_class : public Expression_class {
 
 auto or_temporal_expr(Expression te1, Expression te2) -> Expression;
 
+class sequence_temporal_expr_class : public Expression_class {
+    protected:
+        Expressions temporals;
+    public:
+        sequence_temporal_expr_class(Expressions temporals) {
+            this->temporals = temporals;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef sequence_temporal_expr_EXTRAS
+    sequence_temporal_expr_EXTRAS
+#endif
+};
+
+auto sequence_temporal_expr(Expressions temporals) -> Expression;
+
 class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;

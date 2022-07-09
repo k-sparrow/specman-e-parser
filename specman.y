@@ -348,10 +348,13 @@
 /* Temporal Expressions */
 %nterm <elex::Expression>   temporal_expression
 %nterm <elex::Expression>   temporal_expression_base
+%nterm <elex::Expression>   sampling_event_expression
 %nterm <elex::Expression>   unary_temporal_expression_base
 %nterm <elex::Expression>   binary_temporal_expression_base
 %nterm <elex::Expression>   edge_triggered_temporal_expression_base
-%nterm <elex::Expression>   sampling_event_expression
+
+%nterm <elex::Expression>   sequence_temporal_expression_base
+%nterm <elex::Expressions>  temporal_expression_base_items
 
 /* Object Expressions */
 /* %nterm <elex::Expression>   list_indexing_expression
@@ -676,6 +679,9 @@ temporal_expression_base:
 
     | edge_triggered_temporal_expression_base
       { $$ = $1; }
+
+    | sequence_temporal_expression_base
+      { $$ = $1; }
       
     | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
       { $$ = elex::yield_temporal_expr($trigger, $temporal); }
@@ -716,14 +722,27 @@ unary_temporal_expression_base :
     ;
 
 edge_triggered_temporal_expression_base : 
-      RISE LPAREN hdl_pathname_expression RPAREN 
-      { $$ = elex::rise_temporal_expr($3); }
+    RISE LPAREN hdl_pathname_expression RPAREN 
+    { $$ = elex::rise_temporal_expr($3); }
 
-    | FALL LPAREN hdl_pathname_expression RPAREN
-      { $$ = elex::fall_temporal_expr($3); }  
+  | FALL LPAREN hdl_pathname_expression RPAREN
+    { $$ = elex::fall_temporal_expr($3); }  
 
-    | CHANGE LPAREN hdl_pathname_expression RPAREN
-      { $$ = elex::change_temporal_expr($3); }  
+  | CHANGE LPAREN hdl_pathname_expression RPAREN
+    { $$ = elex::change_temporal_expr($3); }  
+
+sequence_temporal_expression_base : 
+  LBRACE temporal_expression_base_items RBRACE 
+  { $$ = elex::sequence_temporal_expr($2); }
+  ;
+
+temporal_expression_base_items : 
+    temporal_expression_base 
+    { $$ = elex::single_Expressions($1); }
+
+  | temporal_expression_base_items SEMICOLON temporal_expression_base
+    { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+  ;
 
 /* Actions */ 
 actions : 
