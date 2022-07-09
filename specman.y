@@ -263,9 +263,10 @@
 %token END 0 
 
 /* token precedence */
-%left IN IS OR AND LOGICAL_AND_OP LOGICAL_OR_OP BTWS_AND_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
+%left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %left PLUS MINUS
 %left DIV MUL REMAINDER
+%left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
 
@@ -348,6 +349,8 @@
 %nterm <elex::Expression>   temporal_expression
 %nterm <elex::Expression>   temporal_expression_base
 %nterm <elex::Expression>   unary_temporal_expression_base
+%nterm <elex::Expression>   binary_temporal_expression_base
+%nterm <elex::Expression>   edge_triggered_temporal_expression_base
 %nterm <elex::Expression>   sampling_event_expression
 
 /* Object Expressions */
@@ -665,6 +668,28 @@ sampling_event_expression :
     ;
 
 temporal_expression_base: 
+      unary_temporal_expression_base
+      { $$ = $1; }
+
+    | binary_temporal_expression_base 
+      { $$ = $1; }
+
+    | edge_triggered_temporal_expression_base
+      { $$ = $1; }
+      
+    | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
+      { $$ = elex::yield_temporal_expr($trigger, $temporal); }
+    ;
+
+binary_temporal_expression_base : 
+      temporal_expression_base AND temporal_expression_base 
+      { $$ = elex::and_temporal_expr($1, $3); }
+
+    | temporal_expression_base OR  temporal_expression_base
+      { $$ = elex::or_temporal_expr($1, $3); }
+    ;
+
+unary_temporal_expression_base : 
       LPAREN temporal_expression_base RPAREN 
       { $$ = $2; }
     
@@ -683,17 +708,22 @@ temporal_expression_base:
     | TRUE LPAREN logical_expression RPAREN 
       { $$ = elex::true_temporal_expr($3); }
 
-    | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
-      { $$ = elex::yield_temporal_expr($trigger, $temporal); }
-    
-    | RISE LPAREN hdl_pathname_expression RPAREN 
-      { $$ = elex::rise_temporal_expr($3); }
-
     | AT hier_ref_expression                 
       { $$ = $2; }
+
     | CYCLE                                  
       { $$ = elex::cycle_temporal_expr(); }
     ;
+
+edge_triggered_temporal_expression_base : 
+      RISE LPAREN hdl_pathname_expression RPAREN 
+      { $$ = elex::rise_temporal_expr($3); }
+
+    | FALL LPAREN hdl_pathname_expression RPAREN
+      { $$ = elex::fall_temporal_expr($3); }  
+
+    | CHANGE LPAREN hdl_pathname_expression RPAREN
+      { $$ = elex::change_temporal_expr($3); }  
 
 /* Actions */ 
 actions : 
@@ -956,7 +986,7 @@ hier_ref_expression :
     ;
 
 dot_separated_expressions : 
-      id_expr                                         { $$ = elex::single_Expressions($1); }
+      id_expr                                { $$ = elex::single_Expressions($1); }
     | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 

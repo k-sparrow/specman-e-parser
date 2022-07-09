@@ -1006,6 +1006,90 @@ class rise_temporal_expr_class : public Expression_class {
 
 auto rise_temporal_expr(Expression hdl_path) -> Expression;
 
+class fall_temporal_expr_class : public Expression_class {
+    protected:
+        Expression hdl_path;
+    public:
+        fall_temporal_expr_class(Expression hdl_path) {
+            this->hdl_path = hdl_path;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef fall_temporal_expr_EXTRAS
+    fall_temporal_expr_EXTRAS
+#endif
+};
+
+auto fall_temporal_expr(Expression hdl_path) -> Expression;
+
+class change_temporal_expr_class : public Expression_class {
+    protected:
+        Expression hdl_path;
+    public:
+        change_temporal_expr_class(Expression hdl_path) {
+            this->hdl_path = hdl_path;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef change_temporal_expr_EXTRAS
+    change_temporal_expr_EXTRAS
+#endif
+};
+
+auto change_temporal_expr(Expression hdl_path) -> Expression;
+
+class and_temporal_expr_class : public Expression_class {
+    protected:
+        Expression te1;
+        Expression te2;
+    public:
+        and_temporal_expr_class(Expression te1, Expression te2) {
+            this->te1 = te1;
+            this->te2 = te2;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef and_temporal_expr_EXTRAS
+    and_temporal_expr_EXTRAS
+#endif
+};
+
+auto and_temporal_expr(Expression te1, Expression te2) -> Expression;
+
+class or_temporal_expr_class : public Expression_class {
+    protected:
+        Expression te1;
+        Expression te2;
+    public:
+        or_temporal_expr_class(Expression te1, Expression te2) {
+            this->te1 = te1;
+            this->te2 = te2;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef or_temporal_expr_EXTRAS
+    or_temporal_expr_EXTRAS
+#endif
+};
+
+auto or_temporal_expr(Expression te1, Expression te2) -> Expression;
+
 class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;

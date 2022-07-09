@@ -489,6 +489,44 @@ auto rise_temporal_expr(Expression hdl_path) -> Expression {
     return Expression(new rise_temporal_expr_class(hdl_path));
 }
 
+auto fall_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "fall_temporal_expr" << std::endl;
+    hdl_path->dump(stream, n+2);
+}
+
+auto fall_temporal_expr(Expression hdl_path) -> Expression {
+    return Expression(new fall_temporal_expr_class(hdl_path));
+}
+
+auto change_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "change_temporal_expr" << std::endl;
+    hdl_path->dump(stream, n+2);
+}
+
+auto change_temporal_expr(Expression hdl_path) -> Expression {
+    return Expression(new change_temporal_expr_class(hdl_path));
+}
+
+auto and_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "and_temporal_expr" << std::endl;
+    te1->dump(stream, n+2);
+    te2->dump(stream, n+2);
+}
+
+auto and_temporal_expr(Expression te1, Expression te2) -> Expression {
+    return Expression(new and_temporal_expr_class(te1, te2));
+}
+
+auto or_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "or_temporal_expr" << std::endl;
+    te1->dump(stream, n+2);
+    te2->dump(stream, n+2);
+}
+
+auto or_temporal_expr(Expression te1, Expression te2) -> Expression {
+    return Expression(new or_temporal_expr_class(te1, te2));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     event_name->dump(stream, n+2);
