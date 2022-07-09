@@ -386,6 +386,89 @@ auto on_event_sm(Expression event_name, Actions action_block) -> StructMember {
     return StructMember(new on_event_sm_class(event_name, action_block));
 }
 
+auto simple_event_dec_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "simple_event_dec_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto simple_event_dec_sm(Symbol_ id) -> StructMember {
+    return StructMember(new simple_event_dec_sm_class(id));
+}
+
+auto event_def_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "event_def_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    temporal->dump(stream, n+2);
+}
+
+auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember {
+    return StructMember(new event_def_sm_class(id, temporal));
+}
+
+auto event_def_override_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "event_def_override_sm" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    temporal->dump(stream, n+2);
+}
+
+auto event_def_override_sm(Symbol_ id, Expression temporal) -> StructMember {
+    return StructMember(new event_def_override_sm_class(id, temporal));
+}
+
+auto temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+    sample_event->dump(stream, n+2);
+}
+
+auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
+    return Expression(new temporal_expr_class(temporal, sample_event));
+}
+
+auto not_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "not_temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+}
+
+auto not_temporal_expr(Expression temporal) -> Expression {
+    return Expression(new not_temporal_expr_class(temporal));
+}
+
+auto fail_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "fail_temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+}
+
+auto fail_temporal_expr(Expression temporal) -> Expression {
+    return Expression(new fail_temporal_expr_class(temporal));
+}
+
+auto eventually_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "eventually_temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+}
+
+auto eventually_temporal_expr(Expression temporal) -> Expression {
+    return Expression(new eventually_temporal_expr_class(temporal));
+}
+
+auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "event_ref_expr" << std::endl;
+    event_name->dump(stream, n+2);
+}
+
+auto event_ref_expr(Expression event_name) -> Expression {
+    return Expression(new event_ref_expr_class(event_name));
+}
+
+auto cycle_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "cycle_temporal_expr" << std::endl;
+}
+
+auto cycle_temporal_expr() -> Expression {
+    return Expression(new cycle_temporal_expr_class());
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

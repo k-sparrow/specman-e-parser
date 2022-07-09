@@ -76,7 +76,7 @@ change	    (change)
 delay	    (delay)
 consume	    (consume)
 fail	    (fail) 
-eventual	(eventual)
+eventually	(eventually)
 start	    (start)
 wait	    (wait)
 sync	    (sync)
@@ -229,7 +229,7 @@ number  [0-9]+
 {consume}	{ return yy::parser::make_CONSUME(location()); }
 
 {fail}	    { return yy::parser::make_FAIL(location()); } 
-{eventual}	{ return yy::parser::make_EVENTUAL(location()); }
+{eventually} { return yy::parser::make_EVENTUALLY(location()); }
 {start}	    { return yy::parser::make_START(location()); }
 {wait}	    { return yy::parser::make_WAIT(location()); }
 {sync}	    { return yy::parser::make_SYNC(location()); }

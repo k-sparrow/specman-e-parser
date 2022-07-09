@@ -55,8 +55,20 @@ module Specman begin
 
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
         constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
+
         constructor on_event_sm(event_name: Expression; action_block: Actions) : StructMember;
+
+        constructor simple_event_dec_sm(id: Symbol_) : StructMember;
+        constructor event_def_sm(id: Symbol_; temporal: Expression) : StructMember;
+        constructor event_def_override_sm(id: Symbol_; temporal: Expression) : StructMember;
         
+        constructor temporal_expr(temporal: Expression; sample_event: Expression) : Expression;
+        constructor not_temporal_expr(temporal: Expression) : Expression;
+        constructor fail_temporal_expr(temporal: Expression) : Expression;
+        constructor eventually_temporal_expr(temporal: Expression) : Expression;
+        constructor event_ref_expr(event_name: Expression) : Expression;
+
+        constructor cycle_temporal_expr() : Expression;
         constructor no_action() : Action;
 
         constructor id_expr(id: Symbol_) : Expression;

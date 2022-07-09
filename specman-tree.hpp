@@ -778,6 +778,190 @@ class on_event_sm_class : public StructMember_class {
 
 auto on_event_sm(Expression event_name, Actions action_block) -> StructMember;
 
+class simple_event_dec_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+    public:
+        simple_event_dec_sm_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef simple_event_dec_sm_EXTRAS
+    simple_event_dec_sm_EXTRAS
+#endif
+};
+
+auto simple_event_dec_sm(Symbol_ id) -> StructMember;
+
+class event_def_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Expression temporal;
+    public:
+        event_def_sm_class(Symbol_ id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef event_def_sm_EXTRAS
+    event_def_sm_EXTRAS
+#endif
+};
+
+auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember;
+
+class event_def_override_sm_class : public StructMember_class {
+    protected:
+        Symbol_ id;
+        Expression temporal;
+    public:
+        event_def_override_sm_class(Symbol_ id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef event_def_override_sm_EXTRAS
+    event_def_override_sm_EXTRAS
+#endif
+};
+
+auto event_def_override_sm(Symbol_ id, Expression temporal) -> StructMember;
+
+class temporal_expr_class : public Expression_class {
+    protected:
+        Expression temporal;
+        Expression sample_event;
+    public:
+        temporal_expr_class(Expression temporal, Expression sample_event) {
+            this->temporal = temporal;
+            this->sample_event = sample_event;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef temporal_expr_EXTRAS
+    temporal_expr_EXTRAS
+#endif
+};
+
+auto temporal_expr(Expression temporal, Expression sample_event) -> Expression;
+
+class not_temporal_expr_class : public Expression_class {
+    protected:
+        Expression temporal;
+    public:
+        not_temporal_expr_class(Expression temporal) {
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef not_temporal_expr_EXTRAS
+    not_temporal_expr_EXTRAS
+#endif
+};
+
+auto not_temporal_expr(Expression temporal) -> Expression;
+
+class fail_temporal_expr_class : public Expression_class {
+    protected:
+        Expression temporal;
+    public:
+        fail_temporal_expr_class(Expression temporal) {
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef fail_temporal_expr_EXTRAS
+    fail_temporal_expr_EXTRAS
+#endif
+};
+
+auto fail_temporal_expr(Expression temporal) -> Expression;
+
+class eventually_temporal_expr_class : public Expression_class {
+    protected:
+        Expression temporal;
+    public:
+        eventually_temporal_expr_class(Expression temporal) {
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef eventually_temporal_expr_EXTRAS
+    eventually_temporal_expr_EXTRAS
+#endif
+};
+
+auto eventually_temporal_expr(Expression temporal) -> Expression;
+
+class event_ref_expr_class : public Expression_class {
+    protected:
+        Expression event_name;
+    public:
+        event_ref_expr_class(Expression event_name) {
+            this->event_name = event_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef event_ref_expr_EXTRAS
+    event_ref_expr_EXTRAS
+#endif
+};
+
+auto event_ref_expr(Expression event_name) -> Expression;
+
+class cycle_temporal_expr_class : public Expression_class {
+    protected:
+    public:
+        cycle_temporal_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef cycle_temporal_expr_EXTRAS
+    cycle_temporal_expr_EXTRAS
+#endif
+};
+
+auto cycle_temporal_expr() -> Expression;
+
 class no_action_class : public Action_class {
     protected:
     public:

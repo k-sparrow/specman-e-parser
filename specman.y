@@ -176,7 +176,7 @@
 %token DELAY
 %token CONSUME
 %token FAIL 
-%token EVENTUAL
+%token EVENTUALLY
 %token START
 %token WAIT
 %token SYNC
@@ -342,6 +342,12 @@
 %nterm <elex::Expression>   unary_arithmetic_expression
 %nterm <elex::Expression>   binary_arithmetic_expression
 
+/* Temporal Expressions */
+%nterm <elex::Expression>   temporal_expression
+%nterm <elex::Expression>   temporal_expression_base
+%nterm <elex::Expression>   unary_temporal_expression_base
+%nterm <elex::Expression>   sampling_event_expression
+
 /* Object Expressions */
 /* %nterm <elex::Expression>   list_indexing_expression
 %nterm <elex::Expression>   list_slicing_expression
@@ -474,10 +480,10 @@ non_term_struct_member :
     | method_declaration       { $$ = $1; }
     | tcm_declaration          { $$ = $1; }
     | when_subtype_declaration { $$ = $1; }
-//   | event_declaration { $$ = $1; }
+    | event_declaration        { $$ = $1; }
 //   | coverage_group_declaration { $$ = $1; }
-    | on_event_definition   { $$ = $1; }
-    | constraint_definition { $$ = $1; }
+    | on_event_definition      { $$ = $1; }
+    | constraint_definition    { $$ = $1; }
 //   | expect_definition { $$ = $1; }
     ; // TODO: correctly implement this
 
@@ -635,6 +641,34 @@ constraint_definition :
 
 on_event_definition : 
     ON hier_ref_expression[event_name] action_block[actions] { $$ = elex::on_event_sm($event_name, $actions); }
+    ;
+
+event_declaration : 
+      EVENT ID[id]                                       { $$ = elex::simple_event_dec_sm($id); }
+    | EVENT ID[id] IS temporal_expression[temporal]      { $$ = elex::event_def_sm($id, $temporal); }
+    | EVENT ID[id] IS ONLY temporal_expression[temporal] { $$ = elex::event_def_override_sm($id, $temporal); }
+
+temporal_expression : 
+      temporal_expression_base[temporal] AT sampling_event_expression[sample_event] 
+      { 
+          $$ = elex::temporal_expr($temporal, $sample_event); 
+      }
+    | AT hier_ref_expression 
+      {
+          $$ = elex::event_ref_expr($2);
+      }
+    ;
+
+sampling_event_expression : 
+    hier_ref_expression { $$ = $1; }
+    ;
+
+temporal_expression_base: 
+      NOT  temporal_expression_base     { $$ = elex::not_temporal_expr($2); }
+    | FAIL temporal_expression_base     { $$ = elex::fail_temporal_expr($2); }
+    | EVENTUALLY temporal_expression_base { $$ = elex::eventually_temporal_expr($2); }
+    | AT hier_ref_expression            { $$ = $2; }
+    | CYCLE                             { $$ = elex::cycle_temporal_expr(); }
     ;
 
 /* Actions */ 
