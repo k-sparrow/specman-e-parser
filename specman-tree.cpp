@@ -956,10 +956,10 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression {
 
 auto hdl_path_name_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "hdl_path_name_expr" << std::endl;
-    hdl_hier_ref->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, hdl_hier_ref);
 }
 
-auto hdl_path_name_expr(Expression hdl_hier_ref) -> Expression {
+auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression {
     return Expression(new hdl_path_name_expr_class(hdl_hier_ref));
 }
 

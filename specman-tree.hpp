@@ -2034,9 +2034,9 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression;
 
 class hdl_path_name_expr_class : public Expression_class {
     protected:
-        Expression hdl_hier_ref;
+        Symbol_ hdl_hier_ref;
     public:
-        hdl_path_name_expr_class(Expression hdl_hier_ref) {
+        hdl_path_name_expr_class(Symbol_ hdl_hier_ref) {
             this->hdl_hier_ref = hdl_hier_ref;
         }
 
@@ -2050,7 +2050,7 @@ class hdl_path_name_expr_class : public Expression_class {
 #endif
 };
 
-auto hdl_path_name_expr(Expression hdl_hier_ref) -> Expression;
+auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression;
 
 class ternary_operator_expr_class : public Expression_class {
     protected:

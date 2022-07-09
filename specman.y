@@ -56,6 +56,7 @@
     #include <iostream>
     #include <string>
     #include <exception>
+    #include <sstream>
     #include "scanner.hpp"
     #include "parser.hpp"
     #include "driver.hpp"
@@ -253,6 +254,7 @@
 /* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
+%token <elex::Symbol_> SNG_QUOTED_STRING_LITERAL   
 %token <elex::Symbol_> STRING_LITERAL
 /* ------------------ Literals ------------------ */
 
@@ -378,7 +380,7 @@
 
 %nterm <elex::Expression>   hdl_pathname_expression 
 %nterm <elex::Expression>   hier_ref_expression
-%nterm <elex::Expressions>  dot_or_slash_separated_expressions
+%nterm <elex::Expressions>  dot_separated_expressions
 
 /* %nterm <elex::expression>   ternary_operator_expression   
 %nterm <elex::expression>   casting_operator_expression    */
@@ -936,17 +938,26 @@ int_expression :
     ;
 
 hdl_pathname_expression : 
-      SNG_QUOTE hier_ref_expression  SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
+      SNG_QUOTED_STRING_LITERAL  { 
+          // std::cout << "Found HDL pathname: " << $1.lock()->Str() << std::endl;
+
+          std::string pathname = $1.lock()->Str();
+          if (pathname.find('.') != std::string::npos && 
+              pathname.find('/') != std::string::npos) {
+            error(@1, "HDL pathname is mixed with '.' and '/'!");
+          }
+          // construct the HDL pathname
+          $$ = elex::hdl_path_name_expr($1); 
+        }
     ;
 
 hier_ref_expression : 
-    dot_or_slash_separated_expressions { $$ = elex::struct_hier_ref_expr($1); }
+    dot_separated_expressions { $$ = elex::struct_hier_ref_expr($1); }
     ;
 
-dot_or_slash_separated_expressions : 
+dot_separated_expressions : 
       id_expr                                         { $$ = elex::single_Expressions($1); }
-    | dot_or_slash_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
-    | dot_or_slash_separated_expressions SLASH id_expr{ $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 
