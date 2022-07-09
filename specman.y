@@ -265,7 +265,7 @@
 %left PLUS MINUS
 %left DIV MUL REMAINDER
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
-%right LOGICAL_NOT_OP BTWS_NOT_OP
+%right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
 
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
@@ -664,13 +664,28 @@ sampling_event_expression :
     ;
 
 temporal_expression_base: 
-      LPAREN temporal_expression_base RPAREN { $$ = $2; }
-    | NOT  temporal_expression_base     { $$ = elex::not_temporal_expr($2); }
-    | FAIL temporal_expression_base     { $$ = elex::fail_temporal_expr($2); }
-    | EVENTUALLY temporal_expression_base { $$ = elex::eventually_temporal_expr($2); }
-    | DETACH temporal_expression_base   { $$ = elex::detach_temporal_expr($2); }
-    | AT hier_ref_expression            { $$ = $2; }
-    | CYCLE                             { $$ = elex::cycle_temporal_expr(); }
+      LPAREN temporal_expression_base RPAREN 
+      { $$ = $2; }
+    
+    | NOT  temporal_expression_base          
+      { $$ = elex::not_temporal_expr($2); }
+    
+    | FAIL temporal_expression_base          
+      { $$ = elex::fail_temporal_expr($2); }
+    
+    | EVENTUALLY temporal_expression_base    
+      { $$ = elex::eventually_temporal_expr($2); }
+    
+    | DETACH temporal_expression_base        
+      { $$ = elex::detach_temporal_expr($2); }
+    
+    | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
+      { $$ = elex::yield_temporal_expr($trigger, $temporal); }
+    
+    | AT hier_ref_expression                 
+      { $$ = $2; }
+    | CYCLE                                  
+      { $$ = elex::cycle_temporal_expr(); }
     ;
 
 /* Actions */ 

@@ -944,6 +944,28 @@ class detach_temporal_expr_class : public Expression_class {
 
 auto detach_temporal_expr(Expression temporal) -> Expression;
 
+class yield_temporal_expr_class : public Expression_class {
+    protected:
+        Expression trigger;
+        Expression temporal;
+    public:
+        yield_temporal_expr_class(Expression trigger, Expression temporal) {
+            this->trigger = trigger;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef yield_temporal_expr_EXTRAS
+    yield_temporal_expr_EXTRAS
+#endif
+};
+
+auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression;
+
 class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;

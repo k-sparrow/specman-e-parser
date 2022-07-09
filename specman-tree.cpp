@@ -461,6 +461,16 @@ auto detach_temporal_expr(Expression temporal) -> Expression {
     return Expression(new detach_temporal_expr_class(temporal));
 }
 
+auto yield_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "yield_temporal_expr" << std::endl;
+    trigger->dump(stream, n+2);
+    temporal->dump(stream, n+2);
+}
+
+auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression {
+    return Expression(new yield_temporal_expr_class(trigger, temporal));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     event_name->dump(stream, n+2);
