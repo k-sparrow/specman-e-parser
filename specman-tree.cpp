@@ -471,6 +471,24 @@ auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression 
     return Expression(new yield_temporal_expr_class(trigger, temporal));
 }
 
+auto true_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "true_temporal_expr" << std::endl;
+    bool_expr->dump(stream, n+2);
+}
+
+auto true_temporal_expr(Expression bool_expr) -> Expression {
+    return Expression(new true_temporal_expr_class(bool_expr));
+}
+
+auto rise_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "rise_temporal_expr" << std::endl;
+    hdl_path->dump(stream, n+2);
+}
+
+auto rise_temporal_expr(Expression hdl_path) -> Expression {
+    return Expression(new rise_temporal_expr_class(hdl_path));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     event_name->dump(stream, n+2);
@@ -938,11 +956,11 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression {
 
 auto hdl_path_name_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "hdl_path_name_expr" << std::endl;
-    hdl_hiers->dump(stream, n+2);
+    hdl_hier_ref->dump(stream, n+2);
 }
 
-auto hdl_path_name_expr(Expressions hdl_hiers) -> Expression {
-    return Expression(new hdl_path_name_expr_class(hdl_hiers));
+auto hdl_path_name_expr(Expression hdl_hier_ref) -> Expression {
+    return Expression(new hdl_path_name_expr_class(hdl_hier_ref));
 }
 
 auto ternary_operator_expr_class::dump(std::ostream& stream, int n) -> void {

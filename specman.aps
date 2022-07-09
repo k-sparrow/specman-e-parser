@@ -68,6 +68,8 @@ module Specman begin
         constructor eventually_temporal_expr(temporal: Expression) : Expression;
         constructor detach_temporal_expr(temporal: Expression) : Expression;
         constructor yield_temporal_expr(trigger: Expression; temporal: Expression) : Expression;
+        constructor true_temporal_expr(bool_expr: Expression) : Expression;
+        constructor rise_temporal_expr(hdl_path: Expression) : Expression;
         constructor event_ref_expr(event_name: Expression) : Expression;
 
         constructor cycle_temporal_expr() : Expression;
@@ -126,7 +128,7 @@ module Specman begin
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
-        constructor hdl_path_name_expr(hdl_hiers: Expressions) : Expression;
+        constructor hdl_path_name_expr(hdl_hier_ref: Expression) : Expression;
         constructor ternary_operator_expr(condition: Expression; true_expr: Expression; false_expr: Expression) : Expression;
         constructor cast_operator_expr(casted_expr: Expression; dest_type_expr: Expression) : Expression;
 

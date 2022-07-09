@@ -376,10 +376,9 @@
 %nterm <elex::Expressions>  enum_list_exprs
 %nterm <elex::Expression>   enum_list_item
 
+%nterm <elex::Expression>   hdl_pathname_expression 
 %nterm <elex::Expression>   hier_ref_expression
-%nterm <elex::Expressions>  dot_separated_expressions
-/* %nterm <elex::Expression>   hdl_pathname_expression */
-/* %nterm <elex::Expression>   slash_separated_expressions */
+%nterm <elex::Expressions>  dot_or_slash_separated_expressions
 
 /* %nterm <elex::expression>   ternary_operator_expression   
 %nterm <elex::expression>   casting_operator_expression    */
@@ -679,9 +678,15 @@ temporal_expression_base:
     | DETACH temporal_expression_base        
       { $$ = elex::detach_temporal_expr($2); }
     
+    | TRUE LPAREN logical_expression RPAREN 
+      { $$ = elex::true_temporal_expr($3); }
+
     | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
       { $$ = elex::yield_temporal_expr($trigger, $temporal); }
     
+    | RISE LPAREN hdl_pathname_expression RPAREN 
+      { $$ = elex::rise_temporal_expr($3); }
+
     | AT hier_ref_expression                 
       { $$ = $2; }
     | CYCLE                                  
@@ -930,23 +935,18 @@ int_expression :
     NUMBER { $$ = elex::int_expr($1); }
     ;
 
+hdl_pathname_expression : 
+      SNG_QUOTE hier_ref_expression  SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
+    ;
+
 hier_ref_expression : 
-    dot_separated_expressions { $$ = elex::struct_hier_ref_expr($1); }
+    dot_or_slash_separated_expressions { $$ = elex::struct_hier_ref_expr($1); }
     ;
 
-dot_separated_expressions : 
-      id_expr                                { $$ = elex::single_Expressions($1); }
-    | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
-    ;
-
-/* hdl_pathname_expression : 
-      SNG_QUOTE slash_separated_expressions SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
-    | SNG_QUOTE dot_separated_expressions   SNG_QUOTE { $$ = elex::hdl_path_name_expr($2); }
-    ; 
-
-slash_separated_expressions : 
-      non_term_expression                                   { $$ = elex::single_Expressions($1); }
-    | slash_separated_expressions SLASH non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); } */
+dot_or_slash_separated_expressions : 
+      id_expr                                         { $$ = elex::single_Expressions($1); }
+    | dot_or_slash_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    | dot_or_slash_separated_expressions SLASH id_expr{ $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 

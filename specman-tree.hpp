@@ -966,6 +966,46 @@ class yield_temporal_expr_class : public Expression_class {
 
 auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression;
 
+class true_temporal_expr_class : public Expression_class {
+    protected:
+        Expression bool_expr;
+    public:
+        true_temporal_expr_class(Expression bool_expr) {
+            this->bool_expr = bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef true_temporal_expr_EXTRAS
+    true_temporal_expr_EXTRAS
+#endif
+};
+
+auto true_temporal_expr(Expression bool_expr) -> Expression;
+
+class rise_temporal_expr_class : public Expression_class {
+    protected:
+        Expression hdl_path;
+    public:
+        rise_temporal_expr_class(Expression hdl_path) {
+            this->hdl_path = hdl_path;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef rise_temporal_expr_EXTRAS
+    rise_temporal_expr_EXTRAS
+#endif
+};
+
+auto rise_temporal_expr(Expression hdl_path) -> Expression;
+
 class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;
@@ -1994,10 +2034,10 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression;
 
 class hdl_path_name_expr_class : public Expression_class {
     protected:
-        Expressions hdl_hiers;
+        Expression hdl_hier_ref;
     public:
-        hdl_path_name_expr_class(Expressions hdl_hiers) {
-            this->hdl_hiers = hdl_hiers;
+        hdl_path_name_expr_class(Expression hdl_hier_ref) {
+            this->hdl_hier_ref = hdl_hier_ref;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -2010,7 +2050,7 @@ class hdl_path_name_expr_class : public Expression_class {
 #endif
 };
 
-auto hdl_path_name_expr(Expressions hdl_hiers) -> Expression;
+auto hdl_path_name_expr(Expression hdl_hier_ref) -> Expression;
 
 class ternary_operator_expr_class : public Expression_class {
     protected:

@@ -18,6 +18,7 @@
     using yy::location;
 %}
 
+int start_condition = INITIAL;
 /* ------------------ Keywords ------------------ */
 
 while       (while)
@@ -130,7 +131,6 @@ lte             <=
 lt              <
 mul             \*
 div             \/
-slash           \\
 rem             %
 hwp             \$
 
@@ -141,6 +141,7 @@ rbracket        \]
 lbrace          \{
 rbrace          \}
 sng_quote       \'
+%s SINGLE_QUOTE
 
 ddot            \.\.
 dot             \.
@@ -273,6 +274,13 @@ number  [0-9]+
 {btws_and_op}   { return yy::parser::make_BTWS_AND_OP(location()); } 
 {log_or_op}	    { return yy::parser::make_LOGICAL_OR_OP(location()); }   
 {btws_or_op}	{ return yy::parser::make_BTWS_OR_OP(location()); }  
+<SINGLE_QUOTE>{btws_not_op}  {
+    std::string id(YYText());
+    if(m_driver.idtable.find(id) == std::end(m_driver.idtable)) {
+        m_driver.idtable[id] = elex::Symbol(new elex::Entry(id, id.length()));
+    }
+    return yy::parser::make_ID(m_driver.idtable[id], location()); 
+    }
 {btws_not_op}	{ return yy::parser::make_BTWS_NOT_OP(location()); } 
 {log_not_op}	{ return yy::parser::make_LOGICAL_NOT_OP(location()); }  
 {plus}	        { return yy::parser::make_PLUS(location()); }        
@@ -284,8 +292,13 @@ number  [0-9]+
 {lte}	        { return yy::parser::make_LTE(location()); }         
 {lt}	        { return yy::parser::make_LT(location()); }          
 {mul}	        { return yy::parser::make_MUL(location()); }         
+<SINGLE_QUOTE>{div} { 
+        // inside a single quoted string, a DIV is a SLASH
+        // needed to prevent shift-reduce conflict between
+        // a division expression and an HDL-pathname expression
+        return yy::parser::make_SLASH(location()); 
+    }         
 {div}	        { return yy::parser::make_DIV(location()); }         
-{slash}	        { return yy::parser::make_SLASH(location()); }         
 {rem}	        { return yy::parser::make_REMAINDER(location()); }         
 {hwp}	        { return yy::parser::make_HWP(location()); }         
 {ternary}       { return yy::parser::make_TERNARY(location()); }         
@@ -296,7 +309,14 @@ number  [0-9]+
 {rbracket}	{ return yy::parser::make_RBRACKET(location()); }    
 {lbrace}	{ return yy::parser::make_LBRACE(location()); }      
 {rbrace}	{ return yy::parser::make_RBRACE(location()); }      
-{sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
+{sng_quote}	{ 
+        BEGIN(SINGLE_QUOTE);
+        return yy::parser::make_SNG_QUOTE(location()); 
+    }   
+<SINGLE_QUOTE>{sng_quote} {
+        BEGIN(INITIAL);
+        return yy::parser::make_SNG_QUOTE(location()); 
+    }
 {at}	    { return yy::parser::make_AT(location()); }   
 
 {comma}       { return yy::parser::make_COMMA(location()); }
