@@ -66,6 +66,7 @@ module Specman begin
         constructor not_temporal_expr(temporal: Expression) : Expression;
         constructor fail_temporal_expr(temporal: Expression) : Expression;
         constructor eventually_temporal_expr(temporal: Expression) : Expression;
+        constructor detach_temporal_expr(temporal: Expression) : Expression;
         constructor event_ref_expr(event_name: Expression) : Expression;
 
         constructor cycle_temporal_expr() : Expression;

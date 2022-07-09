@@ -452,6 +452,15 @@ auto eventually_temporal_expr(Expression temporal) -> Expression {
     return Expression(new eventually_temporal_expr_class(temporal));
 }
 
+auto detach_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "detach_temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+}
+
+auto detach_temporal_expr(Expression temporal) -> Expression {
+    return Expression(new detach_temporal_expr_class(temporal));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     event_name->dump(stream, n+2);

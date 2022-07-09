@@ -664,9 +664,11 @@ sampling_event_expression :
     ;
 
 temporal_expression_base: 
-      NOT  temporal_expression_base     { $$ = elex::not_temporal_expr($2); }
+      LPAREN temporal_expression_base RPAREN { $$ = $2; }
+    | NOT  temporal_expression_base     { $$ = elex::not_temporal_expr($2); }
     | FAIL temporal_expression_base     { $$ = elex::fail_temporal_expr($2); }
     | EVENTUALLY temporal_expression_base { $$ = elex::eventually_temporal_expr($2); }
+    | DETACH temporal_expression_base   { $$ = elex::detach_temporal_expr($2); }
     | AT hier_ref_expression            { $$ = $2; }
     | CYCLE                             { $$ = elex::cycle_temporal_expr(); }
     ;
