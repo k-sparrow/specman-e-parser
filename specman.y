@@ -269,7 +269,7 @@
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
-
+%precedence TRUE_MATCH
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -358,7 +358,8 @@
 %nterm <elex::Expression>   fixed_repetition_temporal_expression_base
 %nterm <elex::Expression>   first_match_repetition_temporal_expression_base
 %nterm <elex::Expression>   true_match_repetition_temporal_expression_base
-
+%nterm <elex::Expression>   fixed_repetition_rep_base_expr
+%nterm <elex::Expression>   opt_fixed_repetition_rep_base_expr
 
 /* Object Expressions */
 /* %nterm <elex::Expression>   list_indexing_expression
@@ -687,6 +688,9 @@ temporal_expression_base:
     | fixed_repetition_temporal_expression_base
       { $$ = $1; }
 
+    | true_match_repetition_temporal_expression_base
+      { $$ = $1; }
+
     | sequence_temporal_expression_base
       { $$ = $1; }
       
@@ -753,12 +757,33 @@ temporal_expression_base_items :
   ;
 
 fixed_repetition_temporal_expression_base : 
-    LBRACKET int_expression[rep] RBRACKET 
+    LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET 
     { $$ = elex::fixed_repetition_expr($rep, elex::cycle_temporal_expr()); }
   
-  | LBRACKET int_expression[rep] RBRACKET MUL temporal_expression_base[temporal]
+  | LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET MUL temporal_expression_base[temporal]
     { $$ = elex::fixed_repetition_expr($rep, $temporal); }
   ;
+
+true_match_repetition_temporal_expression_base : 
+    BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET 
+    { $$ = elex::true_match_repetition_expr($from, $to, elex::cycle_temporal_expr()); }
+
+  | BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] 
+    { $$ = elex::true_match_repetition_expr($from, $to, $temporal); }
+  ; 
+
+opt_fixed_repetition_rep_base_expr : 
+    %empty 
+    { $$ = elex::no_expr(); }
+
+  | fixed_repetition_rep_base_expr 
+    { $$ = $1; }
+  ;
+
+fixed_repetition_rep_base_expr : 
+    int_expression        { $$ = $1; }
+  | identifier_expression { $$ = $1; }
+  | arithmetic_expression { $$ = $1; }
 
 /* Actions */ 
 actions : 

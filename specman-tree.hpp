@@ -1152,6 +1152,66 @@ class fixed_repetition_expr_class : public Expression_class {
 
 auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression;
 
+class true_match_repetition_expr_class : public Expression_class {
+    protected:
+        Expression from_rep;
+        Expression to_rep;
+        Expression temporal;
+    public:
+        true_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal) {
+            this->from_rep = from_rep;
+            this->to_rep = to_rep;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef true_match_repetition_expr_EXTRAS
+    true_match_repetition_expr_EXTRAS
+#endif
+};
+
+auto true_match_repetition_expr(Expression from_rep, Expression to_rep, Expression temporal) -> Expression;
+
+class zero_repetition_base_expr_class : public Expression_class {
+    protected:
+    public:
+        zero_repetition_base_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef zero_repetition_base_expr_EXTRAS
+    zero_repetition_base_expr_EXTRAS
+#endif
+};
+
+auto zero_repetition_base_expr() -> Expression;
+
+class inf_repetition_base_expr_class : public Expression_class {
+    protected:
+    public:
+        inf_repetition_base_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef inf_repetition_base_expr_EXTRAS
+    inf_repetition_base_expr_EXTRAS
+#endif
+};
+
+auto inf_repetition_base_expr() -> Expression;
+
 class cycle_temporal_expr_class : public Expression_class {
     protected:
     public:

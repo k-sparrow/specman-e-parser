@@ -555,6 +555,33 @@ auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression {
     return Expression(new fixed_repetition_expr_class(rep, temporal));
 }
 
+auto true_match_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "true_match_repetition_expr" << std::endl;
+    from_rep->dump(stream, n+2);
+    to_rep->dump(stream, n+2);
+    temporal->dump(stream, n+2);
+}
+
+auto true_match_repetition_expr(Expression from_rep, Expression to_rep, Expression temporal) -> Expression {
+    return Expression(new true_match_repetition_expr_class(from_rep, to_rep, temporal));
+}
+
+auto zero_repetition_base_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "zero_repetition_base_expr" << std::endl;
+}
+
+auto zero_repetition_base_expr() -> Expression {
+    return Expression(new zero_repetition_base_expr_class());
+}
+
+auto inf_repetition_base_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "inf_repetition_base_expr" << std::endl;
+}
+
+auto inf_repetition_base_expr() -> Expression {
+    return Expression(new inf_repetition_base_expr_class());
+}
+
 auto cycle_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "cycle_temporal_expr" << std::endl;
 }

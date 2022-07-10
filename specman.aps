@@ -77,6 +77,9 @@ module Specman begin
         constructor or_temporal_expr(te1: Expression; te2: Expression) : Expression;
         constructor sequence_temporal_expr(temporals: Expressions) : Expression;
         constructor fixed_repetition_expr(rep: Expression; temporal: Expression) : Expression;
+        constructor true_match_repetition_expr(from_rep: Expression; to_rep: Expression; temporal: Expression) : Expression;
+        constructor zero_repetition_base_expr() : Expression;
+        constructor inf_repetition_base_expr() : Expression;
 
         constructor cycle_temporal_expr() : Expression;
         constructor no_action() : Action;
