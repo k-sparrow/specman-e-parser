@@ -1278,6 +1278,134 @@ class cycle_temporal_expr_class : public Expression_class {
 
 auto cycle_temporal_expr() -> Expression;
 
+class expect_nameless_sm_class : public StructMember_class {
+    protected:
+        Expression temporal;
+    public:
+        expect_nameless_sm_class(Expression temporal) {
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef expect_nameless_sm_EXTRAS
+    expect_nameless_sm_EXTRAS
+#endif
+};
+
+auto expect_nameless_sm(Expression temporal) -> StructMember;
+
+class expect_sm_class : public StructMember_class {
+    protected:
+        Expression id;
+        Expression temporal;
+    public:
+        expect_sm_class(Expression id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef expect_sm_EXTRAS
+    expect_sm_EXTRAS
+#endif
+};
+
+auto expect_sm(Expression id, Expression temporal) -> StructMember;
+
+class expect_override_sm_class : public StructMember_class {
+    protected:
+        Expression id;
+        Expression temporal;
+    public:
+        expect_override_sm_class(Expression id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef expect_override_sm_EXTRAS
+    expect_override_sm_EXTRAS
+#endif
+};
+
+auto expect_override_sm(Expression id, Expression temporal) -> StructMember;
+
+class assume_nameless_sm_class : public StructMember_class {
+    protected:
+        Expression temporal;
+    public:
+        assume_nameless_sm_class(Expression temporal) {
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef assume_nameless_sm_EXTRAS
+    assume_nameless_sm_EXTRAS
+#endif
+};
+
+auto assume_nameless_sm(Expression temporal) -> StructMember;
+
+class assume_sm_class : public StructMember_class {
+    protected:
+        Expression id;
+        Expression temporal;
+    public:
+        assume_sm_class(Expression id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef assume_sm_EXTRAS
+    assume_sm_EXTRAS
+#endif
+};
+
+auto assume_sm(Expression id, Expression temporal) -> StructMember;
+
+class assume_override_sm_class : public StructMember_class {
+    protected:
+        Expression id;
+        Expression temporal;
+    public:
+        assume_override_sm_class(Expression id, Expression temporal) {
+            this->id = id;
+            this->temporal = temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef assume_override_sm_EXTRAS
+    assume_override_sm_EXTRAS
+#endif
+};
+
+auto assume_override_sm(Expression id, Expression temporal) -> StructMember;
+
 class no_action_class : public Action_class {
     protected:
     public:

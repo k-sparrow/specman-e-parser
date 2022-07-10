@@ -48,6 +48,11 @@
             eNotPredefined 
         };
 
+        enum e_temporal_check {
+            eExpect,
+            eAssume
+        };
+
     };
 }
 
@@ -309,6 +314,8 @@
 %nterm <elex::StructMember>  on_event_definition
 %nterm <elex::StructMember>  constraint_definition
 %nterm <elex::StructMember>  expect_definition
+%nterm <elex::e_temporal_check> expect_or_assume_kwd
+%nterm <elex::e_method_ext_mod> opt_expect_assume_modifier
 
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
@@ -498,8 +505,61 @@ non_term_struct_member :
 //   | coverage_group_declaration { $$ = $1; }
     | on_event_definition      { $$ = $1; }
     | constraint_definition    { $$ = $1; }
-//   | expect_definition { $$ = $1; }
+    | expect_definition { $$ = $1; }
     ; // TODO: correctly implement this
+
+expect_definition:
+    expect_or_assume_kwd[kwd] temporal_expression[temporal] 
+    {
+      switch($kwd){
+        case eExpect: {
+          $$ = elex::expect_nameless_sm($temporal);
+          break;
+        }
+        case eAssume: {
+          $$ = elex::assume_nameless_sm($temporal);
+          break;
+        }
+      }
+    }
+
+  | expect_or_assume_kwd[kwd] ID[rule_name] IS opt_expect_assume_modifier[mod] temporal_expression[temporal] 
+    {
+      auto rule_name_ = elex::id_expr($rule_name);
+
+      switch($kwd){
+        case eExpect: {
+          if ($mod == eNone)
+            $$ = elex::expect_sm(rule_name_, $temporal);
+          else if($mod == eOnly)
+            $$ = elex::expect_override_sm(rule_name_, $temporal);
+          else
+            $$ = elex::expect_sm(rule_name_, $temporal);
+          break;
+        }
+
+        case eAssume: {
+          if ($mod == eNone)
+            $$ = elex::assume_sm(rule_name_, $temporal);
+          else if($mod == eOnly)
+            $$ = elex::assume_override_sm(rule_name_, $temporal);
+          else
+            $$ = elex::assume_sm(rule_name_, $temporal);
+          break;
+        }
+      }
+    }
+  ;
+
+expect_or_assume_kwd : 
+    EXPECT { $$ = eExpect; }
+  | ASSUME { $$ = eAssume; }
+  ;
+
+opt_expect_assume_modifier : 
+    %empty { $$ = eNone; }
+  | ONLY   { $$ = eOnly; }
+  ;
 
 field_declaration : 
       scalar_field_declaration      { $$ = $1; }

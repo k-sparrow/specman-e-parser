@@ -82,8 +82,16 @@ module Specman begin
         constructor true_match_repetition_expr(from_rep: Expression; to_rep: Expression; temporal: Expression) : Expression;
         constructor zero_repetition_base_expr() : Expression;
         constructor inf_repetition_base_expr() : Expression;
-
         constructor cycle_temporal_expr() : Expression;
+
+        constructor expect_nameless_sm(temporal: Expression): StructMember;
+        constructor expect_sm(id: Expression; temporal: Expression): StructMember;
+        constructor expect_override_sm(id: Expression; temporal: Expression): StructMember;
+
+        constructor assume_nameless_sm(temporal: Expression): StructMember;
+        constructor assume_sm(id: Expression; temporal: Expression): StructMember;
+        constructor assume_override_sm(id: Expression; temporal: Expression): StructMember;
+
         constructor no_action() : Action;
 
         constructor id_expr(id: Symbol_) : Expression;
