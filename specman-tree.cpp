@@ -615,59 +615,65 @@ auto cycle_temporal_expr() -> Expression {
 auto expect_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_nameless_sm" << std::endl;
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto expect_nameless_sm(Expression temporal) -> StructMember {
-    return StructMember(new expect_nameless_sm_class(temporal));
+auto expect_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new expect_nameless_sm_class(temporal, dut_error_call));
 }
 
 auto expect_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_sm" << std::endl;
     id->dump(stream, n+2);
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto expect_sm(Expression id, Expression temporal) -> StructMember {
-    return StructMember(new expect_sm_class(id, temporal));
+auto expect_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new expect_sm_class(id, temporal, dut_error_call));
 }
 
 auto expect_override_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_override_sm" << std::endl;
     id->dump(stream, n+2);
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto expect_override_sm(Expression id, Expression temporal) -> StructMember {
-    return StructMember(new expect_override_sm_class(id, temporal));
+auto expect_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new expect_override_sm_class(id, temporal, dut_error_call));
 }
 
 auto assume_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_nameless_sm" << std::endl;
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto assume_nameless_sm(Expression temporal) -> StructMember {
-    return StructMember(new assume_nameless_sm_class(temporal));
+auto assume_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new assume_nameless_sm_class(temporal, dut_error_call));
 }
 
 auto assume_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_sm" << std::endl;
     id->dump(stream, n+2);
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto assume_sm(Expression id, Expression temporal) -> StructMember {
-    return StructMember(new assume_sm_class(id, temporal));
+auto assume_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new assume_sm_class(id, temporal, dut_error_call));
 }
 
 auto assume_override_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_override_sm" << std::endl;
     id->dump(stream, n+2);
     temporal->dump(stream, n+2);
+    dut_error_call->dump(stream, n+2);
 }
 
-auto assume_override_sm(Expression id, Expression temporal) -> StructMember {
-    return StructMember(new assume_override_sm_class(id, temporal));
+auto assume_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
+    return StructMember(new assume_override_sm_class(id, temporal, dut_error_call));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

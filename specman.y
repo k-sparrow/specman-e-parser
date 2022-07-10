@@ -241,7 +241,9 @@
 %token REMAINDER      
 %token HWP
 %token TERNARY   
-%token AT
+%token AT   
+%token IF 
+%token ELSE
 
 %token LPAREN      
 %token RPAREN      
@@ -276,6 +278,7 @@
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
+%precedence LPAREN RPAREN
 %precedence FIRST_MATCH
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
@@ -316,6 +319,7 @@
 %nterm <elex::StructMember>  expect_definition
 %nterm <elex::e_temporal_check> expect_or_assume_kwd
 %nterm <elex::e_method_ext_mod> opt_expect_assume_modifier
+%nterm <elex::Expression>    opt_dut_error_call
 
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
@@ -414,7 +418,7 @@
 %nterm <elex::Expression>   constraint_expression
 %nterm <elex::Expression>   terminated_constraint_expression
 %nterm <elex::Expressions>  constriant_expression_block
-/* %nterm <elex::Expression>   method_call_expression */
+%nterm <elex::Expression>   method_call_expression
 
 %nterm <elex::Expression>   sized_scalar_expr
 
@@ -509,46 +513,50 @@ non_term_struct_member :
     ; // TODO: correctly implement this
 
 expect_definition:
-    expect_or_assume_kwd[kwd] temporal_expression[temporal] 
+    expect_or_assume_kwd[kwd] temporal_expression[temporal] opt_dut_error_call[dut_error_call] 
     {
       switch($kwd){
         case eExpect: {
-          $$ = elex::expect_nameless_sm($temporal);
+          $$ = elex::expect_nameless_sm($temporal, $dut_error_call);
           break;
         }
         case eAssume: {
-          $$ = elex::assume_nameless_sm($temporal);
+          $$ = elex::assume_nameless_sm($temporal, $dut_error_call);
           break;
         }
       }
     }
 
-  | expect_or_assume_kwd[kwd] ID[rule_name] IS opt_expect_assume_modifier[mod] temporal_expression[temporal] 
+  | expect_or_assume_kwd[kwd] ID[rule_name] IS opt_expect_assume_modifier[mod] temporal_expression[temporal] opt_dut_error_call[dut_error_call] 
     {
       auto rule_name_ = elex::id_expr($rule_name);
 
       switch($kwd){
         case eExpect: {
           if ($mod == eNone)
-            $$ = elex::expect_sm(rule_name_, $temporal);
+            $$ = elex::expect_sm(rule_name_, $temporal, $dut_error_call);
           else if($mod == eOnly)
-            $$ = elex::expect_override_sm(rule_name_, $temporal);
+            $$ = elex::expect_override_sm(rule_name_, $temporal, $dut_error_call);
           else
-            $$ = elex::expect_sm(rule_name_, $temporal);
+            $$ = elex::expect_sm(rule_name_, $temporal, $dut_error_call);
           break;
         }
 
         case eAssume: {
           if ($mod == eNone)
-            $$ = elex::assume_sm(rule_name_, $temporal);
+            $$ = elex::assume_sm(rule_name_, $temporal, $dut_error_call);
           else if($mod == eOnly)
-            $$ = elex::assume_override_sm(rule_name_, $temporal);
+            $$ = elex::assume_override_sm(rule_name_, $temporal, $dut_error_call);
           else
-            $$ = elex::assume_sm(rule_name_, $temporal);
+            $$ = elex::assume_sm(rule_name_, $temporal, $dut_error_call);
           break;
         }
       }
     }
+  ;
+opt_dut_error_call : 
+    %empty                       { $$ = elex::no_expr(); }
+  | ELSE method_call_expression { $$ = $2; }
   ;
 
 expect_or_assume_kwd : 
@@ -891,13 +899,14 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-      type_scalar           { $$ = $1; }
-    | bitwise_expression    { $$ = $1; }
-    | logical_expression    { $$ = $1; }
-    | arithmetic_expression { $$ = $1; }
-    | identifier_expression { $$ = $1; }
-    | str_expression        { $$ = $1; }
-    | int_expression        { $$ = $1; }
+      type_scalar            { $$ = $1; }
+    | bitwise_expression     { $$ = $1; }
+    | logical_expression     { $$ = $1; }
+    | arithmetic_expression  { $$ = $1; }
+    | method_call_expression { $$ = $1; }
+    | identifier_expression  { $$ = $1; }
+    | str_expression         { $$ = $1; }
+    | int_expression         { $$ = $1; }
     ; // TODO: fully implement this
 
 type_scalar: // TODO: fully implement this
@@ -1185,9 +1194,15 @@ constriant_expression_block :
         $$ = elex::append_Expressions($1, elex::single_Expressions($2));
       }
     ;
-/* method_call_expression : 
+
+ method_call_expression : 
     non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
-    ; */
+    ;
+
+comma_separated_expressions : 
+    non_term_expression                                   { $$ = elex::single_Expressions($1); }
+  | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+  ;
 
 identifier_expression : 
       hier_ref_expression { $$ = $1; }

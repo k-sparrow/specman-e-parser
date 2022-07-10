@@ -1281,9 +1281,11 @@ auto cycle_temporal_expr() -> Expression;
 class expect_nameless_sm_class : public StructMember_class {
     protected:
         Expression temporal;
+        Expression dut_error_call;
     public:
-        expect_nameless_sm_class(Expression temporal) {
+        expect_nameless_sm_class(Expression temporal, Expression dut_error_call) {
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1296,16 +1298,18 @@ class expect_nameless_sm_class : public StructMember_class {
 #endif
 };
 
-auto expect_nameless_sm(Expression temporal) -> StructMember;
+auto expect_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember;
 
 class expect_sm_class : public StructMember_class {
     protected:
         Expression id;
         Expression temporal;
+        Expression dut_error_call;
     public:
-        expect_sm_class(Expression id, Expression temporal) {
+        expect_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
             this->id = id;
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1318,16 +1322,18 @@ class expect_sm_class : public StructMember_class {
 #endif
 };
 
-auto expect_sm(Expression id, Expression temporal) -> StructMember;
+auto expect_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember;
 
 class expect_override_sm_class : public StructMember_class {
     protected:
         Expression id;
         Expression temporal;
+        Expression dut_error_call;
     public:
-        expect_override_sm_class(Expression id, Expression temporal) {
+        expect_override_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
             this->id = id;
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1340,14 +1346,16 @@ class expect_override_sm_class : public StructMember_class {
 #endif
 };
 
-auto expect_override_sm(Expression id, Expression temporal) -> StructMember;
+auto expect_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember;
 
 class assume_nameless_sm_class : public StructMember_class {
     protected:
         Expression temporal;
+        Expression dut_error_call;
     public:
-        assume_nameless_sm_class(Expression temporal) {
+        assume_nameless_sm_class(Expression temporal, Expression dut_error_call) {
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1360,16 +1368,18 @@ class assume_nameless_sm_class : public StructMember_class {
 #endif
 };
 
-auto assume_nameless_sm(Expression temporal) -> StructMember;
+auto assume_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember;
 
 class assume_sm_class : public StructMember_class {
     protected:
         Expression id;
         Expression temporal;
+        Expression dut_error_call;
     public:
-        assume_sm_class(Expression id, Expression temporal) {
+        assume_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
             this->id = id;
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1382,16 +1392,18 @@ class assume_sm_class : public StructMember_class {
 #endif
 };
 
-auto assume_sm(Expression id, Expression temporal) -> StructMember;
+auto assume_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember;
 
 class assume_override_sm_class : public StructMember_class {
     protected:
         Expression id;
         Expression temporal;
+        Expression dut_error_call;
     public:
-        assume_override_sm_class(Expression id, Expression temporal) {
+        assume_override_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
             this->id = id;
             this->temporal = temporal;
+            this->dut_error_call = dut_error_call;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1404,7 +1416,7 @@ class assume_override_sm_class : public StructMember_class {
 #endif
 };
 
-auto assume_override_sm(Expression id, Expression temporal) -> StructMember;
+auto assume_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember;
 
 class no_action_class : public Action_class {
     protected:

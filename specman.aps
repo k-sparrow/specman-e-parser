@@ -84,13 +84,13 @@ module Specman begin
         constructor inf_repetition_base_expr() : Expression;
         constructor cycle_temporal_expr() : Expression;
 
-        constructor expect_nameless_sm(temporal: Expression): StructMember;
-        constructor expect_sm(id: Expression; temporal: Expression): StructMember;
-        constructor expect_override_sm(id: Expression; temporal: Expression): StructMember;
+        constructor expect_nameless_sm(temporal: Expression; dut_error_call: Expression): StructMember;
+        constructor expect_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
+        constructor expect_override_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
 
-        constructor assume_nameless_sm(temporal: Expression): StructMember;
-        constructor assume_sm(id: Expression; temporal: Expression): StructMember;
-        constructor assume_override_sm(id: Expression; temporal: Expression): StructMember;
+        constructor assume_nameless_sm(temporal: Expression; dut_error_call: Expression): StructMember;
+        constructor assume_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
+        constructor assume_override_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
 
         constructor no_action() : Action;
 

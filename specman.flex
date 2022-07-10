@@ -102,6 +102,8 @@ select      (==[ \t\f\v]*select)
 key         (key)
 on          (on)
 exec        (exec)
+if          (if)
+else        (else)
 
 
 null	      (NULL)
@@ -256,6 +258,8 @@ number  [0-9]+
 {key}   	{ return yy::parser::make_KEY(location()); }
 {on}   	    { return yy::parser::make_ON(location()); }
 {exec}   	{ return yy::parser::make_EXEC(location()); }
+{if}   	    { return yy::parser::make_IF(location()); }
+{else}      { return yy::parser::make_ELSE(location()); }
 
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
