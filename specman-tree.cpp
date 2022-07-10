@@ -434,6 +434,16 @@ auto event_ref_expr(Expression event_name) -> Expression {
     return Expression(new event_ref_expr_class(event_name));
 }
 
+auto action_attached_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "action_attached_temporal_expr" << std::endl;
+    temporal->dump(stream, n+2);
+    actions->dump(stream, n+2);
+}
+
+auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expression {
+    return Expression(new action_attached_temporal_expr_class(temporal, actions));
+}
+
 auto not_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "not_temporal_expr" << std::endl;
     temporal->dump(stream, n+2);

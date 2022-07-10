@@ -201,6 +201,7 @@
 %token SELECT    
 %token KEY    
 %token ON
+%token EXEC
 
 %token NULL_
 %token UNDEF
@@ -263,6 +264,7 @@
 %token END 0 
 
 /* token precedence */
+%precedence EXEC
 %left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %left PLUS MINUS
 %left DIV MUL REMAINDER
@@ -696,7 +698,10 @@ temporal_expression_base:
 
     | sequence_temporal_expression_base
       { $$ = $1; }
-      
+    
+    | temporal_expression_base[temporal] EXEC action_block[actions]
+      { $$ = elex::action_attached_temporal_expr($temporal, $actions); }
+
     | temporal_expression_base[trigger] IMPLICATION temporal_expression_base[temporal]
       { $$ = elex::yield_temporal_expr($trigger, $temporal); }
     ;

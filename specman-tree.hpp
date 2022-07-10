@@ -884,6 +884,28 @@ class event_ref_expr_class : public Expression_class {
 
 auto event_ref_expr(Expression event_name) -> Expression;
 
+class action_attached_temporal_expr_class : public Expression_class {
+    protected:
+        Expression temporal;
+        Actions actions;
+    public:
+        action_attached_temporal_expr_class(Expression temporal, Actions actions) {
+            this->temporal = temporal;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef action_attached_temporal_expr_EXTRAS
+    action_attached_temporal_expr_EXTRAS
+#endif
+};
+
+auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expression;
+
 class not_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
