@@ -104,6 +104,11 @@ if          (if)
 else        (else)
 is_a	    (is{ws}a{ws})
 is	        (is)
+item                 (item)
+created_kind         (created_kind)
+created_driver       (created_driver)
+sequence_type        (sequence_type)
+sequence_driver_type (sequence_driver_type)
 
 
 
@@ -261,6 +266,12 @@ number  [0-9]+
 {else}      { return yy::parser::make_ELSE(location()); }
 {is_a}	    { return yy::parser::make_IS_A(location()); } 
 {is}	    { return yy::parser::make_IS(location()); }
+{item}		            { return::yy::parser::make_ITEM(location()); }                
+{created_kind}		    { return::yy::parser::make_CREATED_KIND(location()); }        
+{created_driver}		{ return::yy::parser::make_CREATED_DRIVER(location()); }      
+{sequence_type}		    { return::yy::parser::make_SEQUENCE_TYPE(location()); }       
+{sequence_driver_type}	{ return::yy::parser::make_SEQUENCE_DRIVER_TYPE(location()); }
+
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
 {false_literal}	{ return yy::parser::make_FALSE_LITERAL(location()); }

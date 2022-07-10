@@ -1,5 +1,6 @@
 #pragma once
 
+#include <initializer_list>
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -40,6 +41,7 @@ public:
     list_tree_node(Elem elem) : tree_node(0) {
         m_elems.push_back(elem);
     }
+    list_tree_node(std::initializer_list<Elem> elems) : tree_node(0), m_elems(elems){}
     list_tree_node(list_tree_node<Elem> const& cp) : tree_node(cp.get_line_number()), m_elems(cp.m_elems){}
     list_tree_node(list_tree_node<Elem> const& base, 
                    list_tree_node<Elem> const& ext) : list_tree_node(base) {

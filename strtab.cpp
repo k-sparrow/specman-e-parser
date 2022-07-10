@@ -30,4 +30,12 @@ namespace elex {
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& {
         return out << "Symbol: " << rhs->Str() << ", " << " Length: " << rhs->Length();
     }
+
+    auto operator + (Symbol const& lhs, std::string const& rhs) -> Symbol {
+        return std::move(Symbol(new Entry(lhs->Str() + rhs, lhs->Length())));
+    }
+
+    auto operator + (Symbol_ const& lhs, std::string const& rhs) -> Symbol {
+        return std::move(Symbol(new Entry(lhs.lock()->Str() + rhs, lhs.lock()->Length())));
+    }
 }

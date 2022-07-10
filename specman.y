@@ -53,6 +53,13 @@
             eAssume
         };
 
+        enum e_seq_option {
+          eSeqItem,
+          eSeqKind,
+          eSeqDrvKind,
+          eSeqBaseKind,
+          eSeqDrvBaseKind
+        };
     };
 }
 
@@ -207,6 +214,11 @@
 %token KEY    
 %token ON
 %token EXEC
+%token ITEM
+%token CREATED_KIND
+%token CREATED_DRIVER
+%token SEQUENCE_TYPE
+%token SEQUENCE_DRIVER_TYPE
 
 %token NULL_
 %token UNDEF
@@ -299,6 +311,9 @@
 // %nterm <elex::Statement>  simulator_statement
 %nterm <elex::Statement>  unit_statement
 %nterm <elex::Statement>  sequence_statement
+%nterm <elex::SequenceItems> sequence_options
+%nterm <elex::SequenceItem>  sequence_option
+%nterm <elex::e_seq_option>  sequence_item_kwd
 // %nterm <elex::Statement>  method_statement
 %nterm <elex::Statement>  c_export_statement
 %nterm <elex::Statement>  import_statement
@@ -457,12 +472,13 @@ statements :
 statement : non_term_statement SEMICOLON { $$ = $1; }
 
 non_term_statement : 
-      package_statement { $$ = $1; }
-    | struct_statement  { $$ = $1; }
-    | unit_statement    { $$ = $1; }
+      package_statement  { $$ = $1; }
+    | struct_statement   { $$ = $1; }
+    | unit_statement     { $$ = $1; }
     | extend_struct_unit_statement { $$ = $1; }
-    | type_statement    { $$ = $1; }
-    | import_statement  { $$ = $1; }
+    | type_statement     { $$ = $1; }
+    | import_statement   { $$ = $1; }
+    | sequence_statement { $$ = $1; }
     ;
 
 import_statement : 
@@ -490,6 +506,91 @@ type_statement :
     OPT_PACKAGE TYPE ID COLON type_scalar          { $$ = elex::type_($3, $5); }
     ;
 
+sequence_statement : 
+    SEQUENCE ID[seq_id]                                 
+    { 
+      // this is a pure virtual sequence, meaning we didn't provide any description
+      // for the following:
+      //  created_kind         -> will be created as '{$seq_id}_kind_name'
+      //  created_driver       -> will be created as '{$seq_id}_driver'
+      //  sequence_type        -> will be created as 'any_sequence'
+      //  sequence_driver_type -> will be created as 'any_sequence_driver'
+
+      // all of those new id's will be added to the driver idtable
+      std::string seq_id_name = $seq_id.lock()->Str();
+      std::vector<std::string> item_names = {              
+              seq_id_name + "_kind",
+              seq_id_name + "_driver",
+              "any_sequence",
+              "any_sequence_driver"
+      };
+      
+      for (auto const& new_name : item_names)
+        driver.idtable[new_name] = elex::Symbol(new elex::Entry(new_name, new_name.size()));
+      
+      auto sequence_kind             = elex::sequence_created_kind_name_it(driver.idtable[seq_id_name + "_kind"]);
+      auto sequence_driver_kind      = elex::sequence_created_driver_name_it(driver.idtable[seq_id_name + "_driver"]);
+      auto base_sequence_type        = elex::sequence_base_kind_it(driver.idtable["any_sequence"]);
+      auto base_sequence_driver_type = elex::sequence_driver_base_kind_it(driver.idtable["any_sequence_driver"]);
+
+      $$ = elex::virtual_sequence_st(
+                    $seq_id, 
+                    elex::SequenceItems(new SequenceItems_class({ // TODO: this is very ugly, refactor this
+                                            sequence_kind, 
+                                            sequence_driver_kind,
+                                            base_sequence_type,
+                                            base_sequence_driver_type
+                                            }
+                                          )
+                                        )
+                    ); 
+    }
+
+  | SEQUENCE ID[seq_id] USING sequence_options[options] 
+  { 
+    $$ = elex::sequence_st($seq_id, $options); 
+  }
+  ;
+
+sequence_options : 
+    sequence_option                        { $$ = elex::single_SequenceItems($1); }
+  | sequence_options COMMA sequence_option { $$ = elex::append_SequenceItems($1, elex::single_SequenceItems($3)); }
+  ;
+
+sequence_option : 
+  sequence_item_kwd[kwd] ASSIGN ID[id]{ 
+    switch($kwd) {
+      case eSeqItem: {
+        $$ = elex::sequence_item_kind_it($id);
+        break;
+      }
+      case eSeqKind: {
+        $$ = elex::sequence_created_kind_name_it($id);
+        break;
+      }
+      case eSeqDrvKind: {
+        $$ = elex::sequence_created_driver_name_it($id);
+        break;
+      }
+      case eSeqBaseKind: {
+        $$ = elex::sequence_base_kind_it($id);
+        break;
+      }
+      case eSeqDrvBaseKind: {
+        $$ = elex::sequence_driver_base_kind_it($id);
+        break;
+      }
+    }
+  }
+  ;
+
+sequence_item_kwd : 
+    ITEM                  { $$ = eSeqItem; }
+  | CREATED_KIND          { $$ = eSeqKind; }
+  | CREATED_DRIVER        { $$ = eSeqDrvKind; }
+  | SEQUENCE_TYPE         { $$ = eSeqBaseKind; }
+  | SEQUENCE_DRIVER_TYPE  { $$ = eSeqDrvBaseKind; }
+  ;
 
 /* Struct Members */
 struct_members : 
@@ -554,8 +655,9 @@ expect_definition:
       }
     }
   ;
+
 opt_dut_error_call : 
-    %empty                       { $$ = elex::no_expr(); }
+    %empty                      { $$ = elex::no_expr(); }
   | ELSE method_call_expression { $$ = $2; }
   ;
 

@@ -28,6 +28,8 @@ namespace elex {
     auto operator == (Entry const&, Entry const&) -> bool;
     auto operator == (Symbol const&, Symbol const&) -> bool;
     auto operator == (Symbol_ const&, Symbol_ const&) -> bool;
+    auto operator +  (Symbol const&, std::string const&)  -> Symbol;
+    auto operator +  (Symbol_ const&, std::string const&) -> Symbol;
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& ;
 
     typedef std::map<std::string, Symbol> SymTable;

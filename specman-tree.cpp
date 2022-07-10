@@ -91,6 +91,19 @@ auto append_Cases(Cases p1, Cases p2) -> Cases {
     return Cases(new list_tree_node<Case>(*p1, *p2));
 }
 
+/* implementations for SequenceItems */
+auto nil_SequenceItems() -> SequenceItems {
+    return SequenceItems(new list_tree_node<SequenceItem>());
+}
+
+auto single_SequenceItems(SequenceItem p) -> SequenceItems {
+    return SequenceItems(new list_tree_node<SequenceItem>(p));
+}
+
+auto append_SequenceItems(SequenceItems p1, SequenceItems p2) -> SequenceItems {
+    return SequenceItems(new list_tree_node<SequenceItem>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
     stmts->dump(stream, n+2);
@@ -167,6 +180,71 @@ auto import_class::dump(std::ostream& stream, int n) -> void {
 
 auto import(Symbol_ pkg_id) -> Statement {
     return Statement(new import_class(pkg_id));
+}
+
+auto virtual_sequence_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "virtual_sequence_st" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    seq_options->dump(stream, n+2);
+}
+
+auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
+    return Statement(new virtual_sequence_st_class(id, seq_options));
+}
+
+auto sequence_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_st" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    seq_options->dump(stream, n+2);
+}
+
+auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
+    return Statement(new sequence_st_class(id, seq_options));
+}
+
+auto sequence_item_kind_it_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_item_kind_it" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto sequence_item_kind_it(Symbol_ id) -> SequenceItem {
+    return SequenceItem(new sequence_item_kind_it_class(id));
+}
+
+auto sequence_created_kind_name_it_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_created_kind_name_it" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto sequence_created_kind_name_it(Symbol_ id) -> SequenceItem {
+    return SequenceItem(new sequence_created_kind_name_it_class(id));
+}
+
+auto sequence_created_driver_name_it_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_created_driver_name_it" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto sequence_created_driver_name_it(Symbol_ id) -> SequenceItem {
+    return SequenceItem(new sequence_created_driver_name_it_class(id));
+}
+
+auto sequence_base_kind_it_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_base_kind_it" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto sequence_base_kind_it(Symbol_ id) -> SequenceItem {
+    return SequenceItem(new sequence_base_kind_it_class(id));
+}
+
+auto sequence_driver_base_kind_it_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sequence_driver_base_kind_it" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+}
+
+auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem {
+    return SequenceItem(new sequence_driver_base_kind_it_class(id));
 }
 
 auto formal_class::dump(std::ostream& stream, int n) -> void {

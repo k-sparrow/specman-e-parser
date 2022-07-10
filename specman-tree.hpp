@@ -134,6 +134,24 @@ auto nil_Cases() -> Cases;
 auto single_Cases(Case) -> Cases;
 auto append_Cases(Cases, Cases) -> Cases;
 
+class SequenceItem_class;
+typedef std::shared_ptr<SequenceItem_class> SequenceItem;
+
+class SequenceItem_class : public tree_node {
+    public:
+
+#ifdef SequenceItem_EXTRAS
+    SequenceItem_EXTRAS
+#endif
+};
+
+typedef list_tree_node<SequenceItem> SequenceItems_class;
+typedef std::shared_ptr<SequenceItems_class> SequenceItems;
+
+auto nil_SequenceItems() -> SequenceItems;
+auto single_SequenceItems(SequenceItem) -> SequenceItems;
+auto append_SequenceItems(SequenceItems, SequenceItems) -> SequenceItems;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -305,6 +323,150 @@ class import_class : public Statement_class {
 };
 
 auto import(Symbol_ pkg_id) -> Statement;
+
+class virtual_sequence_st_class : public Statement_class {
+    protected:
+        Symbol_ id;
+        SequenceItems seq_options;
+    public:
+        virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options) {
+            this->id = id;
+            this->seq_options = seq_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef virtual_sequence_st_EXTRAS
+    virtual_sequence_st_EXTRAS
+#endif
+};
+
+auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
+
+class sequence_st_class : public Statement_class {
+    protected:
+        Symbol_ id;
+        SequenceItems seq_options;
+    public:
+        sequence_st_class(Symbol_ id, SequenceItems seq_options) {
+            this->id = id;
+            this->seq_options = seq_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef sequence_st_EXTRAS
+    sequence_st_EXTRAS
+#endif
+};
+
+auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
+
+class sequence_item_kind_it_class : public SequenceItem_class {
+    protected:
+        Symbol_ id;
+    public:
+        sequence_item_kind_it_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef SequenceItem_SHARED_EXTRAS
+    SequenceItem_SHARED_EXTRAS
+#endif
+#ifdef sequence_item_kind_it_EXTRAS
+    sequence_item_kind_it_EXTRAS
+#endif
+};
+
+auto sequence_item_kind_it(Symbol_ id) -> SequenceItem;
+
+class sequence_created_kind_name_it_class : public SequenceItem_class {
+    protected:
+        Symbol_ id;
+    public:
+        sequence_created_kind_name_it_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef SequenceItem_SHARED_EXTRAS
+    SequenceItem_SHARED_EXTRAS
+#endif
+#ifdef sequence_created_kind_name_it_EXTRAS
+    sequence_created_kind_name_it_EXTRAS
+#endif
+};
+
+auto sequence_created_kind_name_it(Symbol_ id) -> SequenceItem;
+
+class sequence_created_driver_name_it_class : public SequenceItem_class {
+    protected:
+        Symbol_ id;
+    public:
+        sequence_created_driver_name_it_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef SequenceItem_SHARED_EXTRAS
+    SequenceItem_SHARED_EXTRAS
+#endif
+#ifdef sequence_created_driver_name_it_EXTRAS
+    sequence_created_driver_name_it_EXTRAS
+#endif
+};
+
+auto sequence_created_driver_name_it(Symbol_ id) -> SequenceItem;
+
+class sequence_base_kind_it_class : public SequenceItem_class {
+    protected:
+        Symbol_ id;
+    public:
+        sequence_base_kind_it_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef SequenceItem_SHARED_EXTRAS
+    SequenceItem_SHARED_EXTRAS
+#endif
+#ifdef sequence_base_kind_it_EXTRAS
+    sequence_base_kind_it_EXTRAS
+#endif
+};
+
+auto sequence_base_kind_it(Symbol_ id) -> SequenceItem;
+
+class sequence_driver_base_kind_it_class : public SequenceItem_class {
+    protected:
+        Symbol_ id;
+    public:
+        sequence_driver_base_kind_it_class(Symbol_ id) {
+            this->id = id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef SequenceItem_SHARED_EXTRAS
+    SequenceItem_SHARED_EXTRAS
+#endif
+#ifdef sequence_driver_base_kind_it_EXTRAS
+    sequence_driver_base_kind_it_EXTRAS
+#endif
+};
+
+auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 
 class formal_class : public Formal_class {
     protected:
