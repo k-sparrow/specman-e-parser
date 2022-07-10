@@ -143,8 +143,8 @@
 %token GEN	     
 %token BEFORE	  
 %token IN_TABLE 
+%token IS_A	       
 %token IS	      
-%token A	       
 %token NOT	     
 %token RANGE	   
 %token EMPTY	   

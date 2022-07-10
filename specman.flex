@@ -38,7 +38,6 @@ within	    (within)
 gen	        (gen)
 before	    (before)
 in_table    (in_table)
-is	        (is)
 not	        (not)
 range	    (range)
 empty	    (empty)
@@ -58,7 +57,6 @@ keeping     (keeping)
 keep        (keep)
 like        (like)
 extend      (extend)
-a	        (a) 
 bind        (bind)
 simple      (simple)
 port        (port)
@@ -104,6 +102,9 @@ on          (on)
 exec        (exec)
 if          (if)
 else        (else)
+is_a	    (is{ws}a{ws})
+is	        (is)
+
 
 
 null	      (NULL)
@@ -192,8 +193,6 @@ number  [0-9]+
 {gen}	    { return yy::parser::make_GEN(location()); }
 {before}	{ return yy::parser::make_BEFORE(location()); }
 {in_table}	{ return yy::parser::make_IN_TABLE(location()); }
-{is}	    { return yy::parser::make_IS(location()); }
-{a}	        { return yy::parser::make_A(location()); } 
 {not}	    { return yy::parser::make_NOT(location()); }
 {range}	    { return yy::parser::make_RANGE(location()); }
 {empty}	    { return yy::parser::make_EMPTY(location()); }
@@ -260,7 +259,8 @@ number  [0-9]+
 {exec}   	{ return yy::parser::make_EXEC(location()); }
 {if}   	    { return yy::parser::make_IF(location()); }
 {else}      { return yy::parser::make_ELSE(location()); }
-
+{is_a}	    { return yy::parser::make_IS_A(location()); } 
+{is}	    { return yy::parser::make_IS(location()); }
 {null}	    { return yy::parser::make_NULL_(location()); }
 {true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
 {false_literal}	{ return yy::parser::make_FALSE_LITERAL(location()); }
