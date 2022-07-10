@@ -269,7 +269,7 @@
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
-%precedence TRUE_MATCH
+%precedence FIRST_MATCH
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -688,6 +688,9 @@ temporal_expression_base:
     | fixed_repetition_temporal_expression_base
       { $$ = $1; }
 
+    | first_match_repetition_temporal_expression_base
+      { $$ = $1; }
+
     | true_match_repetition_temporal_expression_base
       { $$ = $1; }
 
@@ -764,6 +767,18 @@ fixed_repetition_temporal_expression_base :
     { $$ = elex::fixed_repetition_expr($rep, $temporal); }
   ;
 
+// %prec FIRST_MATCH is a dummy token needed to solve
+// shift-reduce problems caused by IMPLICATION/OR/AND tokens
+// and the non-terminal match temporal expression after the SEMICOLON
+first_match_repetition_temporal_expression_base : 
+    LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($from, $to, elex::cycle_temporal_expr(), $match); }
+
+  |  LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($from, $to, $temporal, $match); }
+  ;
+
+// TODO: convert empty repetition terminal into zero/infinite terminal expressions
 true_match_repetition_temporal_expression_base : 
     BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET 
     { $$ = elex::true_match_repetition_expr($from, $to, elex::cycle_temporal_expr()); }

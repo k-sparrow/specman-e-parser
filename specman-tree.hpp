@@ -1152,6 +1152,32 @@ class fixed_repetition_expr_class : public Expression_class {
 
 auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression;
 
+class first_match_repetition_expr_class : public Expression_class {
+    protected:
+        Expression from_rep;
+        Expression to_rep;
+        Expression temporal;
+        Expression match_temporal;
+    public:
+        first_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal) {
+            this->from_rep = from_rep;
+            this->to_rep = to_rep;
+            this->temporal = temporal;
+            this->match_temporal = match_temporal;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef first_match_repetition_expr_EXTRAS
+    first_match_repetition_expr_EXTRAS
+#endif
+};
+
+auto first_match_repetition_expr(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal) -> Expression;
+
 class true_match_repetition_expr_class : public Expression_class {
     protected:
         Expression from_rep;
