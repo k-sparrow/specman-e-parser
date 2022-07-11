@@ -107,6 +107,7 @@ is	        (is)
 cover	    (cover)
 global	    (global)
 no_collect	(no_collect)
+per_unit_instance	 (per_unit_instance)
 item                 (item)
 created_kind         (created_kind)
 created_driver       (created_driver)
@@ -272,6 +273,7 @@ number  [0-9]+
 {cover}	    { return yy::parser::make_COVER(location()); }
 {global}    { return yy::parser::make_GLOBAL(location()); }
 {no_collect} { return yy::parser::make_NO_COLLECT(location()); }
+{per_unit_instance} { return yy::parser::make_PER_UNIT_INSTANCE(location()); }
 {item}		            { return yy::parser::make_ITEM(location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(location()); }      

@@ -827,6 +827,15 @@ auto no_collect_cgo(Expression bool_litral) -> CovergroupOption {
     return CovergroupOption(new no_collect_cgo_class(bool_litral));
 }
 
+auto per_unit_instance_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "per_unit_instance_cgo" << std::endl;
+    hier_id->dump(stream, n+2);
+}
+
+auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption {
+    return CovergroupOption(new per_unit_instance_cgo_class(hier_id));
+}
+
 auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "true_literal_expr" << std::endl;
 }

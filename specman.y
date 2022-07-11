@@ -225,6 +225,7 @@
 %token COVER
 %token GLOBAL
 %token NO_COLLECT
+%token PER_UNIT_INSTANCE
 
 %token NULL_
 %token UNDEF
@@ -347,6 +348,7 @@
 %nterm <elex::CovergroupOptions> opt_coverage_group_options
 %nterm <elex::CovergroupOption>  global_cg_option
 %nterm <elex::CovergroupOption>  no_collect_cg_option
+%nterm <elex::CovergroupOption>  per_unit_instance_cg_option
 
 %nterm <elex::CovergroupItems>   coverage_group_items
 %nterm <elex::CovergroupItem>    coverage_group_item
@@ -632,8 +634,9 @@ coverage_group_options :
   ;
 
 coverage_group_option : 
-    global_cg_option     { $$ = $1; }
-  | no_collect_cg_option { $$ = $1;}
+    global_cg_option            { $$ = $1; }
+  | no_collect_cg_option        { $$ = $1;}
+  | per_unit_instance_cg_option { $$ = $1;}
   ;
 
 global_cg_option:
@@ -650,6 +653,14 @@ no_collect_cg_option :
 
   | NO_COLLECT 
     { $$ = elex::no_collect_cgo(elex::true_literal_expr()); }
+  ;
+
+per_unit_instance_cg_option :
+    PER_UNIT_INSTANCE ASSIGN hier_ref_expression 
+    { $$ = elex::per_unit_instance_cgo($3); }
+  
+  | PER_UNIT_INSTANCE
+    { $$ = elex::per_unit_instance_cgo(elex::me_expr()); }
   ;
 
 bool_literal_expression :

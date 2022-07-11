@@ -1720,6 +1720,26 @@ class no_collect_cgo_class : public CovergroupOption_class {
 
 auto no_collect_cgo(Expression bool_litral) -> CovergroupOption;
 
+class per_unit_instance_cgo_class : public CovergroupOption_class {
+    protected:
+        Expression hier_id;
+    public:
+        per_unit_instance_cgo_class(Expression hier_id) {
+            this->hier_id = hier_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef per_unit_instance_cgo_EXTRAS
+    per_unit_instance_cgo_EXTRAS
+#endif
+};
+
+auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption;
+
 class true_literal_expr_class : public Expression_class {
     protected:
     public:

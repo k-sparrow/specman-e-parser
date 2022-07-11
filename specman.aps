@@ -114,6 +114,7 @@ module Specman begin
         
         constructor global_cgo(bool_litral: Expression) : CovergroupOption;
         constructor no_collect_cgo(bool_litral: Expression) : CovergroupOption;
+        constructor per_unit_instance_cgo(hier_id: Expression) : CovergroupOption;
         constructor true_literal_expr() : Expression;
         constructor false_literal_expr() : Expression;
         constructor no_action() : Action;
