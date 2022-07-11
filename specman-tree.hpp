@@ -1682,8 +1682,10 @@ auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem;
 
 class global_cgo_class : public CovergroupOption_class {
     protected:
+        Expression bool_litral;
     public:
-        global_cgo_class() {
+        global_cgo_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -1696,7 +1698,63 @@ class global_cgo_class : public CovergroupOption_class {
 #endif
 };
 
-auto global_cgo() -> CovergroupOption;
+auto global_cgo(Expression bool_litral) -> CovergroupOption;
+
+class no_collect_cgo_class : public CovergroupOption_class {
+    protected:
+        Expression bool_litral;
+    public:
+        no_collect_cgo_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef no_collect_cgo_EXTRAS
+    no_collect_cgo_EXTRAS
+#endif
+};
+
+auto no_collect_cgo(Expression bool_litral) -> CovergroupOption;
+
+class true_literal_expr_class : public Expression_class {
+    protected:
+    public:
+        true_literal_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef true_literal_expr_EXTRAS
+    true_literal_expr_EXTRAS
+#endif
+};
+
+auto true_literal_expr() -> Expression;
+
+class false_literal_expr_class : public Expression_class {
+    protected:
+    public:
+        false_literal_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef false_literal_expr_EXTRAS
+    false_literal_expr_EXTRAS
+#endif
+};
+
+auto false_literal_expr() -> Expression;
 
 class no_action_class : public Action_class {
     protected:

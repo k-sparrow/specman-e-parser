@@ -811,10 +811,36 @@ auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem {
 
 auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "global_cgo" << std::endl;
+    bool_litral->dump(stream, n+2);
 }
 
-auto global_cgo() -> CovergroupOption {
-    return CovergroupOption(new global_cgo_class());
+auto global_cgo(Expression bool_litral) -> CovergroupOption {
+    return CovergroupOption(new global_cgo_class(bool_litral));
+}
+
+auto no_collect_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "no_collect_cgo" << std::endl;
+    bool_litral->dump(stream, n+2);
+}
+
+auto no_collect_cgo(Expression bool_litral) -> CovergroupOption {
+    return CovergroupOption(new no_collect_cgo_class(bool_litral));
+}
+
+auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "true_literal_expr" << std::endl;
+}
+
+auto true_literal_expr() -> Expression {
+    return Expression(new true_literal_expr_class());
+}
+
+auto false_literal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "false_literal_expr" << std::endl;
+}
+
+auto false_literal_expr() -> Expression {
+    return Expression(new false_literal_expr_class());
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

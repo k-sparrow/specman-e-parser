@@ -112,8 +112,10 @@ module Specman begin
 
         constructor simple_covergroup_item_cgi(item_id: Symbol_) : CovergroupItem;
         
-        constructor global_cgo() : CovergroupOption;
-
+        constructor global_cgo(bool_litral: Expression) : CovergroupOption;
+        constructor no_collect_cgo(bool_litral: Expression) : CovergroupOption;
+        constructor true_literal_expr() : Expression;
+        constructor false_literal_expr() : Expression;
         constructor no_action() : Action;
 
         constructor id_expr(id: Symbol_) : Expression;

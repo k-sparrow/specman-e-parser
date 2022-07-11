@@ -224,6 +224,7 @@
 %token SEQUENCE_DRIVER_TYPE
 %token COVER
 %token GLOBAL
+%token NO_COLLECT
 
 %token NULL_
 %token UNDEF
@@ -344,6 +345,9 @@
 %nterm <elex::CovergroupOptions> coverage_group_options
 %nterm <elex::CovergroupOption>  coverage_group_option
 %nterm <elex::CovergroupOptions> opt_coverage_group_options
+%nterm <elex::CovergroupOption>  global_cg_option
+%nterm <elex::CovergroupOption>  no_collect_cg_option
+
 %nterm <elex::CovergroupItems>   coverage_group_items
 %nterm <elex::CovergroupItem>    coverage_group_item
 %nterm <elex::CovergroupItem>    non_term_coverage_group_item
@@ -452,6 +456,9 @@
 
 %nterm <elex::Expression>   str_expression
 %nterm <elex::Expression>   int_expression
+%nterm <elex::Expression>   bool_literal_expression
+%nterm <elex::Expression>   true_literal_expression
+%nterm <elex::Expression>   false_literal_expression
 %nterm <elex::Expression>   me_expression
 %nterm <elex::Expression>   it_expression
 
@@ -625,7 +632,29 @@ coverage_group_options :
   ;
 
 coverage_group_option : 
-  GLOBAL { $$ = elex::global_cgo(); }
+    global_cg_option     { $$ = $1; }
+  | no_collect_cg_option { $$ = $1;}
+  ;
+
+global_cg_option:
+    GLOBAL ASSIGN bool_literal_expression 
+    { $$ = elex::global_cgo($3); }
+
+  | GLOBAL                      
+    { $$ = elex::global_cgo(elex::true_literal_expr()); }
+  ;
+
+no_collect_cg_option :
+    NO_COLLECT ASSIGN bool_literal_expression 
+    { $$ = elex::no_collect_cgo($3); }
+
+  | NO_COLLECT 
+    { $$ = elex::no_collect_cgo(elex::true_literal_expr()); }
+  ;
+
+bool_literal_expression :
+    TRUE_LITERAL  { $$ = elex::true_literal_expr();  }
+  | FALSE_LITERAL { $$ = elex::false_literal_expr(); }
   ;
 
 coverage_group_items : 
