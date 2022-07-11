@@ -25,6 +25,12 @@ module Specman begin
         phylum SequenceItem;
         phylum SequenceItems = LIST[SequenceItem];
 
+        phylum CovergroupOption;
+        phylum CovergroupOptions = LIST[CovergroupOption];
+
+        phylum CovergroupItem;
+        phylum CovergroupItems = LIST[CovergroupItem];
+
         constructor module_(stmts: Statements) : Module;
 
         constructor package(pkg_name: Symbol_) : Statement;
@@ -101,6 +107,12 @@ module Specman begin
         constructor assume_nameless_sm(temporal: Expression; dut_error_call: Expression): StructMember;
         constructor assume_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
         constructor assume_override_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
+        constructor empty_covergroup_sm(event_id: Symbol_): StructMember;
+        constructor covergroup_sm(event_id: Symbol_; cg_opts: CovergroupOptions; cg_items: CovergroupItems): StructMember;
+
+        constructor simple_covergroup_item_cgi(item_id: Symbol_) : CovergroupItem;
+        
+        constructor global_cgo() : CovergroupOption;
 
         constructor no_action() : Action;
 

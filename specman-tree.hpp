@@ -152,6 +152,42 @@ auto nil_SequenceItems() -> SequenceItems;
 auto single_SequenceItems(SequenceItem) -> SequenceItems;
 auto append_SequenceItems(SequenceItems, SequenceItems) -> SequenceItems;
 
+class CovergroupOption_class;
+typedef std::shared_ptr<CovergroupOption_class> CovergroupOption;
+
+class CovergroupOption_class : public tree_node {
+    public:
+
+#ifdef CovergroupOption_EXTRAS
+    CovergroupOption_EXTRAS
+#endif
+};
+
+typedef list_tree_node<CovergroupOption> CovergroupOptions_class;
+typedef std::shared_ptr<CovergroupOptions_class> CovergroupOptions;
+
+auto nil_CovergroupOptions() -> CovergroupOptions;
+auto single_CovergroupOptions(CovergroupOption) -> CovergroupOptions;
+auto append_CovergroupOptions(CovergroupOptions, CovergroupOptions) -> CovergroupOptions;
+
+class CovergroupItem_class;
+typedef std::shared_ptr<CovergroupItem_class> CovergroupItem;
+
+class CovergroupItem_class : public tree_node {
+    public:
+
+#ifdef CovergroupItem_EXTRAS
+    CovergroupItem_EXTRAS
+#endif
+};
+
+typedef list_tree_node<CovergroupItem> CovergroupItems_class;
+typedef std::shared_ptr<CovergroupItems_class> CovergroupItems;
+
+auto nil_CovergroupItems() -> CovergroupItems;
+auto single_CovergroupItems(CovergroupItem) -> CovergroupItems;
+auto append_CovergroupItems(CovergroupItems, CovergroupItems) -> CovergroupItems;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -1579,6 +1615,88 @@ class assume_override_sm_class : public StructMember_class {
 };
 
 auto assume_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember;
+
+class empty_covergroup_sm_class : public StructMember_class {
+    protected:
+        Symbol_ event_id;
+    public:
+        empty_covergroup_sm_class(Symbol_ event_id) {
+            this->event_id = event_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef empty_covergroup_sm_EXTRAS
+    empty_covergroup_sm_EXTRAS
+#endif
+};
+
+auto empty_covergroup_sm(Symbol_ event_id) -> StructMember;
+
+class covergroup_sm_class : public StructMember_class {
+    protected:
+        Symbol_ event_id;
+        CovergroupOptions cg_opts;
+        CovergroupItems cg_items;
+    public:
+        covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) {
+            this->event_id = event_id;
+            this->cg_opts = cg_opts;
+            this->cg_items = cg_items;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef covergroup_sm_EXTRAS
+    covergroup_sm_EXTRAS
+#endif
+};
+
+auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember;
+
+class simple_covergroup_item_cgi_class : public CovergroupItem_class {
+    protected:
+        Symbol_ item_id;
+    public:
+        simple_covergroup_item_cgi_class(Symbol_ item_id) {
+            this->item_id = item_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItem_SHARED_EXTRAS
+    CovergroupItem_SHARED_EXTRAS
+#endif
+#ifdef simple_covergroup_item_cgi_EXTRAS
+    simple_covergroup_item_cgi_EXTRAS
+#endif
+};
+
+auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem;
+
+class global_cgo_class : public CovergroupOption_class {
+    protected:
+    public:
+        global_cgo_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef global_cgo_EXTRAS
+    global_cgo_EXTRAS
+#endif
+};
+
+auto global_cgo() -> CovergroupOption;
 
 class no_action_class : public Action_class {
     protected:

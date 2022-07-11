@@ -104,6 +104,32 @@ auto append_SequenceItems(SequenceItems p1, SequenceItems p2) -> SequenceItems {
     return SequenceItems(new list_tree_node<SequenceItem>(*p1, *p2));
 }
 
+/* implementations for CovergroupOptions */
+auto nil_CovergroupOptions() -> CovergroupOptions {
+    return CovergroupOptions(new list_tree_node<CovergroupOption>());
+}
+
+auto single_CovergroupOptions(CovergroupOption p) -> CovergroupOptions {
+    return CovergroupOptions(new list_tree_node<CovergroupOption>(p));
+}
+
+auto append_CovergroupOptions(CovergroupOptions p1, CovergroupOptions p2) -> CovergroupOptions {
+    return CovergroupOptions(new list_tree_node<CovergroupOption>(*p1, *p2));
+}
+
+/* implementations for CovergroupItems */
+auto nil_CovergroupItems() -> CovergroupItems {
+    return CovergroupItems(new list_tree_node<CovergroupItem>());
+}
+
+auto single_CovergroupItems(CovergroupItem p) -> CovergroupItems {
+    return CovergroupItems(new list_tree_node<CovergroupItem>(p));
+}
+
+auto append_CovergroupItems(CovergroupItems p1, CovergroupItems p2) -> CovergroupItems {
+    return CovergroupItems(new list_tree_node<CovergroupItem>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
     stmts->dump(stream, n+2);
@@ -752,6 +778,43 @@ auto assume_override_sm_class::dump(std::ostream& stream, int n) -> void {
 
 auto assume_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
     return StructMember(new assume_override_sm_class(id, temporal, dut_error_call));
+}
+
+auto empty_covergroup_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "empty_covergroup_sm" << std::endl;
+    dump_Symbol_(stream, n+2, event_id);
+}
+
+auto empty_covergroup_sm(Symbol_ event_id) -> StructMember {
+    return StructMember(new empty_covergroup_sm_class(event_id));
+}
+
+auto covergroup_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "covergroup_sm" << std::endl;
+    dump_Symbol_(stream, n+2, event_id);
+    cg_opts->dump(stream, n+2);
+    cg_items->dump(stream, n+2);
+}
+
+auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember {
+    return StructMember(new covergroup_sm_class(event_id, cg_opts, cg_items));
+}
+
+auto simple_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "simple_covergroup_item_cgi" << std::endl;
+    dump_Symbol_(stream, n+2, item_id);
+}
+
+auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem {
+    return CovergroupItem(new simple_covergroup_item_cgi_class(item_id));
+}
+
+auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "global_cgo" << std::endl;
+}
+
+auto global_cgo() -> CovergroupOption {
+    return CovergroupOption(new global_cgo_class());
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

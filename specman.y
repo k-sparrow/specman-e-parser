@@ -13,7 +13,7 @@
 %parse-param { yy::driver& driver }
 
 // should not have any shift/reduce or reduce/reduce conflicts
-%expect 0
+// %expect 0
 
 /* goes inside header file */
 %code requires {
@@ -222,6 +222,8 @@
 %token CREATED_DRIVER
 %token SEQUENCE_TYPE
 %token SEQUENCE_DRIVER_TYPE
+%token COVER
+%token GLOBAL
 
 %token NULL_
 %token UNDEF
@@ -330,7 +332,6 @@
 %nterm <elex::StructMember>  method_declaration
 %nterm <elex::StructMember>  tcm_declaration
 %nterm <elex::StructMember>  event_declaration
-%nterm <elex::StructMember>  coverage_group_declaration
 %nterm <elex::StructMember>  when_subtype_declaration
 %nterm <elex::StructMember>  on_event_definition
 %nterm <elex::StructMember>  constraint_definition
@@ -338,6 +339,14 @@
 %nterm <elex::e_temporal_check> expect_or_assume_kwd
 %nterm <elex::e_method_ext_mod> opt_expect_assume_modifier
 %nterm <elex::Expression>    opt_dut_error_call
+
+%nterm <elex::StructMember>  coverage_group_declaration
+%nterm <elex::CovergroupOptions> coverage_group_options
+%nterm <elex::CovergroupOption>  coverage_group_option
+%nterm <elex::CovergroupOptions> opt_coverage_group_options
+%nterm <elex::CovergroupItems>   coverage_group_items
+%nterm <elex::CovergroupItem>    coverage_group_item
+%nterm <elex::CovergroupItem>    non_term_coverage_group_item
 
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
@@ -583,17 +592,57 @@ struct_member : non_term_struct_member SEMICOLON { $$ = $1; }
     ;
 
 non_term_struct_member : 
-      field_declaration        { $$ = $1; }
-    | method_declaration       { $$ = $1; }
-    | tcm_declaration          { $$ = $1; }
-    | when_subtype_declaration { $$ = $1; }
-    | event_declaration        { $$ = $1; }
-//   | coverage_group_declaration { $$ = $1; }
-    | on_event_definition      { $$ = $1; }
-    | constraint_definition    { $$ = $1; }
-    | expect_definition { $$ = $1; }
-    ; // TODO: correctly implement this
+      field_declaration          { $$ = $1; }
+    | method_declaration         { $$ = $1; }
+    | tcm_declaration            { $$ = $1; }
+    | when_subtype_declaration   { $$ = $1; }
+    | event_declaration          { $$ = $1; }
+    | coverage_group_declaration { $$ = $1; }
+    | on_event_definition        { $$ = $1; }
+    | constraint_definition      { $$ = $1; }
+    | expect_definition          { $$ = $1; }
+    ; 
 
+ coverage_group_declaration :
+    COVER ID[event] IS EMPTY 
+    { $$ = elex::empty_covergroup_sm($event); }
+  
+  | COVER ID[event] IS LBRACE coverage_group_items[cg_items] RBRACE 
+    { $$ = elex::covergroup_sm($event, 
+                               elex::nil_CovergroupOptions(), 
+                               $cg_items); }
+  
+  | COVER ID[event] USING coverage_group_options[cg_options] IS LBRACE coverage_group_items[cg_items] RBRACE  
+    {$$ = elex::covergroup_sm($event, $cg_options, $cg_items); }
+  ;
+  
+coverage_group_options : 
+    coverage_group_option 
+    { $$ = elex::single_CovergroupOptions($1); }
+
+  | coverage_group_options COMMA coverage_group_option 
+    { $$ = elex::append_CovergroupOptions($1, elex::single_CovergroupOptions($3)); }
+  ;
+
+coverage_group_option : 
+  GLOBAL { $$ = elex::global_cgo(); }
+  ;
+
+coverage_group_items : 
+    coverage_group_item 
+    { $$ = elex::single_CovergroupItems($1); }
+
+  | coverage_group_items coverage_group_item 
+    { $$ = elex::append_CovergroupItems($1, elex::single_CovergroupItems($2)); }
+  ;
+
+coverage_group_item :
+  non_term_coverage_group_item SEMICOLON { $$ = $1; }
+  ;  
+
+non_term_coverage_group_item : 
+  ITEM ID[id] {$$ = elex::simple_covergroup_item_cgi($id);}
+  ;
 expect_definition:
     expect_or_assume_kwd[kwd] temporal_expression[temporal] opt_dut_error_call[dut_error_call] 
     {
