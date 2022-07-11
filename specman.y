@@ -12,6 +12,10 @@
 %parse-param { yy::scanner& lexer }
 %parse-param { yy::driver& driver }
 
+// should not have any shift/reduce or reduce/reduce conflicts
+%expect 0
+%expect-rr 0
+
 /* goes inside header file */
 %code requires {
     
@@ -548,6 +552,7 @@ sequence_statement :
 
   | SEQUENCE ID[seq_id] USING sequence_options[options] 
   { 
+    // TODO: add missing information filling 
     $$ = elex::sequence_st($seq_id, $options); 
   }
   ;
