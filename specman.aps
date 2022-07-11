@@ -34,6 +34,9 @@ module Specman begin
         phylum CovergroupItemOption;
         phylum CovergroupItemOptions = LIST[CovergroupItemOption];
 
+        phylum CovergroupExtensionID;
+
+
         constructor module_(stmts: Statements) : Module;
 
         constructor package(pkg_name: Symbol_) : Statement;
@@ -112,6 +115,11 @@ module Specman begin
         constructor assume_override_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;
         constructor empty_covergroup_sm(event_id: Symbol_): StructMember;
         constructor covergroup_sm(event_id: Symbol_; cg_opts: CovergroupOptions; cg_items: CovergroupItems): StructMember;
+        constructor covergroup_extension_sm(event_id: Symbol_; instance_id: CovergroupExtensionID; cg_opts: CovergroupOptions; cg_items: CovergroupItems): StructMember;
+
+        constructor covergroup_per_type_ceid(): CovergroupExtensionID;
+        constructor covergroup_per_unit_instance_ceid(e_path : Expression): CovergroupExtensionID;
+        constructor covergroup_per_instance_ceid(item_name: Symbol_; bucket_name: Symbol_): CovergroupExtensionID;
 
         constructor global_cgo(bool_litral: Expression) : CovergroupOption;
         constructor no_collect_cgo(bool_litral: Expression) : CovergroupOption;

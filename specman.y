@@ -232,6 +232,7 @@
 %token GLOBAL
 %token NO_COLLECT
 %token PER_UNIT_INSTANCE
+%token E_PATH
 %token RADIX
 %token DEC
 %token HEX
@@ -318,7 +319,7 @@
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
 %precedence LPAREN RPAREN
-%precedence FIRST_MATCH
+%precedence FIRST_MATCH EMPTY_CEID
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -374,6 +375,7 @@
 %nterm <elex::CovergroupOption>  when_cg_option
 %nterm <elex::CovergroupOption>  radix_cg_option
 %nterm <elex::e_radix_bucket>    radix_bucket
+%nterm <elex::e_method_ext_mod>  opt_cg_extension
 
 %nterm <elex::CovergroupItems>   coverage_group_items
 %nterm <elex::CovergroupItem>    coverage_group_item
@@ -394,6 +396,9 @@
 %nterm <elex::CovergroupItemOption>   text_cg_item_option
 %nterm <elex::CovergroupItemOption>   weight_cg_item_option
 %nterm <elex::CovergroupItemOption>   when_cg_item_option
+
+%nterm <elex::CovergroupExtensionID>  covergroup_extension_id
+%nterm <elex::CovergroupExtensionID>  opt_covergroup_extension_id
 
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
@@ -655,15 +660,64 @@ non_term_struct_member :
     COVER ID[event] IS EMPTY 
     { $$ = elex::empty_covergroup_sm($event); }
   
-  | COVER ID[event] IS LBRACE coverage_group_items[cg_items] RBRACE 
-    { $$ = elex::covergroup_sm($event, 
-                               elex::nil_CovergroupOptions(), 
-                               $cg_items); }
+  | COVER ID[event] IS opt_cg_extension[ext] LBRACE coverage_group_items[cg_items] RBRACE 
+    { 
+      switch($ext) {
+        case eAlso: 
+          $$ = elex::covergroup_extension_sm($event, 
+                                             elex::covergroup_per_type_ceid(),
+                                             elex::nil_CovergroupOptions(), 
+                                             $cg_items); 
+          break;
+        case eNone:
+        default: 
+          $$ = elex::covergroup_sm($event, 
+                                  elex::nil_CovergroupOptions(), 
+                                  $cg_items); }
+          break;
+      }
   
   | COVER ID[event] USING coverage_group_options[cg_options] IS LBRACE coverage_group_items[cg_items] RBRACE  
-    {$$ = elex::covergroup_sm($event, $cg_options, $cg_items); }
+    { $$ = elex::covergroup_sm($event, $cg_options, $cg_items); }
+
+  | COVER ID[event] LPAREN covergroup_extension_id[ceid] RPAREN IS opt_cg_extension[ext] LBRACE coverage_group_items[cg_items] RBRACE 
+  {
+      switch($ext) {
+        case eAlso: 
+          $$ = elex::covergroup_extension_sm($event, 
+                                             $ceid,
+                                             elex::nil_CovergroupOptions(), 
+                                             $cg_items); 
+          break;
+        case eNone:
+        default: 
+          $$ = elex::covergroup_sm($event, 
+                                  elex::nil_CovergroupOptions(), 
+                                  $cg_items); }
+          break;
+  }
+
+  | COVER ID[event] USING ALSO coverage_group_options[cg_options] IS ALSO LBRACE coverage_group_items[cg_items] RBRACE  
+    { $$ = elex::covergroup_extension_sm($event, 
+                                         elex::covergroup_per_type_ceid(), 
+                                         $cg_options, 
+                                         $cg_items); }
+
+  | COVER ID[event] LPAREN covergroup_extension_id[ceid] RPAREN USING ALSO coverage_group_options[cg_options] IS ALSO LBRACE coverage_group_items[cg_items] RBRACE  
+    { $$ = elex::covergroup_extension_sm($event, $ceid, $cg_options, $cg_items); }
   ;
-  
+
+covergroup_extension_id : 
+    E_PATH EQ hier_ref_expression    { $$ = elex::covergroup_per_unit_instance_ceid($3); }
+  | ID[item_name] EQ ID[bucket_name] { $$ = elex::covergroup_per_instance_ceid($item_name, $bucket_name); }
+  ;
+
+
+opt_cg_extension : 
+    %empty { $$ = eNone; }
+  | ALSO   { $$ = eAlso; }
+  ;
+
 coverage_group_options : 
     coverage_group_option 
     { $$ = elex::single_CovergroupOptions($1); }
@@ -784,8 +838,11 @@ covergroup_item_list :
   ;
 
 opt_coverage_group_item_options :
-    %empty                            { $$ = elex::nil_CovergroupItemOptions(); }
-  | USING coverage_group_item_options { $$ = $2; }
+    %empty                                 
+    { $$ = elex::nil_CovergroupItemOptions(); }
+
+  | USING opt_cg_extension coverage_group_item_options 
+    { $$ = $3; }
   ;
 
 coverage_group_item_options : 

@@ -813,6 +813,45 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
     return StructMember(new covergroup_sm_class(event_id, cg_opts, cg_items));
 }
 
+auto covergroup_extension_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "covergroup_extension_sm" << std::endl;
+    dump_Symbol_(stream, n+2, event_id);
+    instance_id->dump(stream, n+2);
+    cg_opts->dump(stream, n+2);
+    cg_items->dump(stream, n+2);
+}
+
+auto covergroup_extension_sm(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember {
+    return StructMember(new covergroup_extension_sm_class(event_id, instance_id, cg_opts, cg_items));
+}
+
+auto covergroup_per_type_ceid_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "covergroup_per_type_ceid" << std::endl;
+}
+
+auto covergroup_per_type_ceid() -> CovergroupExtensionID {
+    return CovergroupExtensionID(new covergroup_per_type_ceid_class());
+}
+
+auto covergroup_per_unit_instance_ceid_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "covergroup_per_unit_instance_ceid" << std::endl;
+    e_path->dump(stream, n+2);
+}
+
+auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtensionID {
+    return CovergroupExtensionID(new covergroup_per_unit_instance_ceid_class(e_path));
+}
+
+auto covergroup_per_instance_ceid_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "covergroup_per_instance_ceid" << std::endl;
+    dump_Symbol_(stream, n+2, item_name);
+    dump_Symbol_(stream, n+2, bucket_name);
+}
+
+auto covergroup_per_instance_ceid(Symbol_ item_name, Symbol_ bucket_name) -> CovergroupExtensionID {
+    return CovergroupExtensionID(new covergroup_per_instance_ceid_class(item_name, bucket_name));
+}
+
 auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "global_cgo" << std::endl;
     bool_litral->dump(stream, n+2);

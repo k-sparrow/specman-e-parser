@@ -206,6 +206,17 @@ auto nil_CovergroupItemOptions() -> CovergroupItemOptions;
 auto single_CovergroupItemOptions(CovergroupItemOption) -> CovergroupItemOptions;
 auto append_CovergroupItemOptions(CovergroupItemOptions, CovergroupItemOptions) -> CovergroupItemOptions;
 
+class CovergroupExtensionID_class;
+typedef std::shared_ptr<CovergroupExtensionID_class> CovergroupExtensionID;
+
+class CovergroupExtensionID_class : public tree_node {
+    public:
+
+#ifdef CovergroupExtensionID_EXTRAS
+    CovergroupExtensionID_EXTRAS
+#endif
+};
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -1677,6 +1688,92 @@ class covergroup_sm_class : public StructMember_class {
 };
 
 auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember;
+
+class covergroup_extension_sm_class : public StructMember_class {
+    protected:
+        Symbol_ event_id;
+        CovergroupExtensionID instance_id;
+        CovergroupOptions cg_opts;
+        CovergroupItems cg_items;
+    public:
+        covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items) {
+            this->event_id = event_id;
+            this->instance_id = instance_id;
+            this->cg_opts = cg_opts;
+            this->cg_items = cg_items;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef covergroup_extension_sm_EXTRAS
+    covergroup_extension_sm_EXTRAS
+#endif
+};
+
+auto covergroup_extension_sm(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember;
+
+class covergroup_per_type_ceid_class : public CovergroupExtensionID_class {
+    protected:
+    public:
+        covergroup_per_type_ceid_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupExtensionID_SHARED_EXTRAS
+    CovergroupExtensionID_SHARED_EXTRAS
+#endif
+#ifdef covergroup_per_type_ceid_EXTRAS
+    covergroup_per_type_ceid_EXTRAS
+#endif
+};
+
+auto covergroup_per_type_ceid() -> CovergroupExtensionID;
+
+class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_class {
+    protected:
+        Expression e_path;
+    public:
+        covergroup_per_unit_instance_ceid_class(Expression e_path) {
+            this->e_path = e_path;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupExtensionID_SHARED_EXTRAS
+    CovergroupExtensionID_SHARED_EXTRAS
+#endif
+#ifdef covergroup_per_unit_instance_ceid_EXTRAS
+    covergroup_per_unit_instance_ceid_EXTRAS
+#endif
+};
+
+auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtensionID;
+
+class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
+    protected:
+        Symbol_ item_name;
+        Symbol_ bucket_name;
+    public:
+        covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name) {
+            this->item_name = item_name;
+            this->bucket_name = bucket_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupExtensionID_SHARED_EXTRAS
+    CovergroupExtensionID_SHARED_EXTRAS
+#endif
+#ifdef covergroup_per_instance_ceid_EXTRAS
+    covergroup_per_instance_ceid_EXTRAS
+#endif
+};
+
+auto covergroup_per_instance_ceid(Symbol_ item_name, Symbol_ bucket_name) -> CovergroupExtensionID;
 
 class global_cgo_class : public CovergroupOption_class {
     protected:
