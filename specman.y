@@ -244,6 +244,8 @@
 %token NO_TRACE
 %token NUM_OF_BUCKETS
 %token PER_INSTANCE 
+%token CROSS 
+%token TRANSITION 
 
 %token NULL_
 %token UNDEF
@@ -379,6 +381,7 @@
 
 %nterm <elex::CovergroupItemOption>   coverage_group_item_option
 %nterm <elex::CovergroupItemOptions>  coverage_group_item_options
+%nterm <elex::Expressions>            covergroup_item_list
 %nterm <elex::CovergroupItemOptions>  opt_coverage_group_item_options
 %nterm <elex::CovergroupItemOption>   at_least_cg_item_option
 %nterm <elex::CovergroupItemOption>   ignore_cg_item_option
@@ -764,6 +767,20 @@ non_term_coverage_group_item :
     
   | ITEM ID[id] COLON type_identifier_expression[type_] ASSIGN non_term_expression[value] opt_coverage_group_item_options[options] 
     { $$ = elex::on_the_fly_covergroup_item_cgi($id, $type_, $value, $options); }
+  
+  | CROSS covergroup_item_list[cross_cg_items] opt_coverage_group_item_options[options]
+    { $$ = elex::cross_covergroup_item_cgi($cross_cg_items, $options); }
+  
+  | TRANSITION ID[id] opt_coverage_group_item_options[options]
+    { $$ = elex::transition_covergroup_item_cgi($id, $options); }
+  ;
+
+covergroup_item_list : 
+    ID 
+    { $$ = elex::single_Expressions(elex::id_expr($1)); }
+  
+  | covergroup_item_list COMMA ID 
+    { $$ = elex::append_Expressions($1, elex::single_Expressions(elex::id_expr($3))); }
   ;
 
 opt_coverage_group_item_options :
@@ -803,7 +820,7 @@ ignore_cg_item_option :
   ;
 
 illegal_cg_item_option : 
-  ILLEGAL ASSIGN logical_expression { $$ = elex::ignore_cgio($3); }
+  ILLEGAL ASSIGN logical_expression { $$ = elex::illegal_cgio($3); }
   ;
 
 no_collect_cg_item_option :
@@ -1315,7 +1332,8 @@ logical_expression :
     ;
 
 unary_logical_expression : 
-    LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
+      LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
+    | NOT            non_term_expression   { $$ = elex::logical_not_expr($2); }
     ;
 
 binary_logical_expression : 

@@ -913,6 +913,26 @@ auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expressio
     return CovergroupItem(new on_the_fly_covergroup_item_cgi_class(item_id, type_, sampled_val, cgi_options));
 }
 
+auto cross_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "cross_covergroup_item_cgi" << std::endl;
+    cg_items->dump(stream, n+2);
+    cgi_options->dump(stream, n+2);
+}
+
+auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_options) -> CovergroupItem {
+    return CovergroupItem(new cross_covergroup_item_cgi_class(cg_items, cgi_options));
+}
+
+auto transition_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "transition_covergroup_item_cgi" << std::endl;
+    dump_Symbol_(stream, n+2, item_id);
+    cgi_options->dump(stream, n+2);
+}
+
+auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem {
+    return CovergroupItem(new transition_covergroup_item_cgi_class(item_id, cgi_options));
+}
+
 auto at_least_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "at_least_cgio" << std::endl;
     dump_Symbol_(stream, n+2, num);

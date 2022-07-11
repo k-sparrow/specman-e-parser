@@ -120,6 +120,8 @@ illegal     (illegal)
 no_trace    (no_trace)
 num_of_buckets    (num_of_buckets)
 per_instance    (per_instance)
+cross       (cross)
+transition  (transition)
 
 item                 (item)
 created_kind         (created_kind)
@@ -299,6 +301,8 @@ number  [0-9]+
 {no_trace}	{ return yy::parser::make_NO_TRACE(location()); }
 {num_of_buckets}	    { return yy::parser::make_NUM_OF_BUCKETS(location()); }
 {per_instance}	    { return yy::parser::make_PER_INSTANCE(location()); }
+{cross}	        { return yy::parser::make_CROSS(location()); }
+{transition}	{ return yy::parser::make_TRANSITION(location()); }
 {item}		            { return yy::parser::make_ITEM(location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(location()); }      

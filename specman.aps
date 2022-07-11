@@ -128,7 +128,8 @@ module Specman begin
                                                    type_        : Expression; 
                                                    sampled_val  : Expression; 
                                                    cgi_options : CovergroupItemOptions) : CovergroupItem;
-        
+        constructor cross_covergroup_item_cgi(cg_items: Expressions; cgi_options: CovergroupItemOptions) : CovergroupItem;
+        constructor transition_covergroup_item_cgi(item_id: Symbol_; cgi_options: CovergroupItemOptions) : CovergroupItem;
 
         constructor at_least_cgio(num: Symbol_) : CovergroupItemOption;
         constructor ignore_cgio(item_bool_expr: Expression) : CovergroupItemOption;

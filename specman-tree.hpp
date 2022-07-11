@@ -1900,6 +1900,50 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
 
 auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem;
 
+class cross_covergroup_item_cgi_class : public CovergroupItem_class {
+    protected:
+        Expressions cg_items;
+        CovergroupItemOptions cgi_options;
+    public:
+        cross_covergroup_item_cgi_class(Expressions cg_items, CovergroupItemOptions cgi_options) {
+            this->cg_items = cg_items;
+            this->cgi_options = cgi_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItem_SHARED_EXTRAS
+    CovergroupItem_SHARED_EXTRAS
+#endif
+#ifdef cross_covergroup_item_cgi_EXTRAS
+    cross_covergroup_item_cgi_EXTRAS
+#endif
+};
+
+auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_options) -> CovergroupItem;
+
+class transition_covergroup_item_cgi_class : public CovergroupItem_class {
+    protected:
+        Symbol_ item_id;
+        CovergroupItemOptions cgi_options;
+    public:
+        transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options) {
+            this->item_id = item_id;
+            this->cgi_options = cgi_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItem_SHARED_EXTRAS
+    CovergroupItem_SHARED_EXTRAS
+#endif
+#ifdef transition_covergroup_item_cgi_EXTRAS
+    transition_covergroup_item_cgi_EXTRAS
+#endif
+};
+
+auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem;
+
 class at_least_cgio_class : public CovergroupItemOption_class {
     protected:
         Symbol_ num;
