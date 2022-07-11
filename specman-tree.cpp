@@ -836,6 +836,48 @@ auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption {
     return CovergroupOption(new per_unit_instance_cgo_class(hier_id));
 }
 
+auto radix_dec_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_dec_cgo" << std::endl;
+}
+
+auto radix_dec_cgo() -> CovergroupOption {
+    return CovergroupOption(new radix_dec_cgo_class());
+}
+
+auto radix_hex_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_hex_cgo" << std::endl;
+}
+
+auto radix_hex_cgo() -> CovergroupOption {
+    return CovergroupOption(new radix_hex_cgo_class());
+}
+
+auto radix_bin_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_bin_cgo" << std::endl;
+}
+
+auto radix_bin_cgo() -> CovergroupOption {
+    return CovergroupOption(new radix_bin_cgo_class());
+}
+
+auto text_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "text_cgo" << std::endl;
+    dump_Symbol_(stream, n+2, description);
+}
+
+auto text_cgo(Symbol_ description) -> CovergroupOption {
+    return CovergroupOption(new text_cgo_class(description));
+}
+
+auto weight_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "weight_cgo" << std::endl;
+    dump_Symbol_(stream, n+2, value);
+}
+
+auto weight_cgo(Symbol_ value) -> CovergroupOption {
+    return CovergroupOption(new weight_cgo_class(value));
+}
+
 auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "true_literal_expr" << std::endl;
 }

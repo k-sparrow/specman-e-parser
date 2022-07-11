@@ -108,6 +108,12 @@ cover	    (cover)
 global	    (global)
 no_collect	(no_collect)
 per_unit_instance	 (per_unit_instance)
+radix	    (radix)
+dec         (DEC)
+hex         (HEX)
+bin         (BIN)
+text        (text)
+weight      (weight)
 item                 (item)
 created_kind         (created_kind)
 created_driver       (created_driver)
@@ -274,6 +280,12 @@ number  [0-9]+
 {global}    { return yy::parser::make_GLOBAL(location()); }
 {no_collect} { return yy::parser::make_NO_COLLECT(location()); }
 {per_unit_instance} { return yy::parser::make_PER_UNIT_INSTANCE(location()); }
+{radix}     { return yy::parser::make_RADIX(location()); }
+{dec}		{ return yy::parser::make_DEC(location()); }
+{hex}		{ return yy::parser::make_HEX(location()); }
+{bin}		{ return yy::parser::make_BIN(location()); }
+{text}		{ return yy::parser::make_TEXT(location()); }
+{weight}	{ return yy::parser::make_WEIGHT(location()); }
 {item}		            { return yy::parser::make_ITEM(location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(location()); }      

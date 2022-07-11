@@ -1740,6 +1740,100 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
 
 auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption;
 
+class radix_dec_cgo_class : public CovergroupOption_class {
+    protected:
+    public:
+        radix_dec_cgo_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef radix_dec_cgo_EXTRAS
+    radix_dec_cgo_EXTRAS
+#endif
+};
+
+auto radix_dec_cgo() -> CovergroupOption;
+
+class radix_hex_cgo_class : public CovergroupOption_class {
+    protected:
+    public:
+        radix_hex_cgo_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef radix_hex_cgo_EXTRAS
+    radix_hex_cgo_EXTRAS
+#endif
+};
+
+auto radix_hex_cgo() -> CovergroupOption;
+
+class radix_bin_cgo_class : public CovergroupOption_class {
+    protected:
+    public:
+        radix_bin_cgo_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef radix_bin_cgo_EXTRAS
+    radix_bin_cgo_EXTRAS
+#endif
+};
+
+auto radix_bin_cgo() -> CovergroupOption;
+
+class text_cgo_class : public CovergroupOption_class {
+    protected:
+        Symbol_ description;
+    public:
+        text_cgo_class(Symbol_ description) {
+            this->description = description;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef text_cgo_EXTRAS
+    text_cgo_EXTRAS
+#endif
+};
+
+auto text_cgo(Symbol_ description) -> CovergroupOption;
+
+class weight_cgo_class : public CovergroupOption_class {
+    protected:
+        Symbol_ value;
+    public:
+        weight_cgo_class(Symbol_ value) {
+            this->value = value;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef weight_cgo_EXTRAS
+    weight_cgo_EXTRAS
+#endif
+};
+
+auto weight_cgo(Symbol_ value) -> CovergroupOption;
+
 class true_literal_expr_class : public Expression_class {
     protected:
     public:

@@ -63,6 +63,12 @@
           eSeqBaseKind,
           eSeqDrvBaseKind
         };
+
+        enum e_radix_bucket {
+          eDec,
+          eHex,
+          eBin
+        };
     };
 }
 
@@ -226,6 +232,12 @@
 %token GLOBAL
 %token NO_COLLECT
 %token PER_UNIT_INSTANCE
+%token RADIX
+%token DEC
+%token HEX
+%token BIN
+%token TEXT
+%token WEIGHT
 
 %token NULL_
 %token UNDEF
@@ -349,6 +361,10 @@
 %nterm <elex::CovergroupOption>  global_cg_option
 %nterm <elex::CovergroupOption>  no_collect_cg_option
 %nterm <elex::CovergroupOption>  per_unit_instance_cg_option
+%nterm <elex::CovergroupOption>  text_cg_option
+%nterm <elex::CovergroupOption>  weight_cg_option
+%nterm <elex::CovergroupOption>  radix_cg_option
+%nterm <elex::e_radix_bucket>    radix_bucket
 
 %nterm <elex::CovergroupItems>   coverage_group_items
 %nterm <elex::CovergroupItem>    coverage_group_item
@@ -635,8 +651,11 @@ coverage_group_options :
 
 coverage_group_option : 
     global_cg_option            { $$ = $1; }
-  | no_collect_cg_option        { $$ = $1;}
-  | per_unit_instance_cg_option { $$ = $1;}
+  | no_collect_cg_option        { $$ = $1; }
+  | per_unit_instance_cg_option { $$ = $1; }
+  | radix_cg_option             { $$ = $1; }
+  | text_cg_option              { $$ = $1; }
+  | weight_cg_option              { $$ = $1; }
   ;
 
 global_cg_option:
@@ -661,6 +680,40 @@ per_unit_instance_cg_option :
   
   | PER_UNIT_INSTANCE
     { $$ = elex::per_unit_instance_cgo(elex::me_expr()); }
+  ;
+
+text_cg_option : 
+  TEXT ASSIGN STRING_LITERAL { $$ = elex::text_cgo($3); }
+  ;
+
+weight_cg_option : 
+  WEIGHT ASSIGN NUMBER { $$ = elex::weight_cgo($3); }
+  ;
+
+radix_cg_option : 
+  RADIX ASSIGN radix_bucket 
+  {
+    switch($3){
+      case eDec : {
+        $$ = elex::radix_dec_cgo();
+        break;
+      }
+      case eHex : {
+        $$ = elex::radix_hex_cgo();
+        break;     
+      }
+      case eBin : {
+        $$ = elex::radix_bin_cgo();
+        break;      
+      }
+    }
+  }
+  ;
+
+radix_bucket : 
+    DEC { $$ = eDec; }
+  | HEX { $$ = eHex; }
+  | BIN { $$ = eBin; }
   ;
 
 bool_literal_expression :

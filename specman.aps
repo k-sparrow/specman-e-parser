@@ -115,6 +115,11 @@ module Specman begin
         constructor global_cgo(bool_litral: Expression) : CovergroupOption;
         constructor no_collect_cgo(bool_litral: Expression) : CovergroupOption;
         constructor per_unit_instance_cgo(hier_id: Expression) : CovergroupOption;
+        constructor radix_dec_cgo() : CovergroupOption;
+        constructor radix_hex_cgo() : CovergroupOption;
+        constructor radix_bin_cgo() : CovergroupOption;
+        constructor text_cgo(description: Symbol_) : CovergroupOption;
+        constructor weight_cgo(value: Symbol_) : CovergroupOption;
         constructor true_literal_expr() : Expression;
         constructor false_literal_expr() : Expression;
         constructor no_action() : Action;
