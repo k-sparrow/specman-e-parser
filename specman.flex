@@ -114,6 +114,13 @@ hex         (HEX)
 bin         (BIN)
 text        (text)
 weight      (weight)
+at_least    (at_least)
+ignore      (ignore)
+illegal     (illegal)
+no_trace    (no_trace)
+num_of_buckets    (num_of_buckets)
+per_instance    (per_instance)
+
 item                 (item)
 created_kind         (created_kind)
 created_driver       (created_driver)
@@ -286,6 +293,12 @@ number  [0-9]+
 {bin}		{ return yy::parser::make_BIN(location()); }
 {text}		{ return yy::parser::make_TEXT(location()); }
 {weight}	{ return yy::parser::make_WEIGHT(location()); }
+{at_least}	{ return yy::parser::make_AT_LEAST(location()); }
+{ignore}	{ return yy::parser::make_IGNORE(location()); }
+{illegal}	{ return yy::parser::make_ILLEGAL(location()); }
+{no_trace}	{ return yy::parser::make_NO_TRACE(location()); }
+{num_of_buckets}	    { return yy::parser::make_NUM_OF_BUCKETS(location()); }
+{per_instance}	    { return yy::parser::make_PER_INSTANCE(location()); }
 {item}		            { return yy::parser::make_ITEM(location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(location()); }      

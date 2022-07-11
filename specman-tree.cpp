@@ -130,6 +130,19 @@ auto append_CovergroupItems(CovergroupItems p1, CovergroupItems p2) -> Covergrou
     return CovergroupItems(new list_tree_node<CovergroupItem>(*p1, *p2));
 }
 
+/* implementations for CovergroupItemOptions */
+auto nil_CovergroupItemOptions() -> CovergroupItemOptions {
+    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>());
+}
+
+auto single_CovergroupItemOptions(CovergroupItemOption p) -> CovergroupItemOptions {
+    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>(p));
+}
+
+auto append_CovergroupItemOptions(CovergroupItemOptions p1, CovergroupItemOptions p2) -> CovergroupItemOptions {
+    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
     stmts->dump(stream, n+2);
@@ -800,15 +813,6 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
     return StructMember(new covergroup_sm_class(event_id, cg_opts, cg_items));
 }
 
-auto simple_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "simple_covergroup_item_cgi" << std::endl;
-    dump_Symbol_(stream, n+2, item_id);
-}
-
-auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem {
-    return CovergroupItem(new simple_covergroup_item_cgi_class(item_id));
-}
-
 auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "global_cgo" << std::endl;
     bool_litral->dump(stream, n+2);
@@ -885,6 +889,142 @@ auto when_cgo_class::dump(std::ostream& stream, int n) -> void {
 
 auto when_cgo(Expression bool_expr) -> CovergroupOption {
     return CovergroupOption(new when_cgo_class(bool_expr));
+}
+
+auto simple_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "simple_covergroup_item_cgi" << std::endl;
+    dump_Symbol_(stream, n+2, item_id);
+    cgi_options->dump(stream, n+2);
+}
+
+auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem {
+    return CovergroupItem(new simple_covergroup_item_cgi_class(item_id, cgi_options));
+}
+
+auto on_the_fly_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "on_the_fly_covergroup_item_cgi" << std::endl;
+    dump_Symbol_(stream, n+2, item_id);
+    type_->dump(stream, n+2);
+    sampled_val->dump(stream, n+2);
+    cgi_options->dump(stream, n+2);
+}
+
+auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem {
+    return CovergroupItem(new on_the_fly_covergroup_item_cgi_class(item_id, type_, sampled_val, cgi_options));
+}
+
+auto at_least_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "at_least_cgio" << std::endl;
+    dump_Symbol_(stream, n+2, num);
+}
+
+auto at_least_cgio(Symbol_ num) -> CovergroupItemOption {
+    return CovergroupItemOption(new at_least_cgio_class(num));
+}
+
+auto ignore_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "ignore_cgio" << std::endl;
+    item_bool_expr->dump(stream, n+2);
+}
+
+auto ignore_cgio(Expression item_bool_expr) -> CovergroupItemOption {
+    return CovergroupItemOption(new ignore_cgio_class(item_bool_expr));
+}
+
+auto illegal_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "illegal_cgio" << std::endl;
+    bool_litral->dump(stream, n+2);
+}
+
+auto illegal_cgio(Expression bool_litral) -> CovergroupItemOption {
+    return CovergroupItemOption(new illegal_cgio_class(bool_litral));
+}
+
+auto no_collect_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "no_collect_cgio" << std::endl;
+    bool_litral->dump(stream, n+2);
+}
+
+auto no_collect_cgio(Expression bool_litral) -> CovergroupItemOption {
+    return CovergroupItemOption(new no_collect_cgio_class(bool_litral));
+}
+
+auto no_trace_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "no_trace_cgio" << std::endl;
+    bool_litral->dump(stream, n+2);
+}
+
+auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption {
+    return CovergroupItemOption(new no_trace_cgio_class(bool_litral));
+}
+
+auto num_of_buckets_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "num_of_buckets_cgio" << std::endl;
+    dump_Symbol_(stream, n+2, num);
+}
+
+auto num_of_buckets_cgio(Symbol_ num) -> CovergroupItemOption {
+    return CovergroupItemOption(new num_of_buckets_cgio_class(num));
+}
+
+auto per_instance_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "per_instance_cgio" << std::endl;
+    bool_litral->dump(stream, n+2);
+}
+
+auto per_instance_cgio(Expression bool_litral) -> CovergroupItemOption {
+    return CovergroupItemOption(new per_instance_cgio_class(bool_litral));
+}
+
+auto radix_dec_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_dec_cgio" << std::endl;
+}
+
+auto radix_dec_cgio() -> CovergroupItemOption {
+    return CovergroupItemOption(new radix_dec_cgio_class());
+}
+
+auto radix_hex_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_hex_cgio" << std::endl;
+}
+
+auto radix_hex_cgio() -> CovergroupItemOption {
+    return CovergroupItemOption(new radix_hex_cgio_class());
+}
+
+auto radix_bin_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "radix_bin_cgio" << std::endl;
+}
+
+auto radix_bin_cgio() -> CovergroupItemOption {
+    return CovergroupItemOption(new radix_bin_cgio_class());
+}
+
+auto text_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "text_cgio" << std::endl;
+    dump_Symbol_(stream, n+2, description);
+}
+
+auto text_cgio(Symbol_ description) -> CovergroupItemOption {
+    return CovergroupItemOption(new text_cgio_class(description));
+}
+
+auto weight_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "weight_cgio" << std::endl;
+    dump_Symbol_(stream, n+2, value);
+}
+
+auto weight_cgio(Symbol_ value) -> CovergroupItemOption {
+    return CovergroupItemOption(new weight_cgio_class(value));
+}
+
+auto when_cgio_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "when_cgio" << std::endl;
+    bool_expr->dump(stream, n+2);
+}
+
+auto when_cgio(Expression bool_expr) -> CovergroupItemOption {
+    return CovergroupItemOption(new when_cgio_class(bool_expr));
 }
 
 auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {

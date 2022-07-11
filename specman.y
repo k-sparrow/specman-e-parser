@@ -238,6 +238,12 @@
 %token BIN
 %token TEXT
 %token WEIGHT
+%token AT_LEAST
+%token IGNORE
+%token ILLEGAL
+%token NO_TRACE
+%token NUM_OF_BUCKETS
+%token PER_INSTANCE 
 
 %token NULL_
 %token UNDEF
@@ -352,7 +358,7 @@
 %nterm <elex::StructMember>  expect_definition
 %nterm <elex::e_temporal_check> expect_or_assume_kwd
 %nterm <elex::e_method_ext_mod> opt_expect_assume_modifier
-%nterm <elex::Expression>    opt_dut_error_call
+%nterm <elex::Expression>       opt_dut_error_call
 
 %nterm <elex::StructMember>  coverage_group_declaration
 %nterm <elex::CovergroupOptions> coverage_group_options
@@ -370,6 +376,21 @@
 %nterm <elex::CovergroupItems>   coverage_group_items
 %nterm <elex::CovergroupItem>    coverage_group_item
 %nterm <elex::CovergroupItem>    non_term_coverage_group_item
+
+%nterm <elex::CovergroupItemOption>   coverage_group_item_option
+%nterm <elex::CovergroupItemOptions>  coverage_group_item_options
+%nterm <elex::CovergroupItemOptions>  opt_coverage_group_item_options
+%nterm <elex::CovergroupItemOption>   at_least_cg_item_option
+%nterm <elex::CovergroupItemOption>   ignore_cg_item_option
+%nterm <elex::CovergroupItemOption>   illegal_cg_item_option
+%nterm <elex::CovergroupItemOption>   no_collect_cg_item_option
+%nterm <elex::CovergroupItemOption>   no_trace_cg_item_option
+%nterm <elex::CovergroupItemOption>   num_of_buckets_cg_item_option
+%nterm <elex::CovergroupItemOption>   per_instance_cg_item_option
+%nterm <elex::CovergroupItemOption>   radix_cg_item_option
+%nterm <elex::CovergroupItemOption>   text_cg_item_option
+%nterm <elex::CovergroupItemOption>   weight_cg_item_option
+%nterm <elex::CovergroupItemOption>   when_cg_item_option
 
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
@@ -476,8 +497,6 @@
 %nterm <elex::Expression>   str_expression
 %nterm <elex::Expression>   int_expression
 %nterm <elex::Expression>   bool_literal_expression
-%nterm <elex::Expression>   true_literal_expression
-%nterm <elex::Expression>   false_literal_expression
 %nterm <elex::Expression>   me_expression
 %nterm <elex::Expression>   it_expression
 
@@ -740,8 +759,113 @@ coverage_group_item :
   ;  
 
 non_term_coverage_group_item : 
-  ITEM ID[id] {$$ = elex::simple_covergroup_item_cgi($id);}
+    ITEM ID[id] opt_coverage_group_item_options[options] 
+    { $$ = elex::simple_covergroup_item_cgi($id, $options);}
+    
+  | ITEM ID[id] COLON type_identifier_expression[type_] ASSIGN non_term_expression[value] opt_coverage_group_item_options[options] 
+    { $$ = elex::on_the_fly_covergroup_item_cgi($id, $type_, $value, $options); }
   ;
+
+opt_coverage_group_item_options :
+    %empty                            { $$ = elex::nil_CovergroupItemOptions(); }
+  | USING coverage_group_item_options { $$ = $2; }
+  ;
+
+coverage_group_item_options : 
+    coverage_group_item_option 
+    { $$ = elex::single_CovergroupItemOptions($1); }  
+  
+  | coverage_group_item_options COMMA coverage_group_item_option
+    { $$ = elex::append_CovergroupItemOptions($1, elex::single_CovergroupItemOptions($3)); }
+  ;
+
+coverage_group_item_option: 
+    at_least_cg_item_option   { $$ = $1; }
+  | ignore_cg_item_option     { $$ = $1; }
+  | illegal_cg_item_option    { $$ = $1; }
+  | no_collect_cg_item_option { $$ = $1; }
+  | no_trace_cg_item_option   { $$ = $1; }
+  | num_of_buckets_cg_item_option { $$ = $1; }
+  | per_instance_cg_item_option { $$ = $1; }
+  | radix_cg_item_option	    { $$ = $1; }
+  | text_cg_item_option	      { $$ = $1; }
+  | weight_cg_item_option	    { $$ = $1; }
+  | when_cg_item_option	      { $$ = $1; }
+  // | TODO: add range_cg_item_option
+  ;
+
+at_least_cg_item_option :
+  AT_LEAST ASSIGN NUMBER { $$ = elex::at_least_cgio($3); }
+  ;
+
+ignore_cg_item_option : 
+  IGNORE ASSIGN logical_expression { $$ = elex::ignore_cgio($3); }
+  ;
+
+illegal_cg_item_option : 
+  ILLEGAL ASSIGN logical_expression { $$ = elex::ignore_cgio($3); }
+  ;
+
+no_collect_cg_item_option :
+    NO_COLLECT ASSIGN bool_literal_expression 
+    { $$ = elex::no_collect_cgio($3); }
+
+  | NO_COLLECT 
+    { $$ = elex::no_collect_cgio(elex::true_literal_expr()); }
+  ;
+
+no_trace_cg_item_option : 
+    NO_TRACE ASSIGN bool_literal_expression 
+    { $$ = elex::no_trace_cgio($3); }
+
+  | NO_TRACE 
+    { $$ = elex::no_trace_cgio(elex::true_literal_expr()); }
+  ;
+
+num_of_buckets_cg_item_option :
+  NUM_OF_BUCKETS ASSIGN NUMBER { $$ = elex::num_of_buckets_cgio($3); }
+  ;
+
+per_instance_cg_item_option : 
+    PER_INSTANCE ASSIGN bool_literal_expression 
+    { $$ = elex::per_instance_cgio($3); }
+
+  | PER_INSTANCE 
+    { $$ = elex::per_instance_cgio(elex::true_literal_expr()); }
+  ;
+
+radix_cg_item_option :
+  RADIX ASSIGN radix_bucket 
+  {
+    switch($3){
+      case eDec : {
+        $$ = elex::radix_dec_cgio();
+        break;
+      }
+      case eHex : {
+        $$ = elex::radix_hex_cgio();
+        break;     
+      }
+      case eBin : {
+        $$ = elex::radix_bin_cgio();
+        break;      
+      }
+    }
+  }
+  ;
+
+text_cg_item_option : 
+  TEXT ASSIGN STRING_LITERAL { $$ = elex::text_cgio($3); }
+  ;
+
+weight_cg_item_option : 
+  WEIGHT ASSIGN NUMBER { $$ = elex::weight_cgio($3); }
+  ;
+
+when_cg_item_option : 
+  WHEN ASSIGN logical_expression { $$ = elex::when_cgio($3); }
+  ;
+
 expect_definition:
     expect_or_assume_kwd[kwd] temporal_expression[temporal] opt_dut_error_call[dut_error_call] 
     {
@@ -1183,11 +1307,11 @@ shift_expression :
 
 logical_expression : 
       LPAREN logical_expression RPAREN { $$ = $2; }
-    | unary_logical_expression  { $$ = $1; }
-    | binary_logical_expression { $$ = $1; }
-    | implication_expression    { $$ = $1; }
-    | comparison_expression     { $$ = $1; }
-    | inclusion_expression      { $$ = $1; }
+    | unary_logical_expression         { $$ = $1; }
+    | binary_logical_expression        { $$ = $1; }
+    | implication_expression           { $$ = $1; }
+    | comparison_expression            { $$ = $1; }
+    | inclusion_expression             { $$ = $1; }
     ;
 
 unary_logical_expression : 

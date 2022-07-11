@@ -188,6 +188,24 @@ auto nil_CovergroupItems() -> CovergroupItems;
 auto single_CovergroupItems(CovergroupItem) -> CovergroupItems;
 auto append_CovergroupItems(CovergroupItems, CovergroupItems) -> CovergroupItems;
 
+class CovergroupItemOption_class;
+typedef std::shared_ptr<CovergroupItemOption_class> CovergroupItemOption;
+
+class CovergroupItemOption_class : public tree_node {
+    public:
+
+#ifdef CovergroupItemOption_EXTRAS
+    CovergroupItemOption_EXTRAS
+#endif
+};
+
+typedef list_tree_node<CovergroupItemOption> CovergroupItemOptions_class;
+typedef std::shared_ptr<CovergroupItemOptions_class> CovergroupItemOptions;
+
+auto nil_CovergroupItemOptions() -> CovergroupItemOptions;
+auto single_CovergroupItemOptions(CovergroupItemOption) -> CovergroupItemOptions;
+auto append_CovergroupItemOptions(CovergroupItemOptions, CovergroupItemOptions) -> CovergroupItemOptions;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -1660,26 +1678,6 @@ class covergroup_sm_class : public StructMember_class {
 
 auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember;
 
-class simple_covergroup_item_cgi_class : public CovergroupItem_class {
-    protected:
-        Symbol_ item_id;
-    public:
-        simple_covergroup_item_cgi_class(Symbol_ item_id) {
-            this->item_id = item_id;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef CovergroupItem_SHARED_EXTRAS
-    CovergroupItem_SHARED_EXTRAS
-#endif
-#ifdef simple_covergroup_item_cgi_EXTRAS
-    simple_covergroup_item_cgi_EXTRAS
-#endif
-};
-
-auto simple_covergroup_item_cgi(Symbol_ item_id) -> CovergroupItem;
-
 class global_cgo_class : public CovergroupOption_class {
     protected:
         Expression bool_litral;
@@ -1853,6 +1851,308 @@ class when_cgo_class : public CovergroupOption_class {
 };
 
 auto when_cgo(Expression bool_expr) -> CovergroupOption;
+
+class simple_covergroup_item_cgi_class : public CovergroupItem_class {
+    protected:
+        Symbol_ item_id;
+        CovergroupItemOptions cgi_options;
+    public:
+        simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options) {
+            this->item_id = item_id;
+            this->cgi_options = cgi_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItem_SHARED_EXTRAS
+    CovergroupItem_SHARED_EXTRAS
+#endif
+#ifdef simple_covergroup_item_cgi_EXTRAS
+    simple_covergroup_item_cgi_EXTRAS
+#endif
+};
+
+auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem;
+
+class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
+    protected:
+        Symbol_ item_id;
+        Expression type_;
+        Expression sampled_val;
+        CovergroupItemOptions cgi_options;
+    public:
+        on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) {
+            this->item_id = item_id;
+            this->type_ = type_;
+            this->sampled_val = sampled_val;
+            this->cgi_options = cgi_options;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItem_SHARED_EXTRAS
+    CovergroupItem_SHARED_EXTRAS
+#endif
+#ifdef on_the_fly_covergroup_item_cgi_EXTRAS
+    on_the_fly_covergroup_item_cgi_EXTRAS
+#endif
+};
+
+auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem;
+
+class at_least_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Symbol_ num;
+    public:
+        at_least_cgio_class(Symbol_ num) {
+            this->num = num;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef at_least_cgio_EXTRAS
+    at_least_cgio_EXTRAS
+#endif
+};
+
+auto at_least_cgio(Symbol_ num) -> CovergroupItemOption;
+
+class ignore_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression item_bool_expr;
+    public:
+        ignore_cgio_class(Expression item_bool_expr) {
+            this->item_bool_expr = item_bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef ignore_cgio_EXTRAS
+    ignore_cgio_EXTRAS
+#endif
+};
+
+auto ignore_cgio(Expression item_bool_expr) -> CovergroupItemOption;
+
+class illegal_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression bool_litral;
+    public:
+        illegal_cgio_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef illegal_cgio_EXTRAS
+    illegal_cgio_EXTRAS
+#endif
+};
+
+auto illegal_cgio(Expression bool_litral) -> CovergroupItemOption;
+
+class no_collect_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression bool_litral;
+    public:
+        no_collect_cgio_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef no_collect_cgio_EXTRAS
+    no_collect_cgio_EXTRAS
+#endif
+};
+
+auto no_collect_cgio(Expression bool_litral) -> CovergroupItemOption;
+
+class no_trace_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression bool_litral;
+    public:
+        no_trace_cgio_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef no_trace_cgio_EXTRAS
+    no_trace_cgio_EXTRAS
+#endif
+};
+
+auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption;
+
+class num_of_buckets_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Symbol_ num;
+    public:
+        num_of_buckets_cgio_class(Symbol_ num) {
+            this->num = num;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef num_of_buckets_cgio_EXTRAS
+    num_of_buckets_cgio_EXTRAS
+#endif
+};
+
+auto num_of_buckets_cgio(Symbol_ num) -> CovergroupItemOption;
+
+class per_instance_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression bool_litral;
+    public:
+        per_instance_cgio_class(Expression bool_litral) {
+            this->bool_litral = bool_litral;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef per_instance_cgio_EXTRAS
+    per_instance_cgio_EXTRAS
+#endif
+};
+
+auto per_instance_cgio(Expression bool_litral) -> CovergroupItemOption;
+
+class radix_dec_cgio_class : public CovergroupItemOption_class {
+    protected:
+    public:
+        radix_dec_cgio_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef radix_dec_cgio_EXTRAS
+    radix_dec_cgio_EXTRAS
+#endif
+};
+
+auto radix_dec_cgio() -> CovergroupItemOption;
+
+class radix_hex_cgio_class : public CovergroupItemOption_class {
+    protected:
+    public:
+        radix_hex_cgio_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef radix_hex_cgio_EXTRAS
+    radix_hex_cgio_EXTRAS
+#endif
+};
+
+auto radix_hex_cgio() -> CovergroupItemOption;
+
+class radix_bin_cgio_class : public CovergroupItemOption_class {
+    protected:
+    public:
+        radix_bin_cgio_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef radix_bin_cgio_EXTRAS
+    radix_bin_cgio_EXTRAS
+#endif
+};
+
+auto radix_bin_cgio() -> CovergroupItemOption;
+
+class text_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Symbol_ description;
+    public:
+        text_cgio_class(Symbol_ description) {
+            this->description = description;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef text_cgio_EXTRAS
+    text_cgio_EXTRAS
+#endif
+};
+
+auto text_cgio(Symbol_ description) -> CovergroupItemOption;
+
+class weight_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Symbol_ value;
+    public:
+        weight_cgio_class(Symbol_ value) {
+            this->value = value;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef weight_cgio_EXTRAS
+    weight_cgio_EXTRAS
+#endif
+};
+
+auto weight_cgio(Symbol_ value) -> CovergroupItemOption;
+
+class when_cgio_class : public CovergroupItemOption_class {
+    protected:
+        Expression bool_expr;
+    public:
+        when_cgio_class(Expression bool_expr) {
+            this->bool_expr = bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupItemOption_SHARED_EXTRAS
+    CovergroupItemOption_SHARED_EXTRAS
+#endif
+#ifdef when_cgio_EXTRAS
+    when_cgio_EXTRAS
+#endif
+};
+
+auto when_cgio(Expression bool_expr) -> CovergroupItemOption;
 
 class true_literal_expr_class : public Expression_class {
     protected:
