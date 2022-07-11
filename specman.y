@@ -14,7 +14,6 @@
 
 // should not have any shift/reduce or reduce/reduce conflicts
 %expect 0
-%expect-rr 0
 
 /* goes inside header file */
 %code requires {
@@ -435,6 +434,7 @@
 %nterm <elex::Expression>   range_modifier_expression
 
 %nterm <elex::Expression>   constraint_expression
+%nterm <elex::Expression>   type_identifier_expression
 %nterm <elex::Expression>   terminated_constraint_expression
 %nterm <elex::Expressions>  constriant_expression_block
 %nterm <elex::Expression>   method_call_expression
@@ -1169,7 +1169,7 @@ struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
 
 struct_type_modifier : // VALUE'id | id
       id_expr[value] SNG_QUOTE id_expr[id] { $$ = elex::struct_type_modifier($value, $id); }
-    | id_expr[value]                       { $$ = elex::struct_type_modifier($value, elex::no_expr()); }
+    | id_expr                              { $$ = $1; }
     ;
 
 /* opt_with_action_block : // [[ [[(name)]] with {action; ...}]]
@@ -1252,6 +1252,10 @@ List items constraint
 constraint_expression : 
       logical_expression                               { $$ = elex::constraint_expr($1); }
     | SOFT constraint_expression                       { $$ = elex::soft_constraint_expr($2); }
+    | TYPE hier_ref_expression[field] IS_A type_identifier_expression[type_] 
+      { $$ = elex::field_type_constraint_by_type_expr($field, $type_); }
+    | TYPE hier_ref_expression[lhs] EQ hier_ref_expression[rhs]
+      { $$ = elex::field_type_constraint_by_field_expr($lhs, $rhs); }
     | ALL OF LBRACE constriant_expression_block RBRACE { $$ = elex::all_of_constraint_expr($4); } 
     | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE terminated_constraint_expression[constraint] RBRACE 
       {
@@ -1264,6 +1268,10 @@ constraint_expression :
           $$ = elex::distribution_constraint_expr($gen_item, $distribution);
       }
     ;
+
+type_identifier_expression :
+  struct_type_modifiers { $$ = elex::type_identifier_expr($1); }
+  ;
 
 terminated_constraint_expression : 
     constraint_expression SEMICOLON { $$ = $1; }

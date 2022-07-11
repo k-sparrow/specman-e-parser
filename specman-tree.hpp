@@ -2548,6 +2548,26 @@ class struct_type_modifier_class : public Expression_class {
 
 auto struct_type_modifier(Expression value, Expression id) -> Expression;
 
+class type_identifier_expr_class : public Expression_class {
+    protected:
+        Expressions modifiers;
+    public:
+        type_identifier_expr_class(Expressions modifiers) {
+            this->modifiers = modifiers;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef type_identifier_expr_EXTRAS
+    type_identifier_expr_EXTRAS
+#endif
+};
+
+auto type_identifier_expr(Expressions modifiers) -> Expression;
+
 class struct_hier_ref_expr_class : public Expression_class {
     protected:
         Expressions hiers;
@@ -2739,6 +2759,50 @@ class list_items_constraint_expr_class : public Expression_class {
 };
 
 auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression;
+
+class field_type_constraint_by_type_expr_class : public Expression_class {
+    protected:
+        Expression field_;
+        Expression type_;
+    public:
+        field_type_constraint_by_type_expr_class(Expression field_, Expression type_) {
+            this->field_ = field_;
+            this->type_ = type_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef field_type_constraint_by_type_expr_EXTRAS
+    field_type_constraint_by_type_expr_EXTRAS
+#endif
+};
+
+auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> Expression;
+
+class field_type_constraint_by_field_expr_class : public Expression_class {
+    protected:
+        Expression field_;
+        Expression type_;
+    public:
+        field_type_constraint_by_field_expr_class(Expression field_, Expression type_) {
+            this->field_ = field_;
+            this->type_ = type_;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef field_type_constraint_by_field_expr_EXTRAS
+    field_type_constraint_by_field_expr_EXTRAS
+#endif
+};
+
+auto field_type_constraint_by_field_expr(Expression field_, Expression type_) -> Expression;
 
 class distribution_constraint_expr_class : public Expression_class {
     protected:

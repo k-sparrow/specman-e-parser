@@ -1193,6 +1193,15 @@ auto struct_type_modifier(Expression value, Expression id) -> Expression {
     return Expression(new struct_type_modifier_class(value, id));
 }
 
+auto type_identifier_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_identifier_expr" << std::endl;
+    modifiers->dump(stream, n+2);
+}
+
+auto type_identifier_expr(Expressions modifiers) -> Expression {
+    return Expression(new type_identifier_expr_class(modifiers));
+}
+
 auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_hier_ref_expr" << std::endl;
     hiers->dump(stream, n+2);
@@ -1278,6 +1287,26 @@ auto list_items_constraint_expr_class::dump(std::ostream& stream, int n) -> void
 
 auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression {
     return Expression(new list_items_constraint_expr_class(item_name, gen_item, constraint));
+}
+
+auto field_type_constraint_by_type_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "field_type_constraint_by_type_expr" << std::endl;
+    field_->dump(stream, n+2);
+    type_->dump(stream, n+2);
+}
+
+auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> Expression {
+    return Expression(new field_type_constraint_by_type_expr_class(field_, type_));
+}
+
+auto field_type_constraint_by_field_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "field_type_constraint_by_field_expr" << std::endl;
+    field_->dump(stream, n+2);
+    type_->dump(stream, n+2);
+}
+
+auto field_type_constraint_by_field_expr(Expression field_, Expression type_) -> Expression {
+    return Expression(new field_type_constraint_by_field_expr_class(field_, type_));
 }
 
 auto distribution_constraint_expr_class::dump(std::ostream& stream, int n) -> void {

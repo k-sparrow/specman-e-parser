@@ -156,6 +156,7 @@ module Specman begin
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
+        constructor type_identifier_expr(modifiers: Expressions) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;
         constructor ternary_operator_expr(condition: Expression; true_expr: Expression; false_expr: Expression) : Expression;
@@ -167,6 +168,8 @@ module Specman begin
         constructor soft_constraint_expr(bool_expr: Expression) : Expression;
         constructor all_of_constraint_expr(constraints: Expressions) : Expression;
         constructor list_items_constraint_expr(item_name: Expression; gen_item: Expression; constraint: Expression) : Expression;
+        constructor field_type_constraint_by_type_expr(field_ : Expression; type_: Expression) : Expression;
+        constructor field_type_constraint_by_field_expr(field_ : Expression; type_: Expression) : Expression;
         constructor distribution_constraint_expr(gen_item: Expression; distribution: Cases) : Expression;
 
         constructor distribution_branch_case(int_: Expression; value: Expression) : Case;
