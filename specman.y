@@ -521,33 +521,9 @@ sequence_statement :
       //  sequence_driver_type -> will be created as 'any_sequence_driver'
 
       // all of those new id's will be added to the driver idtable
-      std::string seq_id_name = $seq_id.lock()->Str();
-      std::vector<std::string> item_names = {              
-              seq_id_name + "_kind",
-              seq_id_name + "_driver",
-              "any_sequence",
-              "any_sequence_driver"
-      };
-      
-      for (auto const& new_name : item_names)
-        driver.idtable[new_name] = elex::Symbol(new elex::Entry(new_name, new_name.size()));
-      
-      auto sequence_kind             = elex::sequence_created_kind_name_it(driver.idtable[seq_id_name + "_kind"]);
-      auto sequence_driver_kind      = elex::sequence_created_driver_name_it(driver.idtable[seq_id_name + "_driver"]);
-      auto base_sequence_type        = elex::sequence_base_kind_it(driver.idtable["any_sequence"]);
-      auto base_sequence_driver_type = elex::sequence_driver_base_kind_it(driver.idtable["any_sequence_driver"]);
-
       $$ = elex::virtual_sequence_st(
                     $seq_id, 
-                    elex::SequenceItems(new SequenceItems_class({ // TODO: this is very ugly, refactor this
-                                            sequence_kind, 
-                                            sequence_driver_kind,
-                                            base_sequence_type,
-                                            base_sequence_driver_type
-                                            }
-                                          )
-                                        )
-                    ); 
+                    elex::nil_SequenceItems()); 
     }
 
   | SEQUENCE ID[seq_id] USING sequence_options[options] 
