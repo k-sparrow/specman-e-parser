@@ -363,6 +363,7 @@
 %nterm <elex::CovergroupOption>  per_unit_instance_cg_option
 %nterm <elex::CovergroupOption>  text_cg_option
 %nterm <elex::CovergroupOption>  weight_cg_option
+%nterm <elex::CovergroupOption>  when_cg_option
 %nterm <elex::CovergroupOption>  radix_cg_option
 %nterm <elex::e_radix_bucket>    radix_bucket
 
@@ -655,7 +656,8 @@ coverage_group_option :
   | per_unit_instance_cg_option { $$ = $1; }
   | radix_cg_option             { $$ = $1; }
   | text_cg_option              { $$ = $1; }
-  | weight_cg_option              { $$ = $1; }
+  | weight_cg_option            { $$ = $1; }
+  | when_cg_option              { $$ = $1; }
   ;
 
 global_cg_option:
@@ -688,6 +690,10 @@ text_cg_option :
 
 weight_cg_option : 
   WEIGHT ASSIGN NUMBER { $$ = elex::weight_cgo($3); }
+  ;
+
+when_cg_option : 
+  WHEN ASSIGN logical_expression { $$ = elex::when_cgo($3); }
   ;
 
 radix_cg_option : 
@@ -1176,7 +1182,8 @@ shift_expression :
     ;
 
 logical_expression : 
-      unary_logical_expression  { $$ = $1; }
+      LPAREN logical_expression RPAREN { $$ = $2; }
+    | unary_logical_expression  { $$ = $1; }
     | binary_logical_expression { $$ = $1; }
     | implication_expression    { $$ = $1; }
     | comparison_expression     { $$ = $1; }

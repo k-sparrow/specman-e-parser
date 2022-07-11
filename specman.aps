@@ -120,6 +120,7 @@ module Specman begin
         constructor radix_bin_cgo() : CovergroupOption;
         constructor text_cgo(description: Symbol_) : CovergroupOption;
         constructor weight_cgo(value: Symbol_) : CovergroupOption;
+        constructor when_cgo(bool_expr: Expression) : CovergroupOption;
         constructor true_literal_expr() : Expression;
         constructor false_literal_expr() : Expression;
         constructor no_action() : Action;

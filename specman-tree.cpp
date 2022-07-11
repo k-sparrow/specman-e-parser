@@ -878,6 +878,15 @@ auto weight_cgo(Symbol_ value) -> CovergroupOption {
     return CovergroupOption(new weight_cgo_class(value));
 }
 
+auto when_cgo_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "when_cgo" << std::endl;
+    bool_expr->dump(stream, n+2);
+}
+
+auto when_cgo(Expression bool_expr) -> CovergroupOption {
+    return CovergroupOption(new when_cgo_class(bool_expr));
+}
+
 auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "true_literal_expr" << std::endl;
 }

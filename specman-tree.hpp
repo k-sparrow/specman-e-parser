@@ -1834,6 +1834,26 @@ class weight_cgo_class : public CovergroupOption_class {
 
 auto weight_cgo(Symbol_ value) -> CovergroupOption;
 
+class when_cgo_class : public CovergroupOption_class {
+    protected:
+        Expression bool_expr;
+    public:
+        when_cgo_class(Expression bool_expr) {
+            this->bool_expr = bool_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef CovergroupOption_SHARED_EXTRAS
+    CovergroupOption_SHARED_EXTRAS
+#endif
+#ifdef when_cgo_EXTRAS
+    when_cgo_EXTRAS
+#endif
+};
+
+auto when_cgo(Expression bool_expr) -> CovergroupOption;
+
 class true_literal_expr_class : public Expression_class {
     protected:
     public:
