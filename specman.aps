@@ -58,9 +58,9 @@ module Specman begin
 
         constructor formal(name: Symbol_; type_: Symbol_) : Formal;
 
-        constructor struct_field_sm(id: Symbol_; type: Expression) : StructMember;
-        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; list_base_type: Expression) : StructMember;
-        constructor struct_field_assoc_list_sm(id: Symbol_; key_type: Expression; list_base_type: Expression) : StructMember;
+        constructor struct_field_sm(id: Symbol_; type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
+        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; list_base_type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
+        constructor struct_field_assoc_list_sm(id: Symbol_; key_type: Expression; list_base_type: Expression; is_physical : Boolean) : StructMember;
 
         constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; actions_: Actions) : StructMember;
         constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: Symbol_; actions_: Actions) : StructMember;

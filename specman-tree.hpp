@@ -583,10 +583,14 @@ class struct_field_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression type;
+        Boolean is_physical;
+        Boolean do_not_gen;
     public:
-        struct_field_sm_class(Symbol_ id, Expression type) {
+        struct_field_sm_class(Symbol_ id, Expression type, Boolean is_physical, Boolean do_not_gen) {
             this->id = id;
             this->type = type;
+            this->is_physical = is_physical;
+            this->do_not_gen = do_not_gen;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -599,18 +603,22 @@ class struct_field_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_sm(Symbol_ id, Expression type) -> StructMember;
+auto struct_field_sm(Symbol_ id, Expression type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
 
 class struct_field_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression len_expr;
         Expression list_base_type;
+        Boolean is_physical;
+        Boolean do_not_gen;
     public:
-        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Expression list_base_type) {
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Expression list_base_type, Boolean is_physical, Boolean do_not_gen) {
             this->id = id;
             this->len_expr = len_expr;
             this->list_base_type = list_base_type;
+            this->is_physical = is_physical;
+            this->do_not_gen = do_not_gen;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -623,18 +631,20 @@ class struct_field_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type) -> StructMember;
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
 
 class struct_field_assoc_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression key_type;
         Expression list_base_type;
+        Boolean is_physical;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Expression list_base_type) {
+        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Expression list_base_type, Boolean is_physical) {
             this->id = id;
             this->key_type = key_type;
             this->list_base_type = list_base_type;
+            this->is_physical = is_physical;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -647,7 +657,7 @@ class struct_field_assoc_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type) -> StructMember;
+auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type, Boolean is_physical) -> StructMember;
 
 class method_dec_sm_class : public StructMember_class {
     protected:

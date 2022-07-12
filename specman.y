@@ -69,6 +69,13 @@
           eHex,
           eBin
         };
+
+        enum e_physical_dont_gen {
+          eNoFieldMod = 0,
+          eDoNotGen = 1,
+          ePhysical = 2,
+          eAllFieldMod = 3
+        };
     };
 }
 
@@ -401,8 +408,11 @@
 %nterm <elex::CovergroupExtensionID>  opt_covergroup_extension_id
 
 %nterm <elex::StructMember>  scalar_field_declaration
+%nterm <elex::StructMember>  non_decorated_scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
+%nterm <elex::StructMember>  non_decorated_list_field_declaration
 %nterm <elex::StructMember>  keyed_list_field_declaration
+%nterm <elex::e_physical_dont_gen>  do_not_gen_physical
 
 /* Actions */
 %nterm <elex::Actions> actions
@@ -1009,6 +1019,13 @@ field_declaration :
     | keyed_list_field_declaration  { $$ = $1; }
     ;
 
+do_not_gen_physical:
+    REMAINDER                { $$ = ePhysical; }
+  | LOGICAL_NOT_OP           { $$ = eDoNotGen; }
+  | REMAINDER LOGICAL_NOT_OP { $$ = static_cast<e_physical_dont_gen>(eDoNotGen | ePhysical); }
+  | LOGICAL_NOT_OP REMAINDER { $$ = static_cast<e_physical_dont_gen>(eDoNotGen | ePhysical); }
+  ;
+
 // name : type
 
 // TODO: type should not only be an id expression but also a struct name qualifier
@@ -1016,20 +1033,58 @@ field_declaration :
 // TODO: add optional const modifier
 // TODO: add optional bits|bytes length specification
 scalar_field_declaration : 
-    ID[name] COLON type_identifier_expression[type_] { $$ = elex::struct_field_sm($name, $type_); }
-    ;
+    non_decorated_scalar_field_declaration
+    { $$ = $1; }
+
+  | do_not_gen_physical[gen_phy] non_decorated_scalar_field_declaration[field_decl]
+    { 
+      $$ = $field_decl;
+      auto scalar_field_shared = std::dynamic_pointer_cast<elex::struct_field_sm_class>($field_decl);
+      if(scalar_field_shared == nullptr) error(@1, "Bad pointer cast");
+
+      auto is_physical = static_cast<elex::Boolean>(ePhysical & $gen_phy);
+      auto do_not_gen  = static_cast<elex::Boolean>(eDoNotGen & $gen_phy);
+
+      scalar_field_shared->set_is_physical(is_physical);
+      scalar_field_shared->set_do_not_gen(do_not_gen);
+    }
+  ;
+
+non_decorated_scalar_field_declaration : 
+    ID[name] COLON type_identifier_expression[type_] 
+    { $$ = elex::struct_field_sm($name, $type_, false, false); }
+  ;
+
 
 // list-name[[len]] : list of type
 
 // TODO: make $len optional
 // TODO: type should not only be an id expression but also a struct name qualifier
 // TODO: add optional physical and do-not-randomize modifiers
-list_field_declaration : 
-    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF type_identifier_expression[type_] 
-    { $$ = elex::struct_field_list_sm($name, $len, $type_); }
+list_field_declaration :
+    non_decorated_list_field_declaration 
+    { $$ = $1; }
 
-  | ID[name] COLON LIST OF type_identifier_expression[type_] 
-    { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_); }
+  | do_not_gen_physical[gen_phy] non_decorated_list_field_declaration[list_field_decl]
+    {
+      $$ = $list_field_decl;
+      auto list_field_shared = std::dynamic_pointer_cast<elex::struct_field_list_sm_class>($list_field_decl);
+      if(list_field_shared == nullptr) error(@1, "Bad pointer cast");
+
+      auto is_physical = static_cast<elex::Boolean>(ePhysical & $gen_phy);
+      auto do_not_gen  = static_cast<elex::Boolean>(eDoNotGen & $gen_phy);
+
+      list_field_shared->set_is_physical(is_physical);
+      list_field_shared->set_do_not_gen(do_not_gen);
+    }
+
+
+non_decorated_list_field_declaration : 
+    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF type_identifier_expression[type_] 
+    { $$ = elex::struct_field_list_sm($name, $len, $type_, false, false); }
+
+  |  ID[name] COLON LIST OF type_identifier_expression[type_] 
+    { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_, false, false); }
     ;
 
 // list-name : list(key: key-name) of list-type
@@ -1037,8 +1092,17 @@ list_field_declaration :
 // TODO: type should not only be an id expression but also a struct name qualifier
 // TODO: add optional physical and do-not-randomize modifiers
 keyed_list_field_declaration : 
-    ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF type_identifier_expression[list_type] 
-    { $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type); }
+    do_not_gen_physical[gen_phy] ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF type_identifier_expression[list_type] 
+    { 
+        if($gen_phy & eDoNotGen){
+          auto is_physical = static_cast<elex::Boolean>($gen_phy & eDoNotGen);
+          $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type, is_physical); 
+        }
+        else {
+          error(@1, "Associative lists must be generatable!");
+          $$ = nullptr;
+        }
+    }
     ;
 
 method_declaration : 
