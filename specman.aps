@@ -41,7 +41,8 @@ module Specman begin
 
         constructor package(pkg_name: Symbol_) : Statement;
         constructor unit(unit_name: Symbol_; members: StructMembers) : Statement;
-        constructor struct_(struct_name: Symbol_; members: StructMembers) : Statement;
+        constructor struct_st(struct_name: Symbol_; members: StructMembers) : Statement;
+        constructor struct_like_st(struct_name: Symbol_; base_struct_name: Symbol_; members: StructMembers) : Statement;
         constructor extend_like(uos_name: Symbol_; base_uos_name: Symbol_; members: StructMembers) : Statement;
         constructor extend_when(uos_name: Symbol_; members: StructMembers) : Statement;
         constructor type_(type_id: Symbol_; type_expr: Expression)  : Statement;

@@ -171,14 +171,25 @@ auto unit(Symbol_ unit_name, StructMembers members) -> Statement {
     return Statement(new unit_class(unit_name, members));
 }
 
-auto struct__class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "struct_" << std::endl;
+auto struct_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_st" << std::endl;
     dump_Symbol_(stream, n+2, struct_name);
     members->dump(stream, n+2);
 }
 
-auto struct_(Symbol_ struct_name, StructMembers members) -> Statement {
-    return Statement(new struct__class(struct_name, members));
+auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement {
+    return Statement(new struct_st_class(struct_name, members));
+}
+
+auto struct_like_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "struct_like_st" << std::endl;
+    dump_Symbol_(stream, n+2, struct_name);
+    dump_Symbol_(stream, n+2, base_struct_name);
+    members->dump(stream, n+2);
+}
+
+auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) -> Statement {
+    return Statement(new struct_like_st_class(struct_name, base_struct_name, members));
 }
 
 auto extend_like_class::dump(std::ostream& stream, int n) -> void {

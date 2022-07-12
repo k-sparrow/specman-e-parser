@@ -552,8 +552,12 @@ import_statement :
     ;
 
 struct_statement : 
-    STRUCT ID LBRACE struct_members RBRACE { $$ = elex::struct_($2, $4); }
-    ;
+    STRUCT ID[struct_type] LBRACE struct_members[members] RBRACE 
+    { $$ = elex::struct_st($struct_type, $members); }
+
+  | STRUCT ID[struct_type] LIKE ID[base_struct_type] LBRACE struct_members[members] RBRACE 
+    { $$ = elex::struct_like_st($struct_type, $base_struct_type, $members); }
+  ;
 
 unit_statement   : 
     UNIT ID LBRACE struct_members RBRACE   { $$ = elex::unit($2, $4); }
@@ -656,6 +660,7 @@ non_term_struct_member :
     | expect_definition          { $$ = $1; }
     ; 
 
+// TODO: this is extremely ugly, needs to be entirely reworked
  coverage_group_declaration :
     COVER ID[event] IS EMPTY 
     { $$ = elex::empty_covergroup_sm($event); }

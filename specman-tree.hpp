@@ -279,12 +279,12 @@ class unit_class : public Statement_class {
 
 auto unit(Symbol_ unit_name, StructMembers members) -> Statement;
 
-class struct__class : public Statement_class {
+class struct_st_class : public Statement_class {
     protected:
         Symbol_ struct_name;
         StructMembers members;
     public:
-        struct__class(Symbol_ struct_name, StructMembers members) {
+        struct_st_class(Symbol_ struct_name, StructMembers members) {
             this->struct_name = struct_name;
             this->members = members;
         }
@@ -294,12 +294,36 @@ class struct__class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef struct__EXTRAS
-    struct__EXTRAS
+#ifdef struct_st_EXTRAS
+    struct_st_EXTRAS
 #endif
 };
 
-auto struct_(Symbol_ struct_name, StructMembers members) -> Statement;
+auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement;
+
+class struct_like_st_class : public Statement_class {
+    protected:
+        Symbol_ struct_name;
+        Symbol_ base_struct_name;
+        StructMembers members;
+    public:
+        struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) {
+            this->struct_name = struct_name;
+            this->base_struct_name = base_struct_name;
+            this->members = members;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef struct_like_st_EXTRAS
+    struct_like_st_EXTRAS
+#endif
+};
+
+auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) -> Statement;
 
 class extend_like_class : public Statement_class {
     protected:
