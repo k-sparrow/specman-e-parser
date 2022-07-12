@@ -605,12 +605,12 @@ class struct_field_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression len_expr;
-        Symbol_ list_type;
+        Expression list_base_type;
     public:
-        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Symbol_ list_type) {
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Expression list_base_type) {
             this->id = id;
             this->len_expr = len_expr;
-            this->list_type = list_type;
+            this->list_base_type = list_base_type;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -623,18 +623,18 @@ class struct_field_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, Symbol_ list_type) -> StructMember;
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type) -> StructMember;
 
 class struct_field_assoc_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression key_type;
-        Symbol_ list_type;
+        Expression list_base_type;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Symbol_ list_type) {
+        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Expression list_base_type) {
             this->id = id;
             this->key_type = key_type;
-            this->list_type = list_type;
+            this->list_base_type = list_base_type;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -647,7 +647,7 @@ class struct_field_assoc_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Symbol_ list_type) -> StructMember;
+auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type) -> StructMember;
 
 class method_dec_sm_class : public StructMember_class {
     protected:

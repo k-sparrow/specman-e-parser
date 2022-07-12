@@ -1016,7 +1016,7 @@ field_declaration :
 // TODO: add optional const modifier
 // TODO: add optional bits|bytes length specification
 scalar_field_declaration : 
-    ID[name] COLON id_expr[type_] { $$ = elex::struct_field_sm($name, $type_); }
+    ID[name] COLON type_identifier_expression[type_] { $$ = elex::struct_field_sm($name, $type_); }
     ;
 
 // list-name[[len]] : list of type
@@ -1025,7 +1025,11 @@ scalar_field_declaration :
 // TODO: type should not only be an id expression but also a struct name qualifier
 // TODO: add optional physical and do-not-randomize modifiers
 list_field_declaration : 
-    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF ID[type_] { $$ = elex::struct_field_list_sm($name, $len, $type_); }
+    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF type_identifier_expression[type_] 
+    { $$ = elex::struct_field_list_sm($name, $len, $type_); }
+
+  | ID[name] COLON LIST OF type_identifier_expression[type_] 
+    { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_); }
     ;
 
 // list-name : list(key: key-name) of list-type
@@ -1033,7 +1037,8 @@ list_field_declaration :
 // TODO: type should not only be an id expression but also a struct name qualifier
 // TODO: add optional physical and do-not-randomize modifiers
 keyed_list_field_declaration : 
-    ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF ID[list_type] { $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type); }
+    ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF type_identifier_expression[list_type] 
+    { $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type); }
     ;
 
 method_declaration : 

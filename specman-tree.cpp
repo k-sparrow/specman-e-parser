@@ -321,22 +321,22 @@ auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
     len_expr->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, list_type);
+    list_base_type->dump(stream, n+2);
 }
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, Symbol_ list_type) -> StructMember {
-    return StructMember(new struct_field_list_sm_class(id, len_expr, list_type));
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type) -> StructMember {
+    return StructMember(new struct_field_list_sm_class(id, len_expr, list_base_type));
 }
 
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_assoc_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
     key_type->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, list_type);
+    list_base_type->dump(stream, n+2);
 }
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Symbol_ list_type) -> StructMember {
-    return StructMember(new struct_field_assoc_list_sm_class(id, key_type, list_type));
+auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type) -> StructMember {
+    return StructMember(new struct_field_assoc_list_sm_class(id, key_type, list_base_type));
 }
 
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
