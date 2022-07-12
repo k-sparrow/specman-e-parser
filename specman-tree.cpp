@@ -192,25 +192,14 @@ auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers
     return Statement(new struct_like_st_class(struct_name, base_struct_name, members));
 }
 
-auto extend_like_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "extend_like" << std::endl;
-    dump_Symbol_(stream, n+2, uos_name);
-    dump_Symbol_(stream, n+2, base_uos_name);
+auto extend_struct_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "extend_struct_st" << std::endl;
+    struct_type_name->dump(stream, n+2);
     members->dump(stream, n+2);
 }
 
-auto extend_like(Symbol_ uos_name, Symbol_ base_uos_name, StructMembers members) -> Statement {
-    return Statement(new extend_like_class(uos_name, base_uos_name, members));
-}
-
-auto extend_when_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "extend_when" << std::endl;
-    dump_Symbol_(stream, n+2, uos_name);
-    members->dump(stream, n+2);
-}
-
-auto extend_when(Symbol_ uos_name, StructMembers members) -> Statement {
-    return Statement(new extend_when_class(uos_name, members));
+auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement {
+    return Statement(new extend_struct_st_class(struct_type_name, members));
 }
 
 auto type__class::dump(std::ostream& stream, int n) -> void {

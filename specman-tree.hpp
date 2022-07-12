@@ -325,15 +325,13 @@ class struct_like_st_class : public Statement_class {
 
 auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) -> Statement;
 
-class extend_like_class : public Statement_class {
+class extend_struct_st_class : public Statement_class {
     protected:
-        Symbol_ uos_name;
-        Symbol_ base_uos_name;
+        Expressions struct_type_name;
         StructMembers members;
     public:
-        extend_like_class(Symbol_ uos_name, Symbol_ base_uos_name, StructMembers members) {
-            this->uos_name = uos_name;
-            this->base_uos_name = base_uos_name;
+        extend_struct_st_class(Expressions struct_type_name, StructMembers members) {
+            this->struct_type_name = struct_type_name;
             this->members = members;
         }
 
@@ -342,34 +340,12 @@ class extend_like_class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef extend_like_EXTRAS
-    extend_like_EXTRAS
+#ifdef extend_struct_st_EXTRAS
+    extend_struct_st_EXTRAS
 #endif
 };
 
-auto extend_like(Symbol_ uos_name, Symbol_ base_uos_name, StructMembers members) -> Statement;
-
-class extend_when_class : public Statement_class {
-    protected:
-        Symbol_ uos_name;
-        StructMembers members;
-    public:
-        extend_when_class(Symbol_ uos_name, StructMembers members) {
-            this->uos_name = uos_name;
-            this->members = members;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Statement_SHARED_EXTRAS
-    Statement_SHARED_EXTRAS
-#endif
-#ifdef extend_when_EXTRAS
-    extend_when_EXTRAS
-#endif
-};
-
-auto extend_when(Symbol_ uos_name, StructMembers members) -> Statement;
+auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement;
 
 class type__class : public Statement_class {
     protected:

@@ -578,8 +578,8 @@ package_statement :
     ;
 
 extend_struct_unit_statement : 
-      EXTEND ID LIKE ID LBRACE struct_members RBRACE { $$ = elex::extend_like($2, $4, $6); }
-    | EXTEND ID LBRACE struct_members RBRACE         { $$ = elex::extend_when($2, $4); }
+    EXTEND struct_type_modifiers[modifiers] LBRACE struct_members[members] RBRACE 
+    { $$ = elex::extend_struct_st($2, $4); }
     ;
 
 type_statement : 
@@ -1028,10 +1028,7 @@ do_not_gen_physical:
 
 // name : type
 
-// TODO: type should not only be an id expression but also a struct name qualifier
-// TODO: add optional physical and do-not-randomize modifiers
 // TODO: add optional const modifier
-// TODO: add optional bits|bytes length specification
 scalar_field_declaration : 
     non_decorated_scalar_field_declaration
     { $$ = $1; }
@@ -1057,10 +1054,6 @@ non_decorated_scalar_field_declaration :
 
 
 // list-name[[len]] : list of type
-
-// TODO: make $len optional
-// TODO: type should not only be an id expression but also a struct name qualifier
-// TODO: add optional physical and do-not-randomize modifiers
 list_field_declaration :
     non_decorated_list_field_declaration 
     { $$ = $1; }
@@ -1087,10 +1080,7 @@ non_decorated_list_field_declaration :
     { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_, false, false); }
     ;
 
-// list-name : list(key: key-name) of list-type
-
-// TODO: type should not only be an id expression but also a struct name qualifier
-// TODO: add optional physical and do-not-randomize modifiers
+// list-name : !list(key: key-name) of list-type
 keyed_list_field_declaration : 
     do_not_gen_physical[gen_phy] ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF type_identifier_expression[list_type] 
     { 
