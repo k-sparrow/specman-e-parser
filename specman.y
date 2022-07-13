@@ -1626,8 +1626,16 @@ hdl_pathname_expression :
     ;
 
 hier_ref_expression : 
-    dot_separated_expressions { $$ = elex::struct_hier_ref_expr($1); }
-    ;
+    dot_separated_expressions 
+    { $$ = elex::struct_hier_ref_expr($1); }
+
+  | DOT dot_separated_expressions 
+    { 
+      auto it_expr = elex::it_expr();
+      auto complete_hierarchy = elex::append_Expressions(elex::single_Expressions(it_expr), $2);
+      $$ = elex::struct_hier_ref_expr(complete_hierarchy);
+    }
+  ;
 
 dot_separated_expressions : 
       id_expr                                { $$ = elex::single_Expressions($1); }
