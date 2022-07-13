@@ -210,6 +210,8 @@ module Specman begin
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
         constructor type_identifier_expr(modifiers: Expressions) : Expression;
+        constructor type_introspec_expr(field_id: Expression; type_id: Expression) : Expression;
+        constructor type_introspec_negation_expr(field_id: Expression; type_id: Expression) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;
         constructor ternary_operator_expr(condition: Expression; true_expr: Expression; false_expr: Expression) : Expression;

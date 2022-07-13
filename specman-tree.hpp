@@ -3329,6 +3329,50 @@ class type_identifier_expr_class : public Expression_class {
 
 auto type_identifier_expr(Expressions modifiers) -> Expression;
 
+class type_introspec_expr_class : public Expression_class {
+    protected:
+        Expression field_id;
+        Expression type_id;
+    public:
+        type_introspec_expr_class(Expression field_id, Expression type_id) {
+            this->field_id = field_id;
+            this->type_id = type_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef type_introspec_expr_EXTRAS
+    type_introspec_expr_EXTRAS
+#endif
+};
+
+auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression;
+
+class type_introspec_negation_expr_class : public Expression_class {
+    protected:
+        Expression field_id;
+        Expression type_id;
+    public:
+        type_introspec_negation_expr_class(Expression field_id, Expression type_id) {
+            this->field_id = field_id;
+            this->type_id = type_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef type_introspec_negation_expr_EXTRAS
+    type_introspec_negation_expr_EXTRAS
+#endif
+};
+
+auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Expression;
+
 class struct_hier_ref_expr_class : public Expression_class {
     protected:
         Expressions hiers;

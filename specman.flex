@@ -105,6 +105,7 @@ exec        (exec)
 if          (if)
 else        (else)
 is_a	    (is{ws}a{ws})
+is_not_a    (is{ws}not{ws}a{ws})
 is	        (is)
 cover	    (cover)
 global	    (global)
@@ -287,6 +288,7 @@ number  [0-9]+
 {if}   	    { return yy::parser::make_IF(Location()); }
 {else}      { return yy::parser::make_ELSE(Location()); }
 {is_a}	    { return yy::parser::make_IS_A(Location()); } 
+{is_not_a}  { return yy::parser::make_IS_NOT_A(Location()); } 
 {is}	    { return yy::parser::make_IS(Location()); }
 {cover}	    { return yy::parser::make_COVER(Location()); }
 {global}    { return yy::parser::make_GLOBAL(Location()); }

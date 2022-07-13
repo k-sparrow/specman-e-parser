@@ -1555,6 +1555,26 @@ auto type_identifier_expr(Expressions modifiers) -> Expression {
     return Expression(new type_identifier_expr_class(modifiers));
 }
 
+auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_introspec_expr" << std::endl;
+    field_id->dump(stream, n+2);
+    type_id->dump(stream, n+2);
+}
+
+auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression {
+    return Expression(new type_introspec_expr_class(field_id, type_id));
+}
+
+auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_introspec_negation_expr" << std::endl;
+    field_id->dump(stream, n+2);
+    type_id->dump(stream, n+2);
+}
+
+auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Expression {
+    return Expression(new type_introspec_negation_expr_class(field_id, type_id));
+}
+
 auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_hier_ref_expr" << std::endl;
     hiers->dump(stream, n+2);

@@ -167,6 +167,7 @@
 %token BEFORE	  
 %token IN_TABLE 
 %token IS_A	       
+%token IS_NOT_A	       
 %token IS	      
 %token NOT	     
 %token RANGE	   
@@ -441,6 +442,7 @@
 %nterm <elex::Expression>   comparison_expression
 %nterm <elex::Expression>   inclusion_expression
 %nterm <elex::Expression>   implication_expression
+%nterm <elex::Expression>   type_instrospection_expression
 
 /* Arithmetic Expressions */ 
 %nterm <elex::Expression>   arithmetic_expression
@@ -1428,49 +1430,67 @@ bitwise_expression :
     ;
 
 unary_bitwise_expression : 
-    BTWS_NOT_OP expression { $$ = elex::bitwise_not_expr($2); }
-    // TODO: $2 should be numeric or HDL pathname only - refactor this
-    ;
+  BTWS_NOT_OP non_term_expression { $$ = elex::bitwise_not_expr($2); }
+  // TODO: $2 should be numeric or HDL pathname only - refactor this
+  ;
 
 binary_bitwise_expression : 
-      non_term_expression BTWS_AND_OP non_term_expression { $$ = elex::bitwise_and_expr($1, $3); }
-    | non_term_expression BTWS_OR_OP  non_term_expression { $$ = elex::bitwise_or_expr($1, $3); }
-    | non_term_expression XOR_OP      non_term_expression { $$ = elex::bitwise_xor_expr($1, $3); }
-    ;
+    non_term_expression BTWS_AND_OP non_term_expression { $$ = elex::bitwise_and_expr($1, $3); }
+  | non_term_expression BTWS_OR_OP  non_term_expression { $$ = elex::bitwise_or_expr($1, $3); }
+  | non_term_expression XOR_OP      non_term_expression { $$ = elex::bitwise_xor_expr($1, $3); }
+  ;
 
 shift_expression : 
-      non_term_expression LSHIFT non_term_expression { $$ = elex::shift_left_expr($1, $3); }
-    | non_term_expression RSHIFT non_term_expression { $$ = elex::right_left_expr($1, $3); }
-    ;
+    non_term_expression LSHIFT non_term_expression { $$ = elex::shift_left_expr($1, $3); }
+  | non_term_expression RSHIFT non_term_expression { $$ = elex::right_left_expr($1, $3); }
+  ;
 
 logical_expression : 
-      LPAREN logical_expression RPAREN { $$ = $2; }
-    | unary_logical_expression         { $$ = $1; }
-    | binary_logical_expression        { $$ = $1; }
-    | implication_expression           { $$ = $1; }
-    | comparison_expression            { $$ = $1; }
-    | inclusion_expression             { $$ = $1; }
-    ;
+    LPAREN logical_expression RPAREN { $$ = $2; }
+  | unary_logical_expression         { $$ = $1; }
+  | binary_logical_expression        { $$ = $1; }
+  | implication_expression           { $$ = $1; }
+  | comparison_expression            { $$ = $1; }
+  | inclusion_expression             { $$ = $1; }
+  | type_instrospection_expression   { $$ = $1; }
+  ;
 
 unary_logical_expression : 
-      LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
-    | NOT            non_term_expression   { $$ = elex::logical_not_expr($2); }
-    ;
+    LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
+  | NOT            non_term_expression   { $$ = elex::logical_not_expr($2); }
+  ;
 
 binary_logical_expression : 
-      non_term_expression LOGICAL_AND_OP non_term_expression { $$ = elex::logical_and_expr($1, $3); }
-    | non_term_expression AND non_term_expression            { $$ = elex::logical_and_expr($1, $3); }
-    | non_term_expression LOGICAL_OR_OP non_term_expression  { $$ = elex::logical_or_expr($1, $3); }
-    | non_term_expression OR non_term_expression             { $$ = elex::logical_or_expr($1, $3); }
-    ;
+    non_term_expression LOGICAL_AND_OP non_term_expression { $$ = elex::logical_and_expr($1, $3); }
+  | non_term_expression AND non_term_expression            { $$ = elex::logical_and_expr($1, $3); }
+  | non_term_expression LOGICAL_OR_OP non_term_expression  { $$ = elex::logical_or_expr($1, $3); }
+  | non_term_expression OR non_term_expression             { $$ = elex::logical_or_expr($1, $3); }
+  ;
 
 implication_expression : 
-    non_term_expression IMPLICATION non_term_expression { $$ = elex::implication_expr($1, $3); }
-    ;
+  non_term_expression IMPLICATION non_term_expression { $$ = elex::implication_expr($1, $3); }
+  ;
 
 inclusion_expression : 
-    non_term_expression IN non_term_expression          { $$ = elex::in_expr($1, $3); }
-    ;
+  non_term_expression IN non_term_expression          { $$ = elex::in_expr($1, $3); }
+  ;
+
+/* 
+    struct-field is a subtype
+    struct-field is not a subtype
+
+   as opposed to other low level fundamental expressions,
+   type introspection cannot be used with non_term_expression
+   as a building block since it only accepts hiearachy id and type id expressions
+   
+*/
+type_instrospection_expression :
+    hier_ref_expression[field] IS_A type_identifier_expression[type_] 
+    { $$ = elex::type_introspec_expr($field, $type_); }
+
+  | hier_ref_expression[field] IS_NOT_A type_identifier_expression[type_] 
+  { $$ = elex::type_introspec_negation_expr($field, $type_); }
+  ;
 
 arithmetic_expression : 
       unary_arithmetic_expression  { $$ = $1; }
