@@ -195,7 +195,32 @@ name    ({alpha}{alphanum}*)
 num1    [-+]?{dig}+\.?([eE][-+]?{dig}+)?
 num2    [-+]?{dig}*\.{dig}+([eE][-+]?{dig}+)?
 /* number  {num1}|{num2} */
-number  [0-9]+
+
+sized_dec_num  [dD][0-9]+
+sized_bin_num  [bB][10]+
+sized_oct_num  [oO][0-7]+
+sized_hex_num  [xXfF][a-fA-Z0-9]+
+size_number    [1-9][0-9]*'({sized_dec_num}|{sized_bin_num}|{sized_oct_num}|{sized_hex_num})
+
+unszd_dec_num  [-+]?[0-9_]+
+unszd_bin_num  0b[01_]+
+unszd_hex_num  0x[0-9a-fA-F_]+
+unszd_oct_num  0o[0-7_]+
+unszd_kilo_num [1-9][0-9]*[kK]
+unszd_mega_num [1-9][0-9]*[mM]
+unszd_number   {unszd_dec_num}|{unszd_bin_num}|{unszd_hex_num}|{unszd_oct_num}|{unszd_kilo_num}|{unszd_mega_num}
+
+number {unszd_number}|{size_number}
+
+mvl_bin_chars  [01zZxXuUlLwWnN_]+
+mvl_dec_chars  [0-9zZxXuUlLwWnN_]+
+mvl_oct_chars  [0-7zZxXuUlLwWnN_]+
+mvl_hex_chars  [0-9a-fA-FzZxXuUlLwWnN_]+
+sized_mvl      [1-9][0-9]*'[bBoOhHdD]({mvl_bin_chars}|{mvl_dec_chars}|{mvl_oct_chars}|{mvl_hex_chars})
+
+mvl_single     MVL_[UX01ZWLHN]
+mvl            {mvl_single}|{sized_mvl}
+
 %%
 
 
@@ -374,7 +399,8 @@ number  [0-9]+
 {implication} { return yy::parser::make_IMPLICATION(Location()); }
 
     /* ------------------ Operators ----------------- */
-    /* ------------------ Names & Numbers & String Literals ----------------- */
+    /* ------------------ Names & Numbers & Literals ----------------- */
+
 {number}  { 
     std::string number(YYText());
     if(m_driver.inttable.find(number) == std::end(m_driver.inttable)) {
@@ -382,6 +408,14 @@ number  [0-9]+
     }
     // return yy::parser::make_NUMBER(std::stoi(YYText()), Location()); 
     return yy::parser::make_NUMBER(m_driver.inttable[number], Location()); 
+}
+
+{mvl}     {
+    std::string str(YYText());
+    if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
+        m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
+    }
+    return yy::parser::make_MVL_LITERAL(m_driver.strtable[str], Location()); 
 }
 
 {name}    { 
@@ -397,7 +431,9 @@ number  [0-9]+
     if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
         m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
     }
-    return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], Location()); }
+    return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], Location()); 
+}
+
 
 <<EOF>>   { return yyterminate(); }
 

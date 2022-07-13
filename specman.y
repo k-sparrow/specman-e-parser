@@ -307,11 +307,13 @@
 %token DDOT
 %token DOT 
 %token IMPLICATION 
+
 /* ------------------ Operators ----------------- */
 
 /* ------------------ Literals ------------------ */
 %token <elex::Symbol_> SNG_QUOTED_STRING_LITERAL   
 %token <elex::Symbol_> STRING_LITERAL
+%token <elex::Symbol_> MVL_LITERAL
 /* ------------------ Literals ------------------ */
 
 %token <elex::Symbol_> ID
