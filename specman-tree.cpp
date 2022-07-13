@@ -1635,11 +1635,11 @@ auto list_items_constraint_expr_class::dump(std::ostream& stream, int n) -> void
     stream << pad(n) << "list_items_constraint_expr" << std::endl;
     item_name->dump(stream, n+2);
     gen_item->dump(stream, n+2);
-    constraint->dump(stream, n+2);
+    constraints->dump(stream, n+2);
 }
 
-auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression {
-    return Expression(new list_items_constraint_expr_class(item_name, gen_item, constraint));
+auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expressions constraints) -> Expression {
+    return Expression(new list_items_constraint_expr_class(item_name, gen_item, constraints));
 }
 
 auto field_type_constraint_by_type_expr_class::dump(std::ostream& stream, int n) -> void {

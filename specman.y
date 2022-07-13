@@ -1669,7 +1669,7 @@ constraint_expression :
     | TYPE hier_ref_expression[lhs] EQ hier_ref_expression[rhs]
       { $$ = elex::field_type_constraint_by_field_expr($lhs, $rhs); }
     | ALL OF LBRACE constriant_expression_block RBRACE { $$ = elex::all_of_constraint_expr($4); } 
-    | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE terminated_constraint_expression[constraint] RBRACE 
+    | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE constriant_expression_block[constraint] RBRACE 
       {
           $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint);
       }

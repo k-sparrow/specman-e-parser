@@ -220,7 +220,7 @@ module Specman begin
         constructor constraint_expr(bool_expr: Expression) : Expression; 
         constructor soft_constraint_expr(bool_expr: Expression) : Expression;
         constructor all_of_constraint_expr(constraints: Expressions) : Expression;
-        constructor list_items_constraint_expr(item_name: Expression; gen_item: Expression; constraint: Expression) : Expression;
+        constructor list_items_constraint_expr(item_name: Expression; gen_item: Expression; constraints: Expressions) : Expression;
         constructor field_type_constraint_by_type_expr(field_ : Expression; type_: Expression) : Expression;
         constructor field_type_constraint_by_field_expr(field_ : Expression; type_: Expression) : Expression;
         constructor distribution_constraint_expr(gen_item: Expression; distribution: Cases) : Expression;

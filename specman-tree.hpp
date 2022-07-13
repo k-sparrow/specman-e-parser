@@ -3501,12 +3501,12 @@ class list_items_constraint_expr_class : public Expression_class {
     protected:
         Expression item_name;
         Expression gen_item;
-        Expression constraint;
+        Expressions constraints;
     public:
-        list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expression constraint) {
+        list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expressions constraints) {
             this->item_name = item_name;
             this->gen_item = gen_item;
-            this->constraint = constraint;
+            this->constraints = constraints;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3519,7 +3519,7 @@ class list_items_constraint_expr_class : public Expression_class {
 #endif
 };
 
-auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expression constraint) -> Expression;
+auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expressions constraints) -> Expression;
 
 class field_type_constraint_by_type_expr_class : public Expression_class {
     protected:
