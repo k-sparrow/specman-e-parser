@@ -1,6 +1,6 @@
 
 LANG=specman
-CC = g++-9
+CC = g++
 CFLAGS = -std=c++17 -ggdb3 -Wall -Wno-unused -Wno-write-strings -Wno-sign-compare
 FSRC  = ${LANG}.flex
 FCSRC = scanner.cpp
