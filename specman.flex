@@ -2,7 +2,7 @@
 %option c++
 %option nodefault
 %option yyclass="scanner"
-
+%option yylineno
 
 %{
     #include <iostream>
@@ -13,9 +13,11 @@
     using namespace std;
     int mylineno = 0;
     
-    #define yyterminate() yy::parser::make_END(yy::location())
+    #define yyterminate() yy::parser::make_END(Location())
 
-    using yy::location;
+    // update the location of the current token any time a rule is matched
+    // consider removing this option if yyless/yymore will be used in the future
+    #define YY_USER_ACTION updateLocation();
 %}
 
 int start_condition = INITIAL;
@@ -201,173 +203,173 @@ number  [0-9]+
 \n        mylineno++;
 
     /* ------------------ Keywords ------------------ */
-{while}     { return yy::parser::make_WHILE(location()); }
-{for}       { return yy::parser::make_FOR(location()); }
-{in}        { return yy::parser::make_IN(location()); }
-{do}        { return yy::parser::make_DO(location()); }
-{with}      { return yy::parser::make_WITH(location()); }
-{when}      { return yy::parser::make_WHEN(location()); }
-{struct}	{ return yy::parser::make_STRUCT(location()); }
-{unit}	    { return yy::parser::make_UNIT(location()); }
-{enclosing}	{ return yy::parser::make_ENCLOSING(location()); }
-{using}	    { return yy::parser::make_USING(location()); }
-{each}	    { return yy::parser::make_EACH(location()); }
-{prev}	    { return yy::parser::make_PREV(location()); }
-{index}	    { return yy::parser::make_INDEX(location()); }
-{within}	{ return yy::parser::make_WITHIN(location()); }
-{gen}	    { return yy::parser::make_GEN(location()); }
-{before}	{ return yy::parser::make_BEFORE(location()); }
-{in_table}	{ return yy::parser::make_IN_TABLE(location()); }
-{not}	    { return yy::parser::make_NOT(location()); }
-{range}	    { return yy::parser::make_RANGE(location()); }
-{empty}	    { return yy::parser::make_EMPTY(location()); }
-{now}	    { return yy::parser::make_NOW(location()); } 
-{or}	    { return yy::parser::make_OR(location()); }
-{and}	    { return yy::parser::make_AND(location()); }
-{nxor}	    { return yy::parser::make_NXOR(location()); }
-{xor}	    { return yy::parser::make_XOR(location()); }
-{nor}	    { return yy::parser::make_NOR(location()); }
-{nand}  	{ return yy::parser::make_NAND(location()); }
-{all}	    { return yy::parser::make_ALL(location()); }
-{first}	    { return yy::parser::make_FIRST(location()); }
-{of}	    { return yy::parser::make_OF(location()); }
-{me}	    { return yy::parser::make_ME(location()); } 
-{it}	    { return yy::parser::make_IT(location()); } 
-{keeping}   { return yy::parser::make_KEEPING(location());  }
-{keep}      { return yy::parser::make_KEEP(location());  }
-{bind}      { return yy::parser::make_BIND(location());  }
-{like}      { return yy::parser::make_LIKE(location());  }
-{extend}    { return yy::parser::make_EXTEND(location());  }
-{simple}    { return yy::parser::make_SIMPLE(location());  }
-{port}      { return yy::parser::make_PORT(location());  }
-{method}    { return yy::parser::make_METHOD(location());  }
-{list}      { return yy::parser::make_LIST(location());  }
-{bits}      { return yy::parser::make_BITS(location());  }
-{bytes}     { return yy::parser::make_BYTES(location());  }
-{type}      { return yy::parser::make_TYPE(location());  }
+{while}     { return yy::parser::make_WHILE(Location()); }
+{for}       { return yy::parser::make_FOR(Location()); }
+{in}        { return yy::parser::make_IN(Location()); }
+{do}        { return yy::parser::make_DO(Location()); }
+{with}      { return yy::parser::make_WITH(Location()); }
+{when}      { return yy::parser::make_WHEN(Location()); }
+{struct}	{ return yy::parser::make_STRUCT(Location()); }
+{unit}	    { return yy::parser::make_UNIT(Location()); }
+{enclosing}	{ return yy::parser::make_ENCLOSING(Location()); }
+{using}	    { return yy::parser::make_USING(Location()); }
+{each}	    { return yy::parser::make_EACH(Location()); }
+{prev}	    { return yy::parser::make_PREV(Location()); }
+{index}	    { return yy::parser::make_INDEX(Location()); }
+{within}	{ return yy::parser::make_WITHIN(Location()); }
+{gen}	    { return yy::parser::make_GEN(Location()); }
+{before}	{ return yy::parser::make_BEFORE(Location()); }
+{in_table}	{ return yy::parser::make_IN_TABLE(Location()); }
+{not}	    { return yy::parser::make_NOT(Location()); }
+{range}	    { return yy::parser::make_RANGE(Location()); }
+{empty}	    { return yy::parser::make_EMPTY(Location()); }
+{now}	    { return yy::parser::make_NOW(Location()); } 
+{or}	    { return yy::parser::make_OR(Location()); }
+{and}	    { return yy::parser::make_AND(Location()); }
+{nxor}	    { return yy::parser::make_NXOR(Location()); }
+{xor}	    { return yy::parser::make_XOR(Location()); }
+{nor}	    { return yy::parser::make_NOR(Location()); }
+{nand}  	{ return yy::parser::make_NAND(Location()); }
+{all}	    { return yy::parser::make_ALL(Location()); }
+{first}	    { return yy::parser::make_FIRST(Location()); }
+{of}	    { return yy::parser::make_OF(Location()); }
+{me}	    { return yy::parser::make_ME(Location()); } 
+{it}	    { return yy::parser::make_IT(Location()); } 
+{keeping}   { return yy::parser::make_KEEPING(Location());  }
+{keep}      { return yy::parser::make_KEEP(Location());  }
+{bind}      { return yy::parser::make_BIND(Location());  }
+{like}      { return yy::parser::make_LIKE(Location());  }
+{extend}    { return yy::parser::make_EXTEND(Location());  }
+{simple}    { return yy::parser::make_SIMPLE(Location());  }
+{port}      { return yy::parser::make_PORT(Location());  }
+{method}    { return yy::parser::make_METHOD(Location());  }
+{list}      { return yy::parser::make_LIST(Location());  }
+{bits}      { return yy::parser::make_BITS(Location());  }
+{bytes}     { return yy::parser::make_BYTES(Location());  }
+{type}      { return yy::parser::make_TYPE(Location());  }
 
-{cycle}	    { return yy::parser::make_CYCLE(location()); }
-{detach}	{ return yy::parser::make_DETACH(location()); }
-{true}	    { return yy::parser::make_TRUE(location()); }
-{false}	    { return yy::parser::make_FALSE(location()); }
-{rise}	    { return yy::parser::make_RISE(location()); } 
-{fall}	    { return yy::parser::make_FALL(location()); } 
-{change}	{ return yy::parser::make_CHANGE(location()); }
-{delay}	    { return yy::parser::make_DELAY(location()); }
-{consume}	{ return yy::parser::make_CONSUME(location()); }
+{cycle}	    { return yy::parser::make_CYCLE(Location()); }
+{detach}	{ return yy::parser::make_DETACH(Location()); }
+{true}	    { return yy::parser::make_TRUE(Location()); }
+{false}	    { return yy::parser::make_FALSE(Location()); }
+{rise}	    { return yy::parser::make_RISE(Location()); } 
+{fall}	    { return yy::parser::make_FALL(Location()); } 
+{change}	{ return yy::parser::make_CHANGE(Location()); }
+{delay}	    { return yy::parser::make_DELAY(Location()); }
+{consume}	{ return yy::parser::make_CONSUME(Location()); }
 
-{fail}	    { return yy::parser::make_FAIL(location()); } 
-{eventually} { return yy::parser::make_EVENTUALLY(location()); }
-{start}	    { return yy::parser::make_START(location()); }
-{wait}	    { return yy::parser::make_WAIT(location()); }
-{sync}	    { return yy::parser::make_SYNC(location()); }
-{only}	    { return yy::parser::make_ONLY(location()); }
-{also}	    { return yy::parser::make_ALSO(location()); }
-{undefined}	{ return yy::parser::make_UNDEFINED(location()); }
-{event}	    { return yy::parser::make_EVENT(location()); }
-{package}	{ return yy::parser::make_PACKAGE(location()); }
-{private}	{ return yy::parser::make_PRIVATE(location()); }
-{protected}	{ return yy::parser::make_PROTECTED(location()); }
-{sequence}	{ return yy::parser::make_SEQUENCE(location()); }
-{that}	    { return yy::parser::make_THAT(location()); }
-{assume}	{ return yy::parser::make_ASSUME(location()); }
-{expect}	{ return yy::parser::make_EXPECT(location()); }
-{assert}	{ return yy::parser::make_ASSERT(location()); }
-{step}	    { return yy::parser::make_STEP(location()); }
-{new}	    { return yy::parser::make_NEW(location()); }
-{as_a}	    { return yy::parser::make_AS_A(location()); }
-{soft}	    { return yy::parser::make_SOFT(location()); }
-{import}	{ return yy::parser::make_IMPORT(location()); }
-{select}	{ return yy::parser::make_SELECT(location()); }
-{key}   	{ return yy::parser::make_KEY(location()); }
-{on}   	    { return yy::parser::make_ON(location()); }
-{exec}   	{ return yy::parser::make_EXEC(location()); }
-{if}   	    { return yy::parser::make_IF(location()); }
-{else}      { return yy::parser::make_ELSE(location()); }
-{is_a}	    { return yy::parser::make_IS_A(location()); } 
-{is}	    { return yy::parser::make_IS(location()); }
-{cover}	    { return yy::parser::make_COVER(location()); }
-{global}    { return yy::parser::make_GLOBAL(location()); }
-{no_collect} { return yy::parser::make_NO_COLLECT(location()); }
-{per_unit_instance} { return yy::parser::make_PER_UNIT_INSTANCE(location()); }
-{e_path}            { return yy::parser::make_E_PATH(location()); }
-{radix}     { return yy::parser::make_RADIX(location()); }
-{dec}		{ return yy::parser::make_DEC(location()); }
-{hex}		{ return yy::parser::make_HEX(location()); }
-{bin}		{ return yy::parser::make_BIN(location()); }
-{text}		{ return yy::parser::make_TEXT(location()); }
-{weight}	{ return yy::parser::make_WEIGHT(location()); }
-{at_least}	{ return yy::parser::make_AT_LEAST(location()); }
-{ignore}	{ return yy::parser::make_IGNORE(location()); }
-{illegal}	{ return yy::parser::make_ILLEGAL(location()); }
-{no_trace}	{ return yy::parser::make_NO_TRACE(location()); }
-{num_of_buckets}	    { return yy::parser::make_NUM_OF_BUCKETS(location()); }
-{per_instance}	    { return yy::parser::make_PER_INSTANCE(location()); }
-{cross}	        { return yy::parser::make_CROSS(location()); }
-{transition}	{ return yy::parser::make_TRANSITION(location()); }
-{item}		            { return yy::parser::make_ITEM(location()); }                
-{created_kind}		    { return yy::parser::make_CREATED_KIND(location()); }        
-{created_driver}		{ return yy::parser::make_CREATED_DRIVER(location()); }      
-{sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(location()); }       
-{sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(location()); }
+{fail}	    { return yy::parser::make_FAIL(Location()); } 
+{eventually} { return yy::parser::make_EVENTUALLY(Location()); }
+{start}	    { return yy::parser::make_START(Location()); }
+{wait}	    { return yy::parser::make_WAIT(Location()); }
+{sync}	    { return yy::parser::make_SYNC(Location()); }
+{only}	    { return yy::parser::make_ONLY(Location()); }
+{also}	    { return yy::parser::make_ALSO(Location()); }
+{undefined}	{ return yy::parser::make_UNDEFINED(Location()); }
+{event}	    { return yy::parser::make_EVENT(Location()); }
+{package}	{ return yy::parser::make_PACKAGE(Location()); }
+{private}	{ return yy::parser::make_PRIVATE(Location()); }
+{protected}	{ return yy::parser::make_PROTECTED(Location()); }
+{sequence}	{ return yy::parser::make_SEQUENCE(Location()); }
+{that}	    { return yy::parser::make_THAT(Location()); }
+{assume}	{ return yy::parser::make_ASSUME(Location()); }
+{expect}	{ return yy::parser::make_EXPECT(Location()); }
+{assert}	{ return yy::parser::make_ASSERT(Location()); }
+{step}	    { return yy::parser::make_STEP(Location()); }
+{new}	    { return yy::parser::make_NEW(Location()); }
+{as_a}	    { return yy::parser::make_AS_A(Location()); }
+{soft}	    { return yy::parser::make_SOFT(Location()); }
+{import}	{ return yy::parser::make_IMPORT(Location()); }
+{select}	{ return yy::parser::make_SELECT(Location()); }
+{key}   	{ return yy::parser::make_KEY(Location()); }
+{on}   	    { return yy::parser::make_ON(Location()); }
+{exec}   	{ return yy::parser::make_EXEC(Location()); }
+{if}   	    { return yy::parser::make_IF(Location()); }
+{else}      { return yy::parser::make_ELSE(Location()); }
+{is_a}	    { return yy::parser::make_IS_A(Location()); } 
+{is}	    { return yy::parser::make_IS(Location()); }
+{cover}	    { return yy::parser::make_COVER(Location()); }
+{global}    { return yy::parser::make_GLOBAL(Location()); }
+{no_collect} { return yy::parser::make_NO_COLLECT(Location()); }
+{per_unit_instance} { return yy::parser::make_PER_UNIT_INSTANCE(Location()); }
+{e_path}            { return yy::parser::make_E_PATH(Location()); }
+{radix}     { return yy::parser::make_RADIX(Location()); }
+{dec}		{ return yy::parser::make_DEC(Location()); }
+{hex}		{ return yy::parser::make_HEX(Location()); }
+{bin}		{ return yy::parser::make_BIN(Location()); }
+{text}		{ return yy::parser::make_TEXT(Location()); }
+{weight}	{ return yy::parser::make_WEIGHT(Location()); }
+{at_least}	{ return yy::parser::make_AT_LEAST(Location()); }
+{ignore}	{ return yy::parser::make_IGNORE(Location()); }
+{illegal}	{ return yy::parser::make_ILLEGAL(Location()); }
+{no_trace}	{ return yy::parser::make_NO_TRACE(Location()); }
+{num_of_buckets}	    { return yy::parser::make_NUM_OF_BUCKETS(Location()); }
+{per_instance}	    { return yy::parser::make_PER_INSTANCE(Location()); }
+{cross}	        { return yy::parser::make_CROSS(Location()); }
+{transition}	{ return yy::parser::make_TRANSITION(Location()); }
+{item}		            { return yy::parser::make_ITEM(Location()); }                
+{created_kind}		    { return yy::parser::make_CREATED_KIND(Location()); }        
+{created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      
+{sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(Location()); }       
+{sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(Location()); }
 
-{null}	    { return yy::parser::make_NULL_(location()); }
-{true_literal}	{ return yy::parser::make_TRUE_LITERAL(location()); }    
-{false_literal}	{ return yy::parser::make_FALSE_LITERAL(location()); }
+{null}	    { return yy::parser::make_NULL_(Location()); }
+{true_literal}	{ return yy::parser::make_TRUE_LITERAL(Location()); }    
+{false_literal}	{ return yy::parser::make_FALSE_LITERAL(Location()); }
 
     /* ------------------ Keywords ------------------ */
     /* ------------------ Literals ------------------ */
     /* ------------------ Literals ------------------ */
     /* ------------------ Operators ----------------- */
 
-{xor_op}        { return yy::parser::make_XOR_OP(location()); } 
-{ver_eq}	    { return yy::parser::make_VERILOG_EQ(location()); }      
-{ver_neq}	    { return yy::parser::make_VERILOG_NEQ(location()); }     
-{eq}	        { return yy::parser::make_EQ(location()); }          
-{neq}	        { return yy::parser::make_NEQ(location()); }         
-{assign}	    { return yy::parser::make_ASSIGN(location()); }      
-{log_and_op}	{ return yy::parser::make_LOGICAL_AND_OP(location()); }  
-{btws_and_op}   { return yy::parser::make_BTWS_AND_OP(location()); } 
-{log_or_op}	    { return yy::parser::make_LOGICAL_OR_OP(location()); }   
-{btws_or_op}	{ return yy::parser::make_BTWS_OR_OP(location()); }  
-{btws_not_op}	{ return yy::parser::make_BTWS_NOT_OP(location()); } 
-{log_not_op}	{ return yy::parser::make_LOGICAL_NOT_OP(location()); }  
-{plus}	        { return yy::parser::make_PLUS(location()); }        
-{minus}	        { return yy::parser::make_MINUS(location()); }       
-{lshift}	    { return yy::parser::make_LSHIFT(location()); }      
-{rshift}	    { return yy::parser::make_RSHIFT(location()); }      
-{gte}	        { return yy::parser::make_GTE(location()); }         
-{gt}	        { return yy::parser::make_GT(location()); }          
-{lte}	        { return yy::parser::make_LTE(location()); }         
-{lt}	        { return yy::parser::make_LT(location()); }          
-{mul}	        { return yy::parser::make_MUL(location()); }         
-{div}	        { return yy::parser::make_DIV(location()); }         
-{rem}	        { return yy::parser::make_REMAINDER(location()); }         
-{hwp}	        { return yy::parser::make_HWP(location()); }         
-{ternary}       { return yy::parser::make_TERNARY(location()); }         
+{xor_op}        { return yy::parser::make_XOR_OP(Location()); } 
+{ver_eq}	    { return yy::parser::make_VERILOG_EQ(Location()); }      
+{ver_neq}	    { return yy::parser::make_VERILOG_NEQ(Location()); }     
+{eq}	        { return yy::parser::make_EQ(Location()); }          
+{neq}	        { return yy::parser::make_NEQ(Location()); }         
+{assign}	    { return yy::parser::make_ASSIGN(Location()); }      
+{log_and_op}	{ return yy::parser::make_LOGICAL_AND_OP(Location()); }  
+{btws_and_op}   { return yy::parser::make_BTWS_AND_OP(Location()); } 
+{log_or_op}	    { return yy::parser::make_LOGICAL_OR_OP(Location()); }   
+{btws_or_op}	{ return yy::parser::make_BTWS_OR_OP(Location()); }  
+{btws_not_op}	{ return yy::parser::make_BTWS_NOT_OP(Location()); } 
+{log_not_op}	{ return yy::parser::make_LOGICAL_NOT_OP(Location()); }  
+{plus}	        { return yy::parser::make_PLUS(Location()); }        
+{minus}	        { return yy::parser::make_MINUS(Location()); }       
+{lshift}	    { return yy::parser::make_LSHIFT(Location()); }      
+{rshift}	    { return yy::parser::make_RSHIFT(Location()); }      
+{gte}	        { return yy::parser::make_GTE(Location()); }         
+{gt}	        { return yy::parser::make_GT(Location()); }          
+{lte}	        { return yy::parser::make_LTE(Location()); }         
+{lt}	        { return yy::parser::make_LT(Location()); }          
+{mul}	        { return yy::parser::make_MUL(Location()); }         
+{div}	        { return yy::parser::make_DIV(Location()); }         
+{rem}	        { return yy::parser::make_REMAINDER(Location()); }         
+{hwp}	        { return yy::parser::make_HWP(Location()); }         
+{ternary}       { return yy::parser::make_TERNARY(Location()); }         
 
-{lparen}	{ return yy::parser::make_LPAREN(location()); }      
-{rparen}	{ return yy::parser::make_RPAREN(location()); }      
-{lbracket}	{ return yy::parser::make_LBRACKET(location()); }    
-{rbracket}	{ return yy::parser::make_RBRACKET(location()); }    
-{lbrace}	{ return yy::parser::make_LBRACE(location()); }      
-{rbrace}	{ return yy::parser::make_RBRACE(location()); }      
+{lparen}	{ return yy::parser::make_LPAREN(Location()); }      
+{rparen}	{ return yy::parser::make_RPAREN(Location()); }      
+{lbracket}	{ return yy::parser::make_LBRACKET(Location()); }    
+{rbracket}	{ return yy::parser::make_RBRACKET(Location()); }    
+{lbrace}	{ return yy::parser::make_LBRACE(Location()); }      
+{rbrace}	{ return yy::parser::make_RBRACE(Location()); }      
 {sng_quoted_string}	{ 
     std::string str(YYText());
     if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
         m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
     }
-    return yy::parser::make_SNG_QUOTED_STRING_LITERAL(m_driver.strtable[str], location()); 
+    return yy::parser::make_SNG_QUOTED_STRING_LITERAL(m_driver.strtable[str], Location()); 
     }   
-{sng_quote}	{ return yy::parser::make_SNG_QUOTE(location()); }   
-{at}	    { return yy::parser::make_AT(location()); }   
+{sng_quote}	{ return yy::parser::make_SNG_QUOTE(Location()); }   
+{at}	    { return yy::parser::make_AT(Location()); }   
 
-{comma}       { return yy::parser::make_COMMA(location()); }
-{colon}       { return yy::parser::make_COLON(location()); }
-{semicolon}   { return yy::parser::make_SEMICOLON(location()); }
-{ddot}        { return yy::parser::make_DDOT(location()); }
-{dot}         { return yy::parser::make_DOT(location()); }
-{implication} { return yy::parser::make_IMPLICATION(location()); }
+{comma}       { return yy::parser::make_COMMA(Location()); }
+{colon}       { return yy::parser::make_COLON(Location()); }
+{semicolon}   { return yy::parser::make_SEMICOLON(Location()); }
+{ddot}        { return yy::parser::make_DDOT(Location()); }
+{dot}         { return yy::parser::make_DOT(Location()); }
+{implication} { return yy::parser::make_IMPLICATION(Location()); }
 
     /* ------------------ Operators ----------------- */
     /* ------------------ Names & Numbers & String Literals ----------------- */
@@ -376,8 +378,8 @@ number  [0-9]+
     if(m_driver.inttable.find(number) == std::end(m_driver.inttable)) {
         m_driver.inttable[number] = elex::Symbol(new elex::Entry(number, number.length()));
     }
-    // return yy::parser::make_NUMBER(std::stoi(YYText()), location()); 
-    return yy::parser::make_NUMBER(m_driver.inttable[number], location()); 
+    // return yy::parser::make_NUMBER(std::stoi(YYText()), Location()); 
+    return yy::parser::make_NUMBER(m_driver.inttable[number], Location()); 
 }
 
 {name}    { 
@@ -385,7 +387,7 @@ number  [0-9]+
     if(m_driver.idtable.find(id) == std::end(m_driver.idtable)) {
         m_driver.idtable[id] = elex::Symbol(new elex::Entry(id, id.length()));
     }
-    return yy::parser::make_ID(m_driver.idtable[id], location()); 
+    return yy::parser::make_ID(m_driver.idtable[id], Location()); 
 }
 
 {string}  { 
@@ -393,7 +395,7 @@ number  [0-9]+
     if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
         m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
     }
-    return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], location()); }
+    return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], Location()); }
 
 <<EOF>>   { return yyterminate(); }
 

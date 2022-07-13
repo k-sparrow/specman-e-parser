@@ -29,13 +29,50 @@ namespace yy {
         
     class scanner : public yyFlexLexer {
     public:
-        scanner(driver &driver) : m_driver(driver) {}
+        scanner(driver &driver) : m_driver(driver), m_location() {}
         virtual ~scanner() {}
         virtual yy::parser::symbol_type get_next_token();
 
+    private:
+        // Used internally by Scanner YY_USER_ACTION to update location indicator
+        // note
+        auto updateLocation() -> void {
+            // save current location for restoration if updateLocation is used by YY_USER_ACTION
+            // and user wants to recover from yyless or yyabort
+            m_prev_location = m_location;
+
+            // get the previous line number 
+            int prev_yylineno = m_location.end.line;
+
+            // update begin position to current end position
+            m_location.step();
             
+            // update the end position
+            //if we didn't switch lines, just add the length to the column value
+            if(yylineno == prev_yylineno) m_location.columns(YYLeng());
+            // else, we need to update the end position with the remainder of the number
+            // of characters after the newline char, and update the line number
+            else {
+                int column;
+                for(column = 1; yytext[yyleng - column] != '\n'; ++column){}
+
+                // update the line of the end position, and set its column value to 1
+                m_location.lines(yylineno - prev_yylineno);
+
+                // update the column of the end point
+                m_location.columns(column);
+            }
+        }
+
+        // Used to get last Scanner location. Used in error messages.
+        yy::location Location() const {
+            return m_location;
+        }
+
     private:
         driver &m_driver;
+
+        yy::location m_location, m_prev_location;
     };
 
 }
