@@ -536,9 +536,9 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 class formal_class : public Formal_class {
     protected:
         Symbol_ name;
-        Symbol_ type_;
+        Expression type_;
     public:
-        formal_class(Symbol_ name, Symbol_ type_) {
+        formal_class(Symbol_ name, Expression type_) {
             this->name = name;
             this->type_ = type_;
         }
@@ -553,7 +553,7 @@ class formal_class : public Formal_class {
 #endif
 };
 
-auto formal(Symbol_ name, Symbol_ type_) -> Formal;
+auto formal(Symbol_ name, Expression type_) -> Formal;
 
 class struct_field_sm_class : public StructMember_class {
     protected:
@@ -639,10 +639,10 @@ class method_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Actions actions_;
     public:
-        method_dec_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+        method_dec_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -659,16 +659,16 @@ class method_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+auto method_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
 
 class method_dec_also_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Actions actions_;
     public:
-        method_dec_also_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+        method_dec_also_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -685,16 +685,16 @@ class method_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+auto method_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
 
 class method_dec_first_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Actions actions_;
     public:
-        method_dec_first_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+        method_dec_first_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -711,16 +711,16 @@ class method_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+auto method_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
 
 class method_dec_only_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Actions actions_;
     public:
-        method_dec_only_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) {
+        method_dec_only_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -737,15 +737,15 @@ class method_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember;
+auto method_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
 
 class method_dec_empty_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
     public:
-        method_dec_empty_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type) {
+        method_dec_empty_sm_class(Symbol_ id, Formals arguments, Expression return_type) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -761,15 +761,15 @@ class method_dec_empty_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember;
 
 class method_dec_undef_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
     public:
-        method_dec_undef_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type) {
+        method_dec_undef_sm_class(Symbol_ id, Formals arguments, Expression return_type) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -785,17 +785,17 @@ class method_dec_undef_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember;
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember;
 
 class tcm_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -813,17 +813,17 @@ class tcm_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_also_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -841,17 +841,17 @@ class tcm_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_first_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -869,17 +869,17 @@ class tcm_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_only_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -897,16 +897,16 @@ class tcm_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_empty_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) {
+        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -923,16 +923,16 @@ class tcm_dec_empty_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember;
 
 class tcm_dec_undef_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Symbol_ return_type;
+        Expression return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) {
+        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -949,7 +949,7 @@ class tcm_dec_undef_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember;
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember;
 
 class when_subtype_sm_class : public StructMember_class {
     protected:
@@ -3143,10 +3143,12 @@ auto bit_concat_expr(Expressions bit_concat_items) -> Expression;
 
 class range_modifier_expr_class : public Expression_class {
     protected:
-        Expressions range_modifier_elements_list;
+        Expression bottom;
+        Expression top;
     public:
-        range_modifier_expr_class(Expressions range_modifier_elements_list) {
-            this->range_modifier_elements_list = range_modifier_elements_list;
+        range_modifier_expr_class(Expression bottom, Expression top) {
+            this->bottom = bottom;
+            this->top = top;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3159,7 +3161,7 @@ class range_modifier_expr_class : public Expression_class {
 #endif
 };
 
-auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression;
+auto range_modifier_expr(Expression bottom, Expression top) -> Expression;
 
 class sized_bits_scalar_expr_class : public Expression_class {
     protected:
@@ -3728,6 +3730,30 @@ class int_expr_class : public Expression_class {
 };
 
 auto int_expr(Symbol_ int_) -> Expression;
+
+class scalar_subtype_expr_class : public Expression_class {
+    protected:
+        Expression predefined_base_type;
+        Expression range_modifier;
+        Expression width_modifier;
+    public:
+        scalar_subtype_expr_class(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) {
+            this->predefined_base_type = predefined_base_type;
+            this->range_modifier = range_modifier;
+            this->width_modifier = width_modifier;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef scalar_subtype_expr_EXTRAS
+    scalar_subtype_expr_EXTRAS
+#endif
+};
+
+auto scalar_subtype_expr(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) -> Expression;
 
 class predefined_type_int_expr_class : public Expression_class {
     protected:

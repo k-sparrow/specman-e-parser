@@ -20,7 +20,7 @@ namespace elex {
 
     auto operator == (Symbol const& lhs, Symbol const& rhs) -> bool {
         // if only one of the pointers is nullptr, return false
-        if(lhs == nullptr ^ rhs == nullptr) return false;
+        if((lhs == nullptr) ^ (rhs == nullptr)) return false;
 
         // otherwise, compare the pointers or their strings (see above)
         return lhs == rhs || *lhs == *rhs;

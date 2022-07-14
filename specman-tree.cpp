@@ -298,10 +298,11 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem {
 auto formal_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "formal" << std::endl;
     dump_Symbol_(stream, n+2, name);
-    dump_Symbol_(stream, n+2, type_);
+    if(type_)
+        type_->dump(stream, n+2);
 }
 
-auto formal(Symbol_ name, Symbol_ type_) -> Formal {
+auto formal(Symbol_ name, Expression type_) -> Formal {
     return Formal(new formal_class(name, type_));
 }
 
@@ -352,12 +353,13 @@ auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+auto method_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -366,12 +368,13 @@ auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+auto method_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_also_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -380,12 +383,13 @@ auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+auto method_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_first_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -394,12 +398,13 @@ auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
+auto method_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_only_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -408,10 +413,11 @@ auto method_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
 }
 
-auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember {
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember {
     return StructMember(new method_dec_empty_sm_class(id, arguments, return_type));
 }
 
@@ -420,10 +426,11 @@ auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
 }
 
-auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> StructMember {
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember {
     return StructMember(new method_dec_undef_sm_class(id, arguments, return_type));
 }
 
@@ -432,14 +439,15 @@ auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -448,14 +456,15 @@ auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_also_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -464,14 +473,15 @@ auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_first_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -480,14 +490,15 @@ auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
     if(actions_)
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_only_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -496,12 +507,13 @@ auto tcm_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
 }
 
-auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember {
     return StructMember(new tcm_dec_empty_sm_class(id, arguments, return_type, event_id_expr));
 }
 
@@ -510,12 +522,13 @@ auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(arguments)
         arguments->dump(stream, n+2);
-    dump_Symbol_(stream, n+2, return_type);
+    if(return_type)
+        return_type->dump(stream, n+2);
     if(event_id_expr)
         event_id_expr->dump(stream, n+2);
 }
 
-auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember {
     return StructMember(new tcm_dec_undef_sm_class(id, arguments, return_type, event_id_expr));
 }
 
@@ -1652,12 +1665,14 @@ auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
 
 auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "range_modifier_expr" << std::endl;
-    if(range_modifier_elements_list)
-        range_modifier_elements_list->dump(stream, n+2);
+    if(bottom)
+        bottom->dump(stream, n+2);
+    if(top)
+        top->dump(stream, n+2);
 }
 
-auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression {
-    return Expression(new range_modifier_expr_class(range_modifier_elements_list));
+auto range_modifier_expr(Expression bottom, Expression top) -> Expression {
+    return Expression(new range_modifier_expr_class(bottom, top));
 }
 
 auto sized_bits_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -1953,6 +1968,20 @@ auto int_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto int_expr(Symbol_ int_) -> Expression {
     return Expression(new int_expr_class(int_));
+}
+
+auto scalar_subtype_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "scalar_subtype_expr" << std::endl;
+    if(predefined_base_type)
+        predefined_base_type->dump(stream, n+2);
+    if(range_modifier)
+        range_modifier->dump(stream, n+2);
+    if(width_modifier)
+        width_modifier->dump(stream, n+2);
+}
+
+auto scalar_subtype_expr(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) -> Expression {
+    return Expression(new scalar_subtype_expr_class(predefined_base_type, range_modifier, width_modifier));
 }
 
 auto predefined_type_int_expr_class::dump(std::ostream& stream, int n) -> void {
