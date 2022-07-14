@@ -292,6 +292,13 @@
 %token AT   
 %token IF 
 %token ELSE
+%token INT 
+%token UINT 
+%token BIT 
+%token BYTE 
+%token NIBBLE
+%token TIME 
+%token BOOL 
 
 %token LPAREN      
 %token RPAREN      

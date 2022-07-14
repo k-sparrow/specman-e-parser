@@ -126,6 +126,13 @@ num_of_buckets    (num_of_buckets)
 per_instance    (per_instance)
 cross       (cross)
 transition  (transition)
+int_	    (int) 
+uint_	    (uint) 
+bit	        (bit) 
+byte	    (byte) 
+nibble	    (nibble)
+time	    (time) 
+bool_	    (bool) 
 
 item                 (item)
 created_kind         (created_kind)
@@ -334,6 +341,13 @@ mvl            {mvl_single}|{sized_mvl}
 {per_instance}	    { return yy::parser::make_PER_INSTANCE(Location()); }
 {cross}	        { return yy::parser::make_CROSS(Location()); }
 {transition}	{ return yy::parser::make_TRANSITION(Location()); }
+{int_}		{ return yy::parser::make_INT(Location()); } 
+{uint_}		{ return yy::parser::make_UINT(Location()); } 
+{bit}		{ return yy::parser::make_BIT(Location()); } 
+{byte}		{ return yy::parser::make_BYTE(Location()); } 
+{nibble}	{ return yy::parser::make_NIBBLE(Location()); }
+{time}		{ return yy::parser::make_TIME(Location()); } 
+{bool_}		{ return yy::parser::make_BOOL(Location()); } 
 {item}		            { return yy::parser::make_ITEM(Location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(Location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      
