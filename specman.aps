@@ -44,7 +44,7 @@ module Specman begin
         constructor struct_st(struct_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_like_st(struct_name: Symbol_; base_struct_name: Symbol_; members: StructMembers) : Statement;
         constructor extend_struct_st(struct_type_name: Expressions; members: StructMembers) : Statement;
-        constructor type_(type_id: Symbol_; type_expr: Expression)  : Statement;
+        constructor type_st(type_id: Symbol_; type_expr: Expression)  : Statement;
         constructor import(pkg_id: Symbol_)  : Statement;
         
         constructor virtual_sequence_st(id: Symbol_; seq_options: SequenceItems) : Statement;

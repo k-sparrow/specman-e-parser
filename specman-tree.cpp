@@ -208,15 +208,15 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
     return Statement(new extend_struct_st_class(struct_type_name, members));
 }
 
-auto type__class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "type_" << std::endl;
+auto type_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_st" << std::endl;
     dump_Symbol_(stream, n+2, type_id);
     if(type_expr)
         type_expr->dump(stream, n+2);
 }
 
-auto type_(Symbol_ type_id, Expression type_expr) -> Statement {
-    return Statement(new type__class(type_id, type_expr));
+auto type_st(Symbol_ type_id, Expression type_expr) -> Statement {
+    return Statement(new type_st_class(type_id, type_expr));
 }
 
 auto import_class::dump(std::ostream& stream, int n) -> void {

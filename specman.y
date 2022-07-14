@@ -336,8 +336,8 @@
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
-%precedence LPAREN RPAREN
-%precedence FIRST_MATCH SUBTP_WIDTH_EXPR
+%right RPAREN LPAREN
+%precedence FIRST_MATCH 
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -519,6 +519,7 @@
 %nterm <elex::Expression>   opt_struct_type_id
 
 %nterm <elex::Expression>   scalar_type_expression
+%nterm <elex::Expression>   subtype_extension
 %nterm <elex::Expression>   predefined_scalar_type_expression
 
 %nterm <elex::Expression>   constraint_expression
@@ -601,7 +602,7 @@ extend_struct_unit_statement :
 
 type_statement : 
     OPT_PACKAGE TYPE ID COLON type_scalar_expression 
-    { $$ = elex::type_($3, $5); }
+    { $$ = elex::type_st($3, $5); }
     ;
 
 sequence_statement : 
@@ -1393,12 +1394,6 @@ actions :
 action_block : 
     LBRACE actions RBRACE 
     { $$ = $2; }
-
-  | LBRACE error RBRACE 
-    { 
-      yyerrok; 
-      $$ = nullptr;
-    }
   ;
 
 action : non_term_action SEMICOLON { $$ = $1; } 
@@ -1428,7 +1423,7 @@ non_term_expression :
     ; // TODO: fully implement this
 
 type_scalar_expression: // TODO: fully implement this
-      scalar_subtype_expression { $$ = $1; }
+      scalar_type_expression { $$ = $1; }
     | enum_type_expression      { $$ = $1; } 
     ;
 
@@ -1611,36 +1606,33 @@ struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
 
     ; */
 
-scalar_subtype_expression :
-    id_expr[pred_type] range_modifier_expression[range] 
-    {
-      if(std::dynamic_pointer_cast<predefined_type_int_expr_class>($pred_type)
-      || std::dynamic_pointer_cast<predefined_type_uint_expr_class>($pred_type)
-      || std::dynamic_pointer_cast<predefined_type_nibble_expr_class>($pred_type))
-      {
-        $$ = elex::scalar_subtype_expr($pred_type, $range, nullptr);
-      }
-      else {
-        error(@1, "Scalar subtype base type must be of predefined type 'int/uint/nibble'!");
-        yyerrok;
-        $$ = nullptr;
-      }
+scalar_type_expression : 
+    predefined_scalar_type_expression 
+    { 
+      $$ = $1; 
     }
-  
-/*   | id_expr[pred_type] width_modifier_expression[width] 
+  | predefined_scalar_type_expression[type_] range_modifier_expression[range] 
+    { 
+      $$ = elex::scalar_subtype_expr($type_, $range, nullptr);
+    }
+  | predefined_scalar_type_expression[type_] width_modifier_expression[width]
     {
-      if(std::dynamic_pointer_cast<predefined_type_int_expr_class>($pred_type)
-      || std::dynamic_pointer_cast<predefined_type_uint_expr_class>($pred_type)
-      || std::dynamic_pointer_cast<predefined_type_nibble_expr_class>($pred_type))
-      {
-        $$ = elex::scalar_subtype_expr($pred_type, nullptr, $width);
-      }
-      else {
-        error(@1, "Scalar subtype base type must be of predefined type 'int/uint/nibble'!");
-        yyerrok;
-        $$ = nullptr;
-      }
-    }   */
+      $$ = elex::scalar_subtype_expr($type_, nullptr, $width);
+    }
+  | predefined_scalar_type_expression[type_] range_modifier_expression[range] width_modifier_expression[width]
+    {
+      $$ = elex::scalar_subtype_expr($type_, $range, $width);
+    }
+  ;
+
+predefined_scalar_type_expression : 
+    INT     { $$ = elex::predefined_type_int_expr(); }
+  | UINT    { $$ = elex::predefined_type_uint_expr(); }
+  | BOOL    { $$ = elex::predefined_type_bool_expr(); }
+  | BIT     { $$ = elex::predefined_type_bit_expr(); }
+  | BYTE    { $$ = elex::predefined_type_byte_expr(); }
+  | NIBBLE  { $$ = elex::predefined_type_nibble_expr(); }
+  | TIME    { $$ = elex::predefined_type_time_expr(); }
   ;
 
 range_modifier_expression : 
@@ -1648,13 +1640,15 @@ range_modifier_expression :
   { $$ = elex::range_modifier_expr($bot, $top); }
   ;
 
-/* width_modifier_expression:
+// this, for some unknown reason, causes 2 shift/reduce conflicts with its primary production (scalar_type_expression)
+// all attempts to solve these conflicts by reworking the grammar rules or using global/contextual precedence on LPAREN didn't work
+// but parsing works perfectly fine correctly
+width_modifier_expression:
     LPAREN BITS COLON int_expression[width] RPAREN
     { $$ = elex::sized_bits_scalar_expr($width); }
-
   | LPAREN BYTES COLON int_expression[width] RPAREN
     { $$ = elex::sized_bytes_scalar_expr($width); }
-  ; */
+  ;
 
 struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
       struct_type_modifier                       { $$ = elex::single_Expressions($1); }
@@ -1816,20 +1810,6 @@ it_expression :
   IT { $$ = elex::it_expr(); }
   ;
 
-scalar_type_expression : 
-    predefined_scalar_type_expression 
-    { $$ = $1; }
-  ;
-
-predefined_scalar_type_expression : 
-    INT     { $$ = elex::predefined_type_int_expr(); }
-  | UINT    { $$ = elex::predefined_type_uint_expr(); }
-  | BOOL    { $$ = elex::predefined_type_bool_expr(); }
-  | BIT     { $$ = elex::predefined_type_bit_expr(); }
-  | BYTE    { $$ = elex::predefined_type_byte_expr(); }
-  | NIBBLE  { $$ = elex::predefined_type_nibble_expr(); }
-  | TIME    { $$ = elex::predefined_type_time_expr(); }
-  ;
 
 weight_value_pairs:
       terminated_weight_value_pair                    { $$ = elex::single_Cases($1); }

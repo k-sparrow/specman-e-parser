@@ -347,12 +347,12 @@ class extend_struct_st_class : public Statement_class {
 
 auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement;
 
-class type__class : public Statement_class {
+class type_st_class : public Statement_class {
     protected:
         Symbol_ type_id;
         Expression type_expr;
     public:
-        type__class(Symbol_ type_id, Expression type_expr) {
+        type_st_class(Symbol_ type_id, Expression type_expr) {
             this->type_id = type_id;
             this->type_expr = type_expr;
         }
@@ -362,12 +362,12 @@ class type__class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef type__EXTRAS
-    type__EXTRAS
+#ifdef type_st_EXTRAS
+    type_st_EXTRAS
 #endif
 };
 
-auto type_(Symbol_ type_id, Expression type_expr) -> Statement;
+auto type_st(Symbol_ type_id, Expression type_expr) -> Statement;
 
 class import_class : public Statement_class {
     protected:
