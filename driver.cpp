@@ -20,7 +20,8 @@ void driver::clear() {
 
 std::string driver::str() const {
     std::stringstream s;
-    ast_root->dump(s, 0);
+    if(ast_root)
+        ast_root->dump(s, 0);
     return s.str();
 }
 

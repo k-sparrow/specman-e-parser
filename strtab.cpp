@@ -19,23 +19,29 @@ namespace elex {
     }
 
     auto operator == (Symbol const& lhs, Symbol const& rhs) -> bool {
-        return *lhs == *rhs;
+        // if only one of the pointers is nullptr, return false
+        if(lhs == nullptr ^ rhs == nullptr) return false;
+
+        // otherwise, compare the pointers or their strings (see above)
+        return lhs == rhs || *lhs == *rhs;
     }
 
     auto operator == (Symbol_ const& lhs, Symbol_ const& rhs) -> bool {
-        
         return lhs.lock() == rhs.lock();
     }
 
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& {
+        if(!rhs) return out << "Symbol: empty" << std::endl;
         return out << "Symbol: " << rhs->Str() << ", " << " Length: " << rhs->Length();
     }
 
     auto operator + (Symbol const& lhs, std::string const& rhs) -> Symbol {
-        return std::move(Symbol(new Entry(lhs->Str() + rhs, lhs->Length())));
+        auto new_symbol = (!lhs) ? rhs : lhs->Str() + rhs;
+        return std::move(Symbol(new Entry(new_symbol, new_symbol.size())));
     }
 
     auto operator + (Symbol_ const& lhs, std::string const& rhs) -> Symbol {
-        return std::move(Symbol(new Entry(lhs.lock()->Str() + rhs, lhs.lock()->Length())));
+        auto new_symbol = (!lhs.lock()) ? rhs : lhs.lock()->Str() + rhs;
+        return std::move(Symbol(new Entry(new_symbol, new_symbol.size())));
     }
 }

@@ -145,7 +145,8 @@ auto append_CovergroupItemOptions(CovergroupItemOptions p1, CovergroupItemOption
 
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
-    stmts->dump(stream, n+2);
+    if(stmts)
+        stmts->dump(stream, n+2);
 }
 
 auto module_(Statements stmts) -> Module {
@@ -164,7 +165,8 @@ auto package(Symbol_ pkg_name) -> Statement {
 auto unit_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "unit" << std::endl;
     dump_Symbol_(stream, n+2, unit_name);
-    members->dump(stream, n+2);
+    if(members)
+        members->dump(stream, n+2);
 }
 
 auto unit(Symbol_ unit_name, StructMembers members) -> Statement {
@@ -174,7 +176,8 @@ auto unit(Symbol_ unit_name, StructMembers members) -> Statement {
 auto struct_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_st" << std::endl;
     dump_Symbol_(stream, n+2, struct_name);
-    members->dump(stream, n+2);
+    if(members)
+        members->dump(stream, n+2);
 }
 
 auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement {
@@ -185,7 +188,8 @@ auto struct_like_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_like_st" << std::endl;
     dump_Symbol_(stream, n+2, struct_name);
     dump_Symbol_(stream, n+2, base_struct_name);
-    members->dump(stream, n+2);
+    if(members)
+        members->dump(stream, n+2);
 }
 
 auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) -> Statement {
@@ -194,8 +198,10 @@ auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers
 
 auto extend_struct_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "extend_struct_st" << std::endl;
-    struct_type_name->dump(stream, n+2);
-    members->dump(stream, n+2);
+    if(struct_type_name)
+        struct_type_name->dump(stream, n+2);
+    if(members)
+        members->dump(stream, n+2);
 }
 
 auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement {
@@ -205,7 +211,8 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 auto type__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "type_" << std::endl;
     dump_Symbol_(stream, n+2, type_id);
-    type_expr->dump(stream, n+2);
+    if(type_expr)
+        type_expr->dump(stream, n+2);
 }
 
 auto type_(Symbol_ type_id, Expression type_expr) -> Statement {
@@ -224,7 +231,8 @@ auto import(Symbol_ pkg_id) -> Statement {
 auto virtual_sequence_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "virtual_sequence_st" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    seq_options->dump(stream, n+2);
+    if(seq_options)
+        seq_options->dump(stream, n+2);
 }
 
 auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
@@ -234,7 +242,8 @@ auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
 auto sequence_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "sequence_st" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    seq_options->dump(stream, n+2);
+    if(seq_options)
+        seq_options->dump(stream, n+2);
 }
 
 auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
@@ -299,7 +308,8 @@ auto formal(Symbol_ name, Symbol_ type_) -> Formal {
 auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    type->dump(stream, n+2);
+    if(type)
+        type->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
     dump_Boolean(stream, n+2, do_not_gen);
 }
@@ -311,8 +321,10 @@ auto struct_field_sm(Symbol_ id, Expression type, Boolean is_physical, Boolean d
 auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    len_expr->dump(stream, n+2);
-    list_base_type->dump(stream, n+2);
+    if(len_expr)
+        len_expr->dump(stream, n+2);
+    if(list_base_type)
+        list_base_type->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
     dump_Boolean(stream, n+2, do_not_gen);
 }
@@ -324,8 +336,10 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_assoc_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    key_type->dump(stream, n+2);
-    list_base_type->dump(stream, n+2);
+    if(key_type)
+        key_type->dump(stream, n+2);
+    if(list_base_type)
+        list_base_type->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
 }
 
@@ -336,9 +350,11 @@ auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    actions_->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
@@ -348,9 +364,11 @@ auto method_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions a
 auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_also_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    actions_->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
@@ -360,9 +378,11 @@ auto method_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Acti
 auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_first_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    actions_->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
@@ -372,9 +392,11 @@ auto method_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Act
 auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_only_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    actions_->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Actions actions_) -> StructMember {
@@ -384,7 +406,8 @@ auto method_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Acti
 auto method_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_empty_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
 }
 
@@ -395,7 +418,8 @@ auto method_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> 
 auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_dec_undef_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
 }
 
@@ -406,10 +430,13 @@ auto method_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type) -> 
 auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
-    actions_->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
@@ -419,10 +446,13 @@ auto tcm_dec_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression e
 auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_also_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
-    actions_->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
@@ -432,10 +462,13 @@ auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Express
 auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_first_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
-    actions_->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
@@ -445,10 +478,13 @@ auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expres
 auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_only_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
-    actions_->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
+    if(actions_)
+        actions_->dump(stream, n+2);
 }
 
 auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr, Actions actions_) -> StructMember {
@@ -458,9 +494,11 @@ auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Express
 auto tcm_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_empty_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
 }
 
 auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
@@ -470,9 +508,11 @@ auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expres
 auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "tcm_dec_undef_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    arguments->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
     dump_Symbol_(stream, n+2, return_type);
-    event_id_expr->dump(stream, n+2);
+    if(event_id_expr)
+        event_id_expr->dump(stream, n+2);
 }
 
 auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expression event_id_expr) -> StructMember {
@@ -481,8 +521,10 @@ auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Symbol_ return_type, Expres
 
 auto when_subtype_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "when_subtype_sm" << std::endl;
-    subtype_mods->dump(stream, n+2);
-    subtype_members->dump(stream, n+2);
+    if(subtype_mods)
+        subtype_mods->dump(stream, n+2);
+    if(subtype_members)
+        subtype_members->dump(stream, n+2);
 }
 
 auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember {
@@ -491,7 +533,8 @@ auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) ->
 
 auto constraint_def_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "constraint_def_sm" << std::endl;
-    constraint_expr->dump(stream, n+2);
+    if(constraint_expr)
+        constraint_expr->dump(stream, n+2);
 }
 
 auto constraint_def_sm(Expression constraint_expr) -> StructMember {
@@ -500,8 +543,10 @@ auto constraint_def_sm(Expression constraint_expr) -> StructMember {
 
 auto on_event_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "on_event_sm" << std::endl;
-    event_name->dump(stream, n+2);
-    action_block->dump(stream, n+2);
+    if(event_name)
+        event_name->dump(stream, n+2);
+    if(action_block)
+        action_block->dump(stream, n+2);
 }
 
 auto on_event_sm(Expression event_name, Actions action_block) -> StructMember {
@@ -520,7 +565,8 @@ auto simple_event_dec_sm(Symbol_ id) -> StructMember {
 auto event_def_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_def_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember {
@@ -530,7 +576,8 @@ auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember {
 auto event_def_override_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_def_override_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto event_def_override_sm(Symbol_ id, Expression temporal) -> StructMember {
@@ -539,8 +586,10 @@ auto event_def_override_sm(Symbol_ id, Expression temporal) -> StructMember {
 
 auto temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
-    sample_event->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(sample_event)
+        sample_event->dump(stream, n+2);
 }
 
 auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
@@ -549,7 +598,8 @@ auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
 
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
-    event_name->dump(stream, n+2);
+    if(event_name)
+        event_name->dump(stream, n+2);
 }
 
 auto event_ref_expr(Expression event_name) -> Expression {
@@ -558,8 +608,10 @@ auto event_ref_expr(Expression event_name) -> Expression {
 
 auto action_attached_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "action_attached_temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
-    actions->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
 }
 
 auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expression {
@@ -568,7 +620,8 @@ auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expr
 
 auto not_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "not_temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto not_temporal_expr(Expression temporal) -> Expression {
@@ -577,7 +630,8 @@ auto not_temporal_expr(Expression temporal) -> Expression {
 
 auto fail_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "fail_temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto fail_temporal_expr(Expression temporal) -> Expression {
@@ -586,7 +640,8 @@ auto fail_temporal_expr(Expression temporal) -> Expression {
 
 auto eventually_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "eventually_temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto eventually_temporal_expr(Expression temporal) -> Expression {
@@ -595,7 +650,8 @@ auto eventually_temporal_expr(Expression temporal) -> Expression {
 
 auto detach_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "detach_temporal_expr" << std::endl;
-    temporal->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto detach_temporal_expr(Expression temporal) -> Expression {
@@ -604,8 +660,10 @@ auto detach_temporal_expr(Expression temporal) -> Expression {
 
 auto yield_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "yield_temporal_expr" << std::endl;
-    trigger->dump(stream, n+2);
-    temporal->dump(stream, n+2);
+    if(trigger)
+        trigger->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression {
@@ -614,7 +672,8 @@ auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression 
 
 auto true_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "true_temporal_expr" << std::endl;
-    bool_expr->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
 }
 
 auto true_temporal_expr(Expression bool_expr) -> Expression {
@@ -623,7 +682,8 @@ auto true_temporal_expr(Expression bool_expr) -> Expression {
 
 auto rise_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "rise_temporal_expr" << std::endl;
-    hdl_path->dump(stream, n+2);
+    if(hdl_path)
+        hdl_path->dump(stream, n+2);
 }
 
 auto rise_temporal_expr(Expression hdl_path) -> Expression {
@@ -632,7 +692,8 @@ auto rise_temporal_expr(Expression hdl_path) -> Expression {
 
 auto fall_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "fall_temporal_expr" << std::endl;
-    hdl_path->dump(stream, n+2);
+    if(hdl_path)
+        hdl_path->dump(stream, n+2);
 }
 
 auto fall_temporal_expr(Expression hdl_path) -> Expression {
@@ -641,7 +702,8 @@ auto fall_temporal_expr(Expression hdl_path) -> Expression {
 
 auto change_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "change_temporal_expr" << std::endl;
-    hdl_path->dump(stream, n+2);
+    if(hdl_path)
+        hdl_path->dump(stream, n+2);
 }
 
 auto change_temporal_expr(Expression hdl_path) -> Expression {
@@ -650,8 +712,10 @@ auto change_temporal_expr(Expression hdl_path) -> Expression {
 
 auto and_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "and_temporal_expr" << std::endl;
-    te1->dump(stream, n+2);
-    te2->dump(stream, n+2);
+    if(te1)
+        te1->dump(stream, n+2);
+    if(te2)
+        te2->dump(stream, n+2);
 }
 
 auto and_temporal_expr(Expression te1, Expression te2) -> Expression {
@@ -660,8 +724,10 @@ auto and_temporal_expr(Expression te1, Expression te2) -> Expression {
 
 auto or_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "or_temporal_expr" << std::endl;
-    te1->dump(stream, n+2);
-    te2->dump(stream, n+2);
+    if(te1)
+        te1->dump(stream, n+2);
+    if(te2)
+        te2->dump(stream, n+2);
 }
 
 auto or_temporal_expr(Expression te1, Expression te2) -> Expression {
@@ -670,7 +736,8 @@ auto or_temporal_expr(Expression te1, Expression te2) -> Expression {
 
 auto sequence_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "sequence_temporal_expr" << std::endl;
-    temporals->dump(stream, n+2);
+    if(temporals)
+        temporals->dump(stream, n+2);
 }
 
 auto sequence_temporal_expr(Expressions temporals) -> Expression {
@@ -679,8 +746,10 @@ auto sequence_temporal_expr(Expressions temporals) -> Expression {
 
 auto fixed_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "fixed_repetition_expr" << std::endl;
-    rep->dump(stream, n+2);
-    temporal->dump(stream, n+2);
+    if(rep)
+        rep->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression {
@@ -689,10 +758,14 @@ auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression {
 
 auto first_match_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "first_match_repetition_expr" << std::endl;
-    from_rep->dump(stream, n+2);
-    to_rep->dump(stream, n+2);
-    temporal->dump(stream, n+2);
-    match_temporal->dump(stream, n+2);
+    if(from_rep)
+        from_rep->dump(stream, n+2);
+    if(to_rep)
+        to_rep->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(match_temporal)
+        match_temporal->dump(stream, n+2);
 }
 
 auto first_match_repetition_expr(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal) -> Expression {
@@ -701,9 +774,12 @@ auto first_match_repetition_expr(Expression from_rep, Expression to_rep, Express
 
 auto true_match_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "true_match_repetition_expr" << std::endl;
-    from_rep->dump(stream, n+2);
-    to_rep->dump(stream, n+2);
-    temporal->dump(stream, n+2);
+    if(from_rep)
+        from_rep->dump(stream, n+2);
+    if(to_rep)
+        to_rep->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
 }
 
 auto true_match_repetition_expr(Expression from_rep, Expression to_rep, Expression temporal) -> Expression {
@@ -736,8 +812,10 @@ auto cycle_temporal_expr() -> Expression {
 
 auto expect_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_nameless_sm" << std::endl;
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto expect_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember {
@@ -746,9 +824,12 @@ auto expect_nameless_sm(Expression temporal, Expression dut_error_call) -> Struc
 
 auto expect_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_sm" << std::endl;
-    id->dump(stream, n+2);
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(id)
+        id->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto expect_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
@@ -757,9 +838,12 @@ auto expect_sm(Expression id, Expression temporal, Expression dut_error_call) ->
 
 auto expect_override_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_override_sm" << std::endl;
-    id->dump(stream, n+2);
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(id)
+        id->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto expect_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
@@ -768,8 +852,10 @@ auto expect_override_sm(Expression id, Expression temporal, Expression dut_error
 
 auto assume_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_nameless_sm" << std::endl;
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto assume_nameless_sm(Expression temporal, Expression dut_error_call) -> StructMember {
@@ -778,9 +864,12 @@ auto assume_nameless_sm(Expression temporal, Expression dut_error_call) -> Struc
 
 auto assume_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_sm" << std::endl;
-    id->dump(stream, n+2);
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(id)
+        id->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto assume_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
@@ -789,9 +878,12 @@ auto assume_sm(Expression id, Expression temporal, Expression dut_error_call) ->
 
 auto assume_override_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "assume_override_sm" << std::endl;
-    id->dump(stream, n+2);
-    temporal->dump(stream, n+2);
-    dut_error_call->dump(stream, n+2);
+    if(id)
+        id->dump(stream, n+2);
+    if(temporal)
+        temporal->dump(stream, n+2);
+    if(dut_error_call)
+        dut_error_call->dump(stream, n+2);
 }
 
 auto assume_override_sm(Expression id, Expression temporal, Expression dut_error_call) -> StructMember {
@@ -810,8 +902,10 @@ auto empty_covergroup_sm(Symbol_ event_id) -> StructMember {
 auto covergroup_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "covergroup_sm" << std::endl;
     dump_Symbol_(stream, n+2, event_id);
-    cg_opts->dump(stream, n+2);
-    cg_items->dump(stream, n+2);
+    if(cg_opts)
+        cg_opts->dump(stream, n+2);
+    if(cg_items)
+        cg_items->dump(stream, n+2);
 }
 
 auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember {
@@ -821,9 +915,12 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
 auto covergroup_extension_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "covergroup_extension_sm" << std::endl;
     dump_Symbol_(stream, n+2, event_id);
-    instance_id->dump(stream, n+2);
-    cg_opts->dump(stream, n+2);
-    cg_items->dump(stream, n+2);
+    if(instance_id)
+        instance_id->dump(stream, n+2);
+    if(cg_opts)
+        cg_opts->dump(stream, n+2);
+    if(cg_items)
+        cg_items->dump(stream, n+2);
 }
 
 auto covergroup_extension_sm(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items) -> StructMember {
@@ -840,7 +937,8 @@ auto covergroup_per_type_ceid() -> CovergroupExtensionID {
 
 auto covergroup_per_unit_instance_ceid_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "covergroup_per_unit_instance_ceid" << std::endl;
-    e_path->dump(stream, n+2);
+    if(e_path)
+        e_path->dump(stream, n+2);
 }
 
 auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtensionID {
@@ -859,7 +957,8 @@ auto covergroup_per_instance_ceid(Symbol_ item_name, Symbol_ bucket_name) -> Cov
 
 auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "global_cgo" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto global_cgo(Expression bool_litral) -> CovergroupOption {
@@ -868,7 +967,8 @@ auto global_cgo(Expression bool_litral) -> CovergroupOption {
 
 auto no_collect_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_collect_cgo" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto no_collect_cgo(Expression bool_litral) -> CovergroupOption {
@@ -877,7 +977,8 @@ auto no_collect_cgo(Expression bool_litral) -> CovergroupOption {
 
 auto per_unit_instance_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "per_unit_instance_cgo" << std::endl;
-    hier_id->dump(stream, n+2);
+    if(hier_id)
+        hier_id->dump(stream, n+2);
 }
 
 auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption {
@@ -928,7 +1029,8 @@ auto weight_cgo(Symbol_ value) -> CovergroupOption {
 
 auto when_cgo_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "when_cgo" << std::endl;
-    bool_expr->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
 }
 
 auto when_cgo(Expression bool_expr) -> CovergroupOption {
@@ -938,7 +1040,8 @@ auto when_cgo(Expression bool_expr) -> CovergroupOption {
 auto simple_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "simple_covergroup_item_cgi" << std::endl;
     dump_Symbol_(stream, n+2, item_id);
-    cgi_options->dump(stream, n+2);
+    if(cgi_options)
+        cgi_options->dump(stream, n+2);
 }
 
 auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem {
@@ -948,9 +1051,12 @@ auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_optio
 auto on_the_fly_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "on_the_fly_covergroup_item_cgi" << std::endl;
     dump_Symbol_(stream, n+2, item_id);
-    type_->dump(stream, n+2);
-    sampled_val->dump(stream, n+2);
-    cgi_options->dump(stream, n+2);
+    if(type_)
+        type_->dump(stream, n+2);
+    if(sampled_val)
+        sampled_val->dump(stream, n+2);
+    if(cgi_options)
+        cgi_options->dump(stream, n+2);
 }
 
 auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem {
@@ -959,8 +1065,10 @@ auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expressio
 
 auto cross_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "cross_covergroup_item_cgi" << std::endl;
-    cg_items->dump(stream, n+2);
-    cgi_options->dump(stream, n+2);
+    if(cg_items)
+        cg_items->dump(stream, n+2);
+    if(cgi_options)
+        cgi_options->dump(stream, n+2);
 }
 
 auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_options) -> CovergroupItem {
@@ -970,7 +1078,8 @@ auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_o
 auto transition_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "transition_covergroup_item_cgi" << std::endl;
     dump_Symbol_(stream, n+2, item_id);
-    cgi_options->dump(stream, n+2);
+    if(cgi_options)
+        cgi_options->dump(stream, n+2);
 }
 
 auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_options) -> CovergroupItem {
@@ -988,7 +1097,8 @@ auto at_least_cgio(Symbol_ num) -> CovergroupItemOption {
 
 auto ignore_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "ignore_cgio" << std::endl;
-    item_bool_expr->dump(stream, n+2);
+    if(item_bool_expr)
+        item_bool_expr->dump(stream, n+2);
 }
 
 auto ignore_cgio(Expression item_bool_expr) -> CovergroupItemOption {
@@ -997,7 +1107,8 @@ auto ignore_cgio(Expression item_bool_expr) -> CovergroupItemOption {
 
 auto illegal_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "illegal_cgio" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto illegal_cgio(Expression bool_litral) -> CovergroupItemOption {
@@ -1006,7 +1117,8 @@ auto illegal_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 auto no_collect_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_collect_cgio" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto no_collect_cgio(Expression bool_litral) -> CovergroupItemOption {
@@ -1015,7 +1127,8 @@ auto no_collect_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 auto no_trace_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_trace_cgio" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption {
@@ -1033,7 +1146,8 @@ auto num_of_buckets_cgio(Symbol_ num) -> CovergroupItemOption {
 
 auto per_instance_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "per_instance_cgio" << std::endl;
-    bool_litral->dump(stream, n+2);
+    if(bool_litral)
+        bool_litral->dump(stream, n+2);
 }
 
 auto per_instance_cgio(Expression bool_litral) -> CovergroupItemOption {
@@ -1084,7 +1198,8 @@ auto weight_cgio(Symbol_ value) -> CovergroupItemOption {
 
 auto when_cgio_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "when_cgio" << std::endl;
-    bool_expr->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
 }
 
 auto when_cgio(Expression bool_expr) -> CovergroupItemOption {
@@ -1126,7 +1241,8 @@ auto id_expr(Symbol_ id) -> Expression {
 
 auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "enum_type_expr" << std::endl;
-    enum_list_expr->dump(stream, n+2);
+    if(enum_list_expr)
+        enum_list_expr->dump(stream, n+2);
 }
 
 auto enum_type_expr(Expressions enum_list_expr) -> Expression {
@@ -1136,7 +1252,8 @@ auto enum_type_expr(Expressions enum_list_expr) -> Expression {
 auto enum_list_item_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "enum_list_item" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    expr->dump(stream, n+2);
+    if(expr)
+        expr->dump(stream, n+2);
 }
 
 auto enum_list_item(Symbol_ id, Expression expr) -> Expression {
@@ -1145,7 +1262,8 @@ auto enum_list_item(Symbol_ id, Expression expr) -> Expression {
 
 auto bitwise_not_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "bitwise_not_expr" << std::endl;
-    e->dump(stream, n+2);
+    if(e)
+        e->dump(stream, n+2);
 }
 
 auto bitwise_not_expr(Expression e) -> Expression {
@@ -1154,8 +1272,10 @@ auto bitwise_not_expr(Expression e) -> Expression {
 
 auto bitwise_and_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "bitwise_and_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto bitwise_and_expr(Expression e1, Expression e2) -> Expression {
@@ -1164,8 +1284,10 @@ auto bitwise_and_expr(Expression e1, Expression e2) -> Expression {
 
 auto bitwise_or_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "bitwise_or_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto bitwise_or_expr(Expression e1, Expression e2) -> Expression {
@@ -1174,8 +1296,10 @@ auto bitwise_or_expr(Expression e1, Expression e2) -> Expression {
 
 auto bitwise_xor_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "bitwise_xor_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto bitwise_xor_expr(Expression e1, Expression e2) -> Expression {
@@ -1184,8 +1308,10 @@ auto bitwise_xor_expr(Expression e1, Expression e2) -> Expression {
 
 auto shift_left_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "shift_left_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto shift_left_expr(Expression e1, Expression e2) -> Expression {
@@ -1194,8 +1320,10 @@ auto shift_left_expr(Expression e1, Expression e2) -> Expression {
 
 auto right_left_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "right_left_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto right_left_expr(Expression e1, Expression e2) -> Expression {
@@ -1204,7 +1332,8 @@ auto right_left_expr(Expression e1, Expression e2) -> Expression {
 
 auto logical_not_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "logical_not_expr" << std::endl;
-    e->dump(stream, n+2);
+    if(e)
+        e->dump(stream, n+2);
 }
 
 auto logical_not_expr(Expression e) -> Expression {
@@ -1213,8 +1342,10 @@ auto logical_not_expr(Expression e) -> Expression {
 
 auto logical_and_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "logical_and_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto logical_and_expr(Expression e1, Expression e2) -> Expression {
@@ -1223,8 +1354,10 @@ auto logical_and_expr(Expression e1, Expression e2) -> Expression {
 
 auto logical_or_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "logical_or_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto logical_or_expr(Expression e1, Expression e2) -> Expression {
@@ -1233,8 +1366,10 @@ auto logical_or_expr(Expression e1, Expression e2) -> Expression {
 
 auto implication_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "implication_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto implication_expr(Expression e1, Expression e2) -> Expression {
@@ -1243,7 +1378,8 @@ auto implication_expr(Expression e1, Expression e2) -> Expression {
 
 auto unary_positive_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "unary_positive_expr" << std::endl;
-    e->dump(stream, n+2);
+    if(e)
+        e->dump(stream, n+2);
 }
 
 auto unary_positive_expr(Expression e) -> Expression {
@@ -1252,7 +1388,8 @@ auto unary_positive_expr(Expression e) -> Expression {
 
 auto unary_negative_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "unary_negative_expr" << std::endl;
-    e->dump(stream, n+2);
+    if(e)
+        e->dump(stream, n+2);
 }
 
 auto unary_negative_expr(Expression e) -> Expression {
@@ -1261,8 +1398,10 @@ auto unary_negative_expr(Expression e) -> Expression {
 
 auto binary_add_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_add_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto binary_add_expr(Expression e1, Expression e2) -> Expression {
@@ -1271,8 +1410,10 @@ auto binary_add_expr(Expression e1, Expression e2) -> Expression {
 
 auto binary_sub_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_sub_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto binary_sub_expr(Expression e1, Expression e2) -> Expression {
@@ -1281,8 +1422,10 @@ auto binary_sub_expr(Expression e1, Expression e2) -> Expression {
 
 auto binary_mul_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_mul_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto binary_mul_expr(Expression e1, Expression e2) -> Expression {
@@ -1291,8 +1434,10 @@ auto binary_mul_expr(Expression e1, Expression e2) -> Expression {
 
 auto binary_div_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_div_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto binary_div_expr(Expression e1, Expression e2) -> Expression {
@@ -1301,8 +1446,10 @@ auto binary_div_expr(Expression e1, Expression e2) -> Expression {
 
 auto binary_remainder_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "binary_remainder_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
@@ -1311,8 +1458,10 @@ auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
 
 auto less_then_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "less_then_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto less_then_expr(Expression e1, Expression e2) -> Expression {
@@ -1321,8 +1470,10 @@ auto less_then_expr(Expression e1, Expression e2) -> Expression {
 
 auto greater_then_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "greater_then_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto greater_then_expr(Expression e1, Expression e2) -> Expression {
@@ -1331,8 +1482,10 @@ auto greater_then_expr(Expression e1, Expression e2) -> Expression {
 
 auto less_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "less_then_or_equal_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto less_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
@@ -1341,8 +1494,10 @@ auto less_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
 
 auto greater_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "greater_then_or_equal_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto greater_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
@@ -1351,8 +1506,10 @@ auto greater_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
 
 auto equality_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "equality_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto equality_expr(Expression e1, Expression e2) -> Expression {
@@ -1361,8 +1518,10 @@ auto equality_expr(Expression e1, Expression e2) -> Expression {
 
 auto non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "non_equality_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto non_equality_expr(Expression e1, Expression e2) -> Expression {
@@ -1371,8 +1530,10 @@ auto non_equality_expr(Expression e1, Expression e2) -> Expression {
 
 auto hdl_equality_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "hdl_equality_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto hdl_equality_expr(Expression e1, Expression e2) -> Expression {
@@ -1381,8 +1542,10 @@ auto hdl_equality_expr(Expression e1, Expression e2) -> Expression {
 
 auto hdl_non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "hdl_non_equality_expr" << std::endl;
-    e1->dump(stream, n+2);
-    e2->dump(stream, n+2);
+    if(e1)
+        e1->dump(stream, n+2);
+    if(e2)
+        e2->dump(stream, n+2);
 }
 
 auto hdl_non_equality_expr(Expression e1, Expression e2) -> Expression {
@@ -1391,8 +1554,10 @@ auto hdl_non_equality_expr(Expression e1, Expression e2) -> Expression {
 
 auto str_match_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "str_match_expr" << std::endl;
-    str_expr->dump(stream, n+2);
-    pattern_expr->dump(stream, n+2);
+    if(str_expr)
+        str_expr->dump(stream, n+2);
+    if(pattern_expr)
+        pattern_expr->dump(stream, n+2);
 }
 
 auto str_match_expr(Expression str_expr, Expression pattern_expr) -> Expression {
@@ -1401,8 +1566,10 @@ auto str_match_expr(Expression str_expr, Expression pattern_expr) -> Expression 
 
 auto str_does_not_match_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "str_does_not_match_expr" << std::endl;
-    str_expr->dump(stream, n+2);
-    pattern_expr->dump(stream, n+2);
+    if(str_expr)
+        str_expr->dump(stream, n+2);
+    if(pattern_expr)
+        pattern_expr->dump(stream, n+2);
 }
 
 auto str_does_not_match_expr(Expression str_expr, Expression pattern_expr) -> Expression {
@@ -1411,8 +1578,10 @@ auto str_does_not_match_expr(Expression str_expr, Expression pattern_expr) -> Ex
 
 auto in_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "in_expr" << std::endl;
-    exp->dump(stream, n+2);
-    inside->dump(stream, n+2);
+    if(exp)
+        exp->dump(stream, n+2);
+    if(inside)
+        inside->dump(stream, n+2);
 }
 
 auto in_expr(Expression exp, Expression inside) -> Expression {
@@ -1421,8 +1590,10 @@ auto in_expr(Expression exp, Expression inside) -> Expression {
 
 auto list_indexing_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_indexing_expr" << std::endl;
-    list_exp->dump(stream, n+2);
-    idx_expr->dump(stream, n+2);
+    if(list_exp)
+        list_exp->dump(stream, n+2);
+    if(idx_expr)
+        idx_expr->dump(stream, n+2);
 }
 
 auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression {
@@ -1431,10 +1602,14 @@ auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression 
 
 auto list_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_slicing_expr" << std::endl;
-    list_exp->dump(stream, n+2);
-    high_expr->dump(stream, n+2);
-    low_expr->dump(stream, n+2);
-    slice_expr->dump(stream, n+2);
+    if(list_exp)
+        list_exp->dump(stream, n+2);
+    if(high_expr)
+        high_expr->dump(stream, n+2);
+    if(low_expr)
+        low_expr->dump(stream, n+2);
+    if(slice_expr)
+        slice_expr->dump(stream, n+2);
 }
 
 auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) -> Expression {
@@ -1443,9 +1618,12 @@ auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low
 
 auto list_splicing_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_splicing_expr" << std::endl;
-    list_exp->dump(stream, n+2);
-    low_expr->dump(stream, n+2);
-    high_expr->dump(stream, n+2);
+    if(list_exp)
+        list_exp->dump(stream, n+2);
+    if(low_expr)
+        low_expr->dump(stream, n+2);
+    if(high_expr)
+        high_expr->dump(stream, n+2);
 }
 
 auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression high_expr) -> Expression {
@@ -1454,7 +1632,8 @@ auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression hig
 
 auto list_concat_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_concat_expr" << std::endl;
-    list_concat_items->dump(stream, n+2);
+    if(list_concat_items)
+        list_concat_items->dump(stream, n+2);
 }
 
 auto list_concat_expr(Expressions list_concat_items) -> Expression {
@@ -1463,7 +1642,8 @@ auto list_concat_expr(Expressions list_concat_items) -> Expression {
 
 auto bit_concat_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "bit_concat_expr" << std::endl;
-    bit_concat_items->dump(stream, n+2);
+    if(bit_concat_items)
+        bit_concat_items->dump(stream, n+2);
 }
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
@@ -1472,7 +1652,8 @@ auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
 
 auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "range_modifier_expr" << std::endl;
-    range_modifier_elements_list->dump(stream, n+2);
+    if(range_modifier_elements_list)
+        range_modifier_elements_list->dump(stream, n+2);
 }
 
 auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression {
@@ -1481,7 +1662,8 @@ auto range_modifier_expr(Expressions range_modifier_elements_list) -> Expression
 
 auto sized_bits_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "sized_bits_scalar_expr" << std::endl;
-    width_expr->dump(stream, n+2);
+    if(width_expr)
+        width_expr->dump(stream, n+2);
 }
 
 auto sized_bits_scalar_expr(Expression width_expr) -> Expression {
@@ -1490,7 +1672,8 @@ auto sized_bits_scalar_expr(Expression width_expr) -> Expression {
 
 auto sized_bytes_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "sized_bytes_scalar_expr" << std::endl;
-    width_expr->dump(stream, n+2);
+    if(width_expr)
+        width_expr->dump(stream, n+2);
 }
 
 auto sized_bytes_scalar_expr(Expression width_expr) -> Expression {
@@ -1499,7 +1682,8 @@ auto sized_bytes_scalar_expr(Expression width_expr) -> Expression {
 
 auto allocate_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "allocate_expr" << std::endl;
-    opt_struct_type_block->dump(stream, n+2);
+    if(opt_struct_type_block)
+        opt_struct_type_block->dump(stream, n+2);
 }
 
 auto allocate_expr(Expression opt_struct_type_block) -> Expression {
@@ -1508,8 +1692,10 @@ auto allocate_expr(Expression opt_struct_type_block) -> Expression {
 
 auto struct_type_expr_with_opt_action_block_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_type_expr_with_opt_action_block" << std::endl;
-    struct_id_expr->dump(stream, n+2);
-    opt_action_block_expt->dump(stream, n+2);
+    if(struct_id_expr)
+        struct_id_expr->dump(stream, n+2);
+    if(opt_action_block_expt)
+        opt_action_block_expt->dump(stream, n+2);
 }
 
 auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expression opt_action_block_expt) -> Expression {
@@ -1518,8 +1704,10 @@ auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expressio
 
 auto named_action_block_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "named_action_block" << std::endl;
-    struct_id_expr->dump(stream, n+2);
-    action_block->dump(stream, n+2);
+    if(struct_id_expr)
+        struct_id_expr->dump(stream, n+2);
+    if(action_block)
+        action_block->dump(stream, n+2);
 }
 
 auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expression {
@@ -1528,8 +1716,10 @@ auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expr
 
 auto struct_type_id_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_type_id" << std::endl;
-    struct_type_modifiers->dump(stream, n+2);
-    struct_id_expr->dump(stream, n+2);
+    if(struct_type_modifiers)
+        struct_type_modifiers->dump(stream, n+2);
+    if(struct_id_expr)
+        struct_id_expr->dump(stream, n+2);
 }
 
 auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression {
@@ -1538,8 +1728,10 @@ auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr
 
 auto struct_type_modifier_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_type_modifier" << std::endl;
-    value->dump(stream, n+2);
-    id->dump(stream, n+2);
+    if(value)
+        value->dump(stream, n+2);
+    if(id)
+        id->dump(stream, n+2);
 }
 
 auto struct_type_modifier(Expression value, Expression id) -> Expression {
@@ -1548,7 +1740,8 @@ auto struct_type_modifier(Expression value, Expression id) -> Expression {
 
 auto type_identifier_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "type_identifier_expr" << std::endl;
-    modifiers->dump(stream, n+2);
+    if(modifiers)
+        modifiers->dump(stream, n+2);
 }
 
 auto type_identifier_expr(Expressions modifiers) -> Expression {
@@ -1557,8 +1750,10 @@ auto type_identifier_expr(Expressions modifiers) -> Expression {
 
 auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "type_introspec_expr" << std::endl;
-    field_id->dump(stream, n+2);
-    type_id->dump(stream, n+2);
+    if(field_id)
+        field_id->dump(stream, n+2);
+    if(type_id)
+        type_id->dump(stream, n+2);
 }
 
 auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression {
@@ -1567,8 +1762,10 @@ auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression 
 
 auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "type_introspec_negation_expr" << std::endl;
-    field_id->dump(stream, n+2);
-    type_id->dump(stream, n+2);
+    if(field_id)
+        field_id->dump(stream, n+2);
+    if(type_id)
+        type_id->dump(stream, n+2);
 }
 
 auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Expression {
@@ -1577,7 +1774,8 @@ auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Ex
 
 auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_hier_ref_expr" << std::endl;
-    hiers->dump(stream, n+2);
+    if(hiers)
+        hiers->dump(stream, n+2);
 }
 
 auto struct_hier_ref_expr(Expressions hiers) -> Expression {
@@ -1595,9 +1793,12 @@ auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression {
 
 auto ternary_operator_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "ternary_operator_expr" << std::endl;
-    condition->dump(stream, n+2);
-    true_expr->dump(stream, n+2);
-    false_expr->dump(stream, n+2);
+    if(condition)
+        condition->dump(stream, n+2);
+    if(true_expr)
+        true_expr->dump(stream, n+2);
+    if(false_expr)
+        false_expr->dump(stream, n+2);
 }
 
 auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression {
@@ -1606,8 +1807,10 @@ auto ternary_operator_expr(Expression condition, Expression true_expr, Expressio
 
 auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "cast_operator_expr" << std::endl;
-    casted_expr->dump(stream, n+2);
-    dest_type_expr->dump(stream, n+2);
+    if(casted_expr)
+        casted_expr->dump(stream, n+2);
+    if(dest_type_expr)
+        dest_type_expr->dump(stream, n+2);
 }
 
 auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression {
@@ -1616,8 +1819,10 @@ auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Ex
 
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "method_call_expr" << std::endl;
-    base->dump(stream, n+2);
-    arguments->dump(stream, n+2);
+    if(base)
+        base->dump(stream, n+2);
+    if(arguments)
+        arguments->dump(stream, n+2);
 }
 
 auto method_call_expr(Expression base, Expressions arguments) -> Expression {
@@ -1626,7 +1831,8 @@ auto method_call_expr(Expression base, Expressions arguments) -> Expression {
 
 auto constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "constraint_expr" << std::endl;
-    bool_expr->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
 }
 
 auto constraint_expr(Expression bool_expr) -> Expression {
@@ -1635,7 +1841,8 @@ auto constraint_expr(Expression bool_expr) -> Expression {
 
 auto soft_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "soft_constraint_expr" << std::endl;
-    bool_expr->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
 }
 
 auto soft_constraint_expr(Expression bool_expr) -> Expression {
@@ -1644,7 +1851,8 @@ auto soft_constraint_expr(Expression bool_expr) -> Expression {
 
 auto all_of_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "all_of_constraint_expr" << std::endl;
-    constraints->dump(stream, n+2);
+    if(constraints)
+        constraints->dump(stream, n+2);
 }
 
 auto all_of_constraint_expr(Expressions constraints) -> Expression {
@@ -1653,9 +1861,12 @@ auto all_of_constraint_expr(Expressions constraints) -> Expression {
 
 auto list_items_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_items_constraint_expr" << std::endl;
-    item_name->dump(stream, n+2);
-    gen_item->dump(stream, n+2);
-    constraints->dump(stream, n+2);
+    if(item_name)
+        item_name->dump(stream, n+2);
+    if(gen_item)
+        gen_item->dump(stream, n+2);
+    if(constraints)
+        constraints->dump(stream, n+2);
 }
 
 auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expressions constraints) -> Expression {
@@ -1664,8 +1875,10 @@ auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expre
 
 auto field_type_constraint_by_type_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "field_type_constraint_by_type_expr" << std::endl;
-    field_->dump(stream, n+2);
-    type_->dump(stream, n+2);
+    if(field_)
+        field_->dump(stream, n+2);
+    if(type_)
+        type_->dump(stream, n+2);
 }
 
 auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> Expression {
@@ -1674,8 +1887,10 @@ auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> 
 
 auto field_type_constraint_by_field_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "field_type_constraint_by_field_expr" << std::endl;
-    field_->dump(stream, n+2);
-    type_->dump(stream, n+2);
+    if(field_)
+        field_->dump(stream, n+2);
+    if(type_)
+        type_->dump(stream, n+2);
 }
 
 auto field_type_constraint_by_field_expr(Expression field_, Expression type_) -> Expression {
@@ -1684,8 +1899,10 @@ auto field_type_constraint_by_field_expr(Expression field_, Expression type_) ->
 
 auto distribution_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "distribution_constraint_expr" << std::endl;
-    gen_item->dump(stream, n+2);
-    distribution->dump(stream, n+2);
+    if(gen_item)
+        gen_item->dump(stream, n+2);
+    if(distribution)
+        distribution->dump(stream, n+2);
 }
 
 auto distribution_constraint_expr(Expression gen_item, Cases distribution) -> Expression {
@@ -1694,8 +1911,10 @@ auto distribution_constraint_expr(Expression gen_item, Cases distribution) -> Ex
 
 auto distribution_branch_case_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "distribution_branch_case" << std::endl;
-    int_->dump(stream, n+2);
-    value->dump(stream, n+2);
+    if(int_)
+        int_->dump(stream, n+2);
+    if(value)
+        value->dump(stream, n+2);
 }
 
 auto distribution_branch_case(Expression int_, Expression value) -> Case {
