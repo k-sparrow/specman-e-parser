@@ -1412,33 +1412,34 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-      type_scalar_expression { $$ = $1; }
-    | bitwise_expression     { $$ = $1; }
-    | logical_expression     { $$ = $1; }
-    | arithmetic_expression  { $$ = $1; }
-    | method_call_expression { $$ = $1; }
-    | identifier_expression  { $$ = $1; }
-    | str_expression         { $$ = $1; }
-    | int_expression         { $$ = $1; }
-    ; // TODO: fully implement this
+    type_scalar_expression { $$ = $1; }
+  | bitwise_expression     { $$ = $1; }
+  | logical_expression     { $$ = $1; }
+  | arithmetic_expression  { $$ = $1; }
+  | method_call_expression { $$ = $1; }
+  | identifier_expression  { $$ = $1; }
+  | str_expression         { $$ = $1; }
+  | int_expression         { $$ = $1; }
+  ; // TODO: fully implement this
 
 type_scalar_expression: // TODO: fully implement this
-      scalar_type_expression { $$ = $1; }
-    | enum_type_expression      { $$ = $1; } 
-    ;
+    scalar_type_expression { $$ = $1; }
+  | enum_type_expression   { $$ = $1; } 
+  ;
 
-enum_type_expression : LBRACKET enum_list_exprs RBRACKET { $$ = elex::enum_type_expr($2); }
-    ;
+enum_type_expression : 
+  LBRACKET enum_list_exprs RBRACKET { $$ = elex::enum_type_expr($2); }
+  ;
 
 enum_list_exprs :     
-    enum_list_item                         { $$ = elex::single_Expressions($1); }
-    | enum_list_exprs COMMA enum_list_item { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
-    | %empty                               { $$ = elex::nil_Expressions(); }
-    ;
+    enum_list_item                       { $$ = elex::single_Expressions($1); }
+  | enum_list_exprs COMMA enum_list_item { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+  | %empty                               { $$ = elex::nil_Expressions(); }
+  ;
 
 enum_list_item : 
-      ID EQ ID  { $$ = elex::enum_list_item($1, elex::id_expr($3)); }
-    | ID        { $$ = elex::enum_list_item($1, elex::no_expr()); }
+      ID ASSIGN int_expression  { $$ = elex::enum_list_item($1, $3); }
+    | ID                        { $$ = elex::enum_list_item($1, nullptr); }
     ;
 
 
