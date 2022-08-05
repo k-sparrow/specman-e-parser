@@ -1256,10 +1256,12 @@ auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "enum_type_expr" << std::endl;
     if(enum_list_expr)
         enum_list_expr->dump(stream, n+2);
+    if(width_modifier_expr)
+        width_modifier_expr->dump(stream, n+2);
 }
 
-auto enum_type_expr(Expressions enum_list_expr) -> Expression {
-    return Expression(new enum_type_expr_class(enum_list_expr));
+auto enum_type_expr(Expressions enum_list_expr, Expression width_modifier_expr) -> Expression {
+    return Expression(new enum_type_expr_class(enum_list_expr, width_modifier_expr));
 }
 
 auto enum_list_item_class::dump(std::ostream& stream, int n) -> void {

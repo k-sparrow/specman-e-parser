@@ -1428,7 +1428,11 @@ type_scalar_expression: // TODO: fully implement this
   ;
 
 enum_type_expression : 
-  LBRACKET enum_list_exprs RBRACKET { $$ = elex::enum_type_expr($2); }
+    LBRACKET enum_list_exprs[enum_items] RBRACKET 
+    { $$ = elex::enum_type_expr($enum_items, nullptr); }
+
+  | LBRACKET enum_list_exprs[enum_items] RBRACKET width_modifier_expression[width] 
+  { $$ = elex::enum_type_expr($enum_items, $width); }
   ;
 
 enum_list_exprs :     
@@ -1641,9 +1645,9 @@ range_modifier_expression :
   { $$ = elex::range_modifier_expr($bot, $top); }
   ;
 
-// this, for some unknown reason, causes 2 shift/reduce conflicts with its primary production (scalar_type_expression)
+// this, for some unknown reason, causes shift/reduce conflicts in any production it is used 
 // all attempts to solve these conflicts by reworking the grammar rules or using global/contextual precedence on LPAREN didn't work
-// but parsing works perfectly fine correctly
+// but parsing works perfectly fine 
 width_modifier_expression:
     LPAREN BITS COLON int_expression[width] RPAREN
     { $$ = elex::sized_bits_scalar_expr($width); }

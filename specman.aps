@@ -159,7 +159,7 @@ module Specman begin
 
         constructor id_expr(id: Symbol_) : Expression;
         
-        constructor enum_type_expr(enum_list_expr: Expressions) : Expression;
+        constructor enum_type_expr(enum_list_expr: Expressions; width_modifier_expr: Expression) : Expression;
         constructor enum_list_item(id: Symbol_; expr: Expression) : Expression;
         
         constructor bitwise_not_expr(e: Expression) : Expression;

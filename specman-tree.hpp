@@ -2382,9 +2382,11 @@ auto id_expr(Symbol_ id) -> Expression;
 class enum_type_expr_class : public Expression_class {
     protected:
         Expressions enum_list_expr;
+        Expression width_modifier_expr;
     public:
-        enum_type_expr_class(Expressions enum_list_expr) {
+        enum_type_expr_class(Expressions enum_list_expr, Expression width_modifier_expr) {
             this->enum_list_expr = enum_list_expr;
+            this->width_modifier_expr = width_modifier_expr;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -2397,7 +2399,7 @@ class enum_type_expr_class : public Expression_class {
 #endif
 };
 
-auto enum_type_expr(Expressions enum_list_expr) -> Expression;
+auto enum_type_expr(Expressions enum_list_expr, Expression width_modifier_expr) -> Expression;
 
 class enum_list_item_class : public Expression_class {
     protected:
