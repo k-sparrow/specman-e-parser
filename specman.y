@@ -352,6 +352,13 @@
 %nterm <elex::Statement>  package_statement
 %nterm <elex::Statement>  extend_struct_unit_statement
 %nterm <elex::Statement>  type_statement
+%nterm <elex::Statement>  inner_type_statement
+%nterm <elex::Statement>  enumerated_type_statement
+%nterm <elex::Statement>    scalar_subtype_statement
+%nterm <elex::Expressions>  subtype_range_list_items
+%nterm <elex::Expression>   subtype_range_list_item
+%nterm <elex::Statement>  scalar_sized_type_statement
+
 %nterm <elex::Statement>  extend_type_statement
 // %nterm <elex::Statement>  routine_statement
 // %nterm <elex::Statement>  simulator_statement
@@ -519,7 +526,7 @@
 %nterm <elex::Expression>   opt_struct_type_id
 
 %nterm <elex::Expression>   scalar_type_expression
-%nterm <elex::Expression>   subtype_extension
+%nterm <elex::Expression>   scalar_type_qualifier_expression
 %nterm <elex::Expression>   predefined_scalar_type_expression
 
 %nterm <elex::Expression>   constraint_expression
@@ -601,9 +608,114 @@ extend_struct_unit_statement :
     ;
 
 type_statement : 
-    OPT_PACKAGE TYPE ID COLON type_scalar_expression 
-    { $$ = elex::type_st($3, $5); }
-    ;
+  OPT_PACKAGE inner_type_statement
+  { $$ = $2; }
+  ;
+
+inner_type_statement : 
+    enumerated_type_statement
+    { $$ = $1; }
+
+  | scalar_subtype_statement 
+    { $$ = $1; }
+
+  | scalar_sized_type_statement
+    { $$ = $1; }
+  ;
+
+// all type statements are unrolled as long productions
+// in order to avoid astonishing, annoying and difficult rr & rs conflicts
+enumerated_type_statement:
+    TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET
+    { 
+      $$ = elex::enum_type_st($id, $items, nullptr); 
+    }
+
+  | TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET 
+    LPAREN BITS COLON int_expression[width] RPAREN
+    { 
+      auto width_expr = elex::sized_bits_scalar_expr($width);
+      $$ = elex::enum_type_st($id, $items, width_expr); 
+    }
+
+  | TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET 
+    LPAREN BYTES COLON int_expression[width] RPAREN
+    { 
+      auto width_expr = elex::sized_bytes_scalar_expr($width);
+      $$ = elex::enum_type_st($id, $items, width_expr); 
+    }
+  ;
+
+scalar_subtype_statement :
+    TYPE ID[subtype_id] COLON ID[type_id] 
+    { 
+      $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), nullptr);
+    }
+
+  | TYPE ID[subtype_id] COLON predefined_scalar_type_expression[type_id] 
+    { 
+      $$ = elex::scalar_subtype_st($subtype_id, $type_id, nullptr);
+    }
+  
+  | TYPE ID[subtype_id] COLON ID[type_id] 
+    LBRACKET subtype_range_list_items[ranges] RBRACKET
+    { 
+      $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), $ranges);
+    }
+
+  | TYPE ID[subtype_id] COLON predefined_scalar_type_expression[type_id] 
+    LBRACKET subtype_range_list_items[ranges] RBRACKET
+    { 
+      $$ = elex::scalar_subtype_st($subtype_id, $type_id, $ranges);
+    }
+  ;
+
+subtype_range_list_items : 
+    subtype_range_list_item 
+    { $$ = elex::single_Expressions($1); }
+
+  | subtype_range_list_items COMMA subtype_range_list_item 
+    { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+  ;
+
+subtype_range_list_item : 
+    ID 
+    { $$ = elex::id_expr($1); }
+  
+  | int_expression 
+    { $$ = $1; }
+
+  | ID DDOT ID 
+    { $$ = elex::range_modifier_expr(elex::id_expr($1), elex::id_expr($3)); }
+  
+  | int_expression DDOT int_expression 
+    { $$ = elex::range_modifier_expr($1, $3); }
+  ;
+
+scalar_sized_type_statement : 
+    TYPE ID[id] COLON predefined_scalar_type_expression[base_type_id]
+    width_modifier_expression[width]
+    { $$ = elex::scalar_sized_type_st($id, 
+                                      $base_type_id, 
+                                      nullptr,
+                                      $width); }
+  
+  | TYPE ID[id] COLON predefined_scalar_type_expression[base_type_id]
+    LBRACKET subtype_range_list_items[ranges] RBRACKET
+    width_modifier_expression[width]
+    { $$ = elex::scalar_sized_type_st($id, 
+                                      $base_type_id, 
+                                      $ranges,
+                                      $width); }
+  ;
+
+width_modifier_expression :
+    LPAREN BITS COLON int_expression[width] RPAREN
+    { $$ = elex::sized_bits_scalar_expr($width); }
+
+  | LPAREN BYTES COLON int_expression[width] RPAREN
+    { $$ = elex::sized_bytes_scalar_expr($width); }  
+  ;
 
 sequence_statement : 
     SEQUENCE ID[seq_id]                                 
@@ -1412,8 +1524,7 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-    type_scalar_expression { $$ = $1; }
-  | bitwise_expression     { $$ = $1; }
+    bitwise_expression     { $$ = $1; }
   | logical_expression     { $$ = $1; }
   | arithmetic_expression  { $$ = $1; }
   | method_call_expression { $$ = $1; }
@@ -1422,18 +1533,7 @@ non_term_expression :
   | int_expression         { $$ = $1; }
   ; // TODO: fully implement this
 
-type_scalar_expression: // TODO: fully implement this
-    scalar_type_expression { $$ = $1; }
-  | enum_type_expression   { $$ = $1; } 
-  ;
 
-enum_type_expression : 
-    LBRACKET enum_list_exprs[enum_items] RBRACKET 
-    { $$ = elex::enum_type_expr($enum_items, nullptr); }
-
-  | LBRACKET enum_list_exprs[enum_items] RBRACKET width_modifier_expression[width] 
-  { $$ = elex::enum_type_expr($enum_items, $width); }
-  ;
 
 enum_list_exprs :     
     enum_list_item                       { $$ = elex::single_Expressions($1); }
@@ -1611,24 +1711,6 @@ struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
 
     ; */
 
-scalar_type_expression : 
-    predefined_scalar_type_expression 
-    { 
-      $$ = $1; 
-    }
-  | predefined_scalar_type_expression[type_] range_modifier_expression[range] 
-    { 
-      $$ = elex::scalar_subtype_expr($type_, $range, nullptr);
-    }
-  | predefined_scalar_type_expression[type_] width_modifier_expression[width]
-    {
-      $$ = elex::scalar_subtype_expr($type_, nullptr, $width);
-    }
-  | predefined_scalar_type_expression[type_] range_modifier_expression[range] width_modifier_expression[width]
-    {
-      $$ = elex::scalar_subtype_expr($type_, $range, $width);
-    }
-  ;
 
 predefined_scalar_type_expression : 
     INT     { $$ = elex::predefined_type_int_expr(); }
@@ -1640,20 +1722,6 @@ predefined_scalar_type_expression :
   | TIME    { $$ = elex::predefined_type_time_expr(); }
   ;
 
-range_modifier_expression : 
-  LBRACKET fixed_repetition_rep_base_expr[bot] DDOT fixed_repetition_rep_base_expr[top] RBRACKET 
-  { $$ = elex::range_modifier_expr($bot, $top); }
-  ;
-
-// this, for some unknown reason, causes shift/reduce conflicts in any production it is used 
-// all attempts to solve these conflicts by reworking the grammar rules or using global/contextual precedence on LPAREN didn't work
-// but parsing works perfectly fine 
-width_modifier_expression:
-    LPAREN BITS COLON int_expression[width] RPAREN
-    { $$ = elex::sized_bits_scalar_expr($width); }
-  | LPAREN BYTES COLON int_expression[width] RPAREN
-    { $$ = elex::sized_bytes_scalar_expr($width); }
-  ;
 
 struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
       struct_type_modifier                       { $$ = elex::single_Expressions($1); }
@@ -1707,7 +1775,10 @@ hdl_pathname_expression :
     ;
 
 hier_ref_expression : 
-    dot_separated_expressions 
+    id_expr
+    { $$ = elex::struct_hier_ref_expr(elex::single_Expressions($1)); }
+
+  | dot_separated_expressions 
     { $$ = elex::struct_hier_ref_expr($1); }
 
   | DOT dot_separated_expressions 
@@ -1719,7 +1790,7 @@ hier_ref_expression :
   ;
 
 dot_separated_expressions : 
-      id_expr                                { $$ = elex::single_Expressions($1); }
+      id_expr DOT id_expr                    { $$ = elex::append_Expressions(elex::single_Expressions($1), elex::single_Expressions($3)); }
     | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
@@ -1771,8 +1842,8 @@ constraint_expression :
     ;
 
 type_identifier_expression :
-    struct_type_modifiers   { $$ = elex::type_identifier_expr($1); }
-  | scalar_type_expression  { $$ = $1; } 
+    struct_type_modifiers              { $$ = elex::type_identifier_expr($1); }
+  | predefined_scalar_type_expression  { $$ = $1; } 
   ;
 
 terminated_constraint_expression : 

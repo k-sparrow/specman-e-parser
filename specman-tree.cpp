@@ -208,15 +208,45 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
     return Statement(new extend_struct_st_class(struct_type_name, members));
 }
 
-auto type_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "type_st" << std::endl;
+auto enum_type_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "enum_type_st" << std::endl;
     dump_Symbol_(stream, n+2, type_id);
-    if(type_expr)
-        type_expr->dump(stream, n+2);
+    if(enum_list_items)
+        enum_list_items->dump(stream, n+2);
+    if(width_expr)
+        width_expr->dump(stream, n+2);
 }
 
-auto type_st(Symbol_ type_id, Expression type_expr) -> Statement {
-    return Statement(new type_st_class(type_id, type_expr));
+auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) -> Statement {
+    return Statement(new enum_type_st_class(type_id, enum_list_items, width_expr));
+}
+
+auto scalar_subtype_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "scalar_subtype_st" << std::endl;
+    dump_Symbol_(stream, n+2, subtype_id);
+    if(type_id)
+        type_id->dump(stream, n+2);
+    if(ranges)
+        ranges->dump(stream, n+2);
+}
+
+auto scalar_subtype_st(Symbol_ subtype_id, Expression type_id, Expressions ranges) -> Statement {
+    return Statement(new scalar_subtype_st_class(subtype_id, type_id, ranges));
+}
+
+auto scalar_sized_type_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "scalar_sized_type_st" << std::endl;
+    dump_Symbol_(stream, n+2, type_id);
+    if(base_type_id)
+        base_type_id->dump(stream, n+2);
+    if(ranges_expr)
+        ranges_expr->dump(stream, n+2);
+    if(width_expr)
+        width_expr->dump(stream, n+2);
+}
+
+auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr) -> Statement {
+    return Statement(new scalar_sized_type_st_class(type_id, base_type_id, ranges_expr, width_expr));
 }
 
 auto import_class::dump(std::ostream& stream, int n) -> void {

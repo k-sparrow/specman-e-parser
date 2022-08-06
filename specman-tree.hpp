@@ -347,14 +347,16 @@ class extend_struct_st_class : public Statement_class {
 
 auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement;
 
-class type_st_class : public Statement_class {
+class enum_type_st_class : public Statement_class {
     protected:
         Symbol_ type_id;
-        Expression type_expr;
+        Expressions enum_list_items;
+        Expression width_expr;
     public:
-        type_st_class(Symbol_ type_id, Expression type_expr) {
+        enum_type_st_class(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) {
             this->type_id = type_id;
-            this->type_expr = type_expr;
+            this->enum_list_items = enum_list_items;
+            this->width_expr = width_expr;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -362,12 +364,62 @@ class type_st_class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef type_st_EXTRAS
-    type_st_EXTRAS
+#ifdef enum_type_st_EXTRAS
+    enum_type_st_EXTRAS
 #endif
 };
 
-auto type_st(Symbol_ type_id, Expression type_expr) -> Statement;
+auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) -> Statement;
+
+class scalar_subtype_st_class : public Statement_class {
+    protected:
+        Symbol_ subtype_id;
+        Expression type_id;
+        Expressions ranges;
+    public:
+        scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges) {
+            this->subtype_id = subtype_id;
+            this->type_id = type_id;
+            this->ranges = ranges;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef scalar_subtype_st_EXTRAS
+    scalar_subtype_st_EXTRAS
+#endif
+};
+
+auto scalar_subtype_st(Symbol_ subtype_id, Expression type_id, Expressions ranges) -> Statement;
+
+class scalar_sized_type_st_class : public Statement_class {
+    protected:
+        Symbol_ type_id;
+        Expression base_type_id;
+        Expressions ranges_expr;
+        Expression width_expr;
+    public:
+        scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr) {
+            this->type_id = type_id;
+            this->base_type_id = base_type_id;
+            this->ranges_expr = ranges_expr;
+            this->width_expr = width_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef scalar_sized_type_st_EXTRAS
+    scalar_sized_type_st_EXTRAS
+#endif
+};
+
+auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr) -> Statement;
 
 class import_class : public Statement_class {
     protected:
