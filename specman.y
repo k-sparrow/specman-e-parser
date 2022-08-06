@@ -1534,6 +1534,10 @@ non_term_expression :
   | logical_expression     { $$ = $1; }
   | arithmetic_expression  { $$ = $1; }
   | method_call_expression { $$ = $1; }
+  | LBRACKET enum_list_exprs RBRACKET 
+    {
+      $$ = elex::enum_type_expr($2, nullptr);
+    }
   | identifier_expression  { $$ = $1; }
   | str_expression         { $$ = $1; }
   | int_expression         { $$ = $1; }
@@ -1855,7 +1859,12 @@ constraint_expression :
     ;
 
 scoped_type_identifier_expression :
-    struct_type_modifiers              { $$ = elex::type_identifier_expr($1); }
+    struct_type_modifiers              
+    { $$ = elex::type_identifier_expr($1); }
+
+  | LBRACKET enum_list_exprs RBRACKET
+    { $$ = elex::enum_type_expr($2, nullptr); }
+
   | predefined_scalar_type_expression  
     { $$ = $1; } 
 
