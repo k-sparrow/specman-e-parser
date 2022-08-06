@@ -389,7 +389,7 @@ mvl            {mvl_single}|{sized_mvl}
 {hwp}	        { return yy::parser::make_HWP(Location()); }         
 {ternary}       { return yy::parser::make_TERNARY(Location()); }         
 
-"("	        { return yy::parser::make_LPAREN(Location()); }      
+{lparen}    { return yy::parser::make_LPAREN(Location()); }      
 {rparen}	{ return yy::parser::make_RPAREN(Location()); }      
 {lbracket}	{ return yy::parser::make_LBRACKET(Location()); }    
 {rbracket}	{ return yy::parser::make_RBRACKET(Location()); }    

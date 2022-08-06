@@ -530,7 +530,7 @@
 %nterm <elex::Expression>   predefined_scalar_type_expression
 
 %nterm <elex::Expression>   constraint_expression
-%nterm <elex::Expression>   type_identifier_expression
+%nterm <elex::Expression>   scoped_type_identifier_expression
 %nterm <elex::Expression>   terminated_constraint_expression
 %nterm <elex::Expressions>  constriant_expression_block
 %nterm <elex::Expression>   method_call_expression
@@ -965,7 +965,7 @@ non_term_coverage_group_item :
     ITEM ID[id] opt_coverage_group_item_options[options] 
     { $$ = elex::simple_covergroup_item_cgi($id, $options);}
     
-  | ITEM ID[id] COLON type_identifier_expression[type_] ASSIGN non_term_expression[value] opt_coverage_group_item_options[options] 
+  | ITEM ID[id] COLON scoped_type_identifier_expression[type_] ASSIGN non_term_expression[value] opt_coverage_group_item_options[options] 
     { $$ = elex::on_the_fly_covergroup_item_cgi($id, $type_, $value, $options); }
   
   | CROSS covergroup_item_list[cross_cg_items] opt_coverage_group_item_options[options]
@@ -1179,7 +1179,7 @@ scalar_field_declaration :
   ;
 
 non_decorated_scalar_field_declaration : 
-    ID[name] COLON type_identifier_expression[type_] 
+    ID[name] COLON scoped_type_identifier_expression[type_] 
     { $$ = elex::struct_field_sm($name, $type_, false, false); }
   ;
 
@@ -1204,16 +1204,16 @@ list_field_declaration :
 
 
 non_decorated_list_field_declaration : 
-    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF type_identifier_expression[type_] 
+    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF scoped_type_identifier_expression[type_] 
     { $$ = elex::struct_field_list_sm($name, $len, $type_, false, false); }
 
-  |  ID[name] COLON LIST OF type_identifier_expression[type_] 
+  |  ID[name] COLON LIST OF scoped_type_identifier_expression[type_] 
     { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_, false, false); }
     ;
 
 // list-name : !list(key: key-name) of list-type
 keyed_list_field_declaration : 
-    do_not_gen_physical[gen_phy] ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF type_identifier_expression[list_type] 
+    do_not_gen_physical[gen_phy] ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF scoped_type_identifier_expression[list_type] 
     { 
         if($gen_phy & eDoNotGen){
           auto is_physical = static_cast<elex::Boolean>($gen_phy & eDoNotGen);
@@ -1609,10 +1609,10 @@ inclusion_expression :
    
 */
 type_instrospection_expression :
-    hier_ref_expression[field] IS_A type_identifier_expression[type_] 
+    hier_ref_expression[field] IS_A scoped_type_identifier_expression[type_] 
     { $$ = elex::type_introspec_expr($field, $type_); }
 
-  | hier_ref_expression[field] IS_NOT_A type_identifier_expression[type_] 
+  | hier_ref_expression[field] IS_NOT_A scoped_type_identifier_expression[type_] 
   { $$ = elex::type_introspec_negation_expr($field, $type_); }
   ;
 
@@ -1778,6 +1778,13 @@ hier_ref_expression :
     id_expr
     { $$ = elex::struct_hier_ref_expr(elex::single_Expressions($1)); }
 
+  | DOT id_expr
+    { 
+      auto it_expr = elex::it_expr();
+      auto complete_hierarchy = elex::append_Expressions(elex::single_Expressions(it_expr), 
+                                                         elex::single_Expressions($2));
+      $$ = elex::struct_hier_ref_expr(complete_hierarchy);
+    }
   | dot_separated_expressions 
     { $$ = elex::struct_hier_ref_expr($1); }
 
@@ -1824,7 +1831,7 @@ List items constraint
 constraint_expression : 
       logical_expression                               { $$ = elex::constraint_expr($1); }
     | SOFT constraint_expression                       { $$ = elex::soft_constraint_expr($2); }
-    | TYPE hier_ref_expression[field] IS_A type_identifier_expression[type_] 
+    | TYPE hier_ref_expression[field] IS_A scoped_type_identifier_expression[type_] 
       { $$ = elex::field_type_constraint_by_type_expr($field, $type_); }
     | TYPE hier_ref_expression[lhs] EQ hier_ref_expression[rhs]
       { $$ = elex::field_type_constraint_by_field_expr($lhs, $rhs); }
@@ -1841,9 +1848,22 @@ constraint_expression :
       }
     ;
 
-type_identifier_expression :
+scoped_type_identifier_expression :
     struct_type_modifiers              { $$ = elex::type_identifier_expr($1); }
-  | predefined_scalar_type_expression  { $$ = $1; } 
+  | predefined_scalar_type_expression  
+    { $$ = $1; } 
+
+  | predefined_scalar_type_expression[type_] LPAREN BITS COLON int_expression[width] RPAREN 
+    { 
+      auto width_expr = elex::sized_bits_scalar_expr($width);
+      $$ = elex::scalar_subtype_expr($type_, nullptr, width_expr); 
+    }
+
+  | predefined_scalar_type_expression[type_] LPAREN BYTES COLON int_expression[width] RPAREN 
+    { 
+      auto width_expr = elex::sized_bytes_scalar_expr($width);
+      $$ = elex::scalar_subtype_expr($type_, nullptr, width_expr); 
+    }
   ;
 
 terminated_constraint_expression : 
@@ -1907,12 +1927,12 @@ formals:
     ;
 
 formal : 
-    ID[name] COLON type_identifier_expression[type_] { $$ = elex::formal($name, $type_); }
+    ID[name] COLON scoped_type_identifier_expression[type_] { $$ = elex::formal($name, $type_); }
     ;
 
 opt_return_type : 
       %empty                            { $$ = elex::no_expr(); } 
-    | COLON type_identifier_expression  { $$ = $2; }
+    | COLON scoped_type_identifier_expression  { $$ = $2; }
 
 OPT_PACKAGE : 
       PACKAGE  { }
