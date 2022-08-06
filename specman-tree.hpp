@@ -686,14 +686,12 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_
 class struct_field_assoc_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
-        Expression key_type;
-        Expression list_base_type;
+        Expression list_type_expr;
         Boolean is_physical;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, Expression key_type, Expression list_base_type, Boolean is_physical) {
+        struct_field_assoc_list_sm_class(Symbol_ id, Expression list_type_expr, Boolean is_physical) {
             this->id = id;
-            this->key_type = key_type;
-            this->list_base_type = list_base_type;
+            this->list_type_expr = list_type_expr;
             this->is_physical = is_physical;
         }
 
@@ -707,7 +705,7 @@ class struct_field_assoc_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type, Boolean is_physical) -> StructMember;
+auto struct_field_assoc_list_sm(Symbol_ id, Expression list_type_expr, Boolean is_physical) -> StructMember;
 
 class method_dec_sm_class : public StructMember_class {
     protected:
@@ -2415,24 +2413,6 @@ class false_literal_expr_class : public Expression_class {
 
 auto false_literal_expr() -> Expression;
 
-class no_action_class : public Action_class {
-    protected:
-    public:
-        no_action_class() {
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Action_SHARED_EXTRAS
-    Action_SHARED_EXTRAS
-#endif
-#ifdef no_action_EXTRAS
-    no_action_EXTRAS
-#endif
-};
-
-auto no_action() -> Action;
-
 class id_expr_class : public Expression_class {
     protected:
         Symbol_ id;
@@ -2452,6 +2432,48 @@ class id_expr_class : public Expression_class {
 };
 
 auto id_expr(Symbol_ id) -> Expression;
+
+class list_type_expr_class : public Expression_class {
+    protected:
+        Expression base_type_expr;
+    public:
+        list_type_expr_class(Expression base_type_expr) {
+            this->base_type_expr = base_type_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_type_expr_EXTRAS
+    list_type_expr_EXTRAS
+#endif
+};
+
+auto list_type_expr(Expression base_type_expr) -> Expression;
+
+class assoc_list_type_expr_class : public Expression_class {
+    protected:
+        Symbol_ key_id;
+        Expression base_type_expr;
+    public:
+        assoc_list_type_expr_class(Symbol_ key_id, Expression base_type_expr) {
+            this->key_id = key_id;
+            this->base_type_expr = base_type_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef assoc_list_type_expr_EXTRAS
+    assoc_list_type_expr_EXTRAS
+#endif
+};
+
+auto assoc_list_type_expr(Symbol_ key_id, Expression base_type_expr) -> Expression;
 
 class enum_type_expr_class : public Expression_class {
     protected:
@@ -3387,11 +3409,11 @@ class struct_type_modifier_class : public Expression_class {
 
 auto struct_type_modifier(Expression value, Expression id) -> Expression;
 
-class type_identifier_expr_class : public Expression_class {
+class defined_type_identifier_expr_class : public Expression_class {
     protected:
         Expressions modifiers;
     public:
-        type_identifier_expr_class(Expressions modifiers) {
+        defined_type_identifier_expr_class(Expressions modifiers) {
             this->modifiers = modifiers;
         }
 
@@ -3400,12 +3422,12 @@ class type_identifier_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef type_identifier_expr_EXTRAS
-    type_identifier_expr_EXTRAS
+#ifdef defined_type_identifier_expr_EXTRAS
+    defined_type_identifier_expr_EXTRAS
 #endif
 };
 
-auto type_identifier_expr(Expressions modifiers) -> Expression;
+auto defined_type_identifier_expr(Expressions modifiers) -> Expression;
 
 class type_introspec_expr_class : public Expression_class {
     protected:
@@ -3974,6 +3996,48 @@ class no_expr_class : public Expression_class {
 };
 
 auto no_expr() -> Expression;
+
+class var_decl_action_class : public Action_class {
+    protected:
+        Symbol_ name;
+        Expression type_id;
+        Expression init_expr;
+    public:
+        var_decl_action_class(Symbol_ name, Expression type_id, Expression init_expr) {
+            this->name = name;
+            this->type_id = type_id;
+            this->init_expr = init_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef var_decl_action_EXTRAS
+    var_decl_action_EXTRAS
+#endif
+};
+
+auto var_decl_action(Symbol_ name, Expression type_id, Expression init_expr) -> Action;
+
+class no_action_class : public Action_class {
+    protected:
+    public:
+        no_action_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef no_action_EXTRAS
+    no_action_EXTRAS
+#endif
+};
+
+auto no_action() -> Action;
 
  
 }

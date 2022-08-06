@@ -62,7 +62,7 @@ module Specman begin
 
         constructor struct_field_sm(id: Symbol_; type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
         constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; list_base_type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
-        constructor struct_field_assoc_list_sm(id: Symbol_; key_type: Expression; list_base_type: Expression; is_physical : Boolean) : StructMember;
+        constructor struct_field_assoc_list_sm(id: Symbol_; list_type_expr: Expression; is_physical : Boolean) : StructMember;
 
         constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
         constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
@@ -158,10 +158,11 @@ module Specman begin
 
         constructor true_literal_expr() : Expression;
         constructor false_literal_expr() : Expression;
-        constructor no_action() : Action;
 
         constructor id_expr(id: Symbol_) : Expression;
         
+        constructor list_type_expr(base_type_expr: Expression) : Expression;
+        constructor assoc_list_type_expr(key_id: Symbol_; base_type_expr: Expression) : Expression;
         constructor enum_type_expr(enum_list_expr: Expressions; width_modifier_expr: Expression) : Expression;
         constructor enum_list_item(id: Symbol_; expr: Expression) : Expression;
         
@@ -212,7 +213,7 @@ module Specman begin
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
-        constructor type_identifier_expr(modifiers: Expressions) : Expression;
+        constructor defined_type_identifier_expr(modifiers: Expressions) : Expression;
         constructor type_introspec_expr(field_id: Expression; type_id: Expression) : Expression;
         constructor type_introspec_negation_expr(field_id: Expression; type_id: Expression) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
@@ -248,4 +249,7 @@ module Specman begin
         constructor predefined_type_time_expr() : Expression;
 
         constructor no_expr() : Expression;
+        
+        constructor var_decl_action(name: Symbol_; type_id: Expression; init_expr: Expression) : Action;
+        constructor no_action() : Action;
 end;

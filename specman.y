@@ -299,6 +299,7 @@
 %token NIBBLE
 %token TIME 
 %token BOOL 
+%token VAR 
 
 
 %token LPAREN      
@@ -438,6 +439,8 @@
 /* %nterm <elex::Actions> opt_with_action_block */
 %nterm <elex::Action>  action
 %nterm <elex::Action>  non_term_action
+%nterm <elex::Action>  variable_declaration_action
+
 
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
@@ -531,6 +534,7 @@
 
 %nterm <elex::Expression>   constraint_expression
 %nterm <elex::Expression>   scoped_type_identifier_expression
+%nterm <elex::Expression>   scoped_scalar_type_identifier_expression
 %nterm <elex::Expression>   terminated_constraint_expression
 %nterm <elex::Expressions>  constriant_expression_block
 %nterm <elex::Expression>   method_call_expression
@@ -1152,8 +1156,6 @@ opt_expect_assume_modifier :
 
 field_declaration : 
       scalar_field_declaration      { $$ = $1; }
-    | list_field_declaration        { $$ = $1; }
-    | keyed_list_field_declaration  { $$ = $1; }
     ;
 
 do_not_gen_physical:
@@ -1173,64 +1175,86 @@ scalar_field_declaration :
   | do_not_gen_physical[gen_phy] non_decorated_scalar_field_declaration[field_decl]
     { 
       $$ = $field_decl;
-      auto scalar_field_shared = std::dynamic_pointer_cast<elex::struct_field_sm_class>($field_decl);
-      if(scalar_field_shared == nullptr) error(@1, "Bad pointer cast");
+      // TODO: consider using enum-tagged classes, can save bad coding errors and redundant downcasting
+      auto scalar_field     = std::dynamic_pointer_cast<elex::struct_field_sm_class>($field_decl);  
+      auto list_field       = std::dynamic_pointer_cast<elex::struct_field_list_sm_class>($field_decl);  
+      auto assoc_list_field = std::dynamic_pointer_cast<elex::struct_field_assoc_list_sm_class>($field_decl);  
 
       auto is_physical = static_cast<elex::Boolean>(ePhysical & $gen_phy);
       auto do_not_gen  = static_cast<elex::Boolean>(eDoNotGen & $gen_phy);
 
-      scalar_field_shared->set_is_physical(is_physical);
-      scalar_field_shared->set_do_not_gen(do_not_gen);
-    }
-  ;
+      // handle scalar field declaration
+      if(scalar_field){
+        scalar_field->set_is_physical(is_physical);
+        scalar_field->set_do_not_gen(do_not_gen);
+      }
 
-non_decorated_scalar_field_declaration : 
-    ID[name] COLON scoped_type_identifier_expression[type_] 
-    { $$ = elex::struct_field_sm($name, $type_, false, false); }
-  ;
+      // handle list field declaration
+      else if(list_field){
+        list_field->set_is_physical(is_physical);
+        list_field->set_do_not_gen(do_not_gen);
+      }
 
-
-// list-name[[len]] : list of type
-list_field_declaration :
-    non_decorated_list_field_declaration 
-    { $$ = $1; }
-
-  | do_not_gen_physical[gen_phy] non_decorated_list_field_declaration[list_field_decl]
-    {
-      $$ = $list_field_decl;
-      auto list_field_shared = std::dynamic_pointer_cast<elex::struct_field_list_sm_class>($list_field_decl);
-      if(list_field_shared == nullptr) error(@1, "Bad pointer cast");
-
-      auto is_physical = static_cast<elex::Boolean>(ePhysical & $gen_phy);
-      auto do_not_gen  = static_cast<elex::Boolean>(eDoNotGen & $gen_phy);
-
-      list_field_shared->set_is_physical(is_physical);
-      list_field_shared->set_do_not_gen(do_not_gen);
-    }
-
-
-non_decorated_list_field_declaration : 
-    ID[name] LBRACKET id_expr[len] RBRACKET COLON LIST OF scoped_type_identifier_expression[type_] 
-    { $$ = elex::struct_field_list_sm($name, $len, $type_, false, false); }
-
-  |  ID[name] COLON LIST OF scoped_type_identifier_expression[type_] 
-    { $$ = elex::struct_field_list_sm($name, elex::no_expr(), $type_, false, false); }
-    ;
-
-// list-name : !list(key: key-name) of list-type
-keyed_list_field_declaration : 
-    do_not_gen_physical[gen_phy] ID[name] COLON LIST LPAREN KEY COLON id_expr[key_type] RPAREN OF scoped_type_identifier_expression[list_type] 
-    { 
-        if($gen_phy & eDoNotGen){
-          auto is_physical = static_cast<elex::Boolean>($gen_phy & eDoNotGen);
-          $$ = elex::struct_field_assoc_list_sm($name, $key_type, $list_type, is_physical); 
+      // handle associative list field declaration
+      else if(assoc_list_field){
+        if(is_physical){
+          assoc_list_field->set_is_physical(is_physical);
         }
         else {
           error(@1, "Associative lists must be generatable!");
           $$ = nullptr;
         }
+      }
+
+      // error
+      else {
+        error(@1, "Bad pointer cast");
+        $$ = nullptr;
+      }
+
     }
-    ;
+  ;
+
+non_decorated_scalar_field_declaration : 
+    ID[name] COLON scoped_type_identifier_expression[type_] 
+    { 
+      // if its a list type
+      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) 
+        $$ = elex::struct_field_list_sm($name, nullptr, $type_, false, false);
+
+      // or else its a associative list type
+      else if (std::dynamic_pointer_cast<assoc_list_type_expr_class>($type_)) 
+        $$ = elex::struct_field_assoc_list_sm($name, $type_, false);
+      
+      // else it's just a scalar field
+      else // construct a scalar struct field
+        $$ = elex::struct_field_sm($name, $type_, false, false); 
+    }
+
+  // additional syntax specialization for listed fields
+  | ID[name] LBRACKET id_expr[len] RBRACKET COLON scoped_type_identifier_expression[type_] 
+    { 
+      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) {
+        $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
+      }
+      else {
+        error(@1, "Badly constructed list struct field, expecting list base type, got scalar or associative list!");
+        $$ = nullptr;
+      }
+    }
+
+  | ID[name] LBRACKET int_expression[len] RBRACKET COLON scoped_type_identifier_expression[type_] 
+    {  
+      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) {
+        $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
+      }
+      else {
+        error(@1, "Badly constructed list struct field, expecting list base type, got scalar or associative list!");
+        $$ = nullptr;
+      } 
+    }
+  ;
+
 
 method_declaration : 
       /*
@@ -1514,11 +1538,44 @@ action_block :
     { $$ = $2; }
   ;
 
-action : non_term_action SEMICOLON { $$ = $1; } 
-    ;
+action : 
+    non_term_action SEMICOLON { $$ = $1; } 
+  ;
 
-non_term_action : %empty { $$ = elex::no_action(); } //TODO: implement
-    ;
+non_term_action : 
+    %empty 
+    { 
+      $$ = elex::no_action(); 
+    } 
+
+  | variable_declaration_action
+    { $$ = $1; }
+
+  | error 
+    { 
+      yyerrok; 
+      $$ = nullptr; 
+    }
+  
+  ;
+
+variable_declaration_action :
+    // var name
+    VAR ID 
+    { $$ = elex::var_decl_action($2, nullptr, nullptr); }
+  
+    // var name : type
+  | VAR ID[id] COLON scoped_type_identifier_expression[type_]
+    { $$ = elex::var_decl_action($id, $type_, nullptr); }
+  
+    // var name : type = exp
+  | VAR ID[id] COLON scoped_type_identifier_expression[type_] ASSIGN non_term_expression[exp]
+    { $$ = elex::var_decl_action($id, $type_, $exp);}
+
+    // var name := exp
+  | VAR ID[id] COLON ASSIGN non_term_expression[exp]
+    { $$ = elex::var_decl_action($id, nullptr, $exp);}
+  ;
 
 /* Expressions */
 /* expressions : 
@@ -1858,9 +1915,20 @@ constraint_expression :
       }
     ;
 
-scoped_type_identifier_expression :
+scoped_type_identifier_expression: 
+    scoped_scalar_type_identifier_expression
+    { $$ = $1; }
+
+  | LIST OF scoped_type_identifier_expression
+    { $$ = elex::list_type_expr($3); }
+
+  | LIST LPAREN KEY COLON ID[key_id] RPAREN OF scoped_type_identifier_expression[base_type]
+    { $$ = elex::assoc_list_type_expr($key_id, $base_type); }
+  ;
+
+scoped_scalar_type_identifier_expression :
     struct_type_modifiers              
-    { $$ = elex::type_identifier_expr($1); }
+    { $$ = elex::defined_type_identifier_expr($1); }
 
   | LBRACKET enum_list_exprs RBRACKET
     { $$ = elex::enum_type_expr($2, nullptr); }

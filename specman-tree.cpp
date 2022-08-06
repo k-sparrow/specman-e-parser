@@ -378,15 +378,13 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_assoc_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    if(key_type)
-        key_type->dump(stream, n+2);
-    if(list_base_type)
-        list_base_type->dump(stream, n+2);
+    if(list_type_expr)
+        list_type_expr->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
 }
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression key_type, Expression list_base_type, Boolean is_physical) -> StructMember {
-    return StructMember(new struct_field_assoc_list_sm_class(id, key_type, list_base_type, is_physical));
+auto struct_field_assoc_list_sm(Symbol_ id, Expression list_type_expr, Boolean is_physical) -> StructMember {
+    return StructMember(new struct_field_assoc_list_sm_class(id, list_type_expr, is_physical));
 }
 
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
@@ -1276,14 +1274,6 @@ auto false_literal_expr() -> Expression {
     return Expression(new false_literal_expr_class());
 }
 
-auto no_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "no_action" << std::endl;
-}
-
-auto no_action() -> Action {
-    return Action(new no_action_class());
-}
-
 auto id_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "id_expr" << std::endl;
     dump_Symbol_(stream, n+2, id);
@@ -1291,6 +1281,27 @@ auto id_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto id_expr(Symbol_ id) -> Expression {
     return Expression(new id_expr_class(id));
+}
+
+auto list_type_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_type_expr" << std::endl;
+    if(base_type_expr)
+        base_type_expr->dump(stream, n+2);
+}
+
+auto list_type_expr(Expression base_type_expr) -> Expression {
+    return Expression(new list_type_expr_class(base_type_expr));
+}
+
+auto assoc_list_type_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "assoc_list_type_expr" << std::endl;
+    dump_Symbol_(stream, n+2, key_id);
+    if(base_type_expr)
+        base_type_expr->dump(stream, n+2);
+}
+
+auto assoc_list_type_expr(Symbol_ key_id, Expression base_type_expr) -> Expression {
+    return Expression(new assoc_list_type_expr_class(key_id, base_type_expr));
 }
 
 auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -1796,14 +1807,14 @@ auto struct_type_modifier(Expression value, Expression id) -> Expression {
     return Expression(new struct_type_modifier_class(value, id));
 }
 
-auto type_identifier_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "type_identifier_expr" << std::endl;
+auto defined_type_identifier_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "defined_type_identifier_expr" << std::endl;
     if(modifiers)
         modifiers->dump(stream, n+2);
 }
 
-auto type_identifier_expr(Expressions modifiers) -> Expression {
-    return Expression(new type_identifier_expr_class(modifiers));
+auto defined_type_identifier_expr(Expressions modifiers) -> Expression {
+    return Expression(new defined_type_identifier_expr_class(modifiers));
 }
 
 auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -2089,5 +2100,26 @@ auto no_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto no_expr() -> Expression {
     return Expression(new no_expr_class());
+}
+
+auto var_decl_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "var_decl_action" << std::endl;
+    dump_Symbol_(stream, n+2, name);
+    if(type_id)
+        type_id->dump(stream, n+2);
+    if(init_expr)
+        init_expr->dump(stream, n+2);
+}
+
+auto var_decl_action(Symbol_ name, Expression type_id, Expression init_expr) -> Action {
+    return Action(new var_decl_action_class(name, type_id, init_expr));
+}
+
+auto no_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "no_action" << std::endl;
+}
+
+auto no_action() -> Action {
+    return Action(new no_action_class());
 } 
 }
