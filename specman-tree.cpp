@@ -221,6 +221,17 @@ auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width
     return Statement(new enum_type_st_class(type_id, enum_list_items, width_expr));
 }
 
+auto extend_enum_type_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "extend_enum_type_st" << std::endl;
+    dump_Symbol_(stream, n+2, type_id);
+    if(enum_list_items)
+        enum_list_items->dump(stream, n+2);
+}
+
+auto extend_enum_type_st(Symbol_ type_id, Expressions enum_list_items) -> Statement {
+    return Statement(new extend_enum_type_st_class(type_id, enum_list_items));
+}
+
 auto scalar_subtype_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "scalar_subtype_st" << std::endl;
     dump_Symbol_(stream, n+2, subtype_id);

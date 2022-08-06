@@ -573,13 +573,14 @@ statements :
 statement : non_term_statement SEMICOLON { $$ = $1; }
 
 non_term_statement : 
-      package_statement  { $$ = $1; }
-    | struct_statement   { $$ = $1; }
-    | unit_statement     { $$ = $1; }
+      package_statement            { $$ = $1; }
+    | struct_statement             { $$ = $1; }
+    | unit_statement               { $$ = $1; }
     | extend_struct_unit_statement { $$ = $1; }
-    | type_statement     { $$ = $1; }
-    | import_statement   { $$ = $1; }
-    | sequence_statement { $$ = $1; }
+    | type_statement               { $$ = $1; }
+    | extend_type_statement        { $$ = $1; }
+    | import_statement             { $$ = $1; }
+    | sequence_statement           { $$ = $1; }
     ;
 
 import_statement : 
@@ -715,6 +716,11 @@ width_modifier_expression :
 
   | LPAREN BYTES COLON int_expression[width] RPAREN
     { $$ = elex::sized_bytes_scalar_expr($width); }  
+  ;
+
+extend_type_statement :
+  EXTEND ID[type_id] COLON LBRACKET enum_list_exprs[enum_items] RBRACKET 
+  { $$ = elex::extend_enum_type_st($type_id, $enum_items); }
   ;
 
 sequence_statement : 
@@ -1863,6 +1869,24 @@ scoped_type_identifier_expression :
     { 
       auto width_expr = elex::sized_bytes_scalar_expr($width);
       $$ = elex::scalar_subtype_expr($type_, nullptr, width_expr); 
+    }
+
+  | predefined_scalar_type_expression[type_]   
+    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET
+    LPAREN BITS COLON int_expression[width] RPAREN 
+    { 
+      auto range_expr = elex::range_modifier_expr($bot, $top);
+      auto width_expr = elex::sized_bits_scalar_expr($width);
+      $$ = elex::scalar_subtype_expr($type_, range_expr, width_expr); 
+    }
+
+  | predefined_scalar_type_expression[type_] 
+    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET
+    LPAREN BYTES COLON int_expression[width] RPAREN 
+    { 
+      auto range_expr = elex::range_modifier_expr($bot, $top);
+      auto width_expr = elex::sized_bytes_scalar_expr($width);
+      $$ = elex::scalar_subtype_expr($type_, range_expr, width_expr); 
     }
   ;
 

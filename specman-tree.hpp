@@ -371,6 +371,28 @@ class enum_type_st_class : public Statement_class {
 
 auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) -> Statement;
 
+class extend_enum_type_st_class : public Statement_class {
+    protected:
+        Symbol_ type_id;
+        Expressions enum_list_items;
+    public:
+        extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items) {
+            this->type_id = type_id;
+            this->enum_list_items = enum_list_items;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef extend_enum_type_st_EXTRAS
+    extend_enum_type_st_EXTRAS
+#endif
+};
+
+auto extend_enum_type_st(Symbol_ type_id, Expressions enum_list_items) -> Statement;
+
 class scalar_subtype_st_class : public Statement_class {
     protected:
         Symbol_ subtype_id;
