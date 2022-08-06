@@ -440,6 +440,7 @@
 %nterm <elex::Action>  action
 %nterm <elex::Action>  non_term_action
 %nterm <elex::Action>  variable_declaration_action
+%nterm <elex::Action>  variable_assignment_action
 
 
 /* Expressions */
@@ -1551,31 +1552,31 @@ non_term_action :
   | variable_declaration_action
     { $$ = $1; }
 
-  | error 
-    { 
-      yyerrok; 
-      $$ = nullptr; 
-    }
-  
+  | variable_assignment_action
+    { $$ = $1; }
   ;
 
 variable_declaration_action :
     // var name
     VAR ID 
-    { $$ = elex::var_decl_action($2, nullptr, nullptr); }
+    { $$ = elex::var_decl_act($2, nullptr, nullptr); }
   
     // var name : type
   | VAR ID[id] COLON scoped_type_identifier_expression[type_]
-    { $$ = elex::var_decl_action($id, $type_, nullptr); }
+    { $$ = elex::var_decl_act($id, $type_, nullptr); }
   
     // var name : type = exp
   | VAR ID[id] COLON scoped_type_identifier_expression[type_] ASSIGN non_term_expression[exp]
-    { $$ = elex::var_decl_action($id, $type_, $exp);}
+    { $$ = elex::var_decl_act($id, $type_, $exp);}
 
     // var name := exp
   | VAR ID[id] COLON ASSIGN non_term_expression[exp]
-    { $$ = elex::var_decl_action($id, nullptr, $exp);}
+    { $$ = elex::var_decl_act($id, nullptr, $exp);}
   ;
+
+variable_assignment_action : 
+  identifier_expression ASSIGN non_term_expression
+  { $$ = elex::var_assign_act($1, $3); }
 
 /* Expressions */
 /* expressions : 
@@ -1994,9 +1995,17 @@ identifier_expression :
     ;
 
 id_expr : 
-      ID            { $$ = elex::id_expr($1); }
-    | me_expression { $$ = $1; }
-    | it_expression { $$ = $1; }
+      ID             
+      { $$ = elex::id_expr($1); }
+
+    | ID[id] LBRACKET fixed_repetition_rep_base_expr[idx] RBRACKET           
+      { $$ = elex::list_indexing_expr(elex::id_expr($id), $idx); }
+    
+    | me_expression 
+      { $$ = $1; }
+
+    | it_expression 
+      { $$ = $1; }
     ;
 
 me_expression : 

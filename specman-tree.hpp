@@ -3997,13 +3997,13 @@ class no_expr_class : public Expression_class {
 
 auto no_expr() -> Expression;
 
-class var_decl_action_class : public Action_class {
+class var_decl_act_class : public Action_class {
     protected:
         Symbol_ name;
         Expression type_id;
         Expression init_expr;
     public:
-        var_decl_action_class(Symbol_ name, Expression type_id, Expression init_expr) {
+        var_decl_act_class(Symbol_ name, Expression type_id, Expression init_expr) {
             this->name = name;
             this->type_id = type_id;
             this->init_expr = init_expr;
@@ -4014,12 +4014,34 @@ class var_decl_action_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef var_decl_action_EXTRAS
-    var_decl_action_EXTRAS
+#ifdef var_decl_act_EXTRAS
+    var_decl_act_EXTRAS
 #endif
 };
 
-auto var_decl_action(Symbol_ name, Expression type_id, Expression init_expr) -> Action;
+auto var_decl_act(Symbol_ name, Expression type_id, Expression init_expr) -> Action;
+
+class var_assign_act_class : public Action_class {
+    protected:
+        Expression id_expr;
+        Expression assign_expr;
+    public:
+        var_assign_act_class(Expression id_expr, Expression assign_expr) {
+            this->id_expr = id_expr;
+            this->assign_expr = assign_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef var_assign_act_EXTRAS
+    var_assign_act_EXTRAS
+#endif
+};
+
+auto var_assign_act(Expression id_expr, Expression assign_expr) -> Action;
 
 class no_action_class : public Action_class {
     protected:

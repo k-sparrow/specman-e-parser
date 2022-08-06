@@ -2102,8 +2102,8 @@ auto no_expr() -> Expression {
     return Expression(new no_expr_class());
 }
 
-auto var_decl_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "var_decl_action" << std::endl;
+auto var_decl_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "var_decl_act" << std::endl;
     dump_Symbol_(stream, n+2, name);
     if(type_id)
         type_id->dump(stream, n+2);
@@ -2111,8 +2111,20 @@ auto var_decl_action_class::dump(std::ostream& stream, int n) -> void {
         init_expr->dump(stream, n+2);
 }
 
-auto var_decl_action(Symbol_ name, Expression type_id, Expression init_expr) -> Action {
-    return Action(new var_decl_action_class(name, type_id, init_expr));
+auto var_decl_act(Symbol_ name, Expression type_id, Expression init_expr) -> Action {
+    return Action(new var_decl_act_class(name, type_id, init_expr));
+}
+
+auto var_assign_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "var_assign_act" << std::endl;
+    if(id_expr)
+        id_expr->dump(stream, n+2);
+    if(assign_expr)
+        assign_expr->dump(stream, n+2);
+}
+
+auto var_assign_act(Expression id_expr, Expression assign_expr) -> Action {
+    return Action(new var_assign_act_class(id_expr, assign_expr));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

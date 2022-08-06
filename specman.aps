@@ -250,6 +250,7 @@ module Specman begin
 
         constructor no_expr() : Expression;
         
-        constructor var_decl_action(name: Symbol_; type_id: Expression; init_expr: Expression) : Action;
+        constructor var_decl_act(name: Symbol_; type_id: Expression; init_expr: Expression) : Action;
+        constructor var_assign_act(id_expr: Expression; assign_expr: Expression) : Action;
         constructor no_action() : Action;
 end;
