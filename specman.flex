@@ -134,6 +134,8 @@ nibble	    (nibble)
 time	    (time) 
 bool_	    (bool) 
 var         (var)
+force       (force)
+release     (release)
 
 item                 (item)
 created_kind         (created_kind)
@@ -350,6 +352,8 @@ mvl            {mvl_single}|{sized_mvl}
 {time}		{ return yy::parser::make_TIME(Location()); } 
 {bool_}		{ return yy::parser::make_BOOL(Location()); } 
 {var}	   	{ return yy::parser::make_VAR(Location()); } 
+{force}	   	{ return yy::parser::make_FORCE(Location()); } 
+{release}	{ return yy::parser::make_RELEASE(Location()); } 
 {item}		            { return yy::parser::make_ITEM(Location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(Location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      

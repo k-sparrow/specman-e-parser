@@ -315,6 +315,8 @@
 %token TIME 
 %token BOOL 
 %token VAR 
+%token FORCE 
+%token RELEASE 
 
 
 %token LPAREN      
@@ -454,10 +456,15 @@
 /* %nterm <elex::Actions> opt_with_action_block */
 %nterm <elex::Action>  action
 %nterm <elex::Action>  non_term_action
+
+
+%nterm <elex::Action>  variable_creation_or_modification_action
 %nterm <elex::Action>  variable_declaration_action
 %nterm <elex::Action>  variable_assignment_action
 %nterm <elex::Action>  compound_assignment_action
 %nterm <elex::e_compound_op>  compound_op
+%nterm <elex::Action>  force_action
+%nterm <elex::Action>  release_action
 
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
@@ -545,8 +552,6 @@
 %nterm <elex::Expression>   opt_slice_expr */
 %nterm <elex::Expression>   opt_struct_type_id
 
-%nterm <elex::Expression>   scalar_type_expression
-%nterm <elex::Expression>   scalar_type_qualifier_expression
 %nterm <elex::Expression>   predefined_scalar_type_expression
 
 %nterm <elex::Expression>   constraint_expression
@@ -1565,13 +1570,24 @@ non_term_action :
       $$ = elex::no_action(); 
     } 
 
-  | variable_declaration_action
+  | variable_creation_or_modification_action 
+    { $$ = $1; }
+  ;
+
+variable_creation_or_modification_action : 
+    variable_declaration_action
     { $$ = $1; }
 
   | variable_assignment_action
     { $$ = $1; }
   
   | compound_assignment_action
+    { $$ = $1; }
+
+  | force_action 
+    { $$ = $1; }
+
+  | release_action 
     { $$ = $1; }
   ;
 
@@ -1640,6 +1656,17 @@ compound_op :
   | LSHIFT         { $$ = eShiftLeft;  }
   | RSHIFT         { $$ = eShiftRight; }
   ;
+
+force_action : 
+  FORCE hdl_pathname_expression ASSIGN non_term_expression
+  { $$ = elex::force_action($2, $4); }
+  ;
+
+release_action : 
+  RELEASE hdl_pathname_expression
+  { $$ = elex::release_action($2); }
+  ;
+
 /* Expressions */
 /* expressions : 
     %empty                         { $$ = elex::nil_Expressions();  }
