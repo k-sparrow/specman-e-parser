@@ -76,6 +76,21 @@
           ePhysical = 2,
           eAllFieldMod = 3
         };
+
+        enum e_compound_op {
+          eAdd = 0,
+          eSub,
+          eMul,
+          eDiv,
+          eMod,
+          eBoolAnd,
+          eBoolOr,
+          eBitwiseAnd,
+          eBitwiseOr,
+          eBitwiseXor,
+          eShiftLeft,
+          eShiftRight
+        };
     };
 }
 
@@ -441,7 +456,8 @@
 %nterm <elex::Action>  non_term_action
 %nterm <elex::Action>  variable_declaration_action
 %nterm <elex::Action>  variable_assignment_action
-
+%nterm <elex::Action>  compound_assignment_action
+%nterm <elex::e_compound_op>  compound_op
 
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
@@ -1554,6 +1570,9 @@ non_term_action :
 
   | variable_assignment_action
     { $$ = $1; }
+  
+  | compound_assignment_action
+    { $$ = $1; }
   ;
 
 variable_declaration_action :
@@ -1577,7 +1596,50 @@ variable_declaration_action :
 variable_assignment_action : 
   identifier_expression ASSIGN non_term_expression
   { $$ = elex::var_assign_act($1, $3); }
+  ;
 
+compound_assignment_action : 
+  identifier_expression[lhs_exp] compound_op[op] ASSIGN non_term_expression[exp]
+  {
+    switch($op) {
+      /* binary arithmetic operators */
+      case eAdd: { $$ = elex::compound_add_expr($lhs_exp, $exp); break; }
+      case eSub: { $$ = elex::compound_sub_expr($lhs_exp, $exp); break; }
+      case eMul: { $$ = elex::compound_mul_expr($lhs_exp, $exp); break; }
+      case eDiv: { $$ = elex::compound_div_expr($lhs_exp, $exp); break; }
+      case eMod: { $$ = elex::compound_mod_expr($lhs_exp, $exp); break; }
+
+      /* boolean operators */
+      case eBoolAnd: { $$ = elex::compound_bool_and_expr($lhs_exp, $exp); break; }
+      case eBoolOr:  { $$ = elex::compound_bool_or_expr($lhs_exp, $exp);  break; }
+
+      /* bitwise operators */
+      case eBitwiseAnd: { $$ = elex::compound_bit_and_expr($lhs_exp, $exp);    break; }
+      case eBitwiseOr:  { $$ = elex::compound_bit_or_expr($lhs_exp, $exp);     break; }
+      case eBitwiseXor: { $$ = elex::compound_bit_xor_expr($lhs_exp, $exp);    break; }
+      case eShiftLeft:  { $$ = elex::compound_shift_left_expr($lhs_exp, $exp); break; }
+      case eShiftRight: { $$ = elex::compound_right_left_expr($lhs_exp, $exp); break; }
+    }
+  }
+  ;
+
+compound_op :
+    PLUS           { $$ = eAdd; }
+  | MINUS          { $$ = eSub; }
+  | DIV            { $$ = eDiv; }
+  | MUL            { $$ = eMul; }
+  | REMAINDER      { $$ = eMod; }
+
+  | LOGICAL_AND_OP { $$ = eBoolAnd; }
+  | LOGICAL_OR_OP  { $$ = eBoolOr;  }
+
+  | BTWS_AND_OP    { $$ = eBitwiseAnd; }
+  | BTWS_OR_OP     { $$ = eBitwiseOr;  }
+  | XOR_OP         { $$ = eBitwiseXor; }
+
+  | LSHIFT         { $$ = eShiftLeft;  }
+  | RSHIFT         { $$ = eShiftRight; }
+  ;
 /* Expressions */
 /* expressions : 
     %empty                         { $$ = elex::nil_Expressions();  }
@@ -1588,17 +1650,18 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-    bitwise_expression     { $$ = $1; }
-  | logical_expression     { $$ = $1; }
-  | arithmetic_expression  { $$ = $1; }
-  | method_call_expression { $$ = $1; }
+    bitwise_expression      { $$ = $1; }
+  | logical_expression      { $$ = $1; }
+  | arithmetic_expression   { $$ = $1; }
+  | method_call_expression  { $$ = $1; }
   | LBRACKET enum_list_exprs RBRACKET 
     {
       $$ = elex::enum_type_expr($2, nullptr);
     }
-  | identifier_expression  { $$ = $1; }
-  | str_expression         { $$ = $1; }
-  | int_expression         { $$ = $1; }
+  | identifier_expression   { $$ = $1; }
+  | str_expression          { $$ = $1; }
+  | int_expression          { $$ = $1; }
+  | bool_literal_expression { $$ = $1; }
   ; // TODO: fully implement this
 
 

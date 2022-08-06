@@ -187,6 +187,22 @@ module Specman begin
         constructor binary_div_expr(e1: Expression; e2: Expression) : Expression;
         constructor binary_remainder_expr(e1: Expression; e2: Expression) : Expression;
 
+
+        constructor compound_add_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_sub_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_mul_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_div_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_mod_expr(id: Expression; e2: Expression) : Action;
+
+        constructor compound_bool_and_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_bool_or_expr(id: Expression;  e2: Expression) : Action;
+
+        constructor compound_bit_and_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_bit_or_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_bit_xor_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_shift_left_expr(id: Expression; e2: Expression) : Action;
+        constructor compound_right_left_expr(id: Expression; e2: Expression) : Action;
+
         constructor less_then_expr(e1: Expression; e2: Expression) : Expression;
         constructor greater_then_expr(e1: Expression; e2: Expression) : Expression;
         constructor less_then_or_equal_expr(e1: Expression; e2: Expression) : Expression;
