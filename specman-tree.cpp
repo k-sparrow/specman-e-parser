@@ -1749,14 +1749,29 @@ auto sized_bytes_scalar_expr(Expression width_expr) -> Expression {
     return Expression(new sized_bytes_scalar_expr_class(width_expr));
 }
 
-auto allocate_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "allocate_expr" << std::endl;
-    if(opt_struct_type_block)
-        opt_struct_type_block->dump(stream, n+2);
+auto new_allocate_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "new_allocate_expr" << std::endl;
+    if(struct_type_block)
+        struct_type_block->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, scoped_name);
+    if(actions)
+        actions->dump(stream, n+2);
 }
 
-auto allocate_expr(Expression opt_struct_type_block) -> Expression {
-    return Expression(new allocate_expr_class(opt_struct_type_block));
+auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, Actions actions) -> Expression {
+    return Expression(new new_allocate_expr_class(struct_type_block, scoped_name, actions));
+}
+
+auto new_nameless_allocate_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "new_nameless_allocate_expr" << std::endl;
+    if(struct_type_block)
+        struct_type_block->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto new_nameless_allocate_expr(Expression struct_type_block, Actions actions) -> Expression {
+    return Expression(new new_nameless_allocate_expr_class(struct_type_block, actions));
 }
 
 auto struct_type_expr_with_opt_action_block_class::dump(std::ostream& stream, int n) -> void {

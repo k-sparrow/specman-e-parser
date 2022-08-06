@@ -210,7 +210,8 @@ module Specman begin
         constructor sized_bits_scalar_expr(width_expr: Expression) : Expression;
         constructor sized_bytes_scalar_expr(width_expr: Expression) : Expression;
 
-        constructor allocate_expr(opt_struct_type_block : Expression) : Expression;
+        constructor new_allocate_expr(struct_type_block : Expression; scoped_name: Symbol_; actions: Actions) : Expression;
+        constructor new_nameless_allocate_expr(struct_type_block : Expression; actions: Actions) : Expression;
         constructor struct_type_expr_with_opt_action_block(struct_id_expr : Expression; opt_action_block_expt : Expression) : Expression;
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;

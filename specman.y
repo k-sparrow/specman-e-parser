@@ -510,6 +510,7 @@
 %nterm <elex::Expression>   opt_fixed_repetition_rep_base_expr
 
 /* Object Expressions */
+%nterm <elex::Expression>   struct_allocate_expression
 /* %nterm <elex::Expression>   list_indexing_expression
 %nterm <elex::Expression>   list_slicing_expression
 %nterm <elex::Expression>   list_splicing_expression
@@ -1548,6 +1549,33 @@ fixed_repetition_rep_base_expr :
     int_expression        { $$ = $1; }
   | identifier_expression { $$ = $1; }
   | arithmetic_expression { $$ = $1; }
+  ;
+
+struct_allocate_expression :
+    NEW
+    { $$ = elex::new_nameless_allocate_expr(nullptr, nullptr); }
+
+  | NEW WITH action_block[actions]
+    { $$ = elex::new_nameless_allocate_expr(nullptr, $actions); }
+
+  | NEW struct_type_modifiers 
+    { 
+      auto struct_type_id = elex::defined_type_identifier_expr($2);
+      $$ = elex::new_nameless_allocate_expr(struct_type_id, nullptr);   
+    }
+  
+  | NEW struct_type_modifiers[type_id] WITH action_block[actions]
+    { 
+      auto struct_type_id = elex::defined_type_identifier_expr($type_id);
+      $$ = elex::new_nameless_allocate_expr(struct_type_id, $actions);
+    }
+
+  | NEW struct_type_modifiers[type_id] LPAREN ID[name] RPAREN WITH action_block[actions]
+    {  
+      auto struct_type_id = elex::defined_type_identifier_expr($type_id);
+      $$ = elex::new_allocate_expr(struct_type_id, $name, $actions);
+    }
+  ;
 
 /* Actions */ 
 actions : 
@@ -1677,18 +1705,19 @@ expression : non_term_expression SEMICOLON { $$ = $1; }
     ;
 
 non_term_expression :  
-    bitwise_expression      { $$ = $1; }
-  | logical_expression      { $$ = $1; }
-  | arithmetic_expression   { $$ = $1; }
-  | method_call_expression  { $$ = $1; }
+    bitwise_expression         { $$ = $1; }
+  | logical_expression         { $$ = $1; }
+  | arithmetic_expression      { $$ = $1; }
+  | method_call_expression     { $$ = $1; }
   | LBRACKET enum_list_exprs RBRACKET 
     {
       $$ = elex::enum_type_expr($2, nullptr);
     }
-  | identifier_expression   { $$ = $1; }
-  | str_expression          { $$ = $1; }
-  | int_expression          { $$ = $1; }
-  | bool_literal_expression { $$ = $1; }
+  | identifier_expression      { $$ = $1; }
+  | struct_allocate_expression { $$ = $1; }
+  | str_expression             { $$ = $1; }
+  | int_expression             { $$ = $1; }
+  | bool_literal_expression    { $$ = $1; }
   ; // TODO: fully implement this
 
 

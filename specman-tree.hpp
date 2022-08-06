@@ -3301,12 +3301,16 @@ class sized_bytes_scalar_expr_class : public Expression_class {
 
 auto sized_bytes_scalar_expr(Expression width_expr) -> Expression;
 
-class allocate_expr_class : public Expression_class {
+class new_allocate_expr_class : public Expression_class {
     protected:
-        Expression opt_struct_type_block;
+        Expression struct_type_block;
+        Symbol_ scoped_name;
+        Actions actions;
     public:
-        allocate_expr_class(Expression opt_struct_type_block) {
-            this->opt_struct_type_block = opt_struct_type_block;
+        new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, Actions actions) {
+            this->struct_type_block = struct_type_block;
+            this->scoped_name = scoped_name;
+            this->actions = actions;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3314,12 +3318,34 @@ class allocate_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef allocate_expr_EXTRAS
-    allocate_expr_EXTRAS
+#ifdef new_allocate_expr_EXTRAS
+    new_allocate_expr_EXTRAS
 #endif
 };
 
-auto allocate_expr(Expression opt_struct_type_block) -> Expression;
+auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, Actions actions) -> Expression;
+
+class new_nameless_allocate_expr_class : public Expression_class {
+    protected:
+        Expression struct_type_block;
+        Actions actions;
+    public:
+        new_nameless_allocate_expr_class(Expression struct_type_block, Actions actions) {
+            this->struct_type_block = struct_type_block;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef new_nameless_allocate_expr_EXTRAS
+    new_nameless_allocate_expr_EXTRAS
+#endif
+};
+
+auto new_nameless_allocate_expr(Expression struct_type_block, Actions actions) -> Expression;
 
 class struct_type_expr_with_opt_action_block_class : public Expression_class {
     protected:
