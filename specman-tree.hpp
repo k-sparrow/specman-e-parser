@@ -4333,6 +4333,28 @@ class compound_right_left_expr_class : public Action_class {
 
 auto compound_right_left_expr(Expression id, Expression e2) -> Action;
 
+class if_then_else_action_class : public Action_class {
+    protected:
+        Expression condition;
+        Actions action_block;
+    public:
+        if_then_else_action_class(Expression condition, Actions action_block) {
+            this->condition = condition;
+            this->action_block = action_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef if_then_else_action_EXTRAS
+    if_then_else_action_EXTRAS
+#endif
+};
+
+auto if_then_else_action(Expression condition, Actions action_block) -> Action;
+
 class force_action_class : public Action_class {
     protected:
         Expression hdl_or_port;

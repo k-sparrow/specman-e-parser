@@ -271,6 +271,7 @@ module Specman begin
         constructor compound_shift_left_expr(id: Expression; e2: Expression) : Action;
         constructor compound_right_left_expr(id: Expression; e2: Expression) : Action;
 
+        constructor if_then_else_action(condition : Expression; action_block: Actions) : Action;
         constructor force_action(hdl_or_port: Expression; exp: Expression) : Action;
         constructor release_action(hdl_or_port: Expression) : Action;
         constructor no_action() : Action;

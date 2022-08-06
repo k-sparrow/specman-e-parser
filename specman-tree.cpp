@@ -2286,6 +2286,18 @@ auto compound_right_left_expr(Expression id, Expression e2) -> Action {
     return Action(new compound_right_left_expr_class(id, e2));
 }
 
+auto if_then_else_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "if_then_else_action" << std::endl;
+    if(condition)
+        condition->dump(stream, n+2);
+    if(action_block)
+        action_block->dump(stream, n+2);
+}
+
+auto if_then_else_action(Expression condition, Actions action_block) -> Action {
+    return Action(new if_then_else_action_class(condition, action_block));
+}
+
 auto force_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "force_action" << std::endl;
     if(hdl_or_port)

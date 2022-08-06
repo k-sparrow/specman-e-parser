@@ -354,6 +354,7 @@
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
+%precedence  NON_LPAREN
 %right RPAREN LPAREN
 %precedence FIRST_MATCH 
 /* ------------------ helpers ------------------ */
@@ -466,6 +467,9 @@
 %nterm <elex::Action>  force_action
 %nterm <elex::Action>  release_action
 
+
+%nterm <elex::Action>  conditional_action
+%nterm <elex::Action>  if_then_else_action
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
 %nterm <elex::Expression>   expression
@@ -1558,7 +1562,10 @@ struct_allocate_expression :
   | NEW WITH action_block[actions]
     { $$ = elex::new_nameless_allocate_expr(nullptr, $actions); }
 
-  | NEW struct_type_modifiers 
+    // NON_LPAREN is used here in order to solve the shift reduce conflict with the 
+    // LPAREN of the next two rules when lookahead token is LPAREN, and since NON_LPAREN < LPAREN, the action
+    // will be to shift LPAREN
+  | NEW struct_type_modifiers %prec NON_LPAREN
     { 
       auto struct_type_id = elex::defined_type_identifier_expr($2);
       $$ = elex::new_nameless_allocate_expr(struct_type_id, nullptr);   
@@ -1599,6 +1606,9 @@ non_term_action :
     } 
 
   | variable_creation_or_modification_action 
+    { $$ = $1; }
+
+  | conditional_action
     { $$ = $1; }
   ;
 
@@ -2053,7 +2063,10 @@ scoped_scalar_type_identifier_expression :
   | LBRACKET enum_list_exprs RBRACKET
     { $$ = elex::enum_type_expr($2, nullptr); }
 
-  | predefined_scalar_type_expression  
+    // NON_LPAREN is used here in order to solve the shift reduce conflict with the 
+    // LPAREN of the next two rules when lookahead token is LPAREN, and since NON_LPAREN < LPAREN, the action
+    // will be to shift LPAREN
+  | predefined_scalar_type_expression %prec NON_LPAREN
     { $$ = $1; } 
 
   | predefined_scalar_type_expression[type_] LPAREN BITS COLON int_expression[width] RPAREN 
