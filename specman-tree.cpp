@@ -1735,6 +1735,16 @@ auto range_modifier_expr(Expression bottom, Expression top) -> Expression {
     return Expression(new range_modifier_expr_class(bottom, top));
 }
 
+auto ranges_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "ranges_modifier_expr" << std::endl;
+    if(ranges)
+        ranges->dump(stream, n+2);
+}
+
+auto ranges_modifier_expr(Expressions ranges) -> Expression {
+    return Expression(new ranges_modifier_expr_class(ranges));
+}
+
 auto sized_bits_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "sized_bits_scalar_expr" << std::endl;
     if(width_expr)

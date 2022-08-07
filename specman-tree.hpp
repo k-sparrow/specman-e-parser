@@ -3277,6 +3277,26 @@ class range_modifier_expr_class : public Expression_class {
 
 auto range_modifier_expr(Expression bottom, Expression top) -> Expression;
 
+class ranges_modifier_expr_class : public Expression_class {
+    protected:
+        Expressions ranges;
+    public:
+        ranges_modifier_expr_class(Expressions ranges) {
+            this->ranges = ranges;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef ranges_modifier_expr_EXTRAS
+    ranges_modifier_expr_EXTRAS
+#endif
+};
+
+auto ranges_modifier_expr(Expressions ranges) -> Expression;
+
 class sized_bits_scalar_expr_class : public Expression_class {
     protected:
         Expression width_expr;

@@ -530,20 +530,11 @@
 
 /* Object Expressions */
 %nterm <elex::Expression>   struct_allocate_expression
-/* %nterm <elex::Expression>   list_indexing_expression
-%nterm <elex::Expression>   list_slicing_expression
-%nterm <elex::Expression>   list_splicing_expression
 %nterm <elex::Expression>   list_concatenation_expression
 %nterm <elex::Expressions>  list_concat_expressions
 %nterm <elex::Expression>   bit_concatenation_expression
-%nterm <elex::Expressions>  bit_concat_expressions */
+%nterm <elex::Expressions>  bit_concat_expressions 
 
-/* %nterm <elex::Expressions>  allocate_expression
-%nterm <elex::Expressions>  opt_struct_type_expr_with_opt_action_block
-%nterm <elex::Expression>   opt_struct_type_id_expression 
-%nterm <elex::Expression>   struct_type_id_expression
-%nterm <elex::Expressions>  opt_struct_type_modifiers
-*/
 %nterm <elex::Expression>   scalar_subtype_expression
 %nterm <elex::Expression>   range_modifier_expression
 %nterm <elex::Expression>   range_modifier_expression_base
@@ -1780,6 +1771,8 @@ non_term_expression :
     }
   | identifier_expression      { $$ = $1; }
   | struct_allocate_expression { $$ = $1; }
+  | list_concatenation_expression { $$ = $1; }
+  | bit_concatenation_expression  { $$ = $1; }
   | str_expression             { $$ = $1; }
   | int_expression             { $$ = $1; }
   | bool_literal_expression    { $$ = $1; }
@@ -1899,17 +1892,6 @@ comparison_expression :
     | non_term_expression LOGICAL_NOT_OP BTWS_NOT_OP non_term_expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
     ;
 
-/* list_indexing_expression : 
-    non_term_expression LBRACKET non_term_expression RBRACKET { $$ = elex::list_indexing_expr($1, $3); }
-    ;
-
-list_slicing_expression : 
-    non_term_expression LBRACKET opt_expr COLON opt_expr opt_slice_expr RBRACKET { $$ = elex::list_slicing_expr($1, $3, $5, $6); }
-    ;
-
-list_splicing_expression : 
-    non_term_expression LBRACKET opt_expr DDOT opt_expr RBRACKET { $$ = elex::list_splicing_expr($1, $3, $5); }
-    ;
     
 list_concatenation_expression : 
     LBRACE list_concat_expressions RBRACE { $$ = elex::list_concat_expr($2); }
@@ -1923,43 +1905,13 @@ list_concat_expressions :
 bit_concatenation_expression : 
     REMAINDER LBRACE comma_separated_expressions RBRACE { $$ = elex::bit_concat_expr($3); }
 
-
-comma_separated_expressions : 
-      non_term_expression                                   { $$ = elex::single_Expressions($1); }
-    | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
-    ;
+/* 
 
 sized_scalar_expr : 
       LPAREN BITS  COLON expression RPAREN      { $$ = elex::sized_bits_scalar_expr($4); }
     | LPAREN BYTES COLON expression RPAREN      { $$ = elex::sized_bytes_scalar_expr($4); }
     ;
 
-allocate_expression : // new [struct-type [[(name)] with {action;...}]]
-    NEW opt_struct_type_expr_with_opt_action_block { $$ = elex::allocate_expr($2); }
-    ;
-
-opt_struct_type_expr_with_opt_action_block : // [struct-type [[(name)] with {action;...}]]
-      %empty                                   { $$ = elex::no_expr(); }
-    | opt_struct_type_id_expression opt_with_action_block { $$ = elex::struct_type_expr_with_opt_action_block($1, $2); }
-    ; */
-
-/* opt_struct_type_id_expression : // [[struct_id]]
-      %empty          { $$ = elex::no_expr(); }
-    | struct_type_id_expression  { $$ = $1; }                      
-    ;
-
-struct_type_id_expression : // [[VALUE1'id1|id1 VALUE1'id2|id2 ...]] id
-    struct_type_modifiers[modifiers] 
-    { 
-        if($modifiers.m_elems.empty())
-           yy::parser::error(@modifiers, "struct type modifier must have at least a single identifier or modifier");
-
-        auto struct_id = $modifiers.m_elems.back();
-        $modifiers.m_elems.pop_back();
-
-        $$ = elex::struct_type_id_expr($modifiers, struct_id); 
-    }
-    ;
 
     ; */
 
@@ -1984,11 +1936,6 @@ struct_type_modifier : // VALUE'id | id
       id_expr[value] SNG_QUOTE id_expr[id] { $$ = elex::struct_type_modifier($value, $id); }
     | id_expr                              { $$ = $1; }
     ;
-
-/* opt_with_action_block : // [[ [[(name)]] with {action; ...}]]
-      %empty                                              { $$ = elex::no_expr(); }
-    | opt_iterated_id_expr[id] WITH action_block[actions] { $$ = elex::named_action_block($id, $actions); }
-    ; */
 
 opt_iterated_id_expr : // [[ (name) ]]
       %empty                { $$ = elex::no_expr(); }
@@ -2191,8 +2138,14 @@ method_call_expression :
     ;
 
 comma_separated_expressions : 
-    non_term_expression                                   { $$ = elex::single_Expressions($1); }
-  | comma_separated_expressions COMMA non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+    non_term_expression                                   
+    { $$ = elex::single_Expressions($1); }
+
+  | comma_separated_expressions COMMA non_term_expression 
+    { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+
+  | %empty 
+    { $$ = elex::nil_Expressions(); }
   ;
 
 identifier_expression : 
