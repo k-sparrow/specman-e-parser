@@ -278,8 +278,13 @@ module Specman begin
         
         constructor if_then_else_act(condition : Expression; action: Action; else_clause: Action) : Action;
         constructor scoped_actions_block_act(actions: Actions) : Action;
+
         constructor case_bool_act(bool_case_branch_items: Cases) : Action;
         constructor case_bool_branch_item_case(bool_exp: Expression; actions: Actions) : Case;
+
+        constructor case_labeled_act(exp: Expression; labeled_case_branch_items: Cases) : Action;
+        constructor case_labeled_branch_item_case(label_exp: Expression; actions: Actions) : Case;
+
         constructor default_case_branch_item_case(actions: Actions) : Case;
         
         constructor no_action() : Action;

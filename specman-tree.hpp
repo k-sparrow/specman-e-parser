@@ -4497,6 +4497,50 @@ class case_bool_branch_item_case_class : public Case_class {
 
 auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case;
 
+class case_labeled_act_class : public Action_class {
+    protected:
+        Expression exp;
+        Cases labeled_case_branch_items;
+    public:
+        case_labeled_act_class(Expression exp, Cases labeled_case_branch_items) {
+            this->exp = exp;
+            this->labeled_case_branch_items = labeled_case_branch_items;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef case_labeled_act_EXTRAS
+    case_labeled_act_EXTRAS
+#endif
+};
+
+auto case_labeled_act(Expression exp, Cases labeled_case_branch_items) -> Action;
+
+class case_labeled_branch_item_case_class : public Case_class {
+    protected:
+        Expression label_exp;
+        Actions actions;
+    public:
+        case_labeled_branch_item_case_class(Expression label_exp, Actions actions) {
+            this->label_exp = label_exp;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Case_SHARED_EXTRAS
+    Case_SHARED_EXTRAS
+#endif
+#ifdef case_labeled_branch_item_case_EXTRAS
+    case_labeled_branch_item_case_EXTRAS
+#endif
+};
+
+auto case_labeled_branch_item_case(Expression label_exp, Actions actions) -> Case;
+
 class default_case_branch_item_case_class : public Case_class {
     protected:
         Actions actions;

@@ -2370,6 +2370,30 @@ auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case {
     return Case(new case_bool_branch_item_case_class(bool_exp, actions));
 }
 
+auto case_labeled_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "case_labeled_act" << std::endl;
+    if(exp)
+        exp->dump(stream, n+2);
+    if(labeled_case_branch_items)
+        labeled_case_branch_items->dump(stream, n+2);
+}
+
+auto case_labeled_act(Expression exp, Cases labeled_case_branch_items) -> Action {
+    return Action(new case_labeled_act_class(exp, labeled_case_branch_items));
+}
+
+auto case_labeled_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "case_labeled_branch_item_case" << std::endl;
+    if(label_exp)
+        label_exp->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto case_labeled_branch_item_case(Expression label_exp, Actions actions) -> Case {
+    return Case(new case_labeled_branch_item_case_class(label_exp, actions));
+}
+
 auto default_case_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "default_case_branch_item_case" << std::endl;
     if(actions)

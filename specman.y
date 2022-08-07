@@ -485,6 +485,13 @@
 %nterm <elex::Cases>   case_bool_case_branches
 %nterm <elex::Case>    case_bool_case_branch
 %nterm <elex::Case>    non_term_case_bool_case_branch
+
+%nterm <elex::Action>  case_labeled_action
+%nterm <elex::Cases>   case_labeled_case_branches
+%nterm <elex::Case>    case_labeled_case_branch
+%nterm <elex::Case>    non_term_case_labeled_case_branch
+%nterm <elex::Expression> label_case_item_expression
+
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
 %nterm <elex::Expression>   expression
@@ -1712,6 +1719,9 @@ conditional_action :
   
   | case_bool_action
     { $$ = $1; }  
+  
+  | case_labeled_action
+    { $$ = $1; }
   ;
 
 if_then_else_action :
@@ -1731,7 +1741,9 @@ OPT_THEN :
   ;
 
 case_bool_action :
-    CASE LBRACE case_bool_case_branches RBRACE 
+    CASE LBRACE 
+      case_bool_case_branches 
+    RBRACE 
     { $$ = elex::case_bool_act($3); }
   ;
 
@@ -1751,14 +1763,36 @@ case_bool_case_branch :
     { $$ = elex::default_case_branch_item_case($actions); }
   ; 
 
-/* Expressions */
-/* expressions : 
-    %empty                         { $$ = elex::nil_Expressions();  }
-    | expressions expression       { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
-    ; */
+case_labeled_action :
+  CASE non_term_expression[exp] LBRACE 
+    case_labeled_case_branches[branches]
+  RBRACE
+  { $$ = elex::case_labeled_act($exp, $branches); }
+  ;
 
-expression : non_term_expression SEMICOLON { $$ = $1; }
-    ;
+case_labeled_case_branches : 
+    case_labeled_case_branch 
+    { $$ = elex::single_Cases($1); }
+
+  | case_labeled_case_branches case_labeled_case_branch 
+    { $$ = elex::append_Cases($1, elex::single_Cases($2)); }
+  ;
+
+case_labeled_case_branch :
+    label_case_item_expression[label_exp] COLON action_block[actions] SEMICOLON
+    { $$ = elex::case_labeled_branch_item_case($label_exp, $actions); }
+
+  | DEFAULT COLON action_block[actions] SEMICOLON
+    { $$ = elex::default_case_branch_item_case($actions); }
+  ; 
+
+label_case_item_expression : 
+    int_expression 
+    { $$ = $1; }
+
+  | range_modifier_expression
+    { $$ = $1; }
+  ;
 
 non_term_expression :  
     bitwise_expression         { $$ = $1; }
