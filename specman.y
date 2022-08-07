@@ -680,17 +680,9 @@ enumerated_type_statement:
     }
 
   | TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET 
-    LPAREN BITS COLON int_expression[width] RPAREN
+    width_modifier_expression[width]
     { 
-      auto width_expr = elex::sized_bits_scalar_expr($width);
-      $$ = elex::enum_type_st($id, $items, width_expr); 
-    }
-
-  | TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET 
-    LPAREN BYTES COLON int_expression[width] RPAREN
-    { 
-      auto width_expr = elex::sized_bytes_scalar_expr($width);
-      $$ = elex::enum_type_st($id, $items, width_expr); 
+      $$ = elex::enum_type_st($id, $items, $width); 
     }
   ;
 
@@ -2139,35 +2131,28 @@ scoped_scalar_type_identifier_expression :
   | predefined_scalar_type_expression %prec NON_LPAREN
     { $$ = $1; } 
 
-  | predefined_scalar_type_expression[type_] LPAREN BITS COLON int_expression[width] RPAREN 
+  | predefined_scalar_type_expression[type_] width_modifier_expression[width]
     { 
-      auto width_expr = elex::sized_bits_scalar_expr($width);
-      $$ = elex::scalar_subtype_expr($type_, nullptr, width_expr); 
-    }
-
-  | predefined_scalar_type_expression[type_] LPAREN BYTES COLON int_expression[width] RPAREN 
-    { 
-      auto width_expr = elex::sized_bytes_scalar_expr($width);
-      $$ = elex::scalar_subtype_expr($type_, nullptr, width_expr); 
+      $$ = elex::scalar_subtype_expr($type_, nullptr, $width); 
     }
 
   | predefined_scalar_type_expression[type_]   
-    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET
-    LPAREN BITS COLON int_expression[width] RPAREN 
+    range_modifier_expression[range] 
+    width_modifier_expression[width]
     { 
-      auto range_expr = elex::range_modifier_expr($bot, $top);
-      auto width_expr = elex::sized_bits_scalar_expr($width);
-      $$ = elex::scalar_subtype_expr($type_, range_expr, width_expr); 
+      $$ = elex::scalar_subtype_expr($type_, $range, $width); 
     }
 
   | predefined_scalar_type_expression[type_] 
-    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET
-    LPAREN BYTES COLON int_expression[width] RPAREN 
-    { 
-      auto range_expr = elex::range_modifier_expr($bot, $top);
-      auto width_expr = elex::sized_bytes_scalar_expr($width);
-      $$ = elex::scalar_subtype_expr($type_, range_expr, width_expr); 
+    range_modifier_expression[range] %prec NON_LPAREN
+    {
+      $$ = elex::scalar_subtype_expr($type_, $range, nullptr); 
     }
+  ;
+
+range_modifier_expression :
+    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET 
+    { $$ = elex::range_modifier_expr($bot, $top); }
   ;
 
 terminated_constraint_expression : 
