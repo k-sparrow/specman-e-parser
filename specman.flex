@@ -103,6 +103,7 @@ key         (key)
 on          (on)
 exec        (exec)
 if          (if)
+then        (then)
 else        (else)
 is_a	    (is{ws}a{ws})
 is_not_a    (is{ws}not{ws}a{ws})
@@ -321,6 +322,7 @@ mvl            {mvl_single}|{sized_mvl}
 {on}   	    { return yy::parser::make_ON(Location()); }
 {exec}   	{ return yy::parser::make_EXEC(Location()); }
 {if}   	    { return yy::parser::make_IF(Location()); }
+{then}      { return yy::parser::make_THEN(Location()); }
 {else}      { return yy::parser::make_ELSE(Location()); }
 {is_a}	    { return yy::parser::make_IS_A(Location()); } 
 {is_not_a}  { return yy::parser::make_IS_NOT_A(Location()); } 

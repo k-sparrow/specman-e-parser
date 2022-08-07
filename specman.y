@@ -306,6 +306,7 @@
 %token TERNARY   
 %token AT   
 %token IF 
+%token THEN 
 %token ELSE
 %token INT 
 %token UINT 
@@ -347,19 +348,28 @@
 %token END 0 
 
 /* token precedence */
-%precedence EXEC
+/*
+  NON_ELSE    -> needed to resolve dangling else problem
+  NON_LPAREN  -> needed to resolve sr-conflict with some optional products starting with LPAREN
+  NON_DOT     -> same as NON_LPAREN, but for the DOT token
+*/
+%precedence LT_ID
+%precedence NON_DOT NON_LPAREN NON_ELSE NON_THEN
+%precedence ID
+%left ELSE THEN
+%precedence EXEC  
 %left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %left PLUS MINUS
 %left DIV MUL REMAINDER
 %left AND LOGICAL_AND_OP BTWS_AND_OP
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
-%precedence  NON_LPAREN
-%right RPAREN LPAREN
-%precedence FIRST_MATCH 
+%left RPAREN LPAREN DOT
+%precedence FIRST_MATCH GT_ID
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
+%nterm <elex::Symbol_>    OPT_THEN
 
 /* ------------------  rules  ------------------ */
 %nterm <elex::Module>     module
@@ -540,6 +550,7 @@
 %nterm <elex::Expression>   iterated_id_expr
 
 %nterm <elex::Expression>   id_expr
+%nterm <elex::Expression>   scoped_id_expr
 %nterm <elex::Expression>   identifier_expression
 %nterm <elex::Expression>   type_scalar_expression
 %nterm <elex::Expression>   enum_type_expression
@@ -1556,7 +1567,7 @@ fixed_repetition_rep_base_expr :
   ;
 
 struct_allocate_expression :
-    NEW
+    NEW %prec LT_ID
     { $$ = elex::new_nameless_allocate_expr(nullptr, nullptr); }
 
   | NEW WITH action_block[actions]
@@ -1604,6 +1615,9 @@ non_term_action :
     { 
       $$ = elex::no_action(); 
     } 
+
+  | action_block
+    { $$ = elex::scoped_actions_block_act($1); }
 
   | variable_creation_or_modification_action 
     { $$ = $1; }
@@ -1657,22 +1671,22 @@ compound_assignment_action :
   {
     switch($op) {
       /* binary arithmetic operators */
-      case eAdd: { $$ = elex::compound_add_expr($lhs_exp, $exp); break; }
-      case eSub: { $$ = elex::compound_sub_expr($lhs_exp, $exp); break; }
-      case eMul: { $$ = elex::compound_mul_expr($lhs_exp, $exp); break; }
-      case eDiv: { $$ = elex::compound_div_expr($lhs_exp, $exp); break; }
-      case eMod: { $$ = elex::compound_mod_expr($lhs_exp, $exp); break; }
+      case eAdd: { $$ = elex::compound_add_act($lhs_exp, $exp); break; }
+      case eSub: { $$ = elex::compound_sub_act($lhs_exp, $exp); break; }
+      case eMul: { $$ = elex::compound_mul_act($lhs_exp, $exp); break; }
+      case eDiv: { $$ = elex::compound_div_act($lhs_exp, $exp); break; }
+      case eMod: { $$ = elex::compound_mod_act($lhs_exp, $exp); break; }
 
       /* boolean operators */
-      case eBoolAnd: { $$ = elex::compound_bool_and_expr($lhs_exp, $exp); break; }
-      case eBoolOr:  { $$ = elex::compound_bool_or_expr($lhs_exp, $exp);  break; }
+      case eBoolAnd: { $$ = elex::compound_bool_and_act($lhs_exp, $exp); break; }
+      case eBoolOr:  { $$ = elex::compound_bool_or_act($lhs_exp, $exp);  break; }
 
       /* bitwise operators */
-      case eBitwiseAnd: { $$ = elex::compound_bit_and_expr($lhs_exp, $exp);    break; }
-      case eBitwiseOr:  { $$ = elex::compound_bit_or_expr($lhs_exp, $exp);     break; }
-      case eBitwiseXor: { $$ = elex::compound_bit_xor_expr($lhs_exp, $exp);    break; }
-      case eShiftLeft:  { $$ = elex::compound_shift_left_expr($lhs_exp, $exp); break; }
-      case eShiftRight: { $$ = elex::compound_right_left_expr($lhs_exp, $exp); break; }
+      case eBitwiseAnd: { $$ = elex::compound_bit_and_act($lhs_exp, $exp);    break; }
+      case eBitwiseOr:  { $$ = elex::compound_bit_or_act($lhs_exp, $exp);     break; }
+      case eBitwiseXor: { $$ = elex::compound_bit_xor_act($lhs_exp, $exp);    break; }
+      case eShiftLeft:  { $$ = elex::compound_shift_left_act($lhs_exp, $exp); break; }
+      case eShiftRight: { $$ = elex::compound_right_left_act($lhs_exp, $exp); break; }
     }
   }
   ;
@@ -1697,14 +1711,33 @@ compound_op :
 
 force_action : 
   FORCE hdl_pathname_expression ASSIGN non_term_expression
-  { $$ = elex::force_action($2, $4); }
+  { $$ = elex::force_act($2, $4); }
   ;
 
 release_action : 
   RELEASE hdl_pathname_expression
-  { $$ = elex::release_action($2); }
+  { $$ = elex::release_act($2); }
   ;
 
+conditional_action :
+    if_then_else_action { $$ = $1; }
+  ;
+
+if_then_else_action :
+    // if condition then {action; ...}
+    IF logical_expression[condition] OPT_THEN non_term_action[action] %prec NON_ELSE
+    { $$ = elex::if_then_else_act($condition, $action, nullptr); }
+
+    // if condition then {action; ...} else if ...
+  | IF logical_expression[condition] OPT_THEN non_term_action[action]
+    ELSE non_term_action[else_clause]
+    { $$ = elex::if_then_else_act($condition, $action, $else_clause); }
+  ;
+
+OPT_THEN : 
+    %prec NON_THEN
+  | THEN
+  ;
 /* Expressions */
 /* expressions : 
     %empty                         { $$ = elex::nil_Expressions();  }
@@ -1972,20 +2005,10 @@ hdl_pathname_expression :
     ;
 
 hier_ref_expression : 
-    id_expr
-    { $$ = elex::struct_hier_ref_expr(elex::single_Expressions($1)); }
-
-  | DOT id_expr
-    { 
-      auto it_expr = elex::it_expr();
-      auto complete_hierarchy = elex::append_Expressions(elex::single_Expressions(it_expr), 
-                                                         elex::single_Expressions($2));
-      $$ = elex::struct_hier_ref_expr(complete_hierarchy);
-    }
-  | dot_separated_expressions 
+    dot_separated_expressions %prec NON_DOT
     { $$ = elex::struct_hier_ref_expr($1); }
 
-  | DOT dot_separated_expressions 
+  | DOT dot_separated_expressions  %prec NON_DOT
     { 
       auto it_expr = elex::it_expr();
       auto complete_hierarchy = elex::append_Expressions(elex::single_Expressions(it_expr), $2);
@@ -1994,10 +2017,26 @@ hier_ref_expression :
   ;
 
 dot_separated_expressions : 
-      id_expr DOT id_expr                    { $$ = elex::append_Expressions(elex::single_Expressions($1), elex::single_Expressions($3)); }
-    | dot_separated_expressions DOT id_expr  { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      scoped_id_expr                    
+      { $$ = elex::single_Expressions($1); }
+
+    | dot_separated_expressions DOT scoped_id_expr  
+      { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
+scoped_id_expr : 
+    id_expr 
+    { $$ = $1; }
+
+  | id_expr[id] LBRACKET fixed_repetition_rep_base_expr[idx] RBRACKET           
+    { $$ = elex::list_indexing_expr($id, $idx); }
+  
+  | me_expression 
+    { $$ = $1; }
+
+  | it_expression 
+    { $$ = $1; }
+  ;
 
 /* ternary_operator_expression :
     non_term_expression[cond] TERNARY non_term_expression[true_exp] COLON non_term_expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
@@ -2057,7 +2096,7 @@ scoped_type_identifier_expression:
   ;
 
 scoped_scalar_type_identifier_expression :
-    struct_type_modifiers              
+    struct_type_modifiers %prec LT_ID       
     { $$ = elex::defined_type_identifier_expr($1); }
 
   | LBRACKET enum_list_exprs RBRACKET
@@ -2130,14 +2169,6 @@ id_expr :
       ID             
       { $$ = elex::id_expr($1); }
 
-    | ID[id] LBRACKET fixed_repetition_rep_base_expr[idx] RBRACKET           
-      { $$ = elex::list_indexing_expr(elex::id_expr($id), $idx); }
-    
-    | me_expression 
-      { $$ = $1; }
-
-    | it_expression 
-      { $$ = $1; }
     ;
 
 me_expression : 

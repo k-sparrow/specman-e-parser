@@ -4069,12 +4069,12 @@ class var_assign_act_class : public Action_class {
 
 auto var_assign_act(Expression id_expr, Expression assign_expr) -> Action;
 
-class compound_add_expr_class : public Action_class {
+class compound_add_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_add_expr_class(Expression id, Expression e2) {
+        compound_add_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4084,19 +4084,19 @@ class compound_add_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_add_expr_EXTRAS
-    compound_add_expr_EXTRAS
+#ifdef compound_add_act_EXTRAS
+    compound_add_act_EXTRAS
 #endif
 };
 
-auto compound_add_expr(Expression id, Expression e2) -> Action;
+auto compound_add_act(Expression id, Expression e2) -> Action;
 
-class compound_sub_expr_class : public Action_class {
+class compound_sub_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_sub_expr_class(Expression id, Expression e2) {
+        compound_sub_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4106,19 +4106,19 @@ class compound_sub_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_sub_expr_EXTRAS
-    compound_sub_expr_EXTRAS
+#ifdef compound_sub_act_EXTRAS
+    compound_sub_act_EXTRAS
 #endif
 };
 
-auto compound_sub_expr(Expression id, Expression e2) -> Action;
+auto compound_sub_act(Expression id, Expression e2) -> Action;
 
-class compound_mul_expr_class : public Action_class {
+class compound_mul_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_mul_expr_class(Expression id, Expression e2) {
+        compound_mul_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4128,19 +4128,19 @@ class compound_mul_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_mul_expr_EXTRAS
-    compound_mul_expr_EXTRAS
+#ifdef compound_mul_act_EXTRAS
+    compound_mul_act_EXTRAS
 #endif
 };
 
-auto compound_mul_expr(Expression id, Expression e2) -> Action;
+auto compound_mul_act(Expression id, Expression e2) -> Action;
 
-class compound_div_expr_class : public Action_class {
+class compound_div_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_div_expr_class(Expression id, Expression e2) {
+        compound_div_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4150,19 +4150,19 @@ class compound_div_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_div_expr_EXTRAS
-    compound_div_expr_EXTRAS
+#ifdef compound_div_act_EXTRAS
+    compound_div_act_EXTRAS
 #endif
 };
 
-auto compound_div_expr(Expression id, Expression e2) -> Action;
+auto compound_div_act(Expression id, Expression e2) -> Action;
 
-class compound_mod_expr_class : public Action_class {
+class compound_mod_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_mod_expr_class(Expression id, Expression e2) {
+        compound_mod_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4172,19 +4172,19 @@ class compound_mod_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_mod_expr_EXTRAS
-    compound_mod_expr_EXTRAS
+#ifdef compound_mod_act_EXTRAS
+    compound_mod_act_EXTRAS
 #endif
 };
 
-auto compound_mod_expr(Expression id, Expression e2) -> Action;
+auto compound_mod_act(Expression id, Expression e2) -> Action;
 
-class compound_bool_and_expr_class : public Action_class {
+class compound_bool_and_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_bool_and_expr_class(Expression id, Expression e2) {
+        compound_bool_and_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4194,19 +4194,19 @@ class compound_bool_and_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_bool_and_expr_EXTRAS
-    compound_bool_and_expr_EXTRAS
+#ifdef compound_bool_and_act_EXTRAS
+    compound_bool_and_act_EXTRAS
 #endif
 };
 
-auto compound_bool_and_expr(Expression id, Expression e2) -> Action;
+auto compound_bool_and_act(Expression id, Expression e2) -> Action;
 
-class compound_bool_or_expr_class : public Action_class {
+class compound_bool_or_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_bool_or_expr_class(Expression id, Expression e2) {
+        compound_bool_or_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4216,19 +4216,19 @@ class compound_bool_or_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_bool_or_expr_EXTRAS
-    compound_bool_or_expr_EXTRAS
+#ifdef compound_bool_or_act_EXTRAS
+    compound_bool_or_act_EXTRAS
 #endif
 };
 
-auto compound_bool_or_expr(Expression id, Expression e2) -> Action;
+auto compound_bool_or_act(Expression id, Expression e2) -> Action;
 
-class compound_bit_and_expr_class : public Action_class {
+class compound_bit_and_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_bit_and_expr_class(Expression id, Expression e2) {
+        compound_bit_and_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4238,19 +4238,19 @@ class compound_bit_and_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_bit_and_expr_EXTRAS
-    compound_bit_and_expr_EXTRAS
+#ifdef compound_bit_and_act_EXTRAS
+    compound_bit_and_act_EXTRAS
 #endif
 };
 
-auto compound_bit_and_expr(Expression id, Expression e2) -> Action;
+auto compound_bit_and_act(Expression id, Expression e2) -> Action;
 
-class compound_bit_or_expr_class : public Action_class {
+class compound_bit_or_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_bit_or_expr_class(Expression id, Expression e2) {
+        compound_bit_or_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4260,19 +4260,19 @@ class compound_bit_or_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_bit_or_expr_EXTRAS
-    compound_bit_or_expr_EXTRAS
+#ifdef compound_bit_or_act_EXTRAS
+    compound_bit_or_act_EXTRAS
 #endif
 };
 
-auto compound_bit_or_expr(Expression id, Expression e2) -> Action;
+auto compound_bit_or_act(Expression id, Expression e2) -> Action;
 
-class compound_bit_xor_expr_class : public Action_class {
+class compound_bit_xor_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_bit_xor_expr_class(Expression id, Expression e2) {
+        compound_bit_xor_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4282,19 +4282,19 @@ class compound_bit_xor_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_bit_xor_expr_EXTRAS
-    compound_bit_xor_expr_EXTRAS
+#ifdef compound_bit_xor_act_EXTRAS
+    compound_bit_xor_act_EXTRAS
 #endif
 };
 
-auto compound_bit_xor_expr(Expression id, Expression e2) -> Action;
+auto compound_bit_xor_act(Expression id, Expression e2) -> Action;
 
-class compound_shift_left_expr_class : public Action_class {
+class compound_shift_left_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_shift_left_expr_class(Expression id, Expression e2) {
+        compound_shift_left_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4304,19 +4304,19 @@ class compound_shift_left_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_shift_left_expr_EXTRAS
-    compound_shift_left_expr_EXTRAS
+#ifdef compound_shift_left_act_EXTRAS
+    compound_shift_left_act_EXTRAS
 #endif
 };
 
-auto compound_shift_left_expr(Expression id, Expression e2) -> Action;
+auto compound_shift_left_act(Expression id, Expression e2) -> Action;
 
-class compound_right_left_expr_class : public Action_class {
+class compound_right_left_act_class : public Action_class {
     protected:
         Expression id;
         Expression e2;
     public:
-        compound_right_left_expr_class(Expression id, Expression e2) {
+        compound_right_left_act_class(Expression id, Expression e2) {
             this->id = id;
             this->e2 = e2;
         }
@@ -4326,41 +4326,19 @@ class compound_right_left_expr_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef compound_right_left_expr_EXTRAS
-    compound_right_left_expr_EXTRAS
+#ifdef compound_right_left_act_EXTRAS
+    compound_right_left_act_EXTRAS
 #endif
 };
 
-auto compound_right_left_expr(Expression id, Expression e2) -> Action;
+auto compound_right_left_act(Expression id, Expression e2) -> Action;
 
-class if_then_else_action_class : public Action_class {
-    protected:
-        Expression condition;
-        Actions action_block;
-    public:
-        if_then_else_action_class(Expression condition, Actions action_block) {
-            this->condition = condition;
-            this->action_block = action_block;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Action_SHARED_EXTRAS
-    Action_SHARED_EXTRAS
-#endif
-#ifdef if_then_else_action_EXTRAS
-    if_then_else_action_EXTRAS
-#endif
-};
-
-auto if_then_else_action(Expression condition, Actions action_block) -> Action;
-
-class force_action_class : public Action_class {
+class force_act_class : public Action_class {
     protected:
         Expression hdl_or_port;
         Expression exp;
     public:
-        force_action_class(Expression hdl_or_port, Expression exp) {
+        force_act_class(Expression hdl_or_port, Expression exp) {
             this->hdl_or_port = hdl_or_port;
             this->exp = exp;
         }
@@ -4370,18 +4348,18 @@ class force_action_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef force_action_EXTRAS
-    force_action_EXTRAS
+#ifdef force_act_EXTRAS
+    force_act_EXTRAS
 #endif
 };
 
-auto force_action(Expression hdl_or_port, Expression exp) -> Action;
+auto force_act(Expression hdl_or_port, Expression exp) -> Action;
 
-class release_action_class : public Action_class {
+class release_act_class : public Action_class {
     protected:
         Expression hdl_or_port;
     public:
-        release_action_class(Expression hdl_or_port) {
+        release_act_class(Expression hdl_or_port) {
             this->hdl_or_port = hdl_or_port;
         }
 
@@ -4390,12 +4368,56 @@ class release_action_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef release_action_EXTRAS
-    release_action_EXTRAS
+#ifdef release_act_EXTRAS
+    release_act_EXTRAS
 #endif
 };
 
-auto release_action(Expression hdl_or_port) -> Action;
+auto release_act(Expression hdl_or_port) -> Action;
+
+class if_then_else_act_class : public Action_class {
+    protected:
+        Expression condition;
+        Action action;
+        Action else_clause;
+    public:
+        if_then_else_act_class(Expression condition, Action action, Action else_clause) {
+            this->condition = condition;
+            this->action = action;
+            this->else_clause = else_clause;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef if_then_else_act_EXTRAS
+    if_then_else_act_EXTRAS
+#endif
+};
+
+auto if_then_else_act(Expression condition, Action action, Action else_clause) -> Action;
+
+class scoped_actions_block_act_class : public Action_class {
+    protected:
+        Actions actions;
+    public:
+        scoped_actions_block_act_class(Actions actions) {
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef scoped_actions_block_act_EXTRAS
+    scoped_actions_block_act_EXTRAS
+#endif
+};
+
+auto scoped_actions_block_act(Actions actions) -> Action;
 
 class no_action_class : public Action_class {
     protected:

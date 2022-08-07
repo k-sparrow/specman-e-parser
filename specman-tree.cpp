@@ -2142,182 +2142,194 @@ auto var_assign_act(Expression id_expr, Expression assign_expr) -> Action {
     return Action(new var_assign_act_class(id_expr, assign_expr));
 }
 
-auto compound_add_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_add_expr" << std::endl;
+auto compound_add_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_add_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_add_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_add_expr_class(id, e2));
+auto compound_add_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_add_act_class(id, e2));
 }
 
-auto compound_sub_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_sub_expr" << std::endl;
+auto compound_sub_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_sub_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_sub_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_sub_expr_class(id, e2));
+auto compound_sub_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_sub_act_class(id, e2));
 }
 
-auto compound_mul_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_mul_expr" << std::endl;
+auto compound_mul_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_mul_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_mul_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_mul_expr_class(id, e2));
+auto compound_mul_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_mul_act_class(id, e2));
 }
 
-auto compound_div_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_div_expr" << std::endl;
+auto compound_div_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_div_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_div_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_div_expr_class(id, e2));
+auto compound_div_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_div_act_class(id, e2));
 }
 
-auto compound_mod_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_mod_expr" << std::endl;
+auto compound_mod_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_mod_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_mod_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_mod_expr_class(id, e2));
+auto compound_mod_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_mod_act_class(id, e2));
 }
 
-auto compound_bool_and_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_bool_and_expr" << std::endl;
+auto compound_bool_and_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_bool_and_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_bool_and_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_bool_and_expr_class(id, e2));
+auto compound_bool_and_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_bool_and_act_class(id, e2));
 }
 
-auto compound_bool_or_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_bool_or_expr" << std::endl;
+auto compound_bool_or_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_bool_or_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_bool_or_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_bool_or_expr_class(id, e2));
+auto compound_bool_or_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_bool_or_act_class(id, e2));
 }
 
-auto compound_bit_and_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_bit_and_expr" << std::endl;
+auto compound_bit_and_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_bit_and_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_bit_and_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_bit_and_expr_class(id, e2));
+auto compound_bit_and_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_bit_and_act_class(id, e2));
 }
 
-auto compound_bit_or_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_bit_or_expr" << std::endl;
+auto compound_bit_or_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_bit_or_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_bit_or_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_bit_or_expr_class(id, e2));
+auto compound_bit_or_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_bit_or_act_class(id, e2));
 }
 
-auto compound_bit_xor_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_bit_xor_expr" << std::endl;
+auto compound_bit_xor_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_bit_xor_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_bit_xor_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_bit_xor_expr_class(id, e2));
+auto compound_bit_xor_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_bit_xor_act_class(id, e2));
 }
 
-auto compound_shift_left_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_shift_left_expr" << std::endl;
+auto compound_shift_left_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_shift_left_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_shift_left_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_shift_left_expr_class(id, e2));
+auto compound_shift_left_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_shift_left_act_class(id, e2));
 }
 
-auto compound_right_left_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "compound_right_left_expr" << std::endl;
+auto compound_right_left_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compound_right_left_act" << std::endl;
     if(id)
         id->dump(stream, n+2);
     if(e2)
         e2->dump(stream, n+2);
 }
 
-auto compound_right_left_expr(Expression id, Expression e2) -> Action {
-    return Action(new compound_right_left_expr_class(id, e2));
+auto compound_right_left_act(Expression id, Expression e2) -> Action {
+    return Action(new compound_right_left_act_class(id, e2));
 }
 
-auto if_then_else_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "if_then_else_action" << std::endl;
-    if(condition)
-        condition->dump(stream, n+2);
-    if(action_block)
-        action_block->dump(stream, n+2);
-}
-
-auto if_then_else_action(Expression condition, Actions action_block) -> Action {
-    return Action(new if_then_else_action_class(condition, action_block));
-}
-
-auto force_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "force_action" << std::endl;
+auto force_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "force_act" << std::endl;
     if(hdl_or_port)
         hdl_or_port->dump(stream, n+2);
     if(exp)
         exp->dump(stream, n+2);
 }
 
-auto force_action(Expression hdl_or_port, Expression exp) -> Action {
-    return Action(new force_action_class(hdl_or_port, exp));
+auto force_act(Expression hdl_or_port, Expression exp) -> Action {
+    return Action(new force_act_class(hdl_or_port, exp));
 }
 
-auto release_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "release_action" << std::endl;
+auto release_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "release_act" << std::endl;
     if(hdl_or_port)
         hdl_or_port->dump(stream, n+2);
 }
 
-auto release_action(Expression hdl_or_port) -> Action {
-    return Action(new release_action_class(hdl_or_port));
+auto release_act(Expression hdl_or_port) -> Action {
+    return Action(new release_act_class(hdl_or_port));
+}
+
+auto if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "if_then_else_act" << std::endl;
+    if(condition)
+        condition->dump(stream, n+2);
+    if(action)
+        action->dump(stream, n+2);
+    if(else_clause)
+        else_clause->dump(stream, n+2);
+}
+
+auto if_then_else_act(Expression condition, Action action, Action else_clause) -> Action {
+    return Action(new if_then_else_act_class(condition, action, else_clause));
+}
+
+auto scoped_actions_block_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "scoped_actions_block_act" << std::endl;
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto scoped_actions_block_act(Actions actions) -> Action {
+    return Action(new scoped_actions_block_act_class(actions));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
