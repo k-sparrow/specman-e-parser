@@ -1671,30 +1671,24 @@ auto list_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_slicing_expr" << std::endl;
     if(list_exp)
         list_exp->dump(stream, n+2);
-    if(high_expr)
-        high_expr->dump(stream, n+2);
-    if(low_expr)
-        low_expr->dump(stream, n+2);
-    if(slice_expr)
-        slice_expr->dump(stream, n+2);
+    if(range_expr)
+        range_expr->dump(stream, n+2);
 }
 
-auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) -> Expression {
-    return Expression(new list_slicing_expr_class(list_exp, high_expr, low_expr, slice_expr));
+auto list_slicing_expr(Expression list_exp, Expression range_expr) -> Expression {
+    return Expression(new list_slicing_expr_class(list_exp, range_expr));
 }
 
-auto list_splicing_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "list_splicing_expr" << std::endl;
+auto bit_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bit_slicing_expr" << std::endl;
     if(list_exp)
         list_exp->dump(stream, n+2);
-    if(low_expr)
-        low_expr->dump(stream, n+2);
-    if(high_expr)
-        high_expr->dump(stream, n+2);
+    if(bit_slice_expr)
+        bit_slice_expr->dump(stream, n+2);
 }
 
-auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression high_expr) -> Expression {
-    return Expression(new list_splicing_expr_class(list_exp, low_expr, high_expr));
+auto bit_slicing_expr(Expression list_exp, Expression bit_slice_expr) -> Expression {
+    return Expression(new bit_slicing_expr_class(list_exp, bit_slice_expr));
 }
 
 auto list_concat_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -1715,6 +1709,18 @@ auto bit_concat_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
     return Expression(new bit_concat_expr_class(bit_concat_items));
+}
+
+auto bit_slice_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bit_slice_expr" << std::endl;
+    if(bottom)
+        bottom->dump(stream, n+2);
+    if(top)
+        top->dump(stream, n+2);
+}
+
+auto bit_slice_expr(Expression bottom, Expression top) -> Expression {
+    return Expression(new bit_slice_expr_class(bottom, top));
 }
 
 auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {

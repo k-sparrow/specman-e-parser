@@ -202,10 +202,11 @@ module Specman begin
 
         constructor in_expr(exp: Expression; inside: Expression) : Expression;
         constructor list_indexing_expr(list_exp: Expression; idx_expr: Expression) : Expression;
-        constructor list_slicing_expr(list_exp: Expression; high_expr: Expression; low_expr: Expression; slice_expr: Expression) : Expression;
-        constructor list_splicing_expr(list_exp: Expression; low_expr: Expression; high_expr: Expression) : Expression;
+        constructor list_slicing_expr(list_exp: Expression; range_expr: Expression) : Expression;
+        constructor bit_slicing_expr(list_exp: Expression; bit_slice_expr: Expression) : Expression;
         constructor list_concat_expr(list_concat_items: Expressions) : Expression;
         constructor bit_concat_expr(bit_concat_items: Expressions) : Expression;
+        constructor bit_slice_expr(bottom: Expression; top: Expression) : Expression;
         constructor range_modifier_expr(bottom: Expression; top: Expression) : Expression;
         constructor sized_bits_scalar_expr(width_expr: Expression) : Expression;
         constructor sized_bytes_scalar_expr(width_expr: Expression) : Expression;

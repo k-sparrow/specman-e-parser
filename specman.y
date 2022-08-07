@@ -546,7 +546,9 @@
 */
 %nterm <elex::Expression>   scalar_subtype_expression
 %nterm <elex::Expression>   range_modifier_expression
+%nterm <elex::Expression>   range_modifier_expression_base
 %nterm <elex::Expression>   width_modifier_expression
+%nterm <elex::Expression>   bit_slicing_expression
 
 %nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
@@ -725,11 +727,8 @@ subtype_range_list_item :
   | int_expression 
     { $$ = $1; }
 
-  | ID DDOT ID 
-    { $$ = elex::range_modifier_expr(elex::id_expr($1), elex::id_expr($3)); }
-  
-  | int_expression DDOT int_expression 
-    { $$ = elex::range_modifier_expr($1, $3); }
+  | range_modifier_expression_base
+    { $$ = $1; }
   ;
 
 scalar_sized_type_statement : 
@@ -2054,12 +2053,19 @@ scoped_id_expr :
   | id_expr[id] LBRACKET fixed_repetition_rep_base_expr[idx] RBRACKET           
     { $$ = elex::list_indexing_expr($id, $idx); }
   
+  | id_expr[id] range_modifier_expression[range]
+    { $$ = elex::list_slicing_expr($id, $range); }  
+  
+  | id_expr[id] bit_slicing_expression[slice]
+    { $$ = elex::bit_slicing_expr($id, $slice); }
+    
   | me_expression 
     { $$ = $1; }
 
   | it_expression 
     { $$ = $1; }
   ;
+
 
 /* ternary_operator_expression :
     non_term_expression[cond] TERNARY non_term_expression[true_exp] COLON non_term_expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
@@ -2151,8 +2157,20 @@ scoped_scalar_type_identifier_expression :
   ;
 
 range_modifier_expression :
-    LBRACKET int_expression[bot] DDOT int_expression[top] RBRACKET 
-    { $$ = elex::range_modifier_expr($bot, $top); }
+    LBRACKET 
+      range_modifier_expression_base
+    RBRACKET 
+    { $$ = $2; }
+  ;
+
+range_modifier_expression_base : 
+  opt_fixed_repetition_rep_base_expr[bot] DDOT opt_fixed_repetition_rep_base_expr[top] 
+  { $$ = elex::range_modifier_expr($bot, $top); }
+  ;
+
+bit_slicing_expression :
+  LBRACKET opt_fixed_repetition_rep_base_expr[top] COLON opt_fixed_repetition_rep_base_expr[bot] RBRACKET
+  { $$ = elex::list_slicing_expr($bot, $top); }
   ;
 
 terminated_constraint_expression : 
@@ -2168,7 +2186,7 @@ constriant_expression_block :
       }
     ;
 
- method_call_expression : 
+method_call_expression : 
     non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
     ;
 
@@ -2182,10 +2200,8 @@ identifier_expression :
     ;
 
 id_expr : 
-      ID             
-      { $$ = elex::id_expr($1); }
-
-    ;
+  ID { $$ = elex::id_expr($1); }
+  ;
 
 me_expression : 
   ME { $$ = elex::me_expr(); }

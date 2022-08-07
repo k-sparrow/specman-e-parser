@@ -3152,15 +3152,11 @@ auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression;
 class list_slicing_expr_class : public Expression_class {
     protected:
         Expression list_exp;
-        Expression high_expr;
-        Expression low_expr;
-        Expression slice_expr;
+        Expression range_expr;
     public:
-        list_slicing_expr_class(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) {
+        list_slicing_expr_class(Expression list_exp, Expression range_expr) {
             this->list_exp = list_exp;
-            this->high_expr = high_expr;
-            this->low_expr = low_expr;
-            this->slice_expr = slice_expr;
+            this->range_expr = range_expr;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3173,18 +3169,16 @@ class list_slicing_expr_class : public Expression_class {
 #endif
 };
 
-auto list_slicing_expr(Expression list_exp, Expression high_expr, Expression low_expr, Expression slice_expr) -> Expression;
+auto list_slicing_expr(Expression list_exp, Expression range_expr) -> Expression;
 
-class list_splicing_expr_class : public Expression_class {
+class bit_slicing_expr_class : public Expression_class {
     protected:
         Expression list_exp;
-        Expression low_expr;
-        Expression high_expr;
+        Expression bit_slice_expr;
     public:
-        list_splicing_expr_class(Expression list_exp, Expression low_expr, Expression high_expr) {
+        bit_slicing_expr_class(Expression list_exp, Expression bit_slice_expr) {
             this->list_exp = list_exp;
-            this->low_expr = low_expr;
-            this->high_expr = high_expr;
+            this->bit_slice_expr = bit_slice_expr;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3192,12 +3186,12 @@ class list_splicing_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef list_splicing_expr_EXTRAS
-    list_splicing_expr_EXTRAS
+#ifdef bit_slicing_expr_EXTRAS
+    bit_slicing_expr_EXTRAS
 #endif
 };
 
-auto list_splicing_expr(Expression list_exp, Expression low_expr, Expression high_expr) -> Expression;
+auto bit_slicing_expr(Expression list_exp, Expression bit_slice_expr) -> Expression;
 
 class list_concat_expr_class : public Expression_class {
     protected:
@@ -3238,6 +3232,28 @@ class bit_concat_expr_class : public Expression_class {
 };
 
 auto bit_concat_expr(Expressions bit_concat_items) -> Expression;
+
+class bit_slice_expr_class : public Expression_class {
+    protected:
+        Expression bottom;
+        Expression top;
+    public:
+        bit_slice_expr_class(Expression bottom, Expression top) {
+            this->bottom = bottom;
+            this->top = top;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef bit_slice_expr_EXTRAS
+    bit_slice_expr_EXTRAS
+#endif
+};
+
+auto bit_slice_expr(Expression bottom, Expression top) -> Expression;
 
 class range_modifier_expr_class : public Expression_class {
     protected:
