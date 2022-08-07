@@ -2332,6 +2332,38 @@ auto scoped_actions_block_act(Actions actions) -> Action {
     return Action(new scoped_actions_block_act_class(actions));
 }
 
+auto case_bool_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "case_bool_act" << std::endl;
+    if(bool_case_branch_items)
+        bool_case_branch_items->dump(stream, n+2);
+}
+
+auto case_bool_act(Cases bool_case_branch_items) -> Action {
+    return Action(new case_bool_act_class(bool_case_branch_items));
+}
+
+auto case_bool_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "case_bool_branch_item_case" << std::endl;
+    if(bool_exp)
+        bool_exp->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case {
+    return Case(new case_bool_branch_item_case_class(bool_exp, actions));
+}
+
+auto default_case_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "default_case_branch_item_case" << std::endl;
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto default_case_branch_item_case(Actions actions) -> Case {
+    return Case(new default_case_branch_item_case_class(actions));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

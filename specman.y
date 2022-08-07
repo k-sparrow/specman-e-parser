@@ -308,6 +308,8 @@
 %token IF 
 %token THEN 
 %token ELSE
+%token CASE
+%token DEFAULT
 %token INT 
 %token UINT 
 %token BIT 
@@ -369,7 +371,6 @@
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
-%nterm <elex::Symbol_>    OPT_THEN
 
 /* ------------------  rules  ------------------ */
 %nterm <elex::Module>     module
@@ -480,6 +481,10 @@
 
 %nterm <elex::Action>  conditional_action
 %nterm <elex::Action>  if_then_else_action
+%nterm <elex::Action>  case_bool_action
+%nterm <elex::Cases>   case_bool_case_branches
+%nterm <elex::Case>    case_bool_case_branch
+%nterm <elex::Case>    non_term_case_bool_case_branch
 /* Expressions */
 /* %nterm <elex::Expressions>  expressions */
 %nterm <elex::Expression>   expression
@@ -1720,7 +1725,11 @@ release_action :
   ;
 
 conditional_action :
-    if_then_else_action { $$ = $1; }
+    if_then_else_action 
+    { $$ = $1; }
+  
+  | case_bool_action
+    { $$ = $1; }  
   ;
 
 if_then_else_action :
@@ -1735,9 +1744,31 @@ if_then_else_action :
   ;
 
 OPT_THEN : 
-    %prec NON_THEN
+    %empty %prec NON_THEN
   | THEN
   ;
+
+case_bool_action :
+    CASE LBRACE case_bool_case_branches RBRACE 
+    { $$ = elex::case_bool_act($3); }
+  ;
+
+case_bool_case_branches : 
+    case_bool_case_branch 
+    { $$ = elex::single_Cases($1); }
+
+  | case_bool_case_branches case_bool_case_branch 
+    { $$ = elex::append_Cases($1, elex::single_Cases($2)); }
+  ;
+
+case_bool_case_branch :
+    logical_expression[bool_exp] COLON action_block[actions] SEMICOLON
+    { $$ = elex::case_bool_branch_item_case($bool_exp, $actions); }
+
+  | DEFAULT COLON action_block[actions] SEMICOLON
+    { $$ = elex::default_case_branch_item_case($actions); }
+  ; 
+
 /* Expressions */
 /* expressions : 
     %empty                         { $$ = elex::nil_Expressions();  }

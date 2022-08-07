@@ -105,6 +105,8 @@ exec        (exec)
 if          (if)
 then        (then)
 else        (else)
+case        (case)
+default     (default)
 is_a	    (is{ws}a{ws})
 is_not_a    (is{ws}not{ws}a{ws})
 is	        (is)
@@ -324,6 +326,8 @@ mvl            {mvl_single}|{sized_mvl}
 {if}   	    { return yy::parser::make_IF(Location()); }
 {then}      { return yy::parser::make_THEN(Location()); }
 {else}      { return yy::parser::make_ELSE(Location()); }
+{case}      { return yy::parser::make_CASE(Location()); }
+{default}   { return yy::parser::make_DEFAULT(Location()); }
 {is_a}	    { return yy::parser::make_IS_A(Location()); } 
 {is_not_a}  { return yy::parser::make_IS_NOT_A(Location()); } 
 {is}	    { return yy::parser::make_IS(Location()); }

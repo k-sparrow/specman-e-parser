@@ -4419,6 +4419,68 @@ class scoped_actions_block_act_class : public Action_class {
 
 auto scoped_actions_block_act(Actions actions) -> Action;
 
+class case_bool_act_class : public Action_class {
+    protected:
+        Cases bool_case_branch_items;
+    public:
+        case_bool_act_class(Cases bool_case_branch_items) {
+            this->bool_case_branch_items = bool_case_branch_items;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef case_bool_act_EXTRAS
+    case_bool_act_EXTRAS
+#endif
+};
+
+auto case_bool_act(Cases bool_case_branch_items) -> Action;
+
+class case_bool_branch_item_case_class : public Case_class {
+    protected:
+        Expression bool_exp;
+        Actions actions;
+    public:
+        case_bool_branch_item_case_class(Expression bool_exp, Actions actions) {
+            this->bool_exp = bool_exp;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Case_SHARED_EXTRAS
+    Case_SHARED_EXTRAS
+#endif
+#ifdef case_bool_branch_item_case_EXTRAS
+    case_bool_branch_item_case_EXTRAS
+#endif
+};
+
+auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case;
+
+class default_case_branch_item_case_class : public Case_class {
+    protected:
+        Actions actions;
+    public:
+        default_case_branch_item_case_class(Actions actions) {
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Case_SHARED_EXTRAS
+    Case_SHARED_EXTRAS
+#endif
+#ifdef default_case_branch_item_case_EXTRAS
+    default_case_branch_item_case_EXTRAS
+#endif
+};
+
+auto default_case_branch_item_case(Actions actions) -> Case;
+
 class no_action_class : public Action_class {
     protected:
     public:
