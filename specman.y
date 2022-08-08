@@ -1229,11 +1229,11 @@ scalar_field_declaration :
 
       // handle associative list field declaration
       else if(assoc_list_field){
-        if(is_physical){
+        if(do_not_gen){
           assoc_list_field->set_is_physical(is_physical);
         }
         else {
-          error(@1, "Associative lists must be generatable!");
+          error(@1, "Associative lists must not be generatable!");
           $$ = nullptr;
         }
       }
