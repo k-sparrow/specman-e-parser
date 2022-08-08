@@ -116,50 +116,6 @@
 /*     auto decodeTypeStr() -> e_scalar_predefined_type {
     } */
     namespace elex {
-        auto decodeTypeStr(Symbol_ token) -> elex::e_scalar_predefined_type {              
-            auto token_str = token.lock()->Str();
-
-            if(token_str == "int")          return eInt;
-            else if (token_str == "uint")   return eUint;
-            else if (token_str == "bool")   return eBool;
-            else if (token_str == "bit")    return eBit;
-            else if (token_str == "byte")   return eByte;
-            else if (token_str == "nibble") return eNibble;
-            else if (token_str == "time")   return eTime;
-            else                            return eNotPredefined;
-        }
-
-        auto decodeType(Symbol_ token) -> elex::Expression {
-          switch(decodeTypeStr(token)) {
-              case eInt: {
-                  return elex::predefined_type_int_expr();
-              } 
-              case eUint: {
-                  return elex::predefined_type_uint_expr();
-              } 
-              case eBool: {
-                  return elex::predefined_type_bool_expr();
-              } 
-              case eBit: {
-                  return elex::predefined_type_bit_expr();
-              } 
-              case eByte: {
-                  return elex::predefined_type_byte_expr();
-              }
-              case eNibble: {
-                  return elex::predefined_type_nibble_expr();
-              } 
-              case eTime: {
-                  return elex::predefined_type_time_expr();
-              } 
-              case eNotPredefined: {
-                  return elex::id_expr(token);
-              } 
-              default: {
-                  return elex::id_expr(token);
-              }
-          }
-        }
     }
 %}
 
@@ -458,8 +414,6 @@
 %nterm <elex::StructMember>  scalar_field_declaration
 %nterm <elex::StructMember>  non_decorated_scalar_field_declaration
 %nterm <elex::StructMember>  list_field_declaration
-%nterm <elex::StructMember>  non_decorated_list_field_declaration
-%nterm <elex::StructMember>  keyed_list_field_declaration
 %nterm <elex::e_physical_dont_gen>  do_not_gen_physical
 
 /* Actions */
@@ -493,9 +447,9 @@
 %nterm <elex::Expression> label_case_item_expression
 
 /* Expressions */
-/* %nterm <elex::Expressions>  expressions */
 %nterm <elex::Expression>   expression
-%nterm <elex::Expression>   non_term_expression
+%nterm <elex::Expression>   operator
+
 
 %nterm <elex::Expressions>  comma_separated_expressions 
 
@@ -541,12 +495,18 @@
 %nterm <elex::Expressions>  list_concat_expressions
 %nterm <elex::Expression>   bit_concatenation_expression
 %nterm <elex::Expressions>  bit_concat_expressions 
-
-%nterm <elex::Expression>   scalar_subtype_expression
+%nterm <elex::Expression>   bit_slicing_expression
 %nterm <elex::Expression>   range_modifier_expression
 %nterm <elex::Expression>   range_modifier_expression_base
 %nterm <elex::Expression>   width_modifier_expression
-%nterm <elex::Expression>   bit_slicing_expression
+
+/* Data Types */
+%nterm <elex::DataType>     scalar_or_enum_data_type
+%nterm <elex::DataType>     scalar_subtype_datatype
+%nterm <elex::DataType>     enum_datatype
+
+%nterm <elex::DataType>     scoped_type_identifier_data_type
+%nterm <elex::DataType>     scoped_scalar_type_identifier_data_type
 
 %nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
@@ -558,7 +518,6 @@
 %nterm <elex::Expression>   scoped_id_expr
 %nterm <elex::Expression>   identifier_expression
 %nterm <elex::Expression>   type_scalar_expression
-%nterm <elex::Expression>   enum_type_expression
 %nterm <elex::Expressions>  enum_list_exprs
 %nterm <elex::Expression>   enum_list_item
 
@@ -573,7 +532,7 @@
 %nterm <elex::Expression>   opt_slice_expr */
 %nterm <elex::Expression>   opt_struct_type_id
 
-%nterm <elex::Expression>   predefined_scalar_type_expression
+%nterm <elex::DataType>     predefined_scalar_datatype   
 
 %nterm <elex::Expression>   constraint_expression
 %nterm <elex::Expression>   scoped_type_identifier_expression
@@ -597,7 +556,7 @@
 %nterm <elex::Formals>      formals
 %nterm <elex::Formal>       formal
 
-%nterm <elex::Expression>      opt_return_type
+%nterm <elex::DataType>      opt_return_type
 %nterm <elex::e_method_int_mod> opt_method_introduction_modifier
 %nterm <elex::e_method_ext_mod> opt_method_extension_modifier
 
@@ -664,26 +623,67 @@ inner_type_statement :
     enumerated_type_statement
     { $$ = $1; }
 
-  | scalar_subtype_statement 
+/*   | scalar_subtype_statement 
     { $$ = $1; }
 
   | scalar_sized_type_statement
-    { $$ = $1; }
+    { $$ = $1; } */
   ;
 
 // all type statements are unrolled as long productions
 // in order to avoid astonishing, annoying and difficult rr & rs conflicts
 enumerated_type_statement:
-    TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET
+    TYPE ID[id] COLON scalar_or_enum_data_type[type_]
     { 
-      $$ = elex::enum_type_st($id, $items, nullptr); 
+      $$ = elex::enum_type_st($id, $type_); 
+    }
+  ;
+
+enum_datatype : 
+    LBRACKET enum_list_exprs[items] RBRACKET %prec NON_LPAREN
+    {
+      $$ = elex::enum_dt($items, nullptr);
     }
 
-  | TYPE ID[id] COLON LBRACKET enum_list_exprs[items] RBRACKET 
+  | LBRACKET enum_list_exprs[items] RBRACKET 
     width_modifier_expression[width]
-    { 
-      $$ = elex::enum_type_st($id, $items, $width); 
+    {
+      $$ = elex::enum_dt($items, $width);
     }
+  ;
+
+scalar_or_enum_data_type : 
+    enum_datatype { $$ = $1; }
+  | scalar_subtype_datatype { $$ = $1; }
+  ;
+
+scalar_subtype_datatype :
+    // add a rule for ID alone (needs to solve reduce/reduce conflict with id_expr)
+
+    // type-id[min..max]
+    ID[type_id] range_modifier_expression[range] 
+    { $$ = elex::defined_subtype_dt($type_id, $range); }
+  
+    // int|uint|bit|nibble|time|bool
+  | predefined_scalar_datatype %prec NON_LPAREN
+    { $$ = $1; }
+
+    // int(bits|bytes: width)
+  | predefined_scalar_datatype[type_id]
+    width_modifier_expression[width]
+    { $$ = elex::predefined_subtype_dt($type_id, nullptr, $width); }
+
+    // int[range, ...]
+  | predefined_scalar_datatype[type_id]
+    range_modifier_expression[range] %prec NON_LPAREN
+    { $$ = elex::predefined_subtype_dt($type_id, $range, nullptr); }
+
+    // int[range, ...](bits|bytes: width)
+  | predefined_scalar_datatype[type_id]
+    range_modifier_expression[range]
+    width_modifier_expression[width]
+    { $$ = elex::predefined_subtype_dt($type_id, $range, $width); }
+
   ;
 
 scalar_subtype_statement :
@@ -692,7 +692,7 @@ scalar_subtype_statement :
       $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), nullptr);
     }
 
-  | TYPE ID[subtype_id] COLON predefined_scalar_type_expression[type_id] 
+  | TYPE ID[subtype_id] COLON predefined_scalar_datatype[type_id] 
     { 
       $$ = elex::scalar_subtype_st($subtype_id, $type_id, nullptr);
     }
@@ -703,7 +703,7 @@ scalar_subtype_statement :
       $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), $ranges);
     }
 
-  | TYPE ID[subtype_id] COLON predefined_scalar_type_expression[type_id] 
+  | TYPE ID[subtype_id] COLON predefined_scalar_datatype[type_id] 
     LBRACKET subtype_range_list_items[ranges] RBRACKET
     { 
       $$ = elex::scalar_subtype_st($subtype_id, $type_id, $ranges);
@@ -730,14 +730,14 @@ subtype_range_list_item :
   ;
 
 scalar_sized_type_statement : 
-    TYPE ID[id] COLON predefined_scalar_type_expression[base_type_id]
+    TYPE ID[id] COLON predefined_scalar_datatype[base_type_id]
     width_modifier_expression[width]
     { $$ = elex::scalar_sized_type_st($id, 
                                       $base_type_id, 
                                       nullptr,
                                       $width); }
   
-  | TYPE ID[id] COLON predefined_scalar_type_expression[base_type_id]
+  | TYPE ID[id] COLON predefined_scalar_datatype[base_type_id]
     LBRACKET subtype_range_list_items[ranges] RBRACKET
     width_modifier_expression[width]
     { $$ = elex::scalar_sized_type_st($id, 
@@ -1007,7 +1007,7 @@ non_term_coverage_group_item :
     ITEM ID[id] opt_coverage_group_item_options[options] 
     { $$ = elex::simple_covergroup_item_cgi($id, $options);}
     
-  | ITEM ID[id] COLON scoped_type_identifier_expression[type_] ASSIGN non_term_expression[value] opt_coverage_group_item_options[options] 
+  | ITEM ID[id] COLON scoped_type_identifier_data_type[type_] ASSIGN expression[value] opt_coverage_group_item_options[options] 
     { $$ = elex::on_the_fly_covergroup_item_cgi($id, $type_, $value, $options); }
   
   | CROSS covergroup_item_list[cross_cg_items] opt_coverage_group_item_options[options]
@@ -1248,14 +1248,14 @@ scalar_field_declaration :
   ;
 
 non_decorated_scalar_field_declaration : 
-    ID[name] COLON scoped_type_identifier_expression[type_] 
+    ID[name] COLON scoped_type_identifier_data_type[type_] 
     { 
       // if its a list type
-      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) 
+      if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) 
         $$ = elex::struct_field_list_sm($name, nullptr, $type_, false, false);
 
       // or else its a associative list type
-      else if (std::dynamic_pointer_cast<assoc_list_type_expr_class>($type_)) 
+      else if (std::dynamic_pointer_cast<assoc_list_type_dt_class>($type_)) 
         $$ = elex::struct_field_assoc_list_sm($name, $type_, false);
       
       // else it's just a scalar field
@@ -1264,9 +1264,9 @@ non_decorated_scalar_field_declaration :
     }
 
   // additional syntax specialization for listed fields
-  | ID[name] LBRACKET id_expr[len] RBRACKET COLON scoped_type_identifier_expression[type_] 
+  | ID[name] LBRACKET id_expr[len] RBRACKET COLON scoped_type_identifier_data_type[type_] 
     { 
-      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) {
+      if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) {
         $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
       }
       else {
@@ -1275,9 +1275,9 @@ non_decorated_scalar_field_declaration :
       }
     }
 
-  | ID[name] LBRACKET int_expression[len] RBRACKET COLON scoped_type_identifier_expression[type_] 
+  | ID[name] LBRACKET int_expression[len] RBRACKET COLON scoped_type_identifier_data_type[type_] 
     {  
-      if(std::dynamic_pointer_cast<list_type_expr_class>($type_)) {
+      if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) {
         $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
       }
       else {
@@ -1610,13 +1610,13 @@ non_term_action :
       $$ = elex::no_action(); 
     } 
 
-  | action_block
+/*   | action_block
     { $$ = elex::scoped_actions_block_act($1); }
 
-  | variable_creation_or_modification_action 
-    { $$ = $1; }
-
   | conditional_action
+    { $$ = $1; } */
+
+  | variable_creation_or_modification_action 
     { $$ = $1; }
   ;
 
@@ -1643,25 +1643,25 @@ variable_declaration_action :
     { $$ = elex::var_decl_act($2, nullptr, nullptr); }
   
     // var name : type
-  | VAR ID[id] COLON scoped_type_identifier_expression[type_]
+  | VAR ID[id] COLON scoped_type_identifier_data_type[type_]
     { $$ = elex::var_decl_act($id, $type_, nullptr); }
   
     // var name : type = exp
-  | VAR ID[id] COLON scoped_type_identifier_expression[type_] ASSIGN non_term_expression[exp]
+  | VAR ID[id] COLON scoped_type_identifier_data_type[type_] ASSIGN expression[exp]
     { $$ = elex::var_decl_act($id, $type_, $exp);}
 
     // var name := exp
-  | VAR ID[id] COLON ASSIGN non_term_expression[exp]
+  | VAR ID[id] COLON ASSIGN expression[exp]
     { $$ = elex::var_decl_act($id, nullptr, $exp);}
   ;
 
 variable_assignment_action : 
-  identifier_expression ASSIGN non_term_expression
+  identifier_expression ASSIGN expression
   { $$ = elex::var_assign_act($1, $3); }
   ;
 
 compound_assignment_action : 
-  identifier_expression[lhs_exp] compound_op[op] ASSIGN non_term_expression[exp]
+  identifier_expression[lhs_exp] compound_op[op] ASSIGN expression[exp]
   {
     switch($op) {
       /* binary arithmetic operators */
@@ -1704,7 +1704,7 @@ compound_op :
   ;
 
 force_action : 
-  FORCE hdl_pathname_expression ASSIGN non_term_expression
+  FORCE hdl_pathname_expression ASSIGN expression
   { $$ = elex::force_act($2, $4); }
   ;
 
@@ -1764,7 +1764,7 @@ case_bool_case_branch :
   ; 
 
 case_labeled_action :
-  CASE non_term_expression[exp] LBRACE 
+  CASE expression[exp] LBRACE 
     case_labeled_case_branches[branches]
   RBRACE
   { $$ = elex::case_labeled_act($exp, $branches); }
@@ -1794,22 +1794,27 @@ label_case_item_expression :
     { $$ = $1; }
   ;
 
-non_term_expression :  
+expression : 
+    operator                   { $$ = $1; }
+  | LPAREN expression RPAREN   { $$ = $2; }
+  | str_expression             { $$ = $1; }
+  | int_expression             { $$ = $1; }
+  | bool_literal_expression    { $$ = $1; }
+  ;
+
+operator :  
     bitwise_expression         { $$ = $1; }
   | logical_expression         { $$ = $1; }
   | arithmetic_expression      { $$ = $1; }
   | method_call_expression     { $$ = $1; }
-  | LBRACKET enum_list_exprs RBRACKET 
+/*   | LBRACKET enum_list_exprs RBRACKET 
     {
       $$ = elex::enum_type_expr($2, nullptr);
-    }
+    } */
   | identifier_expression      { $$ = $1; }
   | struct_allocate_expression { $$ = $1; }
   | list_concatenation_expression { $$ = $1; }
   | bit_concatenation_expression  { $$ = $1; }
-  | str_expression             { $$ = $1; }
-  | int_expression             { $$ = $1; }
-  | bool_literal_expression    { $$ = $1; }
   ; // TODO: fully implement this
 
 
@@ -1833,24 +1838,23 @@ bitwise_expression :
     ;
 
 unary_bitwise_expression : 
-  BTWS_NOT_OP non_term_expression { $$ = elex::bitwise_not_expr($2); }
+  BTWS_NOT_OP expression { $$ = elex::bitwise_not_expr($2); }
   // TODO: $2 should be numeric or HDL pathname only - refactor this
   ;
 
 binary_bitwise_expression : 
-    non_term_expression BTWS_AND_OP non_term_expression { $$ = elex::bitwise_and_expr($1, $3); }
-  | non_term_expression BTWS_OR_OP  non_term_expression { $$ = elex::bitwise_or_expr($1, $3); }
-  | non_term_expression XOR_OP      non_term_expression { $$ = elex::bitwise_xor_expr($1, $3); }
+    expression BTWS_AND_OP expression { $$ = elex::bitwise_and_expr($1, $3); }
+  | expression BTWS_OR_OP  expression { $$ = elex::bitwise_or_expr($1, $3); }
+  | expression XOR_OP      expression { $$ = elex::bitwise_xor_expr($1, $3); }
   ;
 
 shift_expression : 
-    non_term_expression LSHIFT non_term_expression { $$ = elex::shift_left_expr($1, $3); }
-  | non_term_expression RSHIFT non_term_expression { $$ = elex::right_left_expr($1, $3); }
+    expression LSHIFT expression { $$ = elex::shift_left_expr($1, $3); }
+  | expression RSHIFT expression { $$ = elex::right_left_expr($1, $3); }
   ;
 
 logical_expression : 
-    LPAREN logical_expression RPAREN { $$ = $2; }
-  | unary_logical_expression         { $$ = $1; }
+    unary_logical_expression         { $$ = $1; }
   | binary_logical_expression        { $$ = $1; }
   | implication_expression           { $$ = $1; }
   | comparison_expression            { $$ = $1; }
@@ -1859,23 +1863,23 @@ logical_expression :
   ;
 
 unary_logical_expression : 
-    LOGICAL_NOT_OP non_term_expression   { $$ = elex::logical_not_expr($2); }
-  | NOT            non_term_expression   { $$ = elex::logical_not_expr($2); }
+    LOGICAL_NOT_OP expression   { $$ = elex::logical_not_expr($2); }
+  | NOT            expression   { $$ = elex::logical_not_expr($2); }
   ;
 
 binary_logical_expression : 
-    non_term_expression LOGICAL_AND_OP non_term_expression { $$ = elex::logical_and_expr($1, $3); }
-  | non_term_expression AND non_term_expression            { $$ = elex::logical_and_expr($1, $3); }
-  | non_term_expression LOGICAL_OR_OP non_term_expression  { $$ = elex::logical_or_expr($1, $3); }
-  | non_term_expression OR non_term_expression             { $$ = elex::logical_or_expr($1, $3); }
+    expression LOGICAL_AND_OP expression { $$ = elex::logical_and_expr($1, $3); }
+  | expression AND expression            { $$ = elex::logical_and_expr($1, $3); }
+  | expression LOGICAL_OR_OP expression  { $$ = elex::logical_or_expr($1, $3); }
+  | expression OR expression             { $$ = elex::logical_or_expr($1, $3); }
   ;
 
 implication_expression : 
-  non_term_expression IMPLICATION non_term_expression { $$ = elex::implication_expr($1, $3); }
+  expression IMPLICATION expression { $$ = elex::implication_expr($1, $3); }
   ;
 
 inclusion_expression : 
-  non_term_expression IN non_term_expression          { $$ = elex::in_expr($1, $3); }
+  expression IN expression          { $$ = elex::in_expr($1, $3); }
   ;
 
 /* 
@@ -1883,15 +1887,15 @@ inclusion_expression :
     struct-field is not a subtype
 
    as opposed to other low level fundamental expressions,
-   type introspection cannot be used with non_term_expression
+   type introspection cannot be used with expression
    as a building block since it only accepts hiearachy id and type id expressions
    
 */
 type_instrospection_expression :
-    hier_ref_expression[field] IS_A scoped_type_identifier_expression[type_] 
+    hier_ref_expression[field] IS_A scoped_type_identifier_data_type[type_] 
     { $$ = elex::type_introspec_expr($field, $type_); }
 
-  | hier_ref_expression[field] IS_NOT_A scoped_type_identifier_expression[type_] 
+  | hier_ref_expression[field] IS_NOT_A scoped_type_identifier_data_type[type_] 
   { $$ = elex::type_introspec_negation_expr($field, $type_); }
   ;
 
@@ -1901,29 +1905,29 @@ arithmetic_expression :
     ;
 
 unary_arithmetic_expression : 
-      PLUS non_term_expression  { $$ = elex::unary_positive_expr($2); }
-    | MINUS non_term_expression { $$ = elex::unary_negative_expr($2); }
+      PLUS expression  { $$ = elex::unary_positive_expr($2); }
+    | MINUS expression { $$ = elex::unary_negative_expr($2); }
     ;
 
 binary_arithmetic_expression : 
-      non_term_expression PLUS      non_term_expression { $$ = elex::binary_add_expr($1, $3); }
-    | non_term_expression MINUS     non_term_expression { $$ = elex::binary_sub_expr($1, $3); }
-    | non_term_expression MUL       non_term_expression { $$ = elex::binary_mul_expr($1, $3); }
-    | non_term_expression DIV       non_term_expression { $$ = elex::binary_div_expr($1, $3); }
-    | non_term_expression REMAINDER non_term_expression { $$ = elex::binary_remainder_expr($1, $3); }
+      expression PLUS      expression { $$ = elex::binary_add_expr($1, $3); }
+    | expression MINUS     expression { $$ = elex::binary_sub_expr($1, $3); }
+    | expression MUL       expression { $$ = elex::binary_mul_expr($1, $3); }
+    | expression DIV       expression { $$ = elex::binary_div_expr($1, $3); }
+    | expression REMAINDER expression { $$ = elex::binary_remainder_expr($1, $3); }
     ;
 
 comparison_expression : 
-      non_term_expression GT  non_term_expression { $$ = elex::greater_then_expr($1, $3); }
-    | non_term_expression LT  non_term_expression { $$ = elex::less_then_expr($1, $3); }
-    | non_term_expression GTE non_term_expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
-    | non_term_expression LTE non_term_expression { $$ = elex::less_then_or_equal_expr($1, $3); }
-    | non_term_expression EQ  non_term_expression { $$ = elex::equality_expr($1, $3); }
-    | non_term_expression NEQ non_term_expression { $$ = elex::non_equality_expr($1, $3); }
-    | non_term_expression VERILOG_EQ non_term_expression  { $$ = elex::hdl_equality_expr($1, $3); }
-    | non_term_expression VERILOG_NEQ non_term_expression { $$ = elex::hdl_non_equality_expr($1, $3); }
-    | non_term_expression BTWS_NOT_OP non_term_expression                { $$ = elex::str_match_expr($1, $3); } // "str" ~ "pattern"
-    | non_term_expression LOGICAL_NOT_OP BTWS_NOT_OP non_term_expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
+      expression GT  expression { $$ = elex::greater_then_expr($1, $3); }
+    | expression LT  expression { $$ = elex::less_then_expr($1, $3); }
+    | expression GTE expression { $$ = elex::greater_then_or_equal_expr($1, $3); }
+    | expression LTE expression { $$ = elex::less_then_or_equal_expr($1, $3); }
+    | expression EQ  expression { $$ = elex::equality_expr($1, $3); }
+    | expression NEQ expression { $$ = elex::non_equality_expr($1, $3); }
+    | expression VERILOG_EQ expression  { $$ = elex::hdl_equality_expr($1, $3); }
+    | expression VERILOG_NEQ expression { $$ = elex::hdl_non_equality_expr($1, $3); }
+    | expression BTWS_NOT_OP expression                { $$ = elex::str_match_expr($1, $3); } // "str" ~ "pattern"
+    | expression LOGICAL_NOT_OP BTWS_NOT_OP expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
     ;
 
     
@@ -1932,8 +1936,8 @@ list_concatenation_expression :
     ;
 
 list_concat_expressions : 
-      non_term_expression                                   { $$ = elex::single_Expressions($1); }
-    | list_concat_expressions SEMICOLON non_term_expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
+      expression                                   { $$ = elex::single_Expressions($1); }
+    | list_concat_expressions SEMICOLON expression { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
     ;
 
 bit_concatenation_expression : 
@@ -1950,14 +1954,14 @@ sized_scalar_expr :
     ; */
 
 
-predefined_scalar_type_expression : 
-    INT     { $$ = elex::predefined_type_int_expr(); }
-  | UINT    { $$ = elex::predefined_type_uint_expr(); }
-  | BOOL    { $$ = elex::predefined_type_bool_expr(); }
-  | BIT     { $$ = elex::predefined_type_bit_expr(); }
-  | BYTE    { $$ = elex::predefined_type_byte_expr(); }
-  | NIBBLE  { $$ = elex::predefined_type_nibble_expr(); }
-  | TIME    { $$ = elex::predefined_type_time_expr(); }
+predefined_scalar_datatype : 
+    INT     { $$ = elex::int_predefined_type(); }
+  | UINT    { $$ = elex::uint_predefined_type(); }
+  | BOOL    { $$ = elex::bool_predefined_type(); }
+  | BIT     { $$ = elex::bit_predefined_type(); }
+  | BYTE    { $$ = elex::byte_predefined_type(); }
+  | NIBBLE  { $$ = elex::nibble_predefined_type(); }
+  | TIME    { $$ = elex::time_predefined_type(); }
   ;
 
 
@@ -1978,11 +1982,11 @@ opt_iterated_id_expr : // [[ (name) ]]
 /*
 opt_slice_expr : // [[: slice]]
       %empty            { $$ = elex::no_expr(); }
-    | COLON non_term_expression  { $$ = $2; }  */
+    | COLON expression  { $$ = $2; }  */
 
 /* opt_expr :  // [[ expr ]]
       %empty        { $$ = elex::no_expr(); }
-    | non_term_expression    { $$ = $1; }
+    | expression    { $$ = $1; }
     ; */
 
 str_expression : 
@@ -2049,11 +2053,11 @@ scoped_id_expr :
 
 
 /* ternary_operator_expression :
-    non_term_expression[cond] TERNARY non_term_expression[true_exp] COLON non_term_expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
+    expression[cond] TERNARY expression[true_exp] COLON expression[false_exp] { $$ = elex::ternary_operator_expr($cond, $true_exp, $false_exp); }
     ;   
 
 casting_operator_expression :
-    non_term_expression[casted] DOT AS_A LPAREN non_term_expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
+    expression[casted] DOT AS_A LPAREN expression[dest_type] RPAREN { $$ = elex::cast_operator_expr($casted, $dest_type); }
     ; */
 
 /*
@@ -2075,66 +2079,48 @@ List items constraint
     }
 */
 constraint_expression : 
-      logical_expression                               { $$ = elex::constraint_expr($1); }
-    | SOFT constraint_expression                       { $$ = elex::soft_constraint_expr($2); }
-    | TYPE hier_ref_expression[field] IS_A scoped_type_identifier_expression[type_] 
+      logical_expression                               
+      { $$ = elex::constraint_expr($1); }
+
+    | SOFT constraint_expression                       
+      { $$ = elex::soft_constraint_expr($2); }
+
+    | TYPE hier_ref_expression[field] IS_A scoped_type_identifier_data_type[type_] 
       { $$ = elex::field_type_constraint_by_type_expr($field, $type_); }
+    
     | TYPE hier_ref_expression[lhs] EQ hier_ref_expression[rhs]
       { $$ = elex::field_type_constraint_by_field_expr($lhs, $rhs); }
-    | ALL OF LBRACE constriant_expression_block RBRACE { $$ = elex::all_of_constraint_expr($4); } 
+    
+    | ALL OF LBRACE constriant_expression_block RBRACE 
+      { $$ = elex::all_of_constraint_expr($4); } 
+    
     | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE constriant_expression_block[constraint] RBRACE 
-      {
-          $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint);
-      }
+      { $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint); }
+
     | SOFT hier_ref_expression[gen_item] SELECT LBRACE weight_value_pairs[distribution] RBRACE 
       // in order to avoid shift/reduce conflicts with `hier_ref_expression . EQ -> identifier_expression`
       // the SELECT keyword was changed to EQ[WS]SELECT (see scanner .l file)
-      {
-          $$ = elex::distribution_constraint_expr($gen_item, $distribution);
-      }
+      { $$ = elex::distribution_constraint_expr($gen_item, $distribution); }
     ;
 
-scoped_type_identifier_expression: 
-    scoped_scalar_type_identifier_expression
+scoped_type_identifier_data_type: 
+    scoped_scalar_type_identifier_data_type
     { $$ = $1; }
 
-  | LIST OF scoped_type_identifier_expression
-    { $$ = elex::list_type_expr($3); }
+  | LIST OF scoped_type_identifier_data_type
+    { $$ = elex::list_type_dt($3); }
 
-  | LIST LPAREN KEY COLON ID[key_id] RPAREN OF scoped_type_identifier_expression[base_type]
-    { $$ = elex::assoc_list_type_expr($key_id, $base_type); }
+  // associative list isn't allowed to have a listed type as a base type
+  | LIST LPAREN KEY COLON ID[key_id] RPAREN OF scoped_scalar_type_identifier_data_type[base_type]
+    { $$ = elex::assoc_list_type_dt($key_id, $base_type); }
   ;
 
-scoped_scalar_type_identifier_expression :
+scoped_scalar_type_identifier_data_type :
     struct_type_modifiers %prec LT_ID       
-    { $$ = elex::defined_type_identifier_expr($1); }
+    { $$ = elex::defined_struct_type_dt($1); }
 
-  | LBRACKET enum_list_exprs RBRACKET
-    { $$ = elex::enum_type_expr($2, nullptr); }
-
-    // NON_LPAREN is used here in order to solve the shift reduce conflict with the 
-    // LPAREN of the next two rules when lookahead token is LPAREN, and since NON_LPAREN < LPAREN, the action
-    // will be to shift LPAREN
-  | predefined_scalar_type_expression %prec NON_LPAREN
-    { $$ = $1; } 
-
-  | predefined_scalar_type_expression[type_] width_modifier_expression[width]
-    { 
-      $$ = elex::scalar_subtype_expr($type_, nullptr, $width); 
-    }
-
-  | predefined_scalar_type_expression[type_]   
-    range_modifier_expression[range] 
-    width_modifier_expression[width]
-    { 
-      $$ = elex::scalar_subtype_expr($type_, $range, $width); 
-    }
-
-  | predefined_scalar_type_expression[type_] 
-    range_modifier_expression[range] %prec NON_LPAREN
-    {
-      $$ = elex::scalar_subtype_expr($type_, $range, nullptr); 
-    }
+  | scalar_or_enum_data_type
+    { $$ = $1; }
   ;
 
 range_modifier_expression :
@@ -2168,14 +2154,14 @@ constriant_expression_block :
     ;
 
 method_call_expression : 
-    non_term_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
+    expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
     ;
 
 comma_separated_expressions : 
-    non_term_expression                                   
+    expression                                   
     { $$ = elex::single_Expressions($1); }
 
-  | comma_separated_expressions COMMA non_term_expression 
+  | comma_separated_expressions COMMA expression 
     { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
 
   | %empty 
@@ -2209,7 +2195,7 @@ terminated_weight_value_pair :
     ;
 
 weight_value_pair : 
-    int_expression[int_] COLON non_term_expression[value] { $$ = elex::distribution_branch_case($int_, $value); } 
+    int_expression[int_] COLON expression[value] { $$ = elex::distribution_branch_case($int_, $value); } 
     ;
 
 formals:
@@ -2219,12 +2205,16 @@ formals:
     ;
 
 formal : 
-    ID[name] COLON scoped_type_identifier_expression[type_] { $$ = elex::formal($name, $type_); }
-    ;
+  ID[name] COLON scoped_type_identifier_data_type[type_] 
+  { $$ = elex::formal($name, $type_); }
+  ;
 
 opt_return_type : 
-      %empty                            { $$ = elex::no_expr(); } 
-    | COLON scoped_type_identifier_expression  { $$ = $2; }
+      %empty                            
+      { $$ = nullptr; } 
+
+    | COLON scoped_type_identifier_data_type  
+      { $$ = $2; }
 
 OPT_PACKAGE : 
       PACKAGE  { }

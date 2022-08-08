@@ -16,6 +16,8 @@ module Specman begin
         phylum Expression;
         phylum Expressions = LIST[Expression];
 
+        phylum DataType;
+
         phylum Formal;
         phylum Formals = LIST[Formal];
 
@@ -44,7 +46,7 @@ module Specman begin
         constructor struct_st(struct_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_like_st(struct_name: Symbol_; base_struct_name: Symbol_; members: StructMembers) : Statement;
         constructor extend_struct_st(struct_type_name: Expressions; members: StructMembers) : Statement;
-        constructor enum_type_st(type_id: Symbol_; enum_list_items: Expressions; width_expr: Expression)  : Statement;
+        constructor enum_type_st(id: Symbol_; type_id: DataType)  : Statement;
         constructor extend_enum_type_st(type_id: Symbol_; enum_list_items: Expressions)  : Statement;
         constructor scalar_subtype_st(subtype_id: Symbol_; type_id: Expression; ranges: Expressions)  : Statement;
         constructor scalar_sized_type_st(type_id: Symbol_; base_type_id: Expression; ranges_expr: Expressions; width_expr: Expression)  : Statement;
@@ -58,25 +60,25 @@ module Specman begin
         constructor sequence_base_kind_it(id: Symbol_) : SequenceItem;
         constructor sequence_driver_base_kind_it(id: Symbol_) : SequenceItem;
 
-        constructor formal(name: Symbol_; type_: Expression) : Formal;
+        constructor formal(name: Symbol_; type_: DataType) : Formal;
 
-        constructor struct_field_sm(id: Symbol_; type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
-        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; list_base_type: Expression; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
-        constructor struct_field_assoc_list_sm(id: Symbol_; list_type_expr: Expression; is_physical : Boolean) : StructMember;
+        constructor struct_field_sm(id: Symbol_; type: DataType; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
+        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; type_: DataType; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
+        constructor struct_field_assoc_list_sm(id: Symbol_; type_: DataType; is_physical : Boolean) : StructMember;
 
-        constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
-        constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
-        constructor method_dec_first_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
-        constructor method_dec_only_sm(id: Symbol_; arguments: Formals; return_type: Expression; actions_: Actions) : StructMember;
-        constructor method_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: Expression) : StructMember;
-        constructor method_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: Expression) : StructMember;
+        constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
+        constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
+        constructor method_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
+        constructor method_dec_only_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
+        constructor method_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: DataType) : StructMember;
+        constructor method_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: DataType) : StructMember;
 
-        constructor tcm_dec_sm(id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression ;actions_: Actions) : StructMember;
-        constructor tcm_dec_also_sm (id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression; actions_: Actions) : StructMember;
-        constructor tcm_dec_first_sm(id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression; actions_: Actions) : StructMember;
-        constructor tcm_dec_only_sm (id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression; actions_: Actions) : StructMember;
-        constructor tcm_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression) : StructMember;
-        constructor tcm_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: Expression; event_id_expr: Expression) : StructMember;
+        constructor tcm_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression ;actions_: Actions) : StructMember;
+        constructor tcm_dec_also_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_only_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression) : StructMember;
+        constructor tcm_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression) : StructMember;
 
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
         constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
@@ -136,7 +138,7 @@ module Specman begin
 
         constructor simple_covergroup_item_cgi(item_id: Symbol_; cgi_options: CovergroupItemOptions) : CovergroupItem;
         constructor on_the_fly_covergroup_item_cgi(item_id      : Symbol_; 
-                                                   type_        : Expression; 
+                                                   type_        : DataType; 
                                                    sampled_val  : Expression; 
                                                    cgi_options : CovergroupItemOptions) : CovergroupItem;
         constructor cross_covergroup_item_cgi(cg_items: Expressions; cgi_options: CovergroupItemOptions) : CovergroupItem;
@@ -161,8 +163,6 @@ module Specman begin
 
         constructor id_expr(id: Symbol_) : Expression;
         
-        constructor list_type_expr(base_type_expr: Expression) : Expression;
-        constructor assoc_list_type_expr(key_id: Symbol_; base_type_expr: Expression) : Expression;
         constructor enum_type_expr(enum_list_expr: Expressions; width_modifier_expr: Expression) : Expression;
         constructor enum_list_item(id: Symbol_; expr: Expression) : Expression;
         
@@ -219,8 +219,8 @@ module Specman begin
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
         constructor defined_type_identifier_expr(modifiers: Expressions) : Expression;
-        constructor type_introspec_expr(field_id: Expression; type_id: Expression) : Expression;
-        constructor type_introspec_negation_expr(field_id: Expression; type_id: Expression) : Expression;
+        constructor type_introspec_expr(field_id: Expression; type_id: DataType) : Expression;
+        constructor type_introspec_negation_expr(field_id: Expression; type_id: DataType) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;
         constructor ternary_operator_expr(condition: Expression; true_expr: Expression; false_expr: Expression) : Expression;
@@ -232,8 +232,8 @@ module Specman begin
         constructor soft_constraint_expr(bool_expr: Expression) : Expression;
         constructor all_of_constraint_expr(constraints: Expressions) : Expression;
         constructor list_items_constraint_expr(item_name: Expression; gen_item: Expression; constraints: Expressions) : Expression;
-        constructor field_type_constraint_by_type_expr(field_ : Expression; type_: Expression) : Expression;
-        constructor field_type_constraint_by_field_expr(field_ : Expression; type_: Expression) : Expression;
+        constructor field_type_constraint_by_type_expr(field_ : Expression; type_: DataType) : Expression;
+        constructor field_type_constraint_by_field_expr(field_ : Expression; field: Expression) : Expression;
         constructor distribution_constraint_expr(gen_item: Expression; distribution: Cases) : Expression;
 
         constructor distribution_branch_case(int_: Expression; value: Expression) : Case;
@@ -243,19 +243,34 @@ module Specman begin
         constructor str_expr(str: Symbol_) : Expression;
         constructor int_expr(int_: Symbol_) : Expression;
         
-        constructor scalar_subtype_expr(predefined_base_type: Expression; range_modifier: Expression; width_modifier: Expression) : Expression;
 
-        constructor predefined_type_int_expr() : Expression;
-        constructor predefined_type_uint_expr() : Expression;
-        constructor predefined_type_bool_expr() : Expression;
-        constructor predefined_type_bit_expr() : Expression;
-        constructor predefined_type_byte_expr() : Expression;
-        constructor predefined_type_nibble_expr() : Expression;
-        constructor predefined_type_time_expr() : Expression;
+        constructor enum_dt(enum_list_items: Expressions; 
+                            width_modifier : Expression)              : DataType;
+        constructor scalar_subtype_dt(predefined_base_type: DataType; 
+                                      range_modifier: Expression; 
+                                      width_modifier: Expression)     : DataType;
+        constructor defined_dt(enum_list_items: Expressions; 
+                               width_modifier : Expression) : DataType;
+        constructor defined_subtype_dt(id: Symbol_; 
+                                       range_modifier: Expression)    : DataType;
+        constructor predefined_subtype_dt(pred_type: DataType; 
+                                          range_modifier: Expression; 
+                                          width_modifier: Expression) : DataType;
+        constructor defined_struct_type_dt(struct_type_modifiers : Expressions) : DataType;
+        constructor list_type_dt(base_type: DataType) : DataType;
+        constructor assoc_list_type_dt(key_id: Symbol_; base_type: DataType) : DataType;
+
+        constructor int_predefined_type()    : DataType;
+        constructor uint_predefined_type()   : DataType;
+        constructor bool_predefined_type()   : DataType;
+        constructor bit_predefined_type()    : DataType;
+        constructor byte_predefined_type()   : DataType;
+        constructor nibble_predefined_type() : DataType;
+        constructor time_predefined_type()   : DataType;
 
         constructor no_expr() : Expression;
         
-        constructor var_decl_act(name: Symbol_; type_id: Expression; init_expr: Expression) : Action;
+        constructor var_decl_act(name: Symbol_; type_id: DataType; init_expr: Expression) : Action;
         constructor var_assign_act(id_expr: Expression; assign_expr: Expression) : Action;
         
         constructor compound_add_act(id: Expression; e2: Expression) : Action;

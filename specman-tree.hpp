@@ -98,6 +98,17 @@ auto nil_Expressions() -> Expressions;
 auto single_Expressions(Expression) -> Expressions;
 auto append_Expressions(Expressions, Expressions) -> Expressions;
 
+class DataType_class;
+typedef std::shared_ptr<DataType_class> DataType;
+
+class DataType_class : public tree_node {
+    public:
+
+#ifdef DataType_EXTRAS
+    DataType_EXTRAS
+#endif
+};
+
 class Formal_class;
 typedef std::shared_ptr<Formal_class> Formal;
 
@@ -349,14 +360,12 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 
 class enum_type_st_class : public Statement_class {
     protected:
-        Symbol_ type_id;
-        Expressions enum_list_items;
-        Expression width_expr;
+        Symbol_ id;
+        DataType type_id;
     public:
-        enum_type_st_class(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) {
+        enum_type_st_class(Symbol_ id, DataType type_id) {
+            this->id = id;
             this->type_id = type_id;
-            this->enum_list_items = enum_list_items;
-            this->width_expr = width_expr;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -369,7 +378,7 @@ class enum_type_st_class : public Statement_class {
 #endif
 };
 
-auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) -> Statement;
+auto enum_type_st(Symbol_ id, DataType type_id) -> Statement;
 
 class extend_enum_type_st_class : public Statement_class {
     protected:
@@ -610,9 +619,9 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 class formal_class : public Formal_class {
     protected:
         Symbol_ name;
-        Expression type_;
+        DataType type_;
     public:
-        formal_class(Symbol_ name, Expression type_) {
+        formal_class(Symbol_ name, DataType type_) {
             this->name = name;
             this->type_ = type_;
         }
@@ -627,16 +636,16 @@ class formal_class : public Formal_class {
 #endif
 };
 
-auto formal(Symbol_ name, Expression type_) -> Formal;
+auto formal(Symbol_ name, DataType type_) -> Formal;
 
 class struct_field_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
-        Expression type;
+        DataType type;
         Boolean is_physical;
         Boolean do_not_gen;
     public:
-        struct_field_sm_class(Symbol_ id, Expression type, Boolean is_physical, Boolean do_not_gen) {
+        struct_field_sm_class(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) {
             this->id = id;
             this->type = type;
             this->is_physical = is_physical;
@@ -653,20 +662,20 @@ class struct_field_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_sm(Symbol_ id, Expression type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
+auto struct_field_sm(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
 
 class struct_field_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Expression len_expr;
-        Expression list_base_type;
+        DataType type_;
         Boolean is_physical;
         Boolean do_not_gen;
     public:
-        struct_field_list_sm_class(Symbol_ id, Expression len_expr, Expression list_base_type, Boolean is_physical, Boolean do_not_gen) {
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) {
             this->id = id;
             this->len_expr = len_expr;
-            this->list_base_type = list_base_type;
+            this->type_ = type_;
             this->is_physical = is_physical;
             this->do_not_gen = do_not_gen;
         }
@@ -681,17 +690,17 @@ class struct_field_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) -> StructMember;
 
 class struct_field_assoc_list_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
-        Expression list_type_expr;
+        DataType type_;
         Boolean is_physical;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, Expression list_type_expr, Boolean is_physical) {
+        struct_field_assoc_list_sm_class(Symbol_ id, DataType type_, Boolean is_physical) {
             this->id = id;
-            this->list_type_expr = list_type_expr;
+            this->type_ = type_;
             this->is_physical = is_physical;
         }
 
@@ -705,16 +714,16 @@ class struct_field_assoc_list_sm_class : public StructMember_class {
 #endif
 };
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression list_type_expr, Boolean is_physical) -> StructMember;
+auto struct_field_assoc_list_sm(Symbol_ id, DataType type_, Boolean is_physical) -> StructMember;
 
 class method_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Actions actions_;
     public:
-        method_dec_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
+        method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -731,16 +740,16 @@ class method_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
+auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
 
 class method_dec_also_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Actions actions_;
     public:
-        method_dec_also_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
+        method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -757,16 +766,16 @@ class method_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
+auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
 
 class method_dec_first_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Actions actions_;
     public:
-        method_dec_first_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
+        method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -783,16 +792,16 @@ class method_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
+auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
 
 class method_dec_only_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Actions actions_;
     public:
-        method_dec_only_sm_class(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) {
+        method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -809,15 +818,15 @@ class method_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember;
+auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
 
 class method_dec_empty_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
     public:
-        method_dec_empty_sm_class(Symbol_ id, Formals arguments, Expression return_type) {
+        method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -833,15 +842,15 @@ class method_dec_empty_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember;
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type) -> StructMember;
 
 class method_dec_undef_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
     public:
-        method_dec_undef_sm_class(Symbol_ id, Formals arguments, Expression return_type) {
+        method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -857,17 +866,17 @@ class method_dec_undef_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember;
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type) -> StructMember;
 
 class tcm_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -885,17 +894,17 @@ class tcm_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_also_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -913,17 +922,17 @@ class tcm_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_first_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -941,17 +950,17 @@ class tcm_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_only_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
         Actions actions_;
     public:
-        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -969,16 +978,16 @@ class tcm_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
 
 class tcm_dec_empty_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) {
+        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -995,16 +1004,16 @@ class tcm_dec_empty_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember;
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember;
 
 class tcm_dec_undef_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
-        Expression return_type;
+        DataType return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) {
+        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -1021,7 +1030,7 @@ class tcm_dec_undef_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember;
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember;
 
 class when_subtype_sm_class : public StructMember_class {
     protected:
@@ -2056,11 +2065,11 @@ auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_optio
 class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
         Symbol_ item_id;
-        Expression type_;
+        DataType type_;
         Expression sampled_val;
         CovergroupItemOptions cgi_options;
     public:
-        on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) {
+        on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options) {
             this->item_id = item_id;
             this->type_ = type_;
             this->sampled_val = sampled_val;
@@ -2077,7 +2086,7 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
 #endif
 };
 
-auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem;
+auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem;
 
 class cross_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
@@ -2432,48 +2441,6 @@ class id_expr_class : public Expression_class {
 };
 
 auto id_expr(Symbol_ id) -> Expression;
-
-class list_type_expr_class : public Expression_class {
-    protected:
-        Expression base_type_expr;
-    public:
-        list_type_expr_class(Expression base_type_expr) {
-            this->base_type_expr = base_type_expr;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef list_type_expr_EXTRAS
-    list_type_expr_EXTRAS
-#endif
-};
-
-auto list_type_expr(Expression base_type_expr) -> Expression;
-
-class assoc_list_type_expr_class : public Expression_class {
-    protected:
-        Symbol_ key_id;
-        Expression base_type_expr;
-    public:
-        assoc_list_type_expr_class(Symbol_ key_id, Expression base_type_expr) {
-            this->key_id = key_id;
-            this->base_type_expr = base_type_expr;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef assoc_list_type_expr_EXTRAS
-    assoc_list_type_expr_EXTRAS
-#endif
-};
-
-auto assoc_list_type_expr(Symbol_ key_id, Expression base_type_expr) -> Expression;
 
 class enum_type_expr_class : public Expression_class {
     protected:
@@ -3494,9 +3461,9 @@ auto defined_type_identifier_expr(Expressions modifiers) -> Expression;
 class type_introspec_expr_class : public Expression_class {
     protected:
         Expression field_id;
-        Expression type_id;
+        DataType type_id;
     public:
-        type_introspec_expr_class(Expression field_id, Expression type_id) {
+        type_introspec_expr_class(Expression field_id, DataType type_id) {
             this->field_id = field_id;
             this->type_id = type_id;
         }
@@ -3511,14 +3478,14 @@ class type_introspec_expr_class : public Expression_class {
 #endif
 };
 
-auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression;
+auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression;
 
 class type_introspec_negation_expr_class : public Expression_class {
     protected:
         Expression field_id;
-        Expression type_id;
+        DataType type_id;
     public:
-        type_introspec_negation_expr_class(Expression field_id, Expression type_id) {
+        type_introspec_negation_expr_class(Expression field_id, DataType type_id) {
             this->field_id = field_id;
             this->type_id = type_id;
         }
@@ -3533,7 +3500,7 @@ class type_introspec_negation_expr_class : public Expression_class {
 #endif
 };
 
-auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Expression;
+auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression;
 
 class struct_hier_ref_expr_class : public Expression_class {
     protected:
@@ -3730,9 +3697,9 @@ auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expre
 class field_type_constraint_by_type_expr_class : public Expression_class {
     protected:
         Expression field_;
-        Expression type_;
+        DataType type_;
     public:
-        field_type_constraint_by_type_expr_class(Expression field_, Expression type_) {
+        field_type_constraint_by_type_expr_class(Expression field_, DataType type_) {
             this->field_ = field_;
             this->type_ = type_;
         }
@@ -3747,16 +3714,16 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
 #endif
 };
 
-auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> Expression;
+auto field_type_constraint_by_type_expr(Expression field_, DataType type_) -> Expression;
 
 class field_type_constraint_by_field_expr_class : public Expression_class {
     protected:
         Expression field_;
-        Expression type_;
+        Expression field;
     public:
-        field_type_constraint_by_field_expr_class(Expression field_, Expression type_) {
+        field_type_constraint_by_field_expr_class(Expression field_, Expression field) {
             this->field_ = field_;
-            this->type_ = type_;
+            this->field = field;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3769,7 +3736,7 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
 #endif
 };
 
-auto field_type_constraint_by_field_expr(Expression field_, Expression type_) -> Expression;
+auto field_type_constraint_by_field_expr(Expression field_, Expression field) -> Expression;
 
 class distribution_constraint_expr_class : public Expression_class {
     protected:
@@ -3891,13 +3858,35 @@ class int_expr_class : public Expression_class {
 
 auto int_expr(Symbol_ int_) -> Expression;
 
-class scalar_subtype_expr_class : public Expression_class {
+class enum_dt_class : public DataType_class {
     protected:
-        Expression predefined_base_type;
+        Expressions enum_list_items;
+        Expression width_modifier;
+    public:
+        enum_dt_class(Expressions enum_list_items, Expression width_modifier) {
+            this->enum_list_items = enum_list_items;
+            this->width_modifier = width_modifier;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef enum_dt_EXTRAS
+    enum_dt_EXTRAS
+#endif
+};
+
+auto enum_dt(Expressions enum_list_items, Expression width_modifier) -> DataType;
+
+class scalar_subtype_dt_class : public DataType_class {
+    protected:
+        DataType predefined_base_type;
         Expression range_modifier;
         Expression width_modifier;
     public:
-        scalar_subtype_expr_class(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) {
+        scalar_subtype_dt_class(DataType predefined_base_type, Expression range_modifier, Expression width_modifier) {
             this->predefined_base_type = predefined_base_type;
             this->range_modifier = range_modifier;
             this->width_modifier = width_modifier;
@@ -3905,141 +3894,271 @@ class scalar_subtype_expr_class : public Expression_class {
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef scalar_subtype_expr_EXTRAS
-    scalar_subtype_expr_EXTRAS
+#ifdef scalar_subtype_dt_EXTRAS
+    scalar_subtype_dt_EXTRAS
 #endif
 };
 
-auto scalar_subtype_expr(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) -> Expression;
+auto scalar_subtype_dt(DataType predefined_base_type, Expression range_modifier, Expression width_modifier) -> DataType;
 
-class predefined_type_int_expr_class : public Expression_class {
+class defined_dt_class : public DataType_class {
     protected:
+        Expressions enum_list_items;
+        Expression width_modifier;
     public:
-        predefined_type_int_expr_class() {
+        defined_dt_class(Expressions enum_list_items, Expression width_modifier) {
+            this->enum_list_items = enum_list_items;
+            this->width_modifier = width_modifier;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_int_expr_EXTRAS
-    predefined_type_int_expr_EXTRAS
+#ifdef defined_dt_EXTRAS
+    defined_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_int_expr() -> Expression;
+auto defined_dt(Expressions enum_list_items, Expression width_modifier) -> DataType;
 
-class predefined_type_uint_expr_class : public Expression_class {
+class defined_subtype_dt_class : public DataType_class {
     protected:
+        Symbol_ id;
+        Expression range_modifier;
     public:
-        predefined_type_uint_expr_class() {
+        defined_subtype_dt_class(Symbol_ id, Expression range_modifier) {
+            this->id = id;
+            this->range_modifier = range_modifier;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_uint_expr_EXTRAS
-    predefined_type_uint_expr_EXTRAS
+#ifdef defined_subtype_dt_EXTRAS
+    defined_subtype_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_uint_expr() -> Expression;
+auto defined_subtype_dt(Symbol_ id, Expression range_modifier) -> DataType;
 
-class predefined_type_bool_expr_class : public Expression_class {
+class predefined_subtype_dt_class : public DataType_class {
     protected:
+        DataType pred_type;
+        Expression range_modifier;
+        Expression width_modifier;
     public:
-        predefined_type_bool_expr_class() {
+        predefined_subtype_dt_class(DataType pred_type, Expression range_modifier, Expression width_modifier) {
+            this->pred_type = pred_type;
+            this->range_modifier = range_modifier;
+            this->width_modifier = width_modifier;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_bool_expr_EXTRAS
-    predefined_type_bool_expr_EXTRAS
+#ifdef predefined_subtype_dt_EXTRAS
+    predefined_subtype_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_bool_expr() -> Expression;
+auto predefined_subtype_dt(DataType pred_type, Expression range_modifier, Expression width_modifier) -> DataType;
 
-class predefined_type_bit_expr_class : public Expression_class {
+class defined_struct_type_dt_class : public DataType_class {
     protected:
+        Expressions struct_type_modifiers;
     public:
-        predefined_type_bit_expr_class() {
+        defined_struct_type_dt_class(Expressions struct_type_modifiers) {
+            this->struct_type_modifiers = struct_type_modifiers;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_bit_expr_EXTRAS
-    predefined_type_bit_expr_EXTRAS
+#ifdef defined_struct_type_dt_EXTRAS
+    defined_struct_type_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_bit_expr() -> Expression;
+auto defined_struct_type_dt(Expressions struct_type_modifiers) -> DataType;
 
-class predefined_type_byte_expr_class : public Expression_class {
+class list_type_dt_class : public DataType_class {
     protected:
+        DataType base_type;
     public:
-        predefined_type_byte_expr_class() {
+        list_type_dt_class(DataType base_type) {
+            this->base_type = base_type;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_byte_expr_EXTRAS
-    predefined_type_byte_expr_EXTRAS
+#ifdef list_type_dt_EXTRAS
+    list_type_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_byte_expr() -> Expression;
+auto list_type_dt(DataType base_type) -> DataType;
 
-class predefined_type_nibble_expr_class : public Expression_class {
+class assoc_list_type_dt_class : public DataType_class {
     protected:
+        Symbol_ key_id;
+        DataType base_type;
     public:
-        predefined_type_nibble_expr_class() {
+        assoc_list_type_dt_class(Symbol_ key_id, DataType base_type) {
+            this->key_id = key_id;
+            this->base_type = base_type;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_nibble_expr_EXTRAS
-    predefined_type_nibble_expr_EXTRAS
+#ifdef assoc_list_type_dt_EXTRAS
+    assoc_list_type_dt_EXTRAS
 #endif
 };
 
-auto predefined_type_nibble_expr() -> Expression;
+auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType;
 
-class predefined_type_time_expr_class : public Expression_class {
+class int_predefined_type_class : public DataType_class {
     protected:
     public:
-        predefined_type_time_expr_class() {
+        int_predefined_type_class() {
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
 #endif
-#ifdef predefined_type_time_expr_EXTRAS
-    predefined_type_time_expr_EXTRAS
+#ifdef int_predefined_type_EXTRAS
+    int_predefined_type_EXTRAS
 #endif
 };
 
-auto predefined_type_time_expr() -> Expression;
+auto int_predefined_type() -> DataType;
+
+class uint_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        uint_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef uint_predefined_type_EXTRAS
+    uint_predefined_type_EXTRAS
+#endif
+};
+
+auto uint_predefined_type() -> DataType;
+
+class bool_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        bool_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef bool_predefined_type_EXTRAS
+    bool_predefined_type_EXTRAS
+#endif
+};
+
+auto bool_predefined_type() -> DataType;
+
+class bit_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        bit_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef bit_predefined_type_EXTRAS
+    bit_predefined_type_EXTRAS
+#endif
+};
+
+auto bit_predefined_type() -> DataType;
+
+class byte_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        byte_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef byte_predefined_type_EXTRAS
+    byte_predefined_type_EXTRAS
+#endif
+};
+
+auto byte_predefined_type() -> DataType;
+
+class nibble_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        nibble_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef nibble_predefined_type_EXTRAS
+    nibble_predefined_type_EXTRAS
+#endif
+};
+
+auto nibble_predefined_type() -> DataType;
+
+class time_predefined_type_class : public DataType_class {
+    protected:
+    public:
+        time_predefined_type_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef time_predefined_type_EXTRAS
+    time_predefined_type_EXTRAS
+#endif
+};
+
+auto time_predefined_type() -> DataType;
 
 class no_expr_class : public Expression_class {
     protected:
@@ -4062,10 +4181,10 @@ auto no_expr() -> Expression;
 class var_decl_act_class : public Action_class {
     protected:
         Symbol_ name;
-        Expression type_id;
+        DataType type_id;
         Expression init_expr;
     public:
-        var_decl_act_class(Symbol_ name, Expression type_id, Expression init_expr) {
+        var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr) {
             this->name = name;
             this->type_id = type_id;
             this->init_expr = init_expr;
@@ -4081,7 +4200,7 @@ class var_decl_act_class : public Action_class {
 #endif
 };
 
-auto var_decl_act(Symbol_ name, Expression type_id, Expression init_expr) -> Action;
+auto var_decl_act(Symbol_ name, DataType type_id, Expression init_expr) -> Action;
 
 class var_assign_act_class : public Action_class {
     protected:

@@ -210,15 +210,13 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 
 auto enum_type_st_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "enum_type_st" << std::endl;
-    dump_Symbol_(stream, n+2, type_id);
-    if(enum_list_items)
-        enum_list_items->dump(stream, n+2);
-    if(width_expr)
-        width_expr->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, id);
+    if(type_id)
+        type_id->dump(stream, n+2);
 }
 
-auto enum_type_st(Symbol_ type_id, Expressions enum_list_items, Expression width_expr) -> Statement {
-    return Statement(new enum_type_st_class(type_id, enum_list_items, width_expr));
+auto enum_type_st(Symbol_ id, DataType type_id) -> Statement {
+    return Statement(new enum_type_st_class(id, type_id));
 }
 
 auto extend_enum_type_st_class::dump(std::ostream& stream, int n) -> void {
@@ -343,7 +341,7 @@ auto formal_class::dump(std::ostream& stream, int n) -> void {
         type_->dump(stream, n+2);
 }
 
-auto formal(Symbol_ name, Expression type_) -> Formal {
+auto formal(Symbol_ name, DataType type_) -> Formal {
     return Formal(new formal_class(name, type_));
 }
 
@@ -356,7 +354,7 @@ auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Boolean(stream, n+2, do_not_gen);
 }
 
-auto struct_field_sm(Symbol_ id, Expression type, Boolean is_physical, Boolean do_not_gen) -> StructMember {
+auto struct_field_sm(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) -> StructMember {
     return StructMember(new struct_field_sm_class(id, type, is_physical, do_not_gen));
 }
 
@@ -365,26 +363,26 @@ auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
     dump_Symbol_(stream, n+2, id);
     if(len_expr)
         len_expr->dump(stream, n+2);
-    if(list_base_type)
-        list_base_type->dump(stream, n+2);
+    if(type_)
+        type_->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
     dump_Boolean(stream, n+2, do_not_gen);
 }
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, Expression list_base_type, Boolean is_physical, Boolean do_not_gen) -> StructMember {
-    return StructMember(new struct_field_list_sm_class(id, len_expr, list_base_type, is_physical, do_not_gen));
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) -> StructMember {
+    return StructMember(new struct_field_list_sm_class(id, len_expr, type_, is_physical, do_not_gen));
 }
 
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_assoc_list_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
-    if(list_type_expr)
-        list_type_expr->dump(stream, n+2);
+    if(type_)
+        type_->dump(stream, n+2);
     dump_Boolean(stream, n+2, is_physical);
 }
 
-auto struct_field_assoc_list_sm(Symbol_ id, Expression list_type_expr, Boolean is_physical) -> StructMember {
-    return StructMember(new struct_field_assoc_list_sm_class(id, list_type_expr, is_physical));
+auto struct_field_assoc_list_sm(Symbol_ id, DataType type_, Boolean is_physical) -> StructMember {
+    return StructMember(new struct_field_assoc_list_sm_class(id, type_, is_physical));
 }
 
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
@@ -398,7 +396,7 @@ auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
+auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -413,7 +411,7 @@ auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
+auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_also_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -428,7 +426,7 @@ auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
+auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_first_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -443,7 +441,7 @@ auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Actions actions_) -> StructMember {
+auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
     return StructMember(new method_dec_only_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -456,7 +454,7 @@ auto method_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
         return_type->dump(stream, n+2);
 }
 
-auto method_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember {
+auto method_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type) -> StructMember {
     return StructMember(new method_dec_empty_sm_class(id, arguments, return_type));
 }
 
@@ -469,7 +467,7 @@ auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
         return_type->dump(stream, n+2);
 }
 
-auto method_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type) -> StructMember {
+auto method_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type) -> StructMember {
     return StructMember(new method_dec_undef_sm_class(id, arguments, return_type));
 }
 
@@ -486,7 +484,7 @@ auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -503,7 +501,7 @@ auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_also_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -520,7 +518,7 @@ auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_first_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -537,7 +535,7 @@ auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
     return StructMember(new tcm_dec_only_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -552,7 +550,7 @@ auto tcm_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
         event_id_expr->dump(stream, n+2);
 }
 
-auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember {
+auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember {
     return StructMember(new tcm_dec_empty_sm_class(id, arguments, return_type, event_id_expr));
 }
 
@@ -567,7 +565,7 @@ auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
         event_id_expr->dump(stream, n+2);
 }
 
-auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, Expression return_type, Expression event_id_expr) -> StructMember {
+auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember {
     return StructMember(new tcm_dec_undef_sm_class(id, arguments, return_type, event_id_expr));
 }
 
@@ -1111,7 +1109,7 @@ auto on_the_fly_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> 
         cgi_options->dump(stream, n+2);
 }
 
-auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, Expression type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem {
+auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options) -> CovergroupItem {
     return CovergroupItem(new on_the_fly_covergroup_item_cgi_class(item_id, type_, sampled_val, cgi_options));
 }
 
@@ -1281,27 +1279,6 @@ auto id_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto id_expr(Symbol_ id) -> Expression {
     return Expression(new id_expr_class(id));
-}
-
-auto list_type_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "list_type_expr" << std::endl;
-    if(base_type_expr)
-        base_type_expr->dump(stream, n+2);
-}
-
-auto list_type_expr(Expression base_type_expr) -> Expression {
-    return Expression(new list_type_expr_class(base_type_expr));
-}
-
-auto assoc_list_type_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "assoc_list_type_expr" << std::endl;
-    dump_Symbol_(stream, n+2, key_id);
-    if(base_type_expr)
-        base_type_expr->dump(stream, n+2);
-}
-
-auto assoc_list_type_expr(Symbol_ key_id, Expression base_type_expr) -> Expression {
-    return Expression(new assoc_list_type_expr_class(key_id, base_type_expr));
 }
 
 auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -1856,7 +1833,7 @@ auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
         type_id->dump(stream, n+2);
 }
 
-auto type_introspec_expr(Expression field_id, Expression type_id) -> Expression {
+auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression {
     return Expression(new type_introspec_expr_class(field_id, type_id));
 }
 
@@ -1868,7 +1845,7 @@ auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> vo
         type_id->dump(stream, n+2);
 }
 
-auto type_introspec_negation_expr(Expression field_id, Expression type_id) -> Expression {
+auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression {
     return Expression(new type_introspec_negation_expr_class(field_id, type_id));
 }
 
@@ -1981,7 +1958,7 @@ auto field_type_constraint_by_type_expr_class::dump(std::ostream& stream, int n)
         type_->dump(stream, n+2);
 }
 
-auto field_type_constraint_by_type_expr(Expression field_, Expression type_) -> Expression {
+auto field_type_constraint_by_type_expr(Expression field_, DataType type_) -> Expression {
     return Expression(new field_type_constraint_by_type_expr_class(field_, type_));
 }
 
@@ -1989,12 +1966,12 @@ auto field_type_constraint_by_field_expr_class::dump(std::ostream& stream, int n
     stream << pad(n) << "field_type_constraint_by_field_expr" << std::endl;
     if(field_)
         field_->dump(stream, n+2);
-    if(type_)
-        type_->dump(stream, n+2);
+    if(field)
+        field->dump(stream, n+2);
 }
 
-auto field_type_constraint_by_field_expr(Expression field_, Expression type_) -> Expression {
-    return Expression(new field_type_constraint_by_field_expr_class(field_, type_));
+auto field_type_constraint_by_field_expr(Expression field_, Expression field) -> Expression {
+    return Expression(new field_type_constraint_by_field_expr_class(field_, field));
 }
 
 auto distribution_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -2055,8 +2032,20 @@ auto int_expr(Symbol_ int_) -> Expression {
     return Expression(new int_expr_class(int_));
 }
 
-auto scalar_subtype_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "scalar_subtype_expr" << std::endl;
+auto enum_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "enum_dt" << std::endl;
+    if(enum_list_items)
+        enum_list_items->dump(stream, n+2);
+    if(width_modifier)
+        width_modifier->dump(stream, n+2);
+}
+
+auto enum_dt(Expressions enum_list_items, Expression width_modifier) -> DataType {
+    return DataType(new enum_dt_class(enum_list_items, width_modifier));
+}
+
+auto scalar_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "scalar_subtype_dt" << std::endl;
     if(predefined_base_type)
         predefined_base_type->dump(stream, n+2);
     if(range_modifier)
@@ -2065,64 +2054,132 @@ auto scalar_subtype_expr_class::dump(std::ostream& stream, int n) -> void {
         width_modifier->dump(stream, n+2);
 }
 
-auto scalar_subtype_expr(Expression predefined_base_type, Expression range_modifier, Expression width_modifier) -> Expression {
-    return Expression(new scalar_subtype_expr_class(predefined_base_type, range_modifier, width_modifier));
+auto scalar_subtype_dt(DataType predefined_base_type, Expression range_modifier, Expression width_modifier) -> DataType {
+    return DataType(new scalar_subtype_dt_class(predefined_base_type, range_modifier, width_modifier));
 }
 
-auto predefined_type_int_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_int_expr" << std::endl;
+auto defined_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "defined_dt" << std::endl;
+    if(enum_list_items)
+        enum_list_items->dump(stream, n+2);
+    if(width_modifier)
+        width_modifier->dump(stream, n+2);
 }
 
-auto predefined_type_int_expr() -> Expression {
-    return Expression(new predefined_type_int_expr_class());
+auto defined_dt(Expressions enum_list_items, Expression width_modifier) -> DataType {
+    return DataType(new defined_dt_class(enum_list_items, width_modifier));
 }
 
-auto predefined_type_uint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_uint_expr" << std::endl;
+auto defined_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "defined_subtype_dt" << std::endl;
+    dump_Symbol_(stream, n+2, id);
+    if(range_modifier)
+        range_modifier->dump(stream, n+2);
 }
 
-auto predefined_type_uint_expr() -> Expression {
-    return Expression(new predefined_type_uint_expr_class());
+auto defined_subtype_dt(Symbol_ id, Expression range_modifier) -> DataType {
+    return DataType(new defined_subtype_dt_class(id, range_modifier));
 }
 
-auto predefined_type_bool_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_bool_expr" << std::endl;
+auto predefined_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "predefined_subtype_dt" << std::endl;
+    if(pred_type)
+        pred_type->dump(stream, n+2);
+    if(range_modifier)
+        range_modifier->dump(stream, n+2);
+    if(width_modifier)
+        width_modifier->dump(stream, n+2);
 }
 
-auto predefined_type_bool_expr() -> Expression {
-    return Expression(new predefined_type_bool_expr_class());
+auto predefined_subtype_dt(DataType pred_type, Expression range_modifier, Expression width_modifier) -> DataType {
+    return DataType(new predefined_subtype_dt_class(pred_type, range_modifier, width_modifier));
 }
 
-auto predefined_type_bit_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_bit_expr" << std::endl;
+auto defined_struct_type_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "defined_struct_type_dt" << std::endl;
+    if(struct_type_modifiers)
+        struct_type_modifiers->dump(stream, n+2);
 }
 
-auto predefined_type_bit_expr() -> Expression {
-    return Expression(new predefined_type_bit_expr_class());
+auto defined_struct_type_dt(Expressions struct_type_modifiers) -> DataType {
+    return DataType(new defined_struct_type_dt_class(struct_type_modifiers));
 }
 
-auto predefined_type_byte_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_byte_expr" << std::endl;
+auto list_type_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_type_dt" << std::endl;
+    if(base_type)
+        base_type->dump(stream, n+2);
 }
 
-auto predefined_type_byte_expr() -> Expression {
-    return Expression(new predefined_type_byte_expr_class());
+auto list_type_dt(DataType base_type) -> DataType {
+    return DataType(new list_type_dt_class(base_type));
 }
 
-auto predefined_type_nibble_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_nibble_expr" << std::endl;
+auto assoc_list_type_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "assoc_list_type_dt" << std::endl;
+    dump_Symbol_(stream, n+2, key_id);
+    if(base_type)
+        base_type->dump(stream, n+2);
 }
 
-auto predefined_type_nibble_expr() -> Expression {
-    return Expression(new predefined_type_nibble_expr_class());
+auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType {
+    return DataType(new assoc_list_type_dt_class(key_id, base_type));
 }
 
-auto predefined_type_time_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "predefined_type_time_expr" << std::endl;
+auto int_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "int_predefined_type" << std::endl;
 }
 
-auto predefined_type_time_expr() -> Expression {
-    return Expression(new predefined_type_time_expr_class());
+auto int_predefined_type() -> DataType {
+    return DataType(new int_predefined_type_class());
+}
+
+auto uint_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "uint_predefined_type" << std::endl;
+}
+
+auto uint_predefined_type() -> DataType {
+    return DataType(new uint_predefined_type_class());
+}
+
+auto bool_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bool_predefined_type" << std::endl;
+}
+
+auto bool_predefined_type() -> DataType {
+    return DataType(new bool_predefined_type_class());
+}
+
+auto bit_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "bit_predefined_type" << std::endl;
+}
+
+auto bit_predefined_type() -> DataType {
+    return DataType(new bit_predefined_type_class());
+}
+
+auto byte_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "byte_predefined_type" << std::endl;
+}
+
+auto byte_predefined_type() -> DataType {
+    return DataType(new byte_predefined_type_class());
+}
+
+auto nibble_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "nibble_predefined_type" << std::endl;
+}
+
+auto nibble_predefined_type() -> DataType {
+    return DataType(new nibble_predefined_type_class());
+}
+
+auto time_predefined_type_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "time_predefined_type" << std::endl;
+}
+
+auto time_predefined_type() -> DataType {
+    return DataType(new time_predefined_type_class());
 }
 
 auto no_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -2142,7 +2199,7 @@ auto var_decl_act_class::dump(std::ostream& stream, int n) -> void {
         init_expr->dump(stream, n+2);
 }
 
-auto var_decl_act(Symbol_ name, Expression type_id, Expression init_expr) -> Action {
+auto var_decl_act(Symbol_ name, DataType type_id, Expression init_expr) -> Action {
     return Action(new var_decl_act_class(name, type_id, init_expr));
 }
 
