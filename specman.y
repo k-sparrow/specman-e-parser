@@ -133,6 +133,7 @@
 %token STEP
 %token LINE
 %token FILE
+%token MATCHING
 %token WITH
 %token WHEN
 %token STRUCT	  
@@ -486,6 +487,10 @@
 
 /*----- FOR-FILE ------*/
 %nterm <elex::Action>      for_line_in_file_action
+%nterm <elex::Expression>  file_identifier_expression
+
+/*----- FOR-FILES -----*/
+%nterm <elex::Action>      for_file_in_files_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1824,6 +1829,9 @@ iterative_action :
 
   | for_line_in_file_action
     { $$ = $1;}
+  
+  | for_file_in_files_action 
+    { $$ = $1; }
   ;
 
 while_loop_action :
@@ -1899,22 +1907,35 @@ for_loop_action :
   ;
 
 // this for-each action is unrolled in order to avoid reduce-reduce conflicts with the (actually used) non-file for-each action
-
 // for each [line] [(name)] in file file-name-exp [do] {action; ...}
 for_line_in_file_action :
-    FOR EACH IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+    FOR EACH IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
 
-  | FOR EACH LINE IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+  | FOR EACH LINE IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
 
-  | FOR EACH iterated_id_expr[line_it_name] IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+  | FOR EACH iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
 
-  | FOR EACH LINE iterated_id_expr[line_it_name] IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+  | FOR EACH LINE iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
   ;
 
+file_identifier_expression :
+    identifier_expression 
+    { $$ = $1; }  
+  
+  | str_expression
+    { $$ = $1; }
+  ;
+
+// this for-each action is unrolled in order to avoid reduce-reduce conflicts with the (actually used) non-file for-each action
+// for each file [(name)] matching file-name-exp [do] {action; ...}
+for_file_in_files_action :
+  FOR EACH FILE opt_iterated_id_expr[name] MATCHING str_expression[file_pattern] OPT_DO action_block[actions]
+  { $$ = elex::for_each_file_in_files_act($name, $file_pattern, $actions); }
+  ;
 
 method_call_action : 
     method_call_expression 

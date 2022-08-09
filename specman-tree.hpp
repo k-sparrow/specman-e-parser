@@ -4918,6 +4918,30 @@ class for_each_line_in_file_act_class : public Action_class {
 
 auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, Actions actions) -> Action;
 
+class for_each_file_in_files_act_class : public Action_class {
+    protected:
+        Expression line_it_name;
+        Expression file_pattern_exp;
+        Actions actions;
+    public:
+        for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, Actions actions) {
+            this->line_it_name = line_it_name;
+            this->file_pattern_exp = file_pattern_exp;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef for_each_file_in_files_act_EXTRAS
+    for_each_file_in_files_act_EXTRAS
+#endif
+};
+
+auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, Actions actions) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:

@@ -35,6 +35,7 @@ do          (do)
 to          (to)
 line        (line)
 file        (file)
+matching    (matching)
 with        (with)
 when        (when)
 struct	    (struct)
@@ -264,6 +265,7 @@ mvl            {mvl_single}|{sized_mvl}
 {to}        { return yy::parser::make_TO(Location()); }
 {line}      { return yy::parser::make_LINE(Location()); }
 {file}      { return yy::parser::make_FILE(Location()); }
+{matching}  { return yy::parser::make_MATCHING(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }
 {when}      { return yy::parser::make_WHEN(Location()); }
 {struct}	{ return yy::parser::make_STRUCT(Location()); }
