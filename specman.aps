@@ -309,5 +309,8 @@ module Specman begin
 
         constructor while_loop_act(bool_expr: Expression; actions: Actions) : Action;
         constructor repeat_until_loop_act(bool_expr: Expression; actions: Actions) : Action;
+        constructor for_each_loop_act(type_id: DataType; iterated_name: Expression; is_reverese: Boolean; list_exp: Expression; idx_exp: Expression; actions: Actions) : Action;
+        constructor for_range_loop_act(bool_expr: Expression; actions: Actions) : Action;
+
         constructor no_action() : Action;
 end;

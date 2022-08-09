@@ -4808,6 +4808,58 @@ class repeat_until_loop_act_class : public Action_class {
 
 auto repeat_until_loop_act(Expression bool_expr, Actions actions) -> Action;
 
+class for_each_loop_act_class : public Action_class {
+    protected:
+        DataType type_id;
+        Expression iterated_name;
+        Boolean is_reverese;
+        Expression list_exp;
+        Expression idx_exp;
+        Actions actions;
+    public:
+        for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) {
+            this->type_id = type_id;
+            this->iterated_name = iterated_name;
+            this->is_reverese = is_reverese;
+            this->list_exp = list_exp;
+            this->idx_exp = idx_exp;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef for_each_loop_act_EXTRAS
+    for_each_loop_act_EXTRAS
+#endif
+};
+
+auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) -> Action;
+
+class for_range_loop_act_class : public Action_class {
+    protected:
+        Expression bool_expr;
+        Actions actions;
+    public:
+        for_range_loop_act_class(Expression bool_expr, Actions actions) {
+            this->bool_expr = bool_expr;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef for_range_loop_act_EXTRAS
+    for_range_loop_act_EXTRAS
+#endif
+};
+
+auto for_range_loop_act(Expression bool_expr, Actions actions) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:

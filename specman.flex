@@ -27,6 +27,7 @@ while       (while)
 repeat       (repeat)
 until       (until)
 for         (for)
+reverse     (reverse)
 in          (in)
 do          (do)
 with        (with)
@@ -250,6 +251,7 @@ mvl            {mvl_single}|{sized_mvl}
 {repeat}    { return yy::parser::make_REPEAT(Location()); }
 {until}     { return yy::parser::make_UNTIL(Location()); }
 {for}       { return yy::parser::make_FOR(Location()); }
+{reverse}   { return yy::parser::make_REVERSE(Location()); }
 {in}        { return yy::parser::make_IN(Location()); }
 {do}        { return yy::parser::make_DO(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }

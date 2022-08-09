@@ -2529,6 +2529,37 @@ auto repeat_until_loop_act(Expression bool_expr, Actions actions) -> Action {
     return Action(new repeat_until_loop_act_class(bool_expr, actions));
 }
 
+auto for_each_loop_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "for_each_loop_act" << std::endl;
+    if(type_id)
+        type_id->dump(stream, n+2);
+    if(iterated_name)
+        iterated_name->dump(stream, n+2);
+    dump_Boolean(stream, n+2, is_reverese);
+    if(list_exp)
+        list_exp->dump(stream, n+2);
+    if(idx_exp)
+        idx_exp->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) -> Action {
+    return Action(new for_each_loop_act_class(type_id, iterated_name, is_reverese, list_exp, idx_exp, actions));
+}
+
+auto for_range_loop_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "for_range_loop_act" << std::endl;
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto for_range_loop_act(Expression bool_expr, Actions actions) -> Action {
+    return Action(new for_range_loop_act_class(bool_expr, actions));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

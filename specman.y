@@ -124,6 +124,7 @@
 %token REPEAT
 %token UNTIL
 %token FOR
+%token REVERSE
 %token IN 
 %token DO 
 %token WITH
@@ -331,6 +332,7 @@
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
+%nterm <elex::Boolean>    OPT_REVERSE
 
 /* ------------------  rules  ------------------ */
 %nterm <elex::Module>     module
@@ -455,10 +457,18 @@
 %nterm <elex::Action>  method_call_action
 
 /* Iterative Actions */
-%nterm <elex::Action>  iterative_action
-%nterm <elex::Action>  while_loop_action
+%nterm <elex::Action>      iterative_action
+
+/*------ While ------*/
+%nterm <elex::Action>      while_loop_action
 %nterm <elex::Expression>  while_header_expr
-%nterm <elex::Action>  repeat_until_loop_action
+
+/*------ REPEAT -----*/
+%nterm <elex::Action>      repeat_until_loop_action
+
+/*------ FOR-EACH -----*/
+%nterm <elex::Action>      for_each_loop_action
+%nterm <elex::Expression>  opt_using_index_branch_expr
 
 
 /* Expressions */
@@ -572,6 +582,7 @@
 %nterm <elex::Formal>       formal
 
 %nterm <elex::DataType>      opt_return_type
+%nterm <elex::DataType>      opt_type
 %nterm <elex::e_method_int_mod> opt_method_introduction_modifier
 %nterm <elex::e_method_ext_mod> opt_method_extension_modifier
 
@@ -1782,25 +1793,54 @@ iterative_action :
   
   | repeat_until_loop_action
     { $$ = $1; }
+
+  | for_each_loop_action
+    { $$ = $1; }
   ;
 
 while_loop_action :
-  while_header_expr[bool_exp] action_block[actions]
+  WHILE logical_expression[bool_exp] OPT_DO action_block[actions]
   { $$ = elex::while_loop_act($bool_exp, $actions); }
   ;
 
-while_header_expr : 
-    WHILE logical_expression 
-    { $$ = $2; }
-
-  | WHILE logical_expression DO
-    { $$ = $2; }
-  ;
 
 repeat_until_loop_action :
   REPEAT action_block[actions] UNTIL logical_expression[bool_exp]
   { $$ = elex::repeat_until_loop_act($bool_exp, $actions); }
   ;
+
+// for each [type] [(item-name)] [using index (index-name)]
+//    in [reverse] list-exp [do] {action; ...}
+for_each_loop_action :
+  FOR EACH opt_type[type_] opt_iterated_id_expr[item_name] opt_using_index_branch_expr[index_name]
+  IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
+  { $$ = elex::for_each_loop_act($type_, $item_name, $reverse, $list_expr, $index_name, $actions); }
+  ;
+
+// [type]
+opt_type : 
+    %empty 
+    { $$ = nullptr; }
+  
+  | scoped_scalar_type_identifier_data_type
+    { $$ = $1; }
+
+opt_using_index_branch_expr :
+    %empty 
+    { $$ = nullptr; }
+
+  | USING INDEX iterated_id_expr[idx]
+    { $$ = $3; }  
+  ;
+
+// [REVERSE]
+OPT_REVERSE : 
+    %empty  { $$ = false; } 
+  | REVERSE { $$ = true;  }
+  ;
+
+// [DO]
+OPT_DO : %empty | DO ;
 
 method_call_action : 
     method_call_expression 
@@ -1850,10 +1890,6 @@ operator :
 
   | method_call_expression     
     { $$ = $1; }
-/*   | LBRACKET enum_list_exprs RBRACKET 
-    {
-      $$ = elex::enum_type_expr($2, nullptr);
-    } */
 
   | struct_allocate_expression 
     { $$ = $1; }
@@ -2025,9 +2061,12 @@ struct_type_modifier : // VALUE'id | id
     | id_expr                              { $$ = $1; }
     ;
 
+iterated_id_expr : LPAREN id_expr RPAREN { $$ = $2; };
+
 opt_iterated_id_expr : // [[ (name) ]]
-      %empty                { $$ = elex::no_expr(); }
-    | LPAREN id_expr RPAREN { $$ = $2; }
+    %empty           { $$ = elex::no_expr(); }
+  | iterated_id_expr { $$ = $1; }
+  ;
 
 /*
 opt_slice_expr : // [[: slice]]
