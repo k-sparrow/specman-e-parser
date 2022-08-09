@@ -2610,6 +2610,22 @@ auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern
     return Action(new for_each_file_in_files_act_class(line_it_name, file_pattern_exp, actions));
 }
 
+auto break_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "break_act" << std::endl;
+}
+
+auto break_act() -> Action {
+    return Action(new break_act_class());
+}
+
+auto continue_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "continue_act" << std::endl;
+}
+
+auto continue_act() -> Action {
+    return Action(new continue_act_class());
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

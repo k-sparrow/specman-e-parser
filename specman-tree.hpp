@@ -4942,6 +4942,42 @@ class for_each_file_in_files_act_class : public Action_class {
 
 auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, Actions actions) -> Action;
 
+class break_act_class : public Action_class {
+    protected:
+    public:
+        break_act_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef break_act_EXTRAS
+    break_act_EXTRAS
+#endif
+};
+
+auto break_act() -> Action;
+
+class continue_act_class : public Action_class {
+    protected:
+    public:
+        continue_act_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef continue_act_EXTRAS
+    continue_act_EXTRAS
+#endif
+};
+
+auto continue_act() -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:

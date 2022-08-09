@@ -315,5 +315,8 @@ module Specman begin
         constructor for_each_line_in_file_act(line_it_name: Expression; file_path_expr: Expression; actions: Actions) : Action;
         constructor for_each_file_in_files_act(line_it_name: Expression; file_pattern_exp: Expression; actions: Actions) : Action;
 
+        constructor break_act() : Action;
+        constructor continue_act() : Action;
+        
         constructor no_action() : Action;
 end;

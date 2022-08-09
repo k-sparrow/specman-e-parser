@@ -134,6 +134,8 @@
 %token LINE
 %token FILE
 %token MATCHING
+%token BREAK
+%token CONTINUE
 %token WITH
 %token WHEN
 %token STRUCT	  
@@ -491,6 +493,10 @@
 
 /*----- FOR-FILES -----*/
 %nterm <elex::Action>      for_file_in_files_action
+
+
+/* Control Flow Actions */
+%nterm <elex::Action>      control_flow_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1621,6 +1627,9 @@ non_term_action :
   | iterative_action
     { $$ = $1; }
 
+  | control_flow_action
+    { $$ = $1; }
+
   | method_call_action 
     { $$ = $1; }
   ;
@@ -1935,6 +1944,15 @@ file_identifier_expression :
 for_file_in_files_action :
   FOR EACH FILE opt_iterated_id_expr[name] MATCHING str_expression[file_pattern] OPT_DO action_block[actions]
   { $$ = elex::for_each_file_in_files_act($name, $file_pattern, $actions); }
+  ;
+
+
+control_flow_action : 
+    BREAK 
+    { $$ = elex::break_act(); }
+
+  | CONTINUE
+    { $$ = elex::continue_act(); }
   ;
 
 method_call_action : 

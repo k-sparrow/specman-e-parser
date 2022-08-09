@@ -36,6 +36,8 @@ to          (to)
 line        (line)
 file        (file)
 matching    (matching)
+break       (break)
+continue    (continue)
 with        (with)
 when        (when)
 struct	    (struct)
@@ -266,6 +268,8 @@ mvl            {mvl_single}|{sized_mvl}
 {line}      { return yy::parser::make_LINE(Location()); }
 {file}      { return yy::parser::make_FILE(Location()); }
 {matching}  { return yy::parser::make_MATCHING(Location()); }
+{break}     { return yy::parser::make_BREAK(Location()); }
+{continue}  { return yy::parser::make_CONTINUE(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }
 {when}      { return yy::parser::make_WHEN(Location()); }
 {struct}	{ return yy::parser::make_STRUCT(Location()); }
