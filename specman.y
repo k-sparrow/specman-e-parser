@@ -208,7 +208,6 @@
 %token ASSUME
 %token EXPECT
 %token ASSERT
-%token STEP
 %token SOFT
 %token NEW
 %token AS_A    
@@ -513,6 +512,13 @@
 
 /* Control Flow Actions */
 %nterm <elex::Action>      control_flow_action
+
+/* Generation Actions   */
+%nterm <elex::Action>      gen_action
+%nterm <elex::Expressions> opt_keeping_constraints_branch
+
+/* Do Sequence Actions   */
+%nterm <elex::Action>      do_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1675,6 +1681,13 @@ non_term_action :
 
   | method_call_action 
     { $$ = $1; }
+  
+  | gen_action
+    { $$ = $1; }
+  
+  | do_action 
+    { $$ = $1; }
+  
   ;
 
 variable_creation_or_modification_action : 
@@ -2060,6 +2073,25 @@ method_call_action :
     { $$ = elex::return_act(nullptr); }
   ;
 
+gen_action :
+  GEN identifier_expression[gen_item] opt_keeping_constraints_branch[constraints]
+  { $$ = elex::gen_act($gen_item, $constraints); }
+  ;
+
+do_action : 
+  DO identifier_expression[seq_item] opt_keeping_constraints_branch[constraints]
+  { $$ = elex::do_seq_act($seq_item, $constraints); }
+  ;
+
+opt_keeping_constraints_branch :
+    %empty 
+    { $$ = nullptr; }
+
+  | KEEPING 
+      LBRACE constriant_expression_block RBRACE
+    { $$ = $3; }
+  ;
+
 expression : 
     operator                   
     { $$ = $1; }
@@ -2169,7 +2201,7 @@ implication_expression :
 
 inclusion_expression : 
     expression IN expression          { $$ = elex::in_expr($1, $3); }
-  | expression IN enum_datatype       { $$ = $1; }
+  | expression IN enum_datatype       { $$ = elex::in_enum_expr($1, $3); }
   ;
 
 /* 

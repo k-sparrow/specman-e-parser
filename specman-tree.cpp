@@ -1645,6 +1645,18 @@ auto in_expr(Expression exp, Expression inside) -> Expression {
     return Expression(new in_expr_class(exp, inside));
 }
 
+auto in_enum_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "in_enum_expr" << std::endl;
+    if(exp)
+        exp->dump(stream, n+2);
+    if(inside)
+        inside->dump(stream, n+2);
+}
+
+auto in_enum_expr(Expression exp, DataType inside) -> Expression {
+    return Expression(new in_enum_expr_class(exp, inside));
+}
+
 auto list_indexing_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "list_indexing_expr" << std::endl;
     if(list_exp)
@@ -2687,6 +2699,30 @@ auto first_of_act_class::dump(std::ostream& stream, int n) -> void {
 
 auto first_of_act(ActionBlocks action_blocks) -> Action {
     return Action(new first_of_act_class(action_blocks));
+}
+
+auto gen_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "gen_act" << std::endl;
+    if(gen_expr)
+        gen_expr->dump(stream, n+2);
+    if(constraints)
+        constraints->dump(stream, n+2);
+}
+
+auto gen_act(Expression gen_expr, Expressions constraints) -> Action {
+    return Action(new gen_act_class(gen_expr, constraints));
+}
+
+auto do_seq_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "do_seq_act" << std::endl;
+    if(gen_expr)
+        gen_expr->dump(stream, n+2);
+    if(constraints)
+        constraints->dump(stream, n+2);
+}
+
+auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action {
+    return Action(new do_seq_act_class(gen_expr, constraints));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

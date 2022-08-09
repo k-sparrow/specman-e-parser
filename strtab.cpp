@@ -32,7 +32,7 @@ namespace elex {
 
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& {
         if(!rhs) return out << "Symbol: empty" << std::endl;
-        return out << "Symbol: " << rhs->Str() << ", " << " Length: " << rhs->Length();
+        return out << "Symbol: " << rhs->Str();
     }
 
     auto operator + (Symbol const& lhs, std::string const& rhs) -> Symbol {

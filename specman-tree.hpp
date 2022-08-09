@@ -3112,6 +3112,28 @@ class in_expr_class : public Expression_class {
 
 auto in_expr(Expression exp, Expression inside) -> Expression;
 
+class in_enum_expr_class : public Expression_class {
+    protected:
+        Expression exp;
+        DataType inside;
+    public:
+        in_enum_expr_class(Expression exp, DataType inside) {
+            this->exp = exp;
+            this->inside = inside;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef in_enum_expr_EXTRAS
+    in_enum_expr_EXTRAS
+#endif
+};
+
+auto in_enum_expr(Expression exp, DataType inside) -> Expression;
+
 class list_indexing_expr_class : public Expression_class {
     protected:
         Expression list_exp;
@@ -5095,6 +5117,50 @@ class first_of_act_class : public Action_class {
 };
 
 auto first_of_act(ActionBlocks action_blocks) -> Action;
+
+class gen_act_class : public Action_class {
+    protected:
+        Expression gen_expr;
+        Expressions constraints;
+    public:
+        gen_act_class(Expression gen_expr, Expressions constraints) {
+            this->gen_expr = gen_expr;
+            this->constraints = constraints;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef gen_act_EXTRAS
+    gen_act_EXTRAS
+#endif
+};
+
+auto gen_act(Expression gen_expr, Expressions constraints) -> Action;
+
+class do_seq_act_class : public Action_class {
+    protected:
+        Expression gen_expr;
+        Expressions constraints;
+    public:
+        do_seq_act_class(Expression gen_expr, Expressions constraints) {
+            this->gen_expr = gen_expr;
+            this->constraints = constraints;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef do_seq_act_EXTRAS
+    do_seq_act_EXTRAS
+#endif
+};
+
+auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action;
 
 class no_action_class : public Action_class {
     protected:
