@@ -311,7 +311,7 @@
   NON_LPAREN  -> needed to resolve sr-conflict with some optional products starting with LPAREN
   NON_DOT     -> same as NON_LPAREN, but for the DOT token
 */
-%precedence LT_ID
+%precedence LT_ID LT_OP
 %precedence NON_DOT NON_LPAREN NON_ELSE NON_THEN
 %precedence ID
 %left ELSE THEN
@@ -323,7 +323,7 @@
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
 %left RPAREN LPAREN DOT
-%precedence FIRST_MATCH GT_ID
+%precedence FIRST_MATCH GT_ID BG_OP
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -340,10 +340,8 @@
 %nterm <elex::Statement>  type_statement
 %nterm <elex::Statement>  inner_type_statement
 %nterm <elex::Statement>  enumerated_type_statement
-%nterm <elex::Statement>    scalar_subtype_statement
 %nterm <elex::Expressions>  subtype_range_list_items
 %nterm <elex::Expression>   subtype_range_list_item
-%nterm <elex::Statement>  scalar_sized_type_statement
 
 %nterm <elex::Statement>  extend_type_statement
 // %nterm <elex::Statement>  routine_statement
@@ -428,6 +426,7 @@
 %nterm <elex::Action>  variable_declaration_action
 %nterm <elex::Action>  variable_assignment_action
 %nterm <elex::Action>  compound_assignment_action
+%nterm <elex::Expression>  compound_identifier
 %nterm <elex::e_compound_op>  compound_op
 %nterm <elex::Action>  force_action
 %nterm <elex::Action>  release_action
@@ -435,6 +434,7 @@
 
 %nterm <elex::Action>  conditional_action
 %nterm <elex::Action>  if_then_else_action
+%nterm <elex::Expression>  if_branch
 %nterm <elex::Action>  case_bool_action
 %nterm <elex::Cases>   case_bool_case_branches
 %nterm <elex::Case>    case_bool_case_branch
@@ -445,6 +445,9 @@
 %nterm <elex::Case>    case_labeled_case_branch
 %nterm <elex::Case>    non_term_case_labeled_case_branch
 %nterm <elex::Expression> label_case_item_expression
+
+/* Method & TCM execution actions */
+%nterm <elex::Action>  method_call_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -622,12 +625,6 @@ type_statement :
 inner_type_statement : 
     enumerated_type_statement
     { $$ = $1; }
-
-/*   | scalar_subtype_statement 
-    { $$ = $1; }
-
-  | scalar_sized_type_statement
-    { $$ = $1; } */
   ;
 
 // all type statements are unrolled as long productions
@@ -686,29 +683,6 @@ scalar_subtype_datatype :
 
   ;
 
-scalar_subtype_statement :
-    TYPE ID[subtype_id] COLON ID[type_id] 
-    { 
-      $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), nullptr);
-    }
-
-  | TYPE ID[subtype_id] COLON predefined_scalar_datatype[type_id] 
-    { 
-      $$ = elex::scalar_subtype_st($subtype_id, $type_id, nullptr);
-    }
-  
-  | TYPE ID[subtype_id] COLON ID[type_id] 
-    LBRACKET subtype_range_list_items[ranges] RBRACKET
-    { 
-      $$ = elex::scalar_subtype_st($subtype_id, elex::id_expr($type_id), $ranges);
-    }
-
-  | TYPE ID[subtype_id] COLON predefined_scalar_datatype[type_id] 
-    LBRACKET subtype_range_list_items[ranges] RBRACKET
-    { 
-      $$ = elex::scalar_subtype_st($subtype_id, $type_id, $ranges);
-    }
-  ;
 
 subtype_range_list_items : 
     subtype_range_list_item 
@@ -729,22 +703,6 @@ subtype_range_list_item :
     { $$ = $1; }
   ;
 
-scalar_sized_type_statement : 
-    TYPE ID[id] COLON predefined_scalar_datatype[base_type_id]
-    width_modifier_expression[width]
-    { $$ = elex::scalar_sized_type_st($id, 
-                                      $base_type_id, 
-                                      nullptr,
-                                      $width); }
-  
-  | TYPE ID[id] COLON predefined_scalar_datatype[base_type_id]
-    LBRACKET subtype_range_list_items[ranges] RBRACKET
-    width_modifier_expression[width]
-    { $$ = elex::scalar_sized_type_st($id, 
-                                      $base_type_id, 
-                                      $ranges,
-                                      $width); }
-  ;
 
 width_modifier_expression :
     LPAREN BITS COLON int_expression[width] RPAREN
@@ -1611,12 +1569,15 @@ non_term_action :
     } 
 
 /*   | action_block
-    { $$ = elex::scoped_actions_block_act($1); }
+    { $$ = elex::scoped_actions_block_act($1); } */
 
   | conditional_action
-    { $$ = $1; } */
+    { $$ = $1; } 
 
   | variable_creation_or_modification_action 
+    { $$ = $1; }
+
+  | method_call_action 
     { $$ = $1; }
   ;
 
@@ -1663,26 +1624,26 @@ variable_assignment_action :
 compound_assignment_action : 
   identifier_expression[lhs_exp] compound_op[op] ASSIGN expression[exp]
   {
-    switch($op) {
-      /* binary arithmetic operators */
-      case eAdd: { $$ = elex::compound_add_act($lhs_exp, $exp); break; }
-      case eSub: { $$ = elex::compound_sub_act($lhs_exp, $exp); break; }
-      case eMul: { $$ = elex::compound_mul_act($lhs_exp, $exp); break; }
-      case eDiv: { $$ = elex::compound_div_act($lhs_exp, $exp); break; }
-      case eMod: { $$ = elex::compound_mod_act($lhs_exp, $exp); break; }
+     switch($op) {
+     /* binary arithmetic operators */
+     case eAdd: { $$ = elex::compound_add_act($lhs_exp, $exp); break; }
+     case eSub: { $$ = elex::compound_sub_act($lhs_exp, $exp); break; }
+     case eMul: { $$ = elex::compound_mul_act($lhs_exp, $exp); break; }
+     case eDiv: { $$ = elex::compound_div_act($lhs_exp, $exp); break; }
+     case eMod: { $$ = elex::compound_mod_act($lhs_exp, $exp); break; }
 
-      /* boolean operators */
-      case eBoolAnd: { $$ = elex::compound_bool_and_act($lhs_exp, $exp); break; }
-      case eBoolOr:  { $$ = elex::compound_bool_or_act($lhs_exp, $exp);  break; }
+     /* boolean operators */
+     case eBoolAnd: { $$ = elex::compound_bool_and_act($lhs_exp, $exp); break; }
+     case eBoolOr:  { $$ = elex::compound_bool_or_act($lhs_exp, $exp);  break; }
 
-      /* bitwise operators */
-      case eBitwiseAnd: { $$ = elex::compound_bit_and_act($lhs_exp, $exp);    break; }
-      case eBitwiseOr:  { $$ = elex::compound_bit_or_act($lhs_exp, $exp);     break; }
-      case eBitwiseXor: { $$ = elex::compound_bit_xor_act($lhs_exp, $exp);    break; }
-      case eShiftLeft:  { $$ = elex::compound_shift_left_act($lhs_exp, $exp); break; }
-      case eShiftRight: { $$ = elex::compound_right_left_act($lhs_exp, $exp); break; }
+     /* bitwise operators */
+     case eBitwiseAnd: { $$ = elex::compound_bit_and_act($lhs_exp, $exp);    break; }
+     case eBitwiseOr:  { $$ = elex::compound_bit_or_act($lhs_exp, $exp);     break; }
+     case eBitwiseXor: { $$ = elex::compound_bit_xor_act($lhs_exp, $exp);    break; }
+     case eShiftLeft:  { $$ = elex::compound_shift_left_act($lhs_exp, $exp); break; }
+     case eShiftRight: { $$ = elex::compound_right_left_act($lhs_exp, $exp); break; }
     }
-  }
+  } 
   ;
 
 compound_op :
@@ -1726,19 +1687,20 @@ conditional_action :
 
 if_then_else_action :
     // if condition then {action; ...}
-    IF logical_expression[condition] OPT_THEN non_term_action[action] %prec NON_ELSE
-    { $$ = elex::if_then_else_act($condition, $action, nullptr); }
+    if_branch[condition] action_block[actions] %prec NON_ELSE
+    { $$ = elex::if_then_else_act($condition, $actions, nullptr); }
 
     // if condition then {action; ...} else if ...
-  | IF logical_expression[condition] OPT_THEN non_term_action[action]
-    ELSE non_term_action[else_clause]
-    { $$ = elex::if_then_else_act($condition, $action, $else_clause); }
+  | if_branch[condition] action_block[actions]
+    ELSE action_block[else_clause]
+    { $$ = elex::if_then_else_act($condition, $actions, $else_clause); }
   ;
 
-OPT_THEN : 
-    %empty %prec NON_THEN
-  | THEN
-  ;
+if_branch : 
+  IF logical_expression THEN
+  { $$ = $2; }
+  ;  
+
 
 case_bool_action :
     CASE LBRACE 
@@ -1794,27 +1756,54 @@ label_case_item_expression :
     { $$ = $1; }
   ;
 
+method_call_action : 
+  method_call_expression { $$ = elex::method_call_act($1); }
+  ;
+
 expression : 
-    operator                   { $$ = $1; }
-  | LPAREN expression RPAREN   { $$ = $2; }
-  | str_expression             { $$ = $1; }
-  | int_expression             { $$ = $1; }
-  | bool_literal_expression    { $$ = $1; }
+    operator                   
+    { $$ = $1; }
+
+  | identifier_expression %prec LT_OP 
+   { $$ = $1; }
+  
+  | str_expression             
+    { $$ = $1; }
+
+  | int_expression             
+    { $$ = $1; }
+
+  | bool_literal_expression    
+    { $$ = $1; }
   ;
 
 operator :  
-    bitwise_expression         { $$ = $1; }
-  | logical_expression         { $$ = $1; }
-  | arithmetic_expression      { $$ = $1; }
-  | method_call_expression     { $$ = $1; }
+    LPAREN expression RPAREN   { $$ = $2; }
+
+  | bitwise_expression         
+    { $$ = $1; }
+
+  | logical_expression %prec NON_LPAREN        
+    { $$ = $1; }
+
+  | arithmetic_expression      
+    { $$ = $1; }
+
+  | method_call_expression     
+    { $$ = $1; }
 /*   | LBRACKET enum_list_exprs RBRACKET 
     {
       $$ = elex::enum_type_expr($2, nullptr);
     } */
-  | identifier_expression      { $$ = $1; }
-  | struct_allocate_expression { $$ = $1; }
-  | list_concatenation_expression { $$ = $1; }
-  | bit_concatenation_expression  { $$ = $1; }
+
+  | struct_allocate_expression 
+    { $$ = $1; }
+  
+  | list_concatenation_expression 
+    { $$ = $1; }
+
+  | bit_concatenation_expression  
+    { $$ = $1; }
   ; // TODO: fully implement this
 
 
@@ -1854,7 +1843,8 @@ shift_expression :
   ;
 
 logical_expression : 
-    unary_logical_expression         { $$ = $1; }
+    LPAREN logical_expression RPAREN { $$ = $2; }
+  | unary_logical_expression         { $$ = $1; }
   | binary_logical_expression        { $$ = $1; }
   | implication_expression           { $$ = $1; }
   | comparison_expression            { $$ = $1; }
@@ -1879,7 +1869,8 @@ implication_expression :
   ;
 
 inclusion_expression : 
-  expression IN expression          { $$ = elex::in_expr($1, $3); }
+    expression IN expression          { $$ = elex::in_expr($1, $3); }
+  | expression IN enum_datatype       { $$ = $1; }
   ;
 
 /* 

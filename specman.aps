@@ -291,7 +291,7 @@ module Specman begin
         constructor force_act(hdl_or_port: Expression; exp: Expression) : Action;
         constructor release_act(hdl_or_port: Expression) : Action;
         
-        constructor if_then_else_act(condition : Expression; action: Action; else_clause: Action) : Action;
+        constructor if_then_else_act(condition : Expression; actions: Actions; else_clause: Actions) : Action;
         constructor scoped_actions_block_act(actions: Actions) : Action;
 
         constructor case_bool_act(bool_case_branch_items: Cases) : Action;
@@ -302,5 +302,6 @@ module Specman begin
 
         constructor default_case_branch_item_case(actions: Actions) : Case;
         
+        constructor method_call_act(method_call_expr: Expression) : Action;
         constructor no_action() : Action;
 end;

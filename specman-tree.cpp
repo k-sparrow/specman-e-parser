@@ -2385,14 +2385,14 @@ auto if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "if_then_else_act" << std::endl;
     if(condition)
         condition->dump(stream, n+2);
-    if(action)
-        action->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
     if(else_clause)
         else_clause->dump(stream, n+2);
 }
 
-auto if_then_else_act(Expression condition, Action action, Action else_clause) -> Action {
-    return Action(new if_then_else_act_class(condition, action, else_clause));
+auto if_then_else_act(Expression condition, Actions actions, Actions else_clause) -> Action {
+    return Action(new if_then_else_act_class(condition, actions, else_clause));
 }
 
 auto scoped_actions_block_act_class::dump(std::ostream& stream, int n) -> void {
@@ -2459,6 +2459,16 @@ auto default_case_branch_item_case_class::dump(std::ostream& stream, int n) -> v
 
 auto default_case_branch_item_case(Actions actions) -> Case {
     return Case(new default_case_branch_item_case_class(actions));
+}
+
+auto method_call_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "method_call_act" << std::endl;
+    if(method_call_expr)
+        method_call_expr->dump(stream, n+2);
+}
+
+auto method_call_act(Expression method_call_expr) -> Action {
+    return Action(new method_call_act_class(method_call_expr));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

@@ -4533,12 +4533,12 @@ auto release_act(Expression hdl_or_port) -> Action;
 class if_then_else_act_class : public Action_class {
     protected:
         Expression condition;
-        Action action;
-        Action else_clause;
+        Actions actions;
+        Actions else_clause;
     public:
-        if_then_else_act_class(Expression condition, Action action, Action else_clause) {
+        if_then_else_act_class(Expression condition, Actions actions, Actions else_clause) {
             this->condition = condition;
-            this->action = action;
+            this->actions = actions;
             this->else_clause = else_clause;
         }
 
@@ -4552,7 +4552,7 @@ class if_then_else_act_class : public Action_class {
 #endif
 };
 
-auto if_then_else_act(Expression condition, Action action, Action else_clause) -> Action;
+auto if_then_else_act(Expression condition, Actions actions, Actions else_clause) -> Action;
 
 class scoped_actions_block_act_class : public Action_class {
     protected:
@@ -4679,6 +4679,26 @@ class default_case_branch_item_case_class : public Case_class {
 };
 
 auto default_case_branch_item_case(Actions actions) -> Case;
+
+class method_call_act_class : public Action_class {
+    protected:
+        Expression method_call_expr;
+    public:
+        method_call_act_class(Expression method_call_expr) {
+            this->method_call_expr = method_call_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef method_call_act_EXTRAS
+    method_call_act_EXTRAS
+#endif
+};
+
+auto method_call_act(Expression method_call_expr) -> Action;
 
 class no_action_class : public Action_class {
     protected:
