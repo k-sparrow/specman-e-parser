@@ -2566,6 +2566,36 @@ auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr
     return Action(new for_range_loop_act_class(var_id, from_expr, to_expr, step_expr, is_down, actions));
 }
 
+auto for_loop_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "for_loop_act" << std::endl;
+    if(init_act)
+        init_act->dump(stream, n+2);
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
+    if(step_act)
+        step_act->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, Actions actions) -> Action {
+    return Action(new for_loop_act_class(init_act, bool_expr, step_act, actions));
+}
+
+auto for_each_line_in_file_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "for_each_line_in_file_act" << std::endl;
+    if(line_it_name)
+        line_it_name->dump(stream, n+2);
+    if(file_path_expr)
+        file_path_expr->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, Actions actions) -> Action {
+    return Action(new for_each_line_in_file_act_class(line_it_name, file_path_expr, actions));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

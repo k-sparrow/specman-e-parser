@@ -311,6 +311,8 @@ module Specman begin
         constructor repeat_until_loop_act(bool_expr: Expression; actions: Actions) : Action;
         constructor for_each_loop_act(type_id: DataType; iterated_name: Expression; is_reverese: Boolean; list_exp: Expression; idx_exp: Expression; actions: Actions) : Action;
         constructor for_range_loop_act(var_id: Symbol_; from_expr: Expression; to_expr: Expression; step_expr: Expression; is_down: Boolean; actions: Actions) : Action;
+        constructor for_loop_act(init_act: Action; bool_expr: Expression; step_act: Action; actions: Actions) : Action;
+        constructor for_each_line_in_file_act(line_it_name: Expression ;file_path_expr: Expression; actions: Actions) : Action;
 
         constructor no_action() : Action;
 end;

@@ -4868,6 +4868,56 @@ class for_range_loop_act_class : public Action_class {
 
 auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) -> Action;
 
+class for_loop_act_class : public Action_class {
+    protected:
+        Action init_act;
+        Expression bool_expr;
+        Action step_act;
+        Actions actions;
+    public:
+        for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, Actions actions) {
+            this->init_act = init_act;
+            this->bool_expr = bool_expr;
+            this->step_act = step_act;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef for_loop_act_EXTRAS
+    for_loop_act_EXTRAS
+#endif
+};
+
+auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, Actions actions) -> Action;
+
+class for_each_line_in_file_act_class : public Action_class {
+    protected:
+        Expression line_it_name;
+        Expression file_path_expr;
+        Actions actions;
+    public:
+        for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, Actions actions) {
+            this->line_it_name = line_it_name;
+            this->file_path_expr = file_path_expr;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef for_each_line_in_file_act_EXTRAS
+    for_each_line_in_file_act_EXTRAS
+#endif
+};
+
+auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, Actions actions) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:

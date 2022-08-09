@@ -131,6 +131,8 @@
 %token TO
 %token DOWN
 %token STEP
+%token LINE
+%token FILE
 %token WITH
 %token WHEN
 %token STRUCT	  
@@ -479,6 +481,11 @@
 %nterm <elex::Action>      for_from_to_loop_action
 %nterm <elex::Expression>  opt_step
 
+/*-------- FOR --------*/
+%nterm <elex::Action>      for_loop_action
+
+/*----- FOR-FILE ------*/
+%nterm <elex::Action>      for_line_in_file_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1649,8 +1656,11 @@ variable_declaration_action :
   ;
 
 variable_assignment_action : 
-  identifier_expression ASSIGN expression
-  { $$ = elex::var_assign_act($1, $3); }
+    identifier_expression ASSIGN expression
+    { $$ = elex::var_assign_act($1, $3); }
+
+  | hdl_pathname_expression ASSIGN expression
+    { $$ = elex::var_assign_act($1, $3); }
   ;
 
 compound_assignment_action : 
@@ -1808,6 +1818,12 @@ iterative_action :
 
   | for_from_to_loop_action
     { $$ = $1;}
+  
+  | for_loop_action 
+    { $$ = $1; }
+
+  | for_line_in_file_action
+    { $$ = $1;}
   ;
 
 while_loop_action :
@@ -1831,7 +1847,7 @@ for_each_loop_action :
 
 // [type]
 opt_type : 
-    %empty 
+    %empty %prec LT_OP
     { $$ = nullptr; }
   
   | scoped_scalar_type_identifier_data_type
@@ -1873,6 +1889,33 @@ opt_step :
     { $$ = $2; }
   ;
 
+// for { initial-action; bool-exp; step-action } [do] {action; ...}
+for_loop_action : 
+  FOR 
+  LBRACE 
+    non_term_action[init_action] SEMICOLON logical_expression[bool_exp] SEMICOLON non_term_action[step_action] 
+  RBRACE OPT_DO action_block[actions]
+  { $$ = elex::for_loop_act($init_action, $bool_exp, $step_action, $actions); }
+  ;
+
+// this for-each action is unrolled in order to avoid reduce-reduce conflicts with the (actually used) non-file for-each action
+
+// for each [line] [(name)] in file file-name-exp [do] {action; ...}
+for_line_in_file_action :
+    FOR EACH IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
+
+  | FOR EACH LINE IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
+
+  | FOR EACH iterated_id_expr[line_it_name] IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
+
+  | FOR EACH LINE iterated_id_expr[line_it_name] IN FILE str_expression[file_name_exp] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
+  ;
+
+
 method_call_action : 
     method_call_expression 
     { $$ = elex::method_call_act($1); }
@@ -1904,6 +1947,9 @@ expression :
     { $$ = $1; }
 
   | bool_literal_expression    
+    { $$ = $1; }
+
+  | hdl_pathname_expression
     { $$ = $1; }
   ;
 

@@ -33,6 +33,8 @@ from        (from)
 down        (down)
 do          (do)
 to          (to)
+line        (line)
+file        (file)
 with        (with)
 when        (when)
 struct	    (struct)
@@ -260,6 +262,8 @@ mvl            {mvl_single}|{sized_mvl}
 {down}      { return yy::parser::make_DOWN(Location()); }
 {do}        { return yy::parser::make_DO(Location()); }
 {to}        { return yy::parser::make_TO(Location()); }
+{line}      { return yy::parser::make_LINE(Location()); }
+{file}      { return yy::parser::make_FILE(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }
 {when}      { return yy::parser::make_WHEN(Location()); }
 {struct}	{ return yy::parser::make_STRUCT(Location()); }
