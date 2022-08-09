@@ -2395,14 +2395,18 @@ auto if_then_else_act(Expression condition, Actions actions, Actions else_clause
     return Action(new if_then_else_act_class(condition, actions, else_clause));
 }
 
-auto scoped_actions_block_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "scoped_actions_block_act" << std::endl;
+auto non_term_if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "non_term_if_then_else_act" << std::endl;
+    if(condition)
+        condition->dump(stream, n+2);
     if(actions)
         actions->dump(stream, n+2);
+    if(else_clause)
+        else_clause->dump(stream, n+2);
 }
 
-auto scoped_actions_block_act(Actions actions) -> Action {
-    return Action(new scoped_actions_block_act_class(actions));
+auto non_term_if_then_else_act(Expression condition, Actions actions, Action else_clause) -> Action {
+    return Action(new non_term_if_then_else_act_class(condition, actions, else_clause));
 }
 
 auto case_bool_act_class::dump(std::ostream& stream, int n) -> void {

@@ -1690,15 +1690,23 @@ if_then_else_action :
     if_branch[condition] action_block[actions] %prec NON_ELSE
     { $$ = elex::if_then_else_act($condition, $actions, nullptr); }
 
-    // if condition then {action; ...} else if ...
+    // if condition then {action; ...} else {action; ...} 
   | if_branch[condition] action_block[actions]
     ELSE action_block[else_clause]
     { $$ = elex::if_then_else_act($condition, $actions, $else_clause); }
+  
+    // if condition then {action; ...} else if ...
+  | if_branch[condition] action_block[actions]
+    ELSE if_then_else_action[else_clause]
+    { $$ = elex::non_term_if_then_else_act($condition, $actions, $else_clause); }
   ;
 
 if_branch : 
-  IF logical_expression THEN
-  { $$ = $2; }
+    IF logical_expression THEN
+    { $$ = $2; }
+
+  | IF logical_expression 
+    { $$ = $2; }
   ;  
 
 

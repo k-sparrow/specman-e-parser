@@ -4554,12 +4554,16 @@ class if_then_else_act_class : public Action_class {
 
 auto if_then_else_act(Expression condition, Actions actions, Actions else_clause) -> Action;
 
-class scoped_actions_block_act_class : public Action_class {
+class non_term_if_then_else_act_class : public Action_class {
     protected:
+        Expression condition;
         Actions actions;
+        Action else_clause;
     public:
-        scoped_actions_block_act_class(Actions actions) {
+        non_term_if_then_else_act_class(Expression condition, Actions actions, Action else_clause) {
+            this->condition = condition;
             this->actions = actions;
+            this->else_clause = else_clause;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -4567,12 +4571,12 @@ class scoped_actions_block_act_class : public Action_class {
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
 #endif
-#ifdef scoped_actions_block_act_EXTRAS
-    scoped_actions_block_act_EXTRAS
+#ifdef non_term_if_then_else_act_EXTRAS
+    non_term_if_then_else_act_EXTRAS
 #endif
 };
 
-auto scoped_actions_block_act(Actions actions) -> Action;
+auto non_term_if_then_else_act(Expression condition, Actions actions, Action else_clause) -> Action;
 
 class case_bool_act_class : public Action_class {
     protected:

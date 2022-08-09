@@ -292,7 +292,7 @@ module Specman begin
         constructor release_act(hdl_or_port: Expression) : Action;
         
         constructor if_then_else_act(condition : Expression; actions: Actions; else_clause: Actions) : Action;
-        constructor scoped_actions_block_act(actions: Actions) : Action;
+        constructor non_term_if_then_else_act(condition : Expression; actions: Actions; else_clause: Action) : Action;
 
         constructor case_bool_act(bool_case_branch_items: Cases) : Action;
         constructor case_bool_branch_item_case(bool_exp: Expression; actions: Actions) : Case;
