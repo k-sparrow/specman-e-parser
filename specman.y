@@ -434,6 +434,7 @@
 %nterm <elex::Action>  release_action
 
 
+/* Conditional Actions */
 %nterm <elex::Action>  conditional_action
 %nterm <elex::Action>  if_then_else_action
 %nterm <elex::Expression>  if_branch
@@ -450,6 +451,12 @@
 
 /* Method & TCM execution actions */
 %nterm <elex::Action>  method_call_action
+
+/* Iterative Actions */
+%nterm <elex::Action>  iterative_action
+%nterm <elex::Action>  while_loop_action
+%nterm <elex::Expression>  while_header_expr
+
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1570,13 +1577,13 @@ non_term_action :
       $$ = elex::no_action(); 
     } 
 
-/*   | action_block
-    { $$ = elex::scoped_actions_block_act($1); } */
+  | variable_creation_or_modification_action 
+    { $$ = $1; }
 
   | conditional_action
     { $$ = $1; } 
 
-  | variable_creation_or_modification_action 
+  | iterative_action
     { $$ = $1; }
 
   | method_call_action 
@@ -1766,6 +1773,23 @@ label_case_item_expression :
     { $$ = $1; }
   ;
 
+iterative_action : 
+    while_loop_action 
+    { $$ = $1; }
+  ;
+
+while_loop_action :
+  while_header_expr[bool_expr] action_block[actions]
+  { $$ = elex::while_loop_action($bool_expr, $actions); }
+  ;
+
+while_header_expr : 
+    WHILE logical_expression 
+    { $$ = $2; }
+
+  | WHILE logical_expression DO
+    { $$ = $2; }
+  ;
 method_call_action : 
     method_call_expression 
     { $$ = elex::method_call_act($1); }
@@ -2213,10 +2237,10 @@ weight_value_pair :
     ;
 
 formals:
-      %empty               { $$ = elex::nil_Formals(); }
-    | formal               { $$ = elex::single_Formals($1); }
-    | formals COMMA formal { $$ = elex::append_Formals($1, elex::single_Formals($3)); }
-    ;
+    %empty               { $$ = elex::nil_Formals(); }
+  | formal               { $$ = elex::single_Formals($1); }
+  | formals COMMA formal { $$ = elex::append_Formals($1, elex::single_Formals($3)); }
+  ;
 
 formal : 
   ID[name] COLON scoped_type_identifier_data_type[type_] 

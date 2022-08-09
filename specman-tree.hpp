@@ -4764,6 +4764,28 @@ class return_act_class : public Action_class {
 
 auto return_act(Expression exp) -> Action;
 
+class while_loop_action_class : public Action_class {
+    protected:
+        Expression bool_expr;
+        Actions actions;
+    public:
+        while_loop_action_class(Expression bool_expr, Actions actions) {
+            this->bool_expr = bool_expr;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef while_loop_action_EXTRAS
+    while_loop_action_EXTRAS
+#endif
+};
+
+auto while_loop_action(Expression bool_expr, Actions actions) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:

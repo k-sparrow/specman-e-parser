@@ -307,5 +307,6 @@ module Specman begin
         constructor compute_method_call_act(method_call_expr: Expression) : Action;
         constructor return_act(exp: Expression) : Action;
 
+        constructor while_loop_action(bool_expr: Expression; actions: Actions) : Action;
         constructor no_action() : Action;
 end;
