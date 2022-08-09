@@ -130,6 +130,7 @@
 %token FROM
 %token TO
 %token DOWN
+%token EMIT	    
 %token STEP
 %token LINE
 %token FILE
@@ -431,17 +432,20 @@
 %nterm <elex::e_physical_dont_gen>  do_not_gen_physical
 
 /* Actions */
-%nterm <elex::Actions> actions
-%nterm <elex::Actions> action_block
+%nterm <elex::Actions>     actions
+%nterm <elex::ActionBlock>  action_block
+%nterm <elex::ActionBlock>  term_action_block
+%nterm <elex::ActionBlocks> action_blocks
+%nterm <elex::ActionBlocks> action_blocks_block
 /* %nterm <elex::Actions> opt_with_action_block */
-%nterm <elex::Action>  action
-%nterm <elex::Action>  non_term_action
+%nterm <elex::Action>      action
+%nterm <elex::Action>      non_term_action
 
 
-%nterm <elex::Action>  variable_creation_or_modification_action
-%nterm <elex::Action>  variable_declaration_action
-%nterm <elex::Action>  variable_assignment_action
-%nterm <elex::Action>  compound_assignment_action
+%nterm <elex::Action>      variable_creation_or_modification_action
+%nterm <elex::Action>      variable_declaration_action
+%nterm <elex::Action>      variable_assignment_action
+%nterm <elex::Action>      compound_assignment_action
 %nterm <elex::Expression>  compound_identifier
 %nterm <elex::e_compound_op>  compound_op
 %nterm <elex::Action>  force_action
@@ -498,6 +502,14 @@
 /* Control Flow Actions */
 %nterm <elex::Action>      control_flow_action
 
+/* Control Flow Actions */
+%nterm <elex::Action>      time_consuming_action
+%nterm <elex::Action>      emit_action
+%nterm <elex::Action>      sync_action
+%nterm <elex::Action>      wait_action
+%nterm <elex::Action>      multi_threaded_action
+
+/*------- EMIT -------*/
 /* Expressions */
 %nterm <elex::Expression>   expression
 %nterm <elex::Expression>   operator
@@ -1416,8 +1428,9 @@ constraint_definition :
     ;
 
 on_event_definition : 
-    ON hier_ref_expression[event_name] action_block[actions] { $$ = elex::on_event_sm($event_name, $actions); }
-    ;
+  ON hier_ref_expression[event_name] action_block[actions] 
+  { $$ = elex::on_event_sm($event_name, $actions); }
+  ;
 
 event_declaration : 
       EVENT ID[id]                                       { $$ = elex::simple_event_dec_sm($id); }
@@ -1605,7 +1618,24 @@ actions :
 
 action_block : 
     LBRACE actions RBRACE 
-    { $$ = $2; }
+    { $$ = elex::action_block($2); }
+  ;
+
+term_action_block :
+  action_block SEMICOLON { $$ = $1; }
+  ;
+
+action_blocks : 
+    term_action_block               
+    { $$ = elex::single_ActionBlocks($1); }
+
+  | action_blocks term_action_block 
+    { $$ = elex::append_ActionBlocks($1, elex::single_ActionBlocks($2)); }
+  ;
+
+action_blocks_block :
+  LBRACE action_blocks RBRACE 
+  { $$ = $2; }
   ;
 
 action : 
@@ -1628,6 +1658,9 @@ non_term_action :
     { $$ = $1; }
 
   | control_flow_action
+    { $$ = $1; }
+
+  | time_consuming_action
     { $$ = $1; }
 
   | method_call_action 
@@ -1843,12 +1876,13 @@ iterative_action :
     { $$ = $1; }
   ;
 
+// while bool-exp [do] {action; ...}
 while_loop_action :
   WHILE logical_expression[bool_exp] OPT_DO action_block[actions]
   { $$ = elex::while_loop_act($bool_exp, $actions); }
   ;
 
-
+// repeat {action; ...} until bool-exp 
 repeat_until_loop_action :
   REPEAT action_block[actions] UNTIL logical_expression[bool_exp]
   { $$ = elex::repeat_until_loop_act($bool_exp, $actions); }
@@ -1953,6 +1987,50 @@ control_flow_action :
 
   | CONTINUE
     { $$ = elex::continue_act(); }
+  ;
+
+time_consuming_action : 
+    emit_action
+    { $$ = $1; }
+  
+  | sync_action
+    { $$ = $1; }
+
+  | wait_action
+    { $$ = $1; }
+  
+  | multi_threaded_action
+    { $$ = $1; }
+  ;
+
+emit_action :
+  EMIT identifier_expression
+  { $$ = elex::emit_act($2); }
+  ;
+
+
+sync_action :
+    SYNC temporal_expression
+    { $$ = elex::sync_act($2); }
+
+  | SYNC 
+    { $$ = elex::sync_act(nullptr); }
+  ;
+
+wait_action : 
+    WAIT
+    { $$ = elex::wait_act(nullptr); }
+
+  | WAIT temporal_expression
+    { $$ = elex::wait_act($2); }
+
+  | WAIT UNTIL temporal_expression
+    { $$ = elex::wait_act($3); }
+  ;
+
+multi_threaded_action : 
+    ALL   OF action_blocks_block { $$ = elex::all_of_act($3); }
+  | FIRST OF action_blocks_block { $$ = elex::first_of_act($3); }
   ;
 
 method_call_action : 

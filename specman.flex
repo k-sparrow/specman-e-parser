@@ -92,6 +92,7 @@ eventually	(eventually)
 start	    (start)
 compute	    (compute)
 return_	    (return)
+emit        (emit)
 wait	    (wait)
 sync	    (sync)
 only	    (only)
@@ -270,6 +271,8 @@ mvl            {mvl_single}|{sized_mvl}
 {matching}  { return yy::parser::make_MATCHING(Location()); }
 {break}     { return yy::parser::make_BREAK(Location()); }
 {continue}  { return yy::parser::make_CONTINUE(Location()); }
+{emit}      { return yy::parser::make_EMIT(Location()); }
+{sync}      { return yy::parser::make_SYNC(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }
 {when}      { return yy::parser::make_WHEN(Location()); }
 {struct}	{ return yy::parser::make_STRUCT(Location()); }

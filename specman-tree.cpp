@@ -143,6 +143,19 @@ auto append_CovergroupItemOptions(CovergroupItemOptions p1, CovergroupItemOption
     return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>(*p1, *p2));
 }
 
+/* implementations for ActionBlocks */
+auto nil_ActionBlocks() -> ActionBlocks {
+    return ActionBlocks(new list_tree_node<ActionBlock>());
+}
+
+auto single_ActionBlocks(ActionBlock p) -> ActionBlocks {
+    return ActionBlocks(new list_tree_node<ActionBlock>(p));
+}
+
+auto append_ActionBlocks(ActionBlocks p1, ActionBlocks p2) -> ActionBlocks {
+    return ActionBlocks(new list_tree_node<ActionBlock>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "module_" << std::endl;
     if(stmts)
@@ -396,7 +409,7 @@ auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
+auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember {
     return StructMember(new method_dec_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -411,7 +424,7 @@ auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
+auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember {
     return StructMember(new method_dec_also_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -426,7 +439,7 @@ auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
+auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember {
     return StructMember(new method_dec_first_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -441,7 +454,7 @@ auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember {
+auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember {
     return StructMember(new method_dec_only_sm_class(id, arguments, return_type, actions_));
 }
 
@@ -484,7 +497,7 @@ auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember {
     return StructMember(new tcm_dec_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -501,7 +514,7 @@ auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember {
     return StructMember(new tcm_dec_also_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -518,7 +531,7 @@ auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember {
     return StructMember(new tcm_dec_first_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -535,7 +548,7 @@ auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
         actions_->dump(stream, n+2);
 }
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember {
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember {
     return StructMember(new tcm_dec_only_sm_class(id, arguments, return_type, event_id_expr, actions_));
 }
 
@@ -599,7 +612,7 @@ auto on_event_sm_class::dump(std::ostream& stream, int n) -> void {
         action_block->dump(stream, n+2);
 }
 
-auto on_event_sm(Expression event_name, Actions action_block) -> StructMember {
+auto on_event_sm(Expression event_name, ActionBlock action_block) -> StructMember {
     return StructMember(new on_event_sm_class(event_name, action_block));
 }
 
@@ -664,7 +677,7 @@ auto action_attached_temporal_expr_class::dump(std::ostream& stream, int n) -> v
         actions->dump(stream, n+2);
 }
 
-auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expression {
+auto action_attached_temporal_expr(Expression temporal, ActionBlock actions) -> Expression {
     return Expression(new action_attached_temporal_expr_class(temporal, actions));
 }
 
@@ -1751,7 +1764,7 @@ auto new_allocate_expr_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, Actions actions) -> Expression {
+auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions) -> Expression {
     return Expression(new new_allocate_expr_class(struct_type_block, scoped_name, actions));
 }
 
@@ -1763,7 +1776,7 @@ auto new_nameless_allocate_expr_class::dump(std::ostream& stream, int n) -> void
         actions->dump(stream, n+2);
 }
 
-auto new_nameless_allocate_expr(Expression struct_type_block, Actions actions) -> Expression {
+auto new_nameless_allocate_expr(Expression struct_type_block, ActionBlock actions) -> Expression {
     return Expression(new new_nameless_allocate_expr_class(struct_type_block, actions));
 }
 
@@ -2391,7 +2404,7 @@ auto if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
         else_clause->dump(stream, n+2);
 }
 
-auto if_then_else_act(Expression condition, Actions actions, Actions else_clause) -> Action {
+auto if_then_else_act(Expression condition, ActionBlock actions, ActionBlock else_clause) -> Action {
     return Action(new if_then_else_act_class(condition, actions, else_clause));
 }
 
@@ -2405,7 +2418,7 @@ auto non_term_if_then_else_act_class::dump(std::ostream& stream, int n) -> void 
         else_clause->dump(stream, n+2);
 }
 
-auto non_term_if_then_else_act(Expression condition, Actions actions, Action else_clause) -> Action {
+auto non_term_if_then_else_act(Expression condition, ActionBlock actions, Action else_clause) -> Action {
     return Action(new non_term_if_then_else_act_class(condition, actions, else_clause));
 }
 
@@ -2427,7 +2440,7 @@ auto case_bool_branch_item_case_class::dump(std::ostream& stream, int n) -> void
         actions->dump(stream, n+2);
 }
 
-auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case {
+auto case_bool_branch_item_case(Expression bool_exp, ActionBlock actions) -> Case {
     return Case(new case_bool_branch_item_case_class(bool_exp, actions));
 }
 
@@ -2451,7 +2464,7 @@ auto case_labeled_branch_item_case_class::dump(std::ostream& stream, int n) -> v
         actions->dump(stream, n+2);
 }
 
-auto case_labeled_branch_item_case(Expression label_exp, Actions actions) -> Case {
+auto case_labeled_branch_item_case(Expression label_exp, ActionBlock actions) -> Case {
     return Case(new case_labeled_branch_item_case_class(label_exp, actions));
 }
 
@@ -2461,7 +2474,7 @@ auto default_case_branch_item_case_class::dump(std::ostream& stream, int n) -> v
         actions->dump(stream, n+2);
 }
 
-auto default_case_branch_item_case(Actions actions) -> Case {
+auto default_case_branch_item_case(ActionBlock actions) -> Case {
     return Case(new default_case_branch_item_case_class(actions));
 }
 
@@ -2513,7 +2526,7 @@ auto while_loop_act_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto while_loop_act(Expression bool_expr, Actions actions) -> Action {
+auto while_loop_act(Expression bool_expr, ActionBlock actions) -> Action {
     return Action(new while_loop_act_class(bool_expr, actions));
 }
 
@@ -2525,7 +2538,7 @@ auto repeat_until_loop_act_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto repeat_until_loop_act(Expression bool_expr, Actions actions) -> Action {
+auto repeat_until_loop_act(Expression bool_expr, ActionBlock actions) -> Action {
     return Action(new repeat_until_loop_act_class(bool_expr, actions));
 }
 
@@ -2544,7 +2557,7 @@ auto for_each_loop_act_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) -> Action {
+auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions) -> Action {
     return Action(new for_each_loop_act_class(type_id, iterated_name, is_reverese, list_exp, idx_exp, actions));
 }
 
@@ -2562,7 +2575,7 @@ auto for_range_loop_act_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) -> Action {
+auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions) -> Action {
     return Action(new for_range_loop_act_class(var_id, from_expr, to_expr, step_expr, is_down, actions));
 }
 
@@ -2578,7 +2591,7 @@ auto for_loop_act_class::dump(std::ostream& stream, int n) -> void {
         actions->dump(stream, n+2);
 }
 
-auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, Actions actions) -> Action {
+auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions) -> Action {
     return Action(new for_loop_act_class(init_act, bool_expr, step_act, actions));
 }
 
@@ -2592,7 +2605,7 @@ auto for_each_line_in_file_act_class::dump(std::ostream& stream, int n) -> void 
         actions->dump(stream, n+2);
 }
 
-auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, Actions actions) -> Action {
+auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, ActionBlock actions) -> Action {
     return Action(new for_each_line_in_file_act_class(line_it_name, file_path_expr, actions));
 }
 
@@ -2606,7 +2619,7 @@ auto for_each_file_in_files_act_class::dump(std::ostream& stream, int n) -> void
         actions->dump(stream, n+2);
 }
 
-auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, Actions actions) -> Action {
+auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions) -> Action {
     return Action(new for_each_file_in_files_act_class(line_it_name, file_pattern_exp, actions));
 }
 
@@ -2626,11 +2639,71 @@ auto continue_act() -> Action {
     return Action(new continue_act_class());
 }
 
+auto emit_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "emit_act" << std::endl;
+    if(event_id)
+        event_id->dump(stream, n+2);
+}
+
+auto emit_act(Expression event_id) -> Action {
+    return Action(new emit_act_class(event_id));
+}
+
+auto sync_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sync_act" << std::endl;
+    if(event_id)
+        event_id->dump(stream, n+2);
+}
+
+auto sync_act(Expression event_id) -> Action {
+    return Action(new sync_act_class(event_id));
+}
+
+auto wait_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "wait_act" << std::endl;
+    if(event_id)
+        event_id->dump(stream, n+2);
+}
+
+auto wait_act(Expression event_id) -> Action {
+    return Action(new wait_act_class(event_id));
+}
+
+auto all_of_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "all_of_act" << std::endl;
+    if(action_blocks)
+        action_blocks->dump(stream, n+2);
+}
+
+auto all_of_act(ActionBlocks action_blocks) -> Action {
+    return Action(new all_of_act_class(action_blocks));
+}
+
+auto first_of_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "first_of_act" << std::endl;
+    if(action_blocks)
+        action_blocks->dump(stream, n+2);
+}
+
+auto first_of_act(ActionBlocks action_blocks) -> Action {
+    return Action(new first_of_act_class(action_blocks));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }
 
 auto no_action() -> Action {
     return Action(new no_action_class());
+}
+
+auto action_block_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "action_block" << std::endl;
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto action_block(Actions actions) -> ActionBlock {
+    return ActionBlock(new action_block_class(actions));
 } 
 }

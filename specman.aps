@@ -38,6 +38,8 @@ module Specman begin
 
         phylum CovergroupExtensionID;
 
+        phylum ActionBlock;
+        phylum ActionBlocks = LIST[ActionBlock];
 
         constructor module_(stmts: Statements) : Module;
 
@@ -66,23 +68,23 @@ module Specman begin
         constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; type_: DataType; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
         constructor struct_field_assoc_list_sm(id: Symbol_; type_: DataType; is_physical : Boolean) : StructMember;
 
-        constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
-        constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
-        constructor method_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
-        constructor method_dec_only_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: Actions) : StructMember;
+        constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
+        constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
+        constructor method_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
+        constructor method_dec_only_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
         constructor method_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: DataType) : StructMember;
         constructor method_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: DataType) : StructMember;
 
-        constructor tcm_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression ;actions_: Actions) : StructMember;
-        constructor tcm_dec_also_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
-        constructor tcm_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
-        constructor tcm_dec_only_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: Actions) : StructMember;
+        constructor tcm_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: ActionBlock) : StructMember;
+        constructor tcm_dec_also_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: ActionBlock) : StructMember;
+        constructor tcm_dec_first_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: ActionBlock) : StructMember;
+        constructor tcm_dec_only_sm (id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression; actions_: ActionBlock) : StructMember;
         constructor tcm_dec_empty_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression) : StructMember;
         constructor tcm_dec_undef_sm(id: Symbol_; arguments: Formals; return_type: DataType; event_id_expr: Expression) : StructMember;
 
         constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
         constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
-        constructor on_event_sm(event_name: Expression; action_block: Actions) : StructMember;
+        constructor on_event_sm(event_name: Expression; action_block: ActionBlock) : StructMember;
 
         constructor simple_event_dec_sm(id: Symbol_) : StructMember;
         constructor event_def_sm(id: Symbol_; temporal: Expression) : StructMember;
@@ -91,7 +93,7 @@ module Specman begin
 
         constructor temporal_expr(temporal: Expression; sample_event: Expression) : Expression;
         constructor event_ref_expr(event_name: Expression) : Expression;
-        constructor action_attached_temporal_expr(temporal: Expression; actions: Actions) : Expression;
+        constructor action_attached_temporal_expr(temporal: Expression; actions: ActionBlock) : Expression;
         constructor not_temporal_expr(temporal: Expression) : Expression;
         constructor fail_temporal_expr(temporal: Expression) : Expression;
         constructor eventually_temporal_expr(temporal: Expression) : Expression;
@@ -212,8 +214,8 @@ module Specman begin
         constructor sized_bits_scalar_expr(width_expr: Expression) : Expression;
         constructor sized_bytes_scalar_expr(width_expr: Expression) : Expression;
 
-        constructor new_allocate_expr(struct_type_block : Expression; scoped_name: Symbol_; actions: Actions) : Expression;
-        constructor new_nameless_allocate_expr(struct_type_block : Expression; actions: Actions) : Expression;
+        constructor new_allocate_expr(struct_type_block : Expression; scoped_name: Symbol_; actions: ActionBlock) : Expression;
+        constructor new_nameless_allocate_expr(struct_type_block : Expression; actions: ActionBlock) : Expression;
         constructor struct_type_expr_with_opt_action_block(struct_id_expr : Expression; opt_action_block_expt : Expression) : Expression;
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
@@ -291,32 +293,40 @@ module Specman begin
         constructor force_act(hdl_or_port: Expression; exp: Expression) : Action;
         constructor release_act(hdl_or_port: Expression) : Action;
         
-        constructor if_then_else_act(condition : Expression; actions: Actions; else_clause: Actions) : Action;
-        constructor non_term_if_then_else_act(condition : Expression; actions: Actions; else_clause: Action) : Action;
+        constructor if_then_else_act(condition : Expression; actions: ActionBlock; else_clause: ActionBlock) : Action;
+        constructor non_term_if_then_else_act(condition : Expression; actions: ActionBlock; else_clause: Action) : Action;
 
         constructor case_bool_act(bool_case_branch_items: Cases) : Action;
-        constructor case_bool_branch_item_case(bool_exp: Expression; actions: Actions) : Case;
+        constructor case_bool_branch_item_case(bool_exp: Expression; actions: ActionBlock) : Case;
 
         constructor case_labeled_act(exp: Expression; labeled_case_branch_items: Cases) : Action;
-        constructor case_labeled_branch_item_case(label_exp: Expression; actions: Actions) : Case;
+        constructor case_labeled_branch_item_case(label_exp: Expression; actions: ActionBlock) : Case;
 
-        constructor default_case_branch_item_case(actions: Actions) : Case;
+        constructor default_case_branch_item_case(actions: ActionBlock) : Case;
         
         constructor method_call_act(method_call_expr: Expression) : Action;
         constructor start_tcm_call_act(method_call_expr: Expression) : Action;
         constructor compute_method_call_act(method_call_expr: Expression) : Action;
         constructor return_act(exp: Expression) : Action;
 
-        constructor while_loop_act(bool_expr: Expression; actions: Actions) : Action;
-        constructor repeat_until_loop_act(bool_expr: Expression; actions: Actions) : Action;
-        constructor for_each_loop_act(type_id: DataType; iterated_name: Expression; is_reverese: Boolean; list_exp: Expression; idx_exp: Expression; actions: Actions) : Action;
-        constructor for_range_loop_act(var_id: Symbol_; from_expr: Expression; to_expr: Expression; step_expr: Expression; is_down: Boolean; actions: Actions) : Action;
-        constructor for_loop_act(init_act: Action; bool_expr: Expression; step_act: Action; actions: Actions) : Action;
-        constructor for_each_line_in_file_act(line_it_name: Expression; file_path_expr: Expression; actions: Actions) : Action;
-        constructor for_each_file_in_files_act(line_it_name: Expression; file_pattern_exp: Expression; actions: Actions) : Action;
+        constructor while_loop_act(bool_expr: Expression; actions: ActionBlock) : Action;
+        constructor repeat_until_loop_act(bool_expr: Expression; actions: ActionBlock) : Action;
+        constructor for_each_loop_act(type_id: DataType; iterated_name: Expression; is_reverese: Boolean; list_exp: Expression; idx_exp: Expression; actions: ActionBlock) : Action;
+        constructor for_range_loop_act(var_id: Symbol_; from_expr: Expression; to_expr: Expression; step_expr: Expression; is_down: Boolean; actions: ActionBlock) : Action;
+        constructor for_loop_act(init_act: Action; bool_expr: Expression; step_act: Action; actions: ActionBlock) : Action;
+        constructor for_each_line_in_file_act(line_it_name: Expression; file_path_expr: Expression; actions: ActionBlock) : Action;
+        constructor for_each_file_in_files_act(line_it_name: Expression; file_pattern_exp: Expression; actions: ActionBlock) : Action;
 
         constructor break_act() : Action;
         constructor continue_act() : Action;
         
+        constructor emit_act(event_id : Expression) : Action;
+        constructor sync_act(event_id : Expression) : Action;
+        constructor wait_act(event_id : Expression) : Action;
+        constructor all_of_act(action_blocks: ActionBlocks) : Action;
+        constructor first_of_act(action_blocks: ActionBlocks) : Action;
+
         constructor no_action() : Action;
+
+        constructor action_block(actions: Actions) : ActionBlock;
 end;

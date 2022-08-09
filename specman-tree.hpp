@@ -228,6 +228,24 @@ class CovergroupExtensionID_class : public tree_node {
 #endif
 };
 
+class ActionBlock_class;
+typedef std::shared_ptr<ActionBlock_class> ActionBlock;
+
+class ActionBlock_class : public tree_node {
+    public:
+
+#ifdef ActionBlock_EXTRAS
+    ActionBlock_EXTRAS
+#endif
+};
+
+typedef list_tree_node<ActionBlock> ActionBlocks_class;
+typedef std::shared_ptr<ActionBlocks_class> ActionBlocks;
+
+auto nil_ActionBlocks() -> ActionBlocks;
+auto single_ActionBlocks(ActionBlock) -> ActionBlocks;
+auto append_ActionBlocks(ActionBlocks, ActionBlocks) -> ActionBlocks;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -721,9 +739,9 @@ class method_dec_sm_class : public StructMember_class {
         Symbol_ id;
         Formals arguments;
         DataType return_type;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
+        method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -740,16 +758,16 @@ class method_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
+auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember;
 
 class method_dec_also_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
         DataType return_type;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
+        method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -766,16 +784,16 @@ class method_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
+auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember;
 
 class method_dec_first_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
         DataType return_type;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
+        method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -792,16 +810,16 @@ class method_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
+auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember;
 
 class method_dec_only_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
         Formals arguments;
         DataType return_type;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) {
+        method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -818,7 +836,7 @@ class method_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Actions actions_) -> StructMember;
+auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) -> StructMember;
 
 class method_dec_empty_sm_class : public StructMember_class {
     protected:
@@ -874,9 +892,9 @@ class tcm_dec_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -894,7 +912,7 @@ class tcm_dec_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember;
 
 class tcm_dec_also_sm_class : public StructMember_class {
     protected:
@@ -902,9 +920,9 @@ class tcm_dec_also_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -922,7 +940,7 @@ class tcm_dec_also_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember;
 
 class tcm_dec_first_sm_class : public StructMember_class {
     protected:
@@ -930,9 +948,9 @@ class tcm_dec_first_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -950,7 +968,7 @@ class tcm_dec_first_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember;
 
 class tcm_dec_only_sm_class : public StructMember_class {
     protected:
@@ -958,9 +976,9 @@ class tcm_dec_only_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
-        Actions actions_;
+        ActionBlock actions_;
     public:
-        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) {
+        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
             this->id = id;
             this->arguments = arguments;
             this->return_type = return_type;
@@ -978,7 +996,7 @@ class tcm_dec_only_sm_class : public StructMember_class {
 #endif
 };
 
-auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, Actions actions_) -> StructMember;
+auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) -> StructMember;
 
 class tcm_dec_empty_sm_class : public StructMember_class {
     protected:
@@ -1077,9 +1095,9 @@ auto constraint_def_sm(Expression constraint_expr) -> StructMember;
 class on_event_sm_class : public StructMember_class {
     protected:
         Expression event_name;
-        Actions action_block;
+        ActionBlock action_block;
     public:
-        on_event_sm_class(Expression event_name, Actions action_block) {
+        on_event_sm_class(Expression event_name, ActionBlock action_block) {
             this->event_name = event_name;
             this->action_block = action_block;
         }
@@ -1094,7 +1112,7 @@ class on_event_sm_class : public StructMember_class {
 #endif
 };
 
-auto on_event_sm(Expression event_name, Actions action_block) -> StructMember;
+auto on_event_sm(Expression event_name, ActionBlock action_block) -> StructMember;
 
 class simple_event_dec_sm_class : public StructMember_class {
     protected:
@@ -1205,9 +1223,9 @@ auto event_ref_expr(Expression event_name) -> Expression;
 class action_attached_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
-        Actions actions;
+        ActionBlock actions;
     public:
-        action_attached_temporal_expr_class(Expression temporal, Actions actions) {
+        action_attached_temporal_expr_class(Expression temporal, ActionBlock actions) {
             this->temporal = temporal;
             this->actions = actions;
         }
@@ -1222,7 +1240,7 @@ class action_attached_temporal_expr_class : public Expression_class {
 #endif
 };
 
-auto action_attached_temporal_expr(Expression temporal, Actions actions) -> Expression;
+auto action_attached_temporal_expr(Expression temporal, ActionBlock actions) -> Expression;
 
 class not_temporal_expr_class : public Expression_class {
     protected:
@@ -3308,9 +3326,9 @@ class new_allocate_expr_class : public Expression_class {
     protected:
         Expression struct_type_block;
         Symbol_ scoped_name;
-        Actions actions;
+        ActionBlock actions;
     public:
-        new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, Actions actions) {
+        new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions) {
             this->struct_type_block = struct_type_block;
             this->scoped_name = scoped_name;
             this->actions = actions;
@@ -3326,14 +3344,14 @@ class new_allocate_expr_class : public Expression_class {
 #endif
 };
 
-auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, Actions actions) -> Expression;
+auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions) -> Expression;
 
 class new_nameless_allocate_expr_class : public Expression_class {
     protected:
         Expression struct_type_block;
-        Actions actions;
+        ActionBlock actions;
     public:
-        new_nameless_allocate_expr_class(Expression struct_type_block, Actions actions) {
+        new_nameless_allocate_expr_class(Expression struct_type_block, ActionBlock actions) {
             this->struct_type_block = struct_type_block;
             this->actions = actions;
         }
@@ -3348,7 +3366,7 @@ class new_nameless_allocate_expr_class : public Expression_class {
 #endif
 };
 
-auto new_nameless_allocate_expr(Expression struct_type_block, Actions actions) -> Expression;
+auto new_nameless_allocate_expr(Expression struct_type_block, ActionBlock actions) -> Expression;
 
 class struct_type_expr_with_opt_action_block_class : public Expression_class {
     protected:
@@ -4533,10 +4551,10 @@ auto release_act(Expression hdl_or_port) -> Action;
 class if_then_else_act_class : public Action_class {
     protected:
         Expression condition;
-        Actions actions;
-        Actions else_clause;
+        ActionBlock actions;
+        ActionBlock else_clause;
     public:
-        if_then_else_act_class(Expression condition, Actions actions, Actions else_clause) {
+        if_then_else_act_class(Expression condition, ActionBlock actions, ActionBlock else_clause) {
             this->condition = condition;
             this->actions = actions;
             this->else_clause = else_clause;
@@ -4552,15 +4570,15 @@ class if_then_else_act_class : public Action_class {
 #endif
 };
 
-auto if_then_else_act(Expression condition, Actions actions, Actions else_clause) -> Action;
+auto if_then_else_act(Expression condition, ActionBlock actions, ActionBlock else_clause) -> Action;
 
 class non_term_if_then_else_act_class : public Action_class {
     protected:
         Expression condition;
-        Actions actions;
+        ActionBlock actions;
         Action else_clause;
     public:
-        non_term_if_then_else_act_class(Expression condition, Actions actions, Action else_clause) {
+        non_term_if_then_else_act_class(Expression condition, ActionBlock actions, Action else_clause) {
             this->condition = condition;
             this->actions = actions;
             this->else_clause = else_clause;
@@ -4576,7 +4594,7 @@ class non_term_if_then_else_act_class : public Action_class {
 #endif
 };
 
-auto non_term_if_then_else_act(Expression condition, Actions actions, Action else_clause) -> Action;
+auto non_term_if_then_else_act(Expression condition, ActionBlock actions, Action else_clause) -> Action;
 
 class case_bool_act_class : public Action_class {
     protected:
@@ -4601,9 +4619,9 @@ auto case_bool_act(Cases bool_case_branch_items) -> Action;
 class case_bool_branch_item_case_class : public Case_class {
     protected:
         Expression bool_exp;
-        Actions actions;
+        ActionBlock actions;
     public:
-        case_bool_branch_item_case_class(Expression bool_exp, Actions actions) {
+        case_bool_branch_item_case_class(Expression bool_exp, ActionBlock actions) {
             this->bool_exp = bool_exp;
             this->actions = actions;
         }
@@ -4618,7 +4636,7 @@ class case_bool_branch_item_case_class : public Case_class {
 #endif
 };
 
-auto case_bool_branch_item_case(Expression bool_exp, Actions actions) -> Case;
+auto case_bool_branch_item_case(Expression bool_exp, ActionBlock actions) -> Case;
 
 class case_labeled_act_class : public Action_class {
     protected:
@@ -4645,9 +4663,9 @@ auto case_labeled_act(Expression exp, Cases labeled_case_branch_items) -> Action
 class case_labeled_branch_item_case_class : public Case_class {
     protected:
         Expression label_exp;
-        Actions actions;
+        ActionBlock actions;
     public:
-        case_labeled_branch_item_case_class(Expression label_exp, Actions actions) {
+        case_labeled_branch_item_case_class(Expression label_exp, ActionBlock actions) {
             this->label_exp = label_exp;
             this->actions = actions;
         }
@@ -4662,13 +4680,13 @@ class case_labeled_branch_item_case_class : public Case_class {
 #endif
 };
 
-auto case_labeled_branch_item_case(Expression label_exp, Actions actions) -> Case;
+auto case_labeled_branch_item_case(Expression label_exp, ActionBlock actions) -> Case;
 
 class default_case_branch_item_case_class : public Case_class {
     protected:
-        Actions actions;
+        ActionBlock actions;
     public:
-        default_case_branch_item_case_class(Actions actions) {
+        default_case_branch_item_case_class(ActionBlock actions) {
             this->actions = actions;
         }
 
@@ -4682,7 +4700,7 @@ class default_case_branch_item_case_class : public Case_class {
 #endif
 };
 
-auto default_case_branch_item_case(Actions actions) -> Case;
+auto default_case_branch_item_case(ActionBlock actions) -> Case;
 
 class method_call_act_class : public Action_class {
     protected:
@@ -4767,9 +4785,9 @@ auto return_act(Expression exp) -> Action;
 class while_loop_act_class : public Action_class {
     protected:
         Expression bool_expr;
-        Actions actions;
+        ActionBlock actions;
     public:
-        while_loop_act_class(Expression bool_expr, Actions actions) {
+        while_loop_act_class(Expression bool_expr, ActionBlock actions) {
             this->bool_expr = bool_expr;
             this->actions = actions;
         }
@@ -4784,14 +4802,14 @@ class while_loop_act_class : public Action_class {
 #endif
 };
 
-auto while_loop_act(Expression bool_expr, Actions actions) -> Action;
+auto while_loop_act(Expression bool_expr, ActionBlock actions) -> Action;
 
 class repeat_until_loop_act_class : public Action_class {
     protected:
         Expression bool_expr;
-        Actions actions;
+        ActionBlock actions;
     public:
-        repeat_until_loop_act_class(Expression bool_expr, Actions actions) {
+        repeat_until_loop_act_class(Expression bool_expr, ActionBlock actions) {
             this->bool_expr = bool_expr;
             this->actions = actions;
         }
@@ -4806,7 +4824,7 @@ class repeat_until_loop_act_class : public Action_class {
 #endif
 };
 
-auto repeat_until_loop_act(Expression bool_expr, Actions actions) -> Action;
+auto repeat_until_loop_act(Expression bool_expr, ActionBlock actions) -> Action;
 
 class for_each_loop_act_class : public Action_class {
     protected:
@@ -4815,9 +4833,9 @@ class for_each_loop_act_class : public Action_class {
         Boolean is_reverese;
         Expression list_exp;
         Expression idx_exp;
-        Actions actions;
+        ActionBlock actions;
     public:
-        for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) {
+        for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions) {
             this->type_id = type_id;
             this->iterated_name = iterated_name;
             this->is_reverese = is_reverese;
@@ -4836,7 +4854,7 @@ class for_each_loop_act_class : public Action_class {
 #endif
 };
 
-auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, Actions actions) -> Action;
+auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions) -> Action;
 
 class for_range_loop_act_class : public Action_class {
     protected:
@@ -4845,9 +4863,9 @@ class for_range_loop_act_class : public Action_class {
         Expression to_expr;
         Expression step_expr;
         Boolean is_down;
-        Actions actions;
+        ActionBlock actions;
     public:
-        for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) {
+        for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions) {
             this->var_id = var_id;
             this->from_expr = from_expr;
             this->to_expr = to_expr;
@@ -4866,16 +4884,16 @@ class for_range_loop_act_class : public Action_class {
 #endif
 };
 
-auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) -> Action;
+auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions) -> Action;
 
 class for_loop_act_class : public Action_class {
     protected:
         Action init_act;
         Expression bool_expr;
         Action step_act;
-        Actions actions;
+        ActionBlock actions;
     public:
-        for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, Actions actions) {
+        for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions) {
             this->init_act = init_act;
             this->bool_expr = bool_expr;
             this->step_act = step_act;
@@ -4892,15 +4910,15 @@ class for_loop_act_class : public Action_class {
 #endif
 };
 
-auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, Actions actions) -> Action;
+auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions) -> Action;
 
 class for_each_line_in_file_act_class : public Action_class {
     protected:
         Expression line_it_name;
         Expression file_path_expr;
-        Actions actions;
+        ActionBlock actions;
     public:
-        for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, Actions actions) {
+        for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, ActionBlock actions) {
             this->line_it_name = line_it_name;
             this->file_path_expr = file_path_expr;
             this->actions = actions;
@@ -4916,15 +4934,15 @@ class for_each_line_in_file_act_class : public Action_class {
 #endif
 };
 
-auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, Actions actions) -> Action;
+auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_expr, ActionBlock actions) -> Action;
 
 class for_each_file_in_files_act_class : public Action_class {
     protected:
         Expression line_it_name;
         Expression file_pattern_exp;
-        Actions actions;
+        ActionBlock actions;
     public:
-        for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, Actions actions) {
+        for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions) {
             this->line_it_name = line_it_name;
             this->file_pattern_exp = file_pattern_exp;
             this->actions = actions;
@@ -4940,7 +4958,7 @@ class for_each_file_in_files_act_class : public Action_class {
 #endif
 };
 
-auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, Actions actions) -> Action;
+auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions) -> Action;
 
 class break_act_class : public Action_class {
     protected:
@@ -4978,6 +4996,106 @@ class continue_act_class : public Action_class {
 
 auto continue_act() -> Action;
 
+class emit_act_class : public Action_class {
+    protected:
+        Expression event_id;
+    public:
+        emit_act_class(Expression event_id) {
+            this->event_id = event_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef emit_act_EXTRAS
+    emit_act_EXTRAS
+#endif
+};
+
+auto emit_act(Expression event_id) -> Action;
+
+class sync_act_class : public Action_class {
+    protected:
+        Expression event_id;
+    public:
+        sync_act_class(Expression event_id) {
+            this->event_id = event_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef sync_act_EXTRAS
+    sync_act_EXTRAS
+#endif
+};
+
+auto sync_act(Expression event_id) -> Action;
+
+class wait_act_class : public Action_class {
+    protected:
+        Expression event_id;
+    public:
+        wait_act_class(Expression event_id) {
+            this->event_id = event_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef wait_act_EXTRAS
+    wait_act_EXTRAS
+#endif
+};
+
+auto wait_act(Expression event_id) -> Action;
+
+class all_of_act_class : public Action_class {
+    protected:
+        ActionBlocks action_blocks;
+    public:
+        all_of_act_class(ActionBlocks action_blocks) {
+            this->action_blocks = action_blocks;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef all_of_act_EXTRAS
+    all_of_act_EXTRAS
+#endif
+};
+
+auto all_of_act(ActionBlocks action_blocks) -> Action;
+
+class first_of_act_class : public Action_class {
+    protected:
+        ActionBlocks action_blocks;
+    public:
+        first_of_act_class(ActionBlocks action_blocks) {
+            this->action_blocks = action_blocks;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef first_of_act_EXTRAS
+    first_of_act_EXTRAS
+#endif
+};
+
+auto first_of_act(ActionBlocks action_blocks) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:
@@ -4995,6 +5113,26 @@ class no_action_class : public Action_class {
 };
 
 auto no_action() -> Action;
+
+class action_block_class : public ActionBlock_class {
+    protected:
+        Actions actions;
+    public:
+        action_block_class(Actions actions) {
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef ActionBlock_SHARED_EXTRAS
+    ActionBlock_SHARED_EXTRAS
+#endif
+#ifdef action_block_EXTRAS
+    action_block_EXTRAS
+#endif
+};
+
+auto action_block(Actions actions) -> ActionBlock;
 
  
 }
