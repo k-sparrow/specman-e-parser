@@ -1513,6 +1513,20 @@ auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
     return Expression(new binary_remainder_expr_class(e1, e2));
 }
 
+auto ternarty_assign_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "ternarty_assign_expr" << std::endl;
+    if(bool_exp)
+        bool_exp->dump(stream, n+2);
+    if(true_expr)
+        true_expr->dump(stream, n+2);
+    if(false_expr)
+        false_expr->dump(stream, n+2);
+}
+
+auto ternarty_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression {
+    return Expression(new ternarty_assign_expr_class(bool_exp, true_expr, false_expr));
+}
+
 auto less_then_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "less_then_expr" << std::endl;
     if(e1)

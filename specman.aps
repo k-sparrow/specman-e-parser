@@ -189,6 +189,7 @@ module Specman begin
         constructor binary_div_expr(e1: Expression; e2: Expression) : Expression;
         constructor binary_remainder_expr(e1: Expression; e2: Expression) : Expression;
 
+        constructor ternarty_assign_expr(bool_exp : Expression; true_expr: Expression; false_expr: Expression) : Expression;
 
 
         constructor less_then_expr(e1: Expression; e2: Expression) : Expression;

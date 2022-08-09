@@ -2870,6 +2870,30 @@ class binary_remainder_expr_class : public Expression_class {
 
 auto binary_remainder_expr(Expression e1, Expression e2) -> Expression;
 
+class ternarty_assign_expr_class : public Expression_class {
+    protected:
+        Expression bool_exp;
+        Expression true_expr;
+        Expression false_expr;
+    public:
+        ternarty_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr) {
+            this->bool_exp = bool_exp;
+            this->true_expr = true_expr;
+            this->false_expr = false_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef ternarty_assign_expr_EXTRAS
+    ternarty_assign_expr_EXTRAS
+#endif
+};
+
+auto ternarty_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression;
+
 class less_then_expr_class : public Expression_class {
     protected:
         Expression e1;

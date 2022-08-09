@@ -330,6 +330,7 @@
 %precedence ID
 %left ELSE THEN
 %precedence EXEC  
+%precedence TERNARY  
 %left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %left PLUS MINUS
 %left DIV MUL REMAINDER
@@ -546,6 +547,9 @@
 %nterm <elex::Expression>   arithmetic_expression
 %nterm <elex::Expression>   unary_arithmetic_expression
 %nterm <elex::Expression>   binary_arithmetic_expression
+
+/* Ternary Expression */
+%nterm <elex::Expression>   ternary_assignment_expression
 
 /* Temporal Expressions */
 %nterm <elex::Expression>   temporal_expression
@@ -2123,6 +2127,9 @@ operator :
 
   | arithmetic_expression      
     { $$ = $1; }
+  
+  | ternary_assignment_expression
+    { $$ = $1; }
 
   | method_call_expression     
     { $$ = $1; }
@@ -2252,6 +2259,9 @@ comparison_expression :
     | expression LOGICAL_NOT_OP BTWS_NOT_OP expression { $$ = elex::str_does_not_match_expr($1, $4); } // "str" !~ "pattern"
     ;
 
+ternary_assignment_expression : 
+  expression[bool_exp] TERNARY expression[if_choice_exp] COLON expression[else_choice_exp] %prec LT_OP
+  { $$ = elex::ternarty_assign_expr($bool_exp, $if_choice_exp, $else_choice_exp); }
     
 list_concatenation_expression : 
     LBRACE list_concat_expressions RBRACE { $$ = elex::list_concat_expr($2); }
