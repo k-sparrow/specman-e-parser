@@ -499,17 +499,21 @@
 %nterm <elex::Action>      for_file_in_files_action
 
 
+/* Time Consuming Actions */
+%nterm <elex::Action>      time_consuming_action
+/*------- EMIT -------*/
+%nterm <elex::Action>      emit_action
+/*------- SYNC -------*/
+%nterm <elex::Action>      sync_action
+/*------- WAIT -------*/
+%nterm <elex::Action>      wait_action
+/*--- ALL/FIRST-OF ---*/
+%nterm <elex::Action>      multi_threaded_action
+
+
 /* Control Flow Actions */
 %nterm <elex::Action>      control_flow_action
 
-/* Control Flow Actions */
-%nterm <elex::Action>      time_consuming_action
-%nterm <elex::Action>      emit_action
-%nterm <elex::Action>      sync_action
-%nterm <elex::Action>      wait_action
-%nterm <elex::Action>      multi_threaded_action
-
-/*------- EMIT -------*/
 /* Expressions */
 %nterm <elex::Expression>   expression
 %nterm <elex::Expression>   operator
@@ -1442,9 +1446,15 @@ temporal_expression :
       { 
           $$ = elex::temporal_expr($temporal, $sample_event); 
       }
+
     | AT hier_ref_expression 
       {
           $$ = elex::event_ref_expr($2);
+      }
+
+    | CYCLE 
+      {
+          $$ = elex::cycle_temporal_expr();
       }
     ;
 
