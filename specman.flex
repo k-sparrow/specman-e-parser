@@ -24,6 +24,8 @@ int start_condition = INITIAL;
 /* ------------------ Keywords ------------------ */
 
 while       (while)
+repeat       (repeat)
+until       (until)
 for         (for)
 in          (in)
 do          (do)
@@ -245,6 +247,8 @@ mvl            {mvl_single}|{sized_mvl}
 
     /* ------------------ Keywords ------------------ */
 {while}     { return yy::parser::make_WHILE(Location()); }
+{repeat}    { return yy::parser::make_REPEAT(Location()); }
+{until}     { return yy::parser::make_UNTIL(Location()); }
 {for}       { return yy::parser::make_FOR(Location()); }
 {in}        { return yy::parser::make_IN(Location()); }
 {do}        { return yy::parser::make_DO(Location()); }

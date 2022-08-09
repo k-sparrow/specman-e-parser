@@ -2505,16 +2505,28 @@ auto return_act(Expression exp) -> Action {
     return Action(new return_act_class(exp));
 }
 
-auto while_loop_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "while_loop_action" << std::endl;
+auto while_loop_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "while_loop_act" << std::endl;
     if(bool_expr)
         bool_expr->dump(stream, n+2);
     if(actions)
         actions->dump(stream, n+2);
 }
 
-auto while_loop_action(Expression bool_expr, Actions actions) -> Action {
-    return Action(new while_loop_action_class(bool_expr, actions));
+auto while_loop_act(Expression bool_expr, Actions actions) -> Action {
+    return Action(new while_loop_act_class(bool_expr, actions));
+}
+
+auto repeat_until_loop_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "repeat_until_loop_act" << std::endl;
+    if(bool_expr)
+        bool_expr->dump(stream, n+2);
+    if(actions)
+        actions->dump(stream, n+2);
+}
+
+auto repeat_until_loop_act(Expression bool_expr, Actions actions) -> Action {
+    return Action(new repeat_until_loop_act_class(bool_expr, actions));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

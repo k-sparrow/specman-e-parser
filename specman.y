@@ -121,6 +121,8 @@
 
 /* ------------------ Keywords ------------------ */
 %token WHILE
+%token REPEAT
+%token UNTIL
 %token FOR
 %token IN 
 %token DO 
@@ -456,6 +458,7 @@
 %nterm <elex::Action>  iterative_action
 %nterm <elex::Action>  while_loop_action
 %nterm <elex::Expression>  while_header_expr
+%nterm <elex::Action>  repeat_until_loop_action
 
 
 /* Expressions */
@@ -1776,11 +1779,14 @@ label_case_item_expression :
 iterative_action : 
     while_loop_action 
     { $$ = $1; }
+  
+  | repeat_until_loop_action
+    { $$ = $1; }
   ;
 
 while_loop_action :
-  while_header_expr[bool_expr] action_block[actions]
-  { $$ = elex::while_loop_action($bool_expr, $actions); }
+  while_header_expr[bool_exp] action_block[actions]
+  { $$ = elex::while_loop_act($bool_exp, $actions); }
   ;
 
 while_header_expr : 
@@ -1790,6 +1796,12 @@ while_header_expr :
   | WHILE logical_expression DO
     { $$ = $2; }
   ;
+
+repeat_until_loop_action :
+  REPEAT action_block[actions] UNTIL logical_expression[bool_exp]
+  { $$ = elex::repeat_until_loop_act($bool_exp, $actions); }
+  ;
+
 method_call_action : 
     method_call_expression 
     { $$ = elex::method_call_act($1); }
