@@ -179,6 +179,8 @@
 %token FAIL 
 %token EVENTUALLY
 %token START
+%token COMPUTE
+%token RETURN
 %token WAIT
 %token SYNC
 %token ONLY
@@ -1770,6 +1772,15 @@ method_call_action :
 
   | START method_call_expression 
     { $$ = elex::start_tcm_call_act($2); }
+  
+  | COMPUTE method_call_expression
+    { $$ = elex::compute_method_call_act($2); }
+  
+  | RETURN expression
+    { $$ = elex::return_act($2); }
+
+  | RETURN 
+    { $$ = elex::return_act(nullptr); }
   ;
 
 expression : 

@@ -79,6 +79,8 @@ consume	    (consume)
 fail	    (fail) 
 eventually	(eventually)
 start	    (start)
+compute	    (compute)
+return_	    (return)
 wait	    (wait)
 sync	    (sync)
 only	    (only)
@@ -300,6 +302,8 @@ mvl            {mvl_single}|{sized_mvl}
 {fail}	    { return yy::parser::make_FAIL(Location()); } 
 {eventually} { return yy::parser::make_EVENTUALLY(Location()); }
 {start}	    { return yy::parser::make_START(Location()); }
+{compute}   { return yy::parser::make_COMPUTE(Location()); }
+{return_}   { return yy::parser::make_RETURN(Location()); }
 {wait}	    { return yy::parser::make_WAIT(Location()); }
 {sync}	    { return yy::parser::make_SYNC(Location()); }
 {only}	    { return yy::parser::make_ONLY(Location()); }

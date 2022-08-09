@@ -2485,6 +2485,26 @@ auto start_tcm_call_act(Expression method_call_expr) -> Action {
     return Action(new start_tcm_call_act_class(method_call_expr));
 }
 
+auto compute_method_call_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "compute_method_call_act" << std::endl;
+    if(method_call_expr)
+        method_call_expr->dump(stream, n+2);
+}
+
+auto compute_method_call_act(Expression method_call_expr) -> Action {
+    return Action(new compute_method_call_act_class(method_call_expr));
+}
+
+auto return_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "return_act" << std::endl;
+    if(exp)
+        exp->dump(stream, n+2);
+}
+
+auto return_act(Expression exp) -> Action {
+    return Action(new return_act_class(exp));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

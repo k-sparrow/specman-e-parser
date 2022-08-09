@@ -304,6 +304,8 @@ module Specman begin
         
         constructor method_call_act(method_call_expr: Expression) : Action;
         constructor start_tcm_call_act(method_call_expr: Expression) : Action;
+        constructor compute_method_call_act(method_call_expr: Expression) : Action;
+        constructor return_act(exp: Expression) : Action;
 
         constructor no_action() : Action;
 end;

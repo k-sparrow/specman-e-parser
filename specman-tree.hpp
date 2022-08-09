@@ -4724,6 +4724,46 @@ class start_tcm_call_act_class : public Action_class {
 
 auto start_tcm_call_act(Expression method_call_expr) -> Action;
 
+class compute_method_call_act_class : public Action_class {
+    protected:
+        Expression method_call_expr;
+    public:
+        compute_method_call_act_class(Expression method_call_expr) {
+            this->method_call_expr = method_call_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef compute_method_call_act_EXTRAS
+    compute_method_call_act_EXTRAS
+#endif
+};
+
+auto compute_method_call_act(Expression method_call_expr) -> Action;
+
+class return_act_class : public Action_class {
+    protected:
+        Expression exp;
+    public:
+        return_act_class(Expression exp) {
+            this->exp = exp;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef return_act_EXTRAS
+    return_act_EXTRAS
+#endif
+};
+
+auto return_act(Expression exp) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:
