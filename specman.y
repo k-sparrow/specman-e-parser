@@ -1765,7 +1765,11 @@ label_case_item_expression :
   ;
 
 method_call_action : 
-  method_call_expression { $$ = elex::method_call_act($1); }
+    method_call_expression 
+    { $$ = elex::method_call_act($1); }
+
+  | START method_call_expression 
+    { $$ = elex::start_tcm_call_act($2); }
   ;
 
 expression : 

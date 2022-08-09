@@ -303,5 +303,7 @@ module Specman begin
         constructor default_case_branch_item_case(actions: Actions) : Case;
         
         constructor method_call_act(method_call_expr: Expression) : Action;
+        constructor start_tcm_call_act(method_call_expr: Expression) : Action;
+
         constructor no_action() : Action;
 end;

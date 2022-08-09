@@ -4704,6 +4704,26 @@ class method_call_act_class : public Action_class {
 
 auto method_call_act(Expression method_call_expr) -> Action;
 
+class start_tcm_call_act_class : public Action_class {
+    protected:
+        Expression method_call_expr;
+    public:
+        start_tcm_call_act_class(Expression method_call_expr) {
+            this->method_call_expr = method_call_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef start_tcm_call_act_EXTRAS
+    start_tcm_call_act_EXTRAS
+#endif
+};
+
+auto start_tcm_call_act(Expression method_call_expr) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:
