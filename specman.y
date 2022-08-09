@@ -127,6 +127,10 @@
 %token REVERSE
 %token IN 
 %token DO 
+%token FROM
+%token TO
+%token DOWN
+%token STEP
 %token WITH
 %token WHEN
 %token STRUCT	  
@@ -333,6 +337,7 @@
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
 %nterm <elex::Boolean>    OPT_REVERSE
+%nterm <elex::Boolean>    OPT_DOWN
 
 /* ------------------  rules  ------------------ */
 %nterm <elex::Module>     module
@@ -469,6 +474,10 @@
 /*------ FOR-EACH -----*/
 %nterm <elex::Action>      for_each_loop_action
 %nterm <elex::Expression>  opt_using_index_branch_expr
+
+/*------ FOR-FROM -----*/
+%nterm <elex::Action>      for_from_to_loop_action
+%nterm <elex::Expression>  opt_step
 
 
 /* Expressions */
@@ -1796,6 +1805,9 @@ iterative_action :
 
   | for_each_loop_action
     { $$ = $1; }
+
+  | for_from_to_loop_action
+    { $$ = $1;}
   ;
 
 while_loop_action :
@@ -1841,6 +1853,25 @@ OPT_REVERSE :
 
 // [DO]
 OPT_DO : %empty | DO ;
+
+// for var-name from from-exp to [down] to-exp [step step-exp] [do] {action; ...}
+for_from_to_loop_action :
+  FOR ID[var_name] FROM expression[from_exp] OPT_DOWN[down] TO expression[to_exp] opt_step[step] OPT_DO action_block[actions]
+  { $$ = elex::for_range_loop_act($var_name, $from_exp, $to_exp, $step, $down, $actions); }
+  ;
+
+OPT_DOWN : 
+    %empty { $$ = false; }
+  | DOWN   { $$ = true; }
+  ;
+
+opt_step : 
+    %empty 
+    { $$ = nullptr; }
+  
+  | STEP expression
+    { $$ = $2; }
+  ;
 
 method_call_action : 
     method_call_expression 

@@ -2550,14 +2550,20 @@ auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_re
 
 auto for_range_loop_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "for_range_loop_act" << std::endl;
-    if(bool_expr)
-        bool_expr->dump(stream, n+2);
+    dump_Symbol_(stream, n+2, var_id);
+    if(from_expr)
+        from_expr->dump(stream, n+2);
+    if(to_expr)
+        to_expr->dump(stream, n+2);
+    if(step_expr)
+        step_expr->dump(stream, n+2);
+    dump_Boolean(stream, n+2, is_down);
     if(actions)
         actions->dump(stream, n+2);
 }
 
-auto for_range_loop_act(Expression bool_expr, Actions actions) -> Action {
-    return Action(new for_range_loop_act_class(bool_expr, actions));
+auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) -> Action {
+    return Action(new for_range_loop_act_class(var_id, from_expr, to_expr, step_expr, is_down, actions));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

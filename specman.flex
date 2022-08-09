@@ -29,7 +29,10 @@ until       (until)
 for         (for)
 reverse     (reverse)
 in          (in)
+from        (from)
+down        (down)
 do          (do)
+to          (to)
 with        (with)
 when        (when)
 struct	    (struct)
@@ -253,7 +256,10 @@ mvl            {mvl_single}|{sized_mvl}
 {for}       { return yy::parser::make_FOR(Location()); }
 {reverse}   { return yy::parser::make_REVERSE(Location()); }
 {in}        { return yy::parser::make_IN(Location()); }
+{from}      { return yy::parser::make_FROM(Location()); }
+{down}      { return yy::parser::make_DOWN(Location()); }
 {do}        { return yy::parser::make_DO(Location()); }
+{to}        { return yy::parser::make_TO(Location()); }
 {with}      { return yy::parser::make_WITH(Location()); }
 {when}      { return yy::parser::make_WHEN(Location()); }
 {struct}	{ return yy::parser::make_STRUCT(Location()); }

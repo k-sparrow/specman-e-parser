@@ -4840,11 +4840,19 @@ auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_re
 
 class for_range_loop_act_class : public Action_class {
     protected:
-        Expression bool_expr;
+        Symbol_ var_id;
+        Expression from_expr;
+        Expression to_expr;
+        Expression step_expr;
+        Boolean is_down;
         Actions actions;
     public:
-        for_range_loop_act_class(Expression bool_expr, Actions actions) {
-            this->bool_expr = bool_expr;
+        for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) {
+            this->var_id = var_id;
+            this->from_expr = from_expr;
+            this->to_expr = to_expr;
+            this->step_expr = step_expr;
+            this->is_down = is_down;
             this->actions = actions;
         }
 
@@ -4858,7 +4866,7 @@ class for_range_loop_act_class : public Action_class {
 #endif
 };
 
-auto for_range_loop_act(Expression bool_expr, Actions actions) -> Action;
+auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, Actions actions) -> Action;
 
 class no_action_class : public Action_class {
     protected:
