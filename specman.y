@@ -323,6 +323,7 @@
 %token VAR 
 %token FORCE 
 %token RELEASE 
+%token INSTANCE 
 
 
 %token LPAREN      
@@ -459,9 +460,8 @@
 %nterm <elex::CovergroupExtensionID>  covergroup_extension_id
 %nterm <elex::CovergroupExtensionID>  opt_covergroup_extension_id
 
-%nterm <elex::StructMember>  scalar_field_declaration
-%nterm <elex::StructMember>  non_decorated_scalar_field_declaration
-%nterm <elex::StructMember>  list_field_declaration
+%nterm <elex::FieldStructMember>  scalar_field_declaration
+%nterm <elex::FieldStructMember>  non_decorated_scalar_field_declaration
 %nterm <elex::e_physical_dont_gen>  do_not_gen_physical
 
 /* Actions */
@@ -648,8 +648,6 @@
 %nterm <elex::DataType>     predefined_scalar_datatype   
 
 %nterm <elex::Expression>   constraint_expression
-%nterm <elex::Expression>   scoped_type_identifier_expression
-%nterm <elex::Expression>   scoped_scalar_type_identifier_expression
 %nterm <elex::Expression>   terminated_constraint_expression
 %nterm <elex::Expressions>  constriant_expression_block
 %nterm <elex::Expression>   method_call_expression
@@ -716,7 +714,13 @@ struct_statement :
   ;
 
 unit_statement   : 
-    UNIT ID LBRACE struct_members RBRACE   { $$ = elex::unit($2, $4); }
+    UNIT ID[unit_type] 
+    LBRACE struct_members[members] RBRACE   
+    { $$ = elex::unit_st($unit_type, $members); }
+
+  | UNIT ID[unit_type] LIKE ID[base_unit_type] 
+    LBRACE struct_members[members]  RBRACE   
+    { $$ = elex::unit_like_st($unit_type, $base_unit_type, $members); }
     ;
 
 package_statement : 
@@ -1246,8 +1250,19 @@ opt_expect_assume_modifier :
   ;
 
 field_declaration : 
-      scalar_field_declaration      { $$ = $1; }
-    ;
+    scalar_field_declaration      
+    { 
+      $1->set_is_instance(false);
+      $$ = elex::field_sm($1); 
+    }
+
+  | scalar_field_declaration IS INSTANCE 
+    { 
+      $1->set_is_instance(true);
+      $$ = elex::field_sm($1); 
+    }
+  
+  ;
 
 do_not_gen_physical:
     REMAINDER                { $$ = ePhysical; }
@@ -1274,22 +1289,16 @@ scalar_field_declaration :
       auto is_physical = static_cast<elex::Boolean>(ePhysical & $gen_phy);
       auto do_not_gen  = static_cast<elex::Boolean>(eDoNotGen & $gen_phy);
 
-      // handle scalar field declaration
-      if(scalar_field){
-        scalar_field->set_is_physical(is_physical);
-        scalar_field->set_do_not_gen(do_not_gen);
-      }
-
-      // handle list field declaration
-      else if(list_field){
-        list_field->set_is_physical(is_physical);
-        list_field->set_do_not_gen(do_not_gen);
+      // handle scalar|list field declaration
+      if(scalar_field != nullptr || list_field != nullptr){
+        $$->set_is_physical(is_physical);
+        $$->set_do_not_gen(do_not_gen);
       }
 
       // handle associative list field declaration
       else if(assoc_list_field){
         if(do_not_gen){
-          assoc_list_field->set_is_physical(is_physical);
+          $$->set_is_physical(is_physical);
         }
         else {
           error(@1, "Associative lists must not be generatable!");
@@ -1311,22 +1320,22 @@ non_decorated_scalar_field_declaration :
     { 
       // if its a list type
       if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) 
-        $$ = elex::struct_field_list_sm($name, nullptr, $type_, false, false);
+        $$ = elex::struct_field_list_sm($name, nullptr, $type_);
 
       // or else its a associative list type
       else if (std::dynamic_pointer_cast<assoc_list_type_dt_class>($type_)) 
-        $$ = elex::struct_field_assoc_list_sm($name, $type_, false);
+        $$ = elex::struct_field_assoc_list_sm($name, $type_);
       
       // else it's just a scalar field
       else // construct a scalar struct field
-        $$ = elex::struct_field_sm($name, $type_, false, false); 
+        $$ = elex::struct_field_sm($name, $type_); 
     }
 
   // additional syntax specialization for listed fields
   | ID[name] LBRACKET id_expr[len] RBRACKET COLON scoped_type_identifier_data_type[type_] 
     { 
       if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) {
-        $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
+        $$ = elex::struct_field_list_sm($name, $len, $type_);
       }
       else {
         error(@1, "Badly constructed list struct field, expecting list base type, got scalar or associative list!");
@@ -1337,7 +1346,7 @@ non_decorated_scalar_field_declaration :
   | ID[name] LBRACKET int_expression[len] RBRACKET COLON scoped_type_identifier_data_type[type_] 
     {  
       if(std::dynamic_pointer_cast<list_type_dt_class>($type_)) {
-        $$ = elex::struct_field_list_sm($name, $len, $type_, false, false);
+        $$ = elex::struct_field_list_sm($name, $len, $type_);
       }
       else {
         error(@1, "Badly constructed list struct field, expecting list base type, got scalar or associative list!");

@@ -175,15 +175,27 @@ auto package(Symbol_ pkg_name) -> Statement {
     return Statement(new package_class(pkg_name));
 }
 
-auto unit_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "unit" << std::endl;
+auto unit_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "unit_st" << std::endl;
     dump_Symbol_(stream, n+2, unit_name);
     if(members)
         members->dump(stream, n+2);
 }
 
-auto unit(Symbol_ unit_name, StructMembers members) -> Statement {
-    return Statement(new unit_class(unit_name, members));
+auto unit_st(Symbol_ unit_name, StructMembers members) -> Statement {
+    return Statement(new unit_st_class(unit_name, members));
+}
+
+auto unit_like_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "unit_like_st" << std::endl;
+    dump_Symbol_(stream, n+2, unit_name);
+    dump_Symbol_(stream, n+2, base_unit_name);
+    if(members)
+        members->dump(stream, n+2);
+}
+
+auto unit_like_st(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members) -> Statement {
+    return Statement(new unit_like_st_class(unit_name, base_unit_name, members));
 }
 
 auto struct_st_class::dump(std::ostream& stream, int n) -> void {
@@ -358,17 +370,25 @@ auto formal(Symbol_ name, DataType type_) -> Formal {
     return Formal(new formal_class(name, type_));
 }
 
+auto field_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "field_sm" << std::endl;
+    if(field)
+        field->dump(stream, n+2);
+}
+
+auto field_sm(FieldStructMember field) -> StructMember {
+    return StructMember(new field_sm_class(field));
+}
+
 auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_field_sm" << std::endl;
     dump_Symbol_(stream, n+2, id);
     if(type)
         type->dump(stream, n+2);
-    dump_Boolean(stream, n+2, is_physical);
-    dump_Boolean(stream, n+2, do_not_gen);
 }
 
-auto struct_field_sm(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) -> StructMember {
-    return StructMember(new struct_field_sm_class(id, type, is_physical, do_not_gen));
+auto struct_field_sm(Symbol_ id, DataType type) -> FieldStructMember {
+    return FieldStructMember(new struct_field_sm_class(id, type));
 }
 
 auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
@@ -378,12 +398,10 @@ auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
         len_expr->dump(stream, n+2);
     if(type_)
         type_->dump(stream, n+2);
-    dump_Boolean(stream, n+2, is_physical);
-    dump_Boolean(stream, n+2, do_not_gen);
 }
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) -> StructMember {
-    return StructMember(new struct_field_list_sm_class(id, len_expr, type_, is_physical, do_not_gen));
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_) -> FieldStructMember {
+    return FieldStructMember(new struct_field_list_sm_class(id, len_expr, type_));
 }
 
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
@@ -391,11 +409,10 @@ auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void
     dump_Symbol_(stream, n+2, id);
     if(type_)
         type_->dump(stream, n+2);
-    dump_Boolean(stream, n+2, is_physical);
 }
 
-auto struct_field_assoc_list_sm(Symbol_ id, DataType type_, Boolean is_physical) -> StructMember {
-    return StructMember(new struct_field_assoc_list_sm_class(id, type_, is_physical));
+auto struct_field_assoc_list_sm(Symbol_ id, DataType type_) -> FieldStructMember {
+    return FieldStructMember(new struct_field_assoc_list_sm_class(id, type_));
 }
 
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {

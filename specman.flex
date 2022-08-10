@@ -153,6 +153,7 @@ bool_	    (bool)
 var         (var)
 force       (force)
 release     (release)
+instance    (instance)
 
 item                 (item)
 created_kind         (created_kind)
@@ -389,6 +390,7 @@ mvl            {mvl_single}|{sized_mvl}
 {var}	   	{ return yy::parser::make_VAR(Location()); } 
 {force}	   	{ return yy::parser::make_FORCE(Location()); } 
 {release}	{ return yy::parser::make_RELEASE(Location()); } 
+{instance}	{ return yy::parser::make_INSTANCE(Location()); } 
 {item}		            { return yy::parser::make_ITEM(Location()); }                
 {created_kind}		    { return yy::parser::make_CREATED_KIND(Location()); }        
 {created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      

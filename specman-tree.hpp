@@ -62,6 +62,17 @@ auto nil_StructMembers() -> StructMembers;
 auto single_StructMembers(StructMember) -> StructMembers;
 auto append_StructMembers(StructMembers, StructMembers) -> StructMembers;
 
+class FieldStructMember_class;
+typedef std::shared_ptr<FieldStructMember_class> FieldStructMember;
+
+class FieldStructMember_class : public tree_node {
+    public:
+
+#ifdef FieldStructMember_EXTRAS
+    FieldStructMember_EXTRAS
+#endif
+};
+
 class Action_class;
 typedef std::shared_ptr<Action_class> Action;
 
@@ -286,12 +297,12 @@ class package_class : public Statement_class {
 
 auto package(Symbol_ pkg_name) -> Statement;
 
-class unit_class : public Statement_class {
+class unit_st_class : public Statement_class {
     protected:
         Symbol_ unit_name;
         StructMembers members;
     public:
-        unit_class(Symbol_ unit_name, StructMembers members) {
+        unit_st_class(Symbol_ unit_name, StructMembers members) {
             this->unit_name = unit_name;
             this->members = members;
         }
@@ -301,12 +312,36 @@ class unit_class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef unit_EXTRAS
-    unit_EXTRAS
+#ifdef unit_st_EXTRAS
+    unit_st_EXTRAS
 #endif
 };
 
-auto unit(Symbol_ unit_name, StructMembers members) -> Statement;
+auto unit_st(Symbol_ unit_name, StructMembers members) -> Statement;
+
+class unit_like_st_class : public Statement_class {
+    protected:
+        Symbol_ unit_name;
+        Symbol_ base_unit_name;
+        StructMembers members;
+    public:
+        unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members) {
+            this->unit_name = unit_name;
+            this->base_unit_name = base_unit_name;
+            this->members = members;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef unit_like_st_EXTRAS
+    unit_like_st_EXTRAS
+#endif
+};
+
+auto unit_like_st(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members) -> Statement;
 
 class struct_st_class : public Statement_class {
     protected:
@@ -656,83 +691,93 @@ class formal_class : public Formal_class {
 
 auto formal(Symbol_ name, DataType type_) -> Formal;
 
-class struct_field_sm_class : public StructMember_class {
+class field_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
-        DataType type;
-        Boolean is_physical;
-        Boolean do_not_gen;
+        FieldStructMember field;
     public:
-        struct_field_sm_class(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) {
-            this->id = id;
-            this->type = type;
-            this->is_physical = is_physical;
-            this->do_not_gen = do_not_gen;
+        field_sm_class(FieldStructMember field) {
+            this->field = field;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
+#endif
+#ifdef field_sm_EXTRAS
+    field_sm_EXTRAS
+#endif
+};
+
+auto field_sm(FieldStructMember field) -> StructMember;
+
+class struct_field_sm_class : public FieldStructMember_class {
+    protected:
+        Symbol_ id;
+        DataType type;
+    public:
+        struct_field_sm_class(Symbol_ id, DataType type) {
+            this->id = id;
+            this->type = type;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef FieldStructMember_SHARED_EXTRAS
+    FieldStructMember_SHARED_EXTRAS
 #endif
 #ifdef struct_field_sm_EXTRAS
     struct_field_sm_EXTRAS
 #endif
 };
 
-auto struct_field_sm(Symbol_ id, DataType type, Boolean is_physical, Boolean do_not_gen) -> StructMember;
+auto struct_field_sm(Symbol_ id, DataType type) -> FieldStructMember;
 
-class struct_field_list_sm_class : public StructMember_class {
+class struct_field_list_sm_class : public FieldStructMember_class {
     protected:
         Symbol_ id;
         Expression len_expr;
         DataType type_;
-        Boolean is_physical;
-        Boolean do_not_gen;
     public:
-        struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) {
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_) {
             this->id = id;
             this->len_expr = len_expr;
             this->type_ = type_;
-            this->is_physical = is_physical;
-            this->do_not_gen = do_not_gen;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef StructMember_SHARED_EXTRAS
-    StructMember_SHARED_EXTRAS
+#ifdef FieldStructMember_SHARED_EXTRAS
+    FieldStructMember_SHARED_EXTRAS
 #endif
 #ifdef struct_field_list_sm_EXTRAS
     struct_field_list_sm_EXTRAS
 #endif
 };
 
-auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_, Boolean is_physical, Boolean do_not_gen) -> StructMember;
+auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_) -> FieldStructMember;
 
-class struct_field_assoc_list_sm_class : public StructMember_class {
+class struct_field_assoc_list_sm_class : public FieldStructMember_class {
     protected:
         Symbol_ id;
         DataType type_;
-        Boolean is_physical;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, DataType type_, Boolean is_physical) {
+        struct_field_assoc_list_sm_class(Symbol_ id, DataType type_) {
             this->id = id;
             this->type_ = type_;
-            this->is_physical = is_physical;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
 
-#ifdef StructMember_SHARED_EXTRAS
-    StructMember_SHARED_EXTRAS
+#ifdef FieldStructMember_SHARED_EXTRAS
+    FieldStructMember_SHARED_EXTRAS
 #endif
 #ifdef struct_field_assoc_list_sm_EXTRAS
     struct_field_assoc_list_sm_EXTRAS
 #endif
 };
 
-auto struct_field_assoc_list_sm(Symbol_ id, DataType type_, Boolean is_physical) -> StructMember;
+auto struct_field_assoc_list_sm(Symbol_ id, DataType type_) -> FieldStructMember;
 
 class method_dec_sm_class : public StructMember_class {
     protected:

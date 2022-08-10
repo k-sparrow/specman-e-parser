@@ -10,6 +10,8 @@ module Specman begin
         phylum StructMember;
         phylum StructMembers = LIST[StructMember];
 
+        phylum FieldStructMember;
+
         phylum Action;
         phylum Actions = LIST[Action];
 
@@ -44,7 +46,8 @@ module Specman begin
         constructor module_(stmts: Statements) : Module;
 
         constructor package(pkg_name: Symbol_) : Statement;
-        constructor unit(unit_name: Symbol_; members: StructMembers) : Statement;
+        constructor unit_st(unit_name: Symbol_; members: StructMembers) : Statement;
+        constructor unit_like_st(unit_name: Symbol_; base_unit_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_st(struct_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_like_st(struct_name: Symbol_; base_struct_name: Symbol_; members: StructMembers) : Statement;
         constructor extend_struct_st(struct_type_name: Expressions; members: StructMembers) : Statement;
@@ -64,9 +67,10 @@ module Specman begin
 
         constructor formal(name: Symbol_; type_: DataType) : Formal;
 
-        constructor struct_field_sm(id: Symbol_; type: DataType; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
-        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; type_: DataType; is_physical : Boolean; do_not_gen: Boolean) : StructMember;
-        constructor struct_field_assoc_list_sm(id: Symbol_; type_: DataType; is_physical : Boolean) : StructMember;
+        constructor field_sm(field : FieldStructMember) : StructMember;
+        constructor struct_field_sm(id: Symbol_; type: DataType) : FieldStructMember;
+        constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; type_: DataType) : FieldStructMember;
+        constructor struct_field_assoc_list_sm(id: Symbol_; type_: DataType) : FieldStructMember;
 
         constructor method_dec_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
         constructor method_dec_also_sm(id: Symbol_; arguments: Formals; return_type: DataType; actions_: ActionBlock) : StructMember;
