@@ -237,6 +237,7 @@
 %token PRIVATE
 %token PROTECTED
 %token SEQUENCE
+%token CHECK
 %token THAT
 %token ASSUME
 %token EXPECT
@@ -553,6 +554,9 @@
 
 /* Do Sequence Actions   */
 %nterm <elex::Action>      do_action
+
+%nterm <elex::Action>      error_handling_action
+%nterm <elex::Action>      immediate_check_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1744,6 +1748,8 @@ non_term_action :
   | do_action 
     { $$ = $1; }
   
+  | error_handling_action
+    { $$ = $1; }
   ;
 
 variable_creation_or_modification_action : 
@@ -2164,6 +2170,28 @@ opt_keeping_constraints_branch :
   | KEEPING 
       LBRACE constriant_expression_block RBRACE
     { $$ = $3; }
+  ;
+
+error_handling_action :
+    immediate_check_action
+    { $$ = $1; }
+  ;
+
+// check [that] [else dut_error(...);]
+//
+// simple enough to unroll
+immediate_check_action :
+    CHECK expression[condition] opt_dut_error_call[dut_error]
+    { 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $condition,  { error(@condition, "Conditional argument must be boolean/identifier/casting/method call expressions"); });
+      $$ = elex::check_that_action($condition, $dut_error); 
+    }
+  
+  | CHECK THAT expression[condition] opt_dut_error_call[dut_error]
+    { 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $condition,  { error(@condition, "Conditional argument must be boolean/identifier/casting/method call expressions"); });
+      $$ = elex::check_that_action($condition, $dut_error); 
+    }
   ;
 
 expression : 

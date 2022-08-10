@@ -2774,6 +2774,18 @@ auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action {
     return Action(new do_seq_act_class(gen_expr, constraints));
 }
 
+auto check_that_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "check_that_action" << std::endl;
+    if(condition)
+        condition->dump(stream, n+2);
+    if(dut_error_block)
+        dut_error_block->dump(stream, n+2);
+}
+
+auto check_that_action(Expression condition, Expression dut_error_block) -> Action {
+    return Action(new check_that_action_class(condition, dut_error_block));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

@@ -336,6 +336,9 @@ module Specman begin
 
         constructor gen_act(gen_expr: Expression; constraints: Expressions) : Action;
         constructor do_seq_act(gen_expr: Expression; constraints: Expressions) : Action;
+
+        constructor check_that_action(condition: Expression; dut_error_block: Expression) : Action;
+
         constructor no_action() : Action;
 
         constructor action_block(actions: Actions) : ActionBlock;

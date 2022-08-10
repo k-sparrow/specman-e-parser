@@ -104,6 +104,7 @@ private	    (private)
 protected	(protected)
 sequence	(sequence)
 that	    (that)
+check	    (check)
 assume	    (assume)
 expect	    (expect)
 assert	    (assert)
@@ -340,6 +341,7 @@ mvl            {mvl_single}|{sized_mvl}
 {private}	{ return yy::parser::make_PRIVATE(Location()); }
 {protected}	{ return yy::parser::make_PROTECTED(Location()); }
 {sequence}	{ return yy::parser::make_SEQUENCE(Location()); }
+{check}	    { return yy::parser::make_CHECK(Location()); }
 {that}	    { return yy::parser::make_THAT(Location()); }
 {assume}	{ return yy::parser::make_ASSUME(Location()); }
 {expect}	{ return yy::parser::make_EXPECT(Location()); }

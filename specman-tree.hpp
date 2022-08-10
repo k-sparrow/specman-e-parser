@@ -5269,6 +5269,28 @@ class do_seq_act_class : public Action_class {
 
 auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action;
 
+class check_that_action_class : public Action_class {
+    protected:
+        Expression condition;
+        Expression dut_error_block;
+    public:
+        check_that_action_class(Expression condition, Expression dut_error_block) {
+            this->condition = condition;
+            this->dut_error_block = dut_error_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef check_that_action_EXTRAS
+    check_that_action_EXTRAS
+#endif
+};
+
+auto check_that_action(Expression condition, Expression dut_error_block) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:
