@@ -1665,19 +1665,22 @@ struct_allocate_expression :
 
 /* Actions */ 
 actions : 
-    %empty         
-    { $$ = elex::nil_Actions(); }
-
+    action
+    { $$ = elex::single_Actions($1); }
+  
   | actions action 
     { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
   ;
 
 action_block : 
-    LBRACE actions RBRACE 
+    LBRACE RBRACE
+    { $$ = elex::action_block(elex::nil_Actions()); }
+
+  | LBRACE actions RBRACE 
     { $$ = elex::action_block($2); }
 
-/*   | LBRACE non_term_action RBRACE
-    { $$ = elex::action_block(elex::single_Actions($2)); } */
+  | LBRACE non_term_action RBRACE
+    { $$ = elex::action_block(elex::single_Actions($2)); }
   ;
 
 term_action_block :
