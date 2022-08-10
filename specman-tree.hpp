@@ -1634,6 +1634,28 @@ class cycle_temporal_expr_class : public Expression_class {
 
 auto cycle_temporal_expr() -> Expression;
 
+class delay_temporal_expr_class : public Expression_class {
+    protected:
+        Expression e;
+        Expression timescale_unit;
+    public:
+        delay_temporal_expr_class(Expression e, Expression timescale_unit) {
+            this->e = e;
+            this->timescale_unit = timescale_unit;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef delay_temporal_expr_EXTRAS
+    delay_temporal_expr_EXTRAS
+#endif
+};
+
+auto delay_temporal_expr(Expression e, Expression timescale_unit) -> Expression;
+
 class expect_nameless_sm_class : public StructMember_class {
     protected:
         Expression temporal;

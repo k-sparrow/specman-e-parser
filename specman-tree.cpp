@@ -883,6 +883,18 @@ auto cycle_temporal_expr() -> Expression {
     return Expression(new cycle_temporal_expr_class());
 }
 
+auto delay_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "delay_temporal_expr" << std::endl;
+    if(e)
+        e->dump(stream, n+2);
+    if(timescale_unit)
+        timescale_unit->dump(stream, n+2);
+}
+
+auto delay_temporal_expr(Expression e, Expression timescale_unit) -> Expression {
+    return Expression(new delay_temporal_expr_class(e, timescale_unit));
+}
+
 auto expect_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "expect_nameless_sm" << std::endl;
     if(temporal)
