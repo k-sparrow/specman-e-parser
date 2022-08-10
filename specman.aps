@@ -92,6 +92,7 @@ module Specman begin
         
 
         constructor temporal_expr(temporal: Expression; sample_event: Expression) : Expression;
+        constructor sampling_event_expr(event_expr: Expression) : Expression;
         constructor event_ref_expr(event_name: Expression) : Expression;
         constructor action_attached_temporal_expr(temporal: Expression; actions: ActionBlock) : Expression;
         constructor not_temporal_expr(temporal: Expression) : Expression;

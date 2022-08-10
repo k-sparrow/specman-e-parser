@@ -659,6 +659,16 @@ auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
     return Expression(new temporal_expr_class(temporal, sample_event));
 }
 
+auto sampling_event_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "sampling_event_expr" << std::endl;
+    if(event_expr)
+        event_expr->dump(stream, n+2);
+}
+
+auto sampling_event_expr(Expression event_expr) -> Expression {
+    return Expression(new sampling_event_expr_class(event_expr));
+}
+
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "event_ref_expr" << std::endl;
     if(event_name)

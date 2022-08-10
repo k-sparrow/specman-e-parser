@@ -1497,7 +1497,7 @@ temporal_expression :
   ;
 
 sampling_event_expression : 
-    hier_ref_expression { $$ = $1; }
+    hier_ref_expression { $$ = elex::sampling_event_expr($1); }
     ;
 
 temporal_expression_base: 

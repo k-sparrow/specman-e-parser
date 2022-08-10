@@ -1200,6 +1200,26 @@ class temporal_expr_class : public Expression_class {
 
 auto temporal_expr(Expression temporal, Expression sample_event) -> Expression;
 
+class sampling_event_expr_class : public Expression_class {
+    protected:
+        Expression event_expr;
+    public:
+        sampling_event_expr_class(Expression event_expr) {
+            this->event_expr = event_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef sampling_event_expr_EXTRAS
+    sampling_event_expr_EXTRAS
+#endif
+};
+
+auto sampling_event_expr(Expression event_expr) -> Expression;
+
 class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;
