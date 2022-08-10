@@ -2200,6 +2200,14 @@ auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType {
     return DataType(new assoc_list_type_dt_class(key_id, base_type));
 }
 
+auto file_dt_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "file_dt" << std::endl;
+}
+
+auto file_dt() -> DataType {
+    return DataType(new file_dt_class());
+}
+
 auto int_predefined_type_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "int_predefined_type" << std::endl;
 }
@@ -2796,6 +2804,18 @@ auto assert_action_class::dump(std::ostream& stream, int n) -> void {
 
 auto assert_action(Expression condition, Expression error_block) -> Action {
     return Action(new assert_action_class(condition, error_block));
+}
+
+auto try_else_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "try_else_action" << std::endl;
+    if(try_actions)
+        try_actions->dump(stream, n+2);
+    if(except_actions)
+        except_actions->dump(stream, n+2);
+}
+
+auto try_else_action(ActionBlock try_actions, ActionBlock except_actions) -> Action {
+    return Action(new try_else_action_class(try_actions, except_actions));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

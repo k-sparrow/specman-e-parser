@@ -4181,6 +4181,24 @@ class assoc_list_type_dt_class : public DataType_class {
 
 auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType;
 
+class file_dt_class : public DataType_class {
+    protected:
+    public:
+        file_dt_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef DataType_SHARED_EXTRAS
+    DataType_SHARED_EXTRAS
+#endif
+#ifdef file_dt_EXTRAS
+    file_dt_EXTRAS
+#endif
+};
+
+auto file_dt() -> DataType;
+
 class int_predefined_type_class : public DataType_class {
     protected:
     public:
@@ -5312,6 +5330,28 @@ class assert_action_class : public Action_class {
 };
 
 auto assert_action(Expression condition, Expression error_block) -> Action;
+
+class try_else_action_class : public Action_class {
+    protected:
+        ActionBlock try_actions;
+        ActionBlock except_actions;
+    public:
+        try_else_action_class(ActionBlock try_actions, ActionBlock except_actions) {
+            this->try_actions = try_actions;
+            this->except_actions = except_actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef try_else_action_EXTRAS
+    try_else_action_EXTRAS
+#endif
+};
+
+auto try_else_action(ActionBlock try_actions, ActionBlock except_actions) -> Action;
 
 class no_action_class : public Action_class {
     protected:

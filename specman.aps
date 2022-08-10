@@ -269,6 +269,7 @@ module Specman begin
         constructor defined_struct_type_dt(struct_type_modifiers : Expressions) : DataType;
         constructor list_type_dt(base_type: DataType) : DataType;
         constructor assoc_list_type_dt(key_id: Symbol_; base_type: DataType) : DataType;
+        constructor file_dt() : DataType;
 
         constructor int_predefined_type()    : DataType;
         constructor uint_predefined_type()   : DataType;
@@ -339,6 +340,7 @@ module Specman begin
 
         constructor check_that_action(condition: Expression; dut_error_block: Expression) : Action;
         constructor assert_action(condition: Expression; error_block: Expression) : Action;
+        constructor try_else_action(try_actions: ActionBlock; except_actions: ActionBlock) : Action;
 
         constructor no_action() : Action;
 

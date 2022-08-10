@@ -312,6 +312,7 @@
 %token IF 
 %token THEN 
 %token ELSE
+%token TRY
 %token CASE
 %token DEFAULT
 %token INT 
@@ -373,7 +374,7 @@
 %left EQ NEQ VERILOG_EQ VERILOG_NEQ GT GTE LT LTE
 %right LOGICAL_NOT_OP BTWS_NOT_OP NOT DETACH FAIL EVENTUALLY
 %left RPAREN LPAREN DOT
-%precedence FIRST_MATCH GT_ID BG_OP
+%precedence FIRST_MATCH GT_ID BG_OP BG_LPAREN
 /* ------------------ helpers ------------------ */
 /* %nterm <elex::Symbol_>    OPT_SEMICOLON */
 %nterm <elex::Symbol_>    OPT_PACKAGE
@@ -558,6 +559,7 @@
 %nterm <elex::Action>      error_handling_action
 %nterm <elex::Action>      immediate_check_action
 %nterm <elex::Action>      assert_action
+%nterm <elex::Action>      try_else_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -622,6 +624,7 @@
 %nterm <elex::DataType>     scalar_or_enum_data_type
 %nterm <elex::DataType>     scalar_subtype_datatype
 %nterm <elex::DataType>     enum_datatype
+%nterm <elex::DataType>     file_datatype
 
 %nterm <elex::DataType>     scoped_type_identifier_data_type
 %nterm <elex::DataType>     scoped_scalar_type_identifier_data_type
@@ -772,6 +775,7 @@ enum_datatype :
 scalar_or_enum_data_type : 
     enum_datatype { $$ = $1; }
   | scalar_subtype_datatype { $$ = $1; }
+  | file_datatype { $$ = $1; }
   ;
 
 scalar_subtype_datatype :
@@ -813,13 +817,17 @@ subtype_range_list_items :
   ;
 
 
-
 width_modifier_expression :
     LPAREN BITS COLON int_expression[width] RPAREN
     { $$ = elex::sized_bits_scalar_expr($width); }
 
   | LPAREN BYTES COLON int_expression[width] RPAREN
     { $$ = elex::sized_bytes_scalar_expr($width); }  
+  ;
+
+file_datatype :
+  FILE %prec BG_LPAREN
+  { $$ = elex::file_dt(); }
   ;
 
 extend_type_statement :
@@ -2179,6 +2187,9 @@ error_handling_action :
   
   | assert_action
     { $$ = $1; }  
+  
+  | try_else_action
+    { $$ = $1; }
   ;
 
 // check [that] bool-exp [else dut_error(...);]
@@ -2205,6 +2216,14 @@ assert_action :
     CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp,  { error(@bool_exp, "Condition expression must be boolean/identifier/casting/method call expressions"); });
     $$ = elex::assert_action($bool_exp, $error_); 
   }
+  ;
+
+try_else_action :
+    TRY action_block[actions] 
+    { $$ = elex::try_else_action($actions, nullptr); }
+  
+  | TRY action_block[try_actions] ELSE action_block[else_actions]
+    { $$ = elex::try_else_action($try_actions, $else_actions); }
   ;
 
 expression : 
@@ -2583,7 +2602,7 @@ range_modifier_expression_base :
     opt_fixed_repetition_rep_base_expr[bot] DDOT opt_fixed_repetition_rep_base_expr[top] 
     { $$ = elex::range_modifier_item_expr($bot, $top); }
 
-  | fixed_repetition_rep_base_expr[bot]  %prec LT_OP
+  | fixed_repetition_rep_base_expr[bot] %prec LT_OP
     { $$ = elex::range_modifier_item_expr($bot, nullptr); }
   ;
 
