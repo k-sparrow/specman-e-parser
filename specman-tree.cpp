@@ -1771,16 +1771,26 @@ auto bit_slice_expr(Expression bottom, Expression top) -> Expression {
     return Expression(new bit_slice_expr_class(bottom, top));
 }
 
-auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "range_modifier_expr" << std::endl;
+auto range_modifier_item_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "range_modifier_item_expr" << std::endl;
     if(bottom)
         bottom->dump(stream, n+2);
     if(top)
         top->dump(stream, n+2);
 }
 
-auto range_modifier_expr(Expression bottom, Expression top) -> Expression {
-    return Expression(new range_modifier_expr_class(bottom, top));
+auto range_modifier_item_expr(Expression bottom, Expression top) -> Expression {
+    return Expression(new range_modifier_item_expr_class(bottom, top));
+}
+
+auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "range_modifier_expr" << std::endl;
+    if(range_items)
+        range_items->dump(stream, n+2);
+}
+
+auto range_modifier_expr(Expressions range_items) -> Expression {
+    return Expression(new range_modifier_expr_class(range_items));
 }
 
 auto ranges_modifier_expr_class::dump(std::ostream& stream, int n) -> void {

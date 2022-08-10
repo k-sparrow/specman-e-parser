@@ -3348,14 +3348,34 @@ class bit_slice_expr_class : public Expression_class {
 
 auto bit_slice_expr(Expression bottom, Expression top) -> Expression;
 
-class range_modifier_expr_class : public Expression_class {
+class range_modifier_item_expr_class : public Expression_class {
     protected:
         Expression bottom;
         Expression top;
     public:
-        range_modifier_expr_class(Expression bottom, Expression top) {
+        range_modifier_item_expr_class(Expression bottom, Expression top) {
             this->bottom = bottom;
             this->top = top;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef range_modifier_item_expr_EXTRAS
+    range_modifier_item_expr_EXTRAS
+#endif
+};
+
+auto range_modifier_item_expr(Expression bottom, Expression top) -> Expression;
+
+class range_modifier_expr_class : public Expression_class {
+    protected:
+        Expressions range_items;
+    public:
+        range_modifier_expr_class(Expressions range_items) {
+            this->range_items = range_items;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -3368,7 +3388,7 @@ class range_modifier_expr_class : public Expression_class {
 #endif
 };
 
-auto range_modifier_expr(Expression bottom, Expression top) -> Expression;
+auto range_modifier_expr(Expressions range_items) -> Expression;
 
 class ranges_modifier_expr_class : public Expression_class {
     protected:

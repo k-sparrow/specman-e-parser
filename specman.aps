@@ -214,7 +214,8 @@ module Specman begin
         constructor list_concat_expr(list_concat_items: Expressions) : Expression;
         constructor bit_concat_expr(bit_concat_items: Expressions) : Expression;
         constructor bit_slice_expr(bottom: Expression; top: Expression) : Expression;
-        constructor range_modifier_expr(bottom: Expression; top: Expression) : Expression;
+        constructor range_modifier_item_expr(bottom: Expression; top: Expression) : Expression;
+        constructor range_modifier_expr(range_items: Expressions) : Expression;
         constructor ranges_modifier_expr(ranges: Expressions) : Expression;
         constructor sized_bits_scalar_expr(width_expr: Expression) : Expression;
         constructor sized_bytes_scalar_expr(width_expr: Expression) : Expression;

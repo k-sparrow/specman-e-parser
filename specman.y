@@ -363,7 +363,7 @@
 %precedence ID
 %left ELSE THEN
 %precedence EXEC  
-%precedence TERNARY  
+%precedence TERNARY RBRACKET
 %left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
 %left PLUS MINUS
 %left DIV MUL REMAINDER
@@ -796,23 +796,13 @@ scalar_subtype_datatype :
 
 
 subtype_range_list_items : 
-    subtype_range_list_item 
+    range_modifier_expression_base 
     { $$ = elex::single_Expressions($1); }
 
-  | subtype_range_list_items COMMA subtype_range_list_item 
+  | subtype_range_list_items COMMA range_modifier_expression_base 
     { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
   ;
 
-subtype_range_list_item : 
-    ID 
-    { $$ = elex::id_expr($1); }
-  
-  | int_expression 
-    { $$ = $1; }
-
-  | range_modifier_expression_base
-    { $$ = $1; }
-  ;
 
 
 width_modifier_expression :
@@ -2534,14 +2524,17 @@ scoped_scalar_type_identifier_data_type :
 
 range_modifier_expression :
     LBRACKET 
-      range_modifier_expression_base
+      subtype_range_list_items
     RBRACKET 
-    { $$ = $2; }
+    { $$ = elex::range_modifier_expr($2); }
   ;
 
 range_modifier_expression_base : 
-  opt_fixed_repetition_rep_base_expr[bot] DDOT opt_fixed_repetition_rep_base_expr[top] 
-  { $$ = elex::range_modifier_expr($bot, $top); }
+    opt_fixed_repetition_rep_base_expr[bot] DDOT opt_fixed_repetition_rep_base_expr[top] 
+    { $$ = elex::range_modifier_item_expr($bot, $top); }
+
+  | fixed_repetition_rep_base_expr[bot]  %prec LT_OP
+    { $$ = elex::range_modifier_item_expr($bot, nullptr); }
   ;
 
 bit_slicing_expression :
