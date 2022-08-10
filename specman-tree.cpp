@@ -1513,20 +1513,6 @@ auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
     return Expression(new binary_remainder_expr_class(e1, e2));
 }
 
-auto ternarty_assign_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "ternarty_assign_expr" << std::endl;
-    if(bool_exp)
-        bool_exp->dump(stream, n+2);
-    if(true_expr)
-        true_expr->dump(stream, n+2);
-    if(false_expr)
-        false_expr->dump(stream, n+2);
-}
-
-auto ternarty_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression {
-    return Expression(new ternarty_assign_expr_class(bool_exp, true_expr, false_expr));
-}
-
 auto less_then_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "less_then_expr" << std::endl;
     if(e1)
@@ -1657,6 +1643,30 @@ auto in_expr_class::dump(std::ostream& stream, int n) -> void {
 
 auto in_expr(Expression exp, Expression inside) -> Expression {
     return Expression(new in_expr_class(exp, inside));
+}
+
+auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_introspec_expr" << std::endl;
+    if(field_id)
+        field_id->dump(stream, n+2);
+    if(type_id)
+        type_id->dump(stream, n+2);
+}
+
+auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression {
+    return Expression(new type_introspec_expr_class(field_id, type_id));
+}
+
+auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "type_introspec_negation_expr" << std::endl;
+    if(field_id)
+        field_id->dump(stream, n+2);
+    if(type_id)
+        type_id->dump(stream, n+2);
+}
+
+auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression {
+    return Expression(new type_introspec_negation_expr_class(field_id, type_id));
 }
 
 auto in_enum_expr_class::dump(std::ostream& stream, int n) -> void {
@@ -1864,30 +1874,6 @@ auto defined_type_identifier_expr(Expressions modifiers) -> Expression {
     return Expression(new defined_type_identifier_expr_class(modifiers));
 }
 
-auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "type_introspec_expr" << std::endl;
-    if(field_id)
-        field_id->dump(stream, n+2);
-    if(type_id)
-        type_id->dump(stream, n+2);
-}
-
-auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression {
-    return Expression(new type_introspec_expr_class(field_id, type_id));
-}
-
-auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "type_introspec_negation_expr" << std::endl;
-    if(field_id)
-        field_id->dump(stream, n+2);
-    if(type_id)
-        type_id->dump(stream, n+2);
-}
-
-auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression {
-    return Expression(new type_introspec_negation_expr_class(field_id, type_id));
-}
-
 auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "struct_hier_ref_expr" << std::endl;
     if(hiers)
@@ -1907,18 +1893,18 @@ auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression {
     return Expression(new hdl_path_name_expr_class(hdl_hier_ref));
 }
 
-auto ternary_operator_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "ternary_operator_expr" << std::endl;
-    if(condition)
-        condition->dump(stream, n+2);
+auto ternary_assign_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "ternary_assign_expr" << std::endl;
+    if(bool_exp)
+        bool_exp->dump(stream, n+2);
     if(true_expr)
         true_expr->dump(stream, n+2);
     if(false_expr)
         false_expr->dump(stream, n+2);
 }
 
-auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression {
-    return Expression(new ternary_operator_expr_class(condition, true_expr, false_expr));
+auto ternary_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression {
+    return Expression(new ternary_assign_expr_class(bool_exp, true_expr, false_expr));
 }
 
 auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {

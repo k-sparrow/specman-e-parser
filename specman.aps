@@ -189,7 +189,6 @@ module Specman begin
         constructor binary_div_expr(e1: Expression; e2: Expression) : Expression;
         constructor binary_remainder_expr(e1: Expression; e2: Expression) : Expression;
 
-        constructor ternarty_assign_expr(bool_exp : Expression; true_expr: Expression; false_expr: Expression) : Expression;
 
 
         constructor less_then_expr(e1: Expression; e2: Expression) : Expression;
@@ -202,8 +201,10 @@ module Specman begin
         constructor hdl_non_equality_expr(e1: Expression; e2: Expression) : Expression;
         constructor str_match_expr(str_expr: Expression; pattern_expr: Expression) : Expression;
         constructor str_does_not_match_expr(str_expr: Expression; pattern_expr: Expression) : Expression;
-
         constructor in_expr(exp: Expression; inside: Expression) : Expression;
+        constructor type_introspec_expr(field_id: Expression; type_id: DataType) : Expression;
+        constructor type_introspec_negation_expr(field_id: Expression; type_id: DataType) : Expression;
+
         constructor in_enum_expr(exp: Expression; inside: DataType) : Expression;
         constructor list_indexing_expr(list_exp: Expression; idx_expr: Expression) : Expression;
         constructor list_slicing_expr(list_exp: Expression; range_expr: Expression) : Expression;
@@ -223,11 +224,9 @@ module Specman begin
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
         constructor defined_type_identifier_expr(modifiers: Expressions) : Expression;
-        constructor type_introspec_expr(field_id: Expression; type_id: DataType) : Expression;
-        constructor type_introspec_negation_expr(field_id: Expression; type_id: DataType) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;
-        constructor ternary_operator_expr(condition: Expression; true_expr: Expression; false_expr: Expression) : Expression;
+        constructor ternary_assign_expr(bool_exp : Expression; true_expr: Expression; false_expr: Expression) : Expression;
         constructor cast_operator_expr(casted_expr: Expression; dest_type_expr: Expression) : Expression;
 
         constructor method_call_expr(base: Expression; arguments: Expressions) : Expression;

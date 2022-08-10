@@ -2870,30 +2870,6 @@ class binary_remainder_expr_class : public Expression_class {
 
 auto binary_remainder_expr(Expression e1, Expression e2) -> Expression;
 
-class ternarty_assign_expr_class : public Expression_class {
-    protected:
-        Expression bool_exp;
-        Expression true_expr;
-        Expression false_expr;
-    public:
-        ternarty_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr) {
-            this->bool_exp = bool_exp;
-            this->true_expr = true_expr;
-            this->false_expr = false_expr;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef ternarty_assign_expr_EXTRAS
-    ternarty_assign_expr_EXTRAS
-#endif
-};
-
-auto ternarty_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression;
-
 class less_then_expr_class : public Expression_class {
     protected:
         Expression e1;
@@ -3135,6 +3111,50 @@ class in_expr_class : public Expression_class {
 };
 
 auto in_expr(Expression exp, Expression inside) -> Expression;
+
+class type_introspec_expr_class : public Expression_class {
+    protected:
+        Expression field_id;
+        DataType type_id;
+    public:
+        type_introspec_expr_class(Expression field_id, DataType type_id) {
+            this->field_id = field_id;
+            this->type_id = type_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef type_introspec_expr_EXTRAS
+    type_introspec_expr_EXTRAS
+#endif
+};
+
+auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression;
+
+class type_introspec_negation_expr_class : public Expression_class {
+    protected:
+        Expression field_id;
+        DataType type_id;
+    public:
+        type_introspec_negation_expr_class(Expression field_id, DataType type_id) {
+            this->field_id = field_id;
+            this->type_id = type_id;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef type_introspec_negation_expr_EXTRAS
+    type_introspec_negation_expr_EXTRAS
+#endif
+};
+
+auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression;
 
 class in_enum_expr_class : public Expression_class {
     protected:
@@ -3522,50 +3542,6 @@ class defined_type_identifier_expr_class : public Expression_class {
 
 auto defined_type_identifier_expr(Expressions modifiers) -> Expression;
 
-class type_introspec_expr_class : public Expression_class {
-    protected:
-        Expression field_id;
-        DataType type_id;
-    public:
-        type_introspec_expr_class(Expression field_id, DataType type_id) {
-            this->field_id = field_id;
-            this->type_id = type_id;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef type_introspec_expr_EXTRAS
-    type_introspec_expr_EXTRAS
-#endif
-};
-
-auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression;
-
-class type_introspec_negation_expr_class : public Expression_class {
-    protected:
-        Expression field_id;
-        DataType type_id;
-    public:
-        type_introspec_negation_expr_class(Expression field_id, DataType type_id) {
-            this->field_id = field_id;
-            this->type_id = type_id;
-        }
-
-        virtual auto dump(std::ostream& stream, int n) -> void;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef type_introspec_negation_expr_EXTRAS
-    type_introspec_negation_expr_EXTRAS
-#endif
-};
-
-auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expression;
-
 class struct_hier_ref_expr_class : public Expression_class {
     protected:
         Expressions hiers;
@@ -3606,14 +3582,14 @@ class hdl_path_name_expr_class : public Expression_class {
 
 auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression;
 
-class ternary_operator_expr_class : public Expression_class {
+class ternary_assign_expr_class : public Expression_class {
     protected:
-        Expression condition;
+        Expression bool_exp;
         Expression true_expr;
         Expression false_expr;
     public:
-        ternary_operator_expr_class(Expression condition, Expression true_expr, Expression false_expr) {
-            this->condition = condition;
+        ternary_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr) {
+            this->bool_exp = bool_exp;
             this->true_expr = true_expr;
             this->false_expr = false_expr;
         }
@@ -3623,12 +3599,12 @@ class ternary_operator_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef ternary_operator_expr_EXTRAS
-    ternary_operator_expr_EXTRAS
+#ifdef ternary_assign_expr_EXTRAS
+    ternary_assign_expr_EXTRAS
 #endif
 };
 
-auto ternary_operator_expr(Expression condition, Expression true_expr, Expression false_expr) -> Expression;
+auto ternary_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression;
 
 class cast_operator_expr_class : public Expression_class {
     protected:

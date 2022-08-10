@@ -110,6 +110,39 @@
         return lexer.get_next_token();
     }
 
+    namespace elex {
+
+      auto isConditionExpression(Expression exp) -> bool {
+        if( std::dynamic_pointer_cast<elex::logical_not_expr_class>(exp) || 
+            std::dynamic_pointer_cast<elex::logical_and_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::logical_or_expr_class>(exp)  ||
+            std::dynamic_pointer_cast<elex::less_then_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::greater_then_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::less_then_or_equal_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::greater_then_or_equal_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::equality_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::non_equality_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::hdl_equality_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::hdl_non_equality_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::str_match_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::str_does_not_match_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::in_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::type_introspec_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::type_introspec_negation_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::true_literal_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::false_literal_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::method_call_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::id_expr_class>(exp) ||
+            std::dynamic_pointer_cast<elex::struct_hier_ref_expr_class>(exp)
+          ) 
+          return true;
+        else 
+          return false;
+      };
+    }
+    #define CHECK_COND_ELSE_PARSE_ERROR(cond_func, term, error_action) \
+      if (!cond_func(term)) error_action;
+
 }
 
 %{
@@ -1632,13 +1665,19 @@ struct_allocate_expression :
 
 /* Actions */ 
 actions : 
-      %empty         { $$ = elex::nil_Actions(); }
-    | actions action { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
-    ;
+    %empty         
+    { $$ = elex::nil_Actions(); }
+
+  | actions action 
+    { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
+  ;
 
 action_block : 
     LBRACE actions RBRACE 
     { $$ = elex::action_block($2); }
+
+/*   | LBRACE non_term_action RBRACE
+    { $$ = elex::action_block(elex::single_Actions($2)); } */
   ;
 
 term_action_block :
@@ -1663,12 +1702,7 @@ action :
   ;
 
 non_term_action : 
-    %empty 
-    { 
-      $$ = elex::no_action(); 
-    } 
-
-  | variable_creation_or_modification_action 
+    variable_creation_or_modification_action 
     { $$ = $1; }
 
   | conditional_action
@@ -1818,11 +1852,17 @@ if_then_else_action :
   ;
 
 if_branch : 
-    IF logical_expression THEN
-    { $$ = $2; }
+    IF expression THEN
+    { 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYABORT; })
+      $$ = $2; 
+    }
 
-  | IF logical_expression 
-    { $$ = $2; }
+  | IF expression 
+    { 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYABORT; })
+      $$ = $2; 
+    }
   ;  
 
 
@@ -1842,8 +1882,11 @@ case_bool_case_branches :
   ;
 
 case_bool_case_branch :
-    logical_expression[bool_exp] COLON action_block[actions] SEMICOLON
-    { $$ = elex::case_bool_branch_item_case($bool_exp, $actions); }
+    expression[bool_exp] COLON action_block[actions] SEMICOLON
+    { 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be boolean expression!"); })
+      $$ = elex::case_bool_branch_item_case($bool_exp, $actions); 
+    }
 
   | DEFAULT COLON action_block[actions] SEMICOLON
     { $$ = elex::default_case_branch_item_case($actions); }
@@ -1905,14 +1948,20 @@ iterative_action :
 
 // while bool-exp [do] {action; ...}
 while_loop_action :
-  WHILE logical_expression[bool_exp] OPT_DO action_block[actions]
-  { $$ = elex::while_loop_act($bool_exp, $actions); }
+  WHILE expression[bool_exp] OPT_DO action_block[actions]
+  { 
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be boolean expression!"); })
+    $$ = elex::while_loop_act($bool_exp, $actions); 
+  }
   ;
 
 // repeat {action; ...} until bool-exp 
 repeat_until_loop_action :
-  REPEAT action_block[actions] UNTIL logical_expression[bool_exp]
-  { $$ = elex::repeat_until_loop_act($bool_exp, $actions); }
+  REPEAT action_block[actions] UNTIL expression[bool_exp]
+  { 
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be boolean expression!"); })
+    $$ = elex::repeat_until_loop_act($bool_exp, $actions); 
+  }
   ;
 
 // for each [type] [(item-name)] [using index (index-name)]
@@ -1973,7 +2022,10 @@ for_loop_action :
   LBRACE 
     non_term_action[init_action] SEMICOLON logical_expression[bool_exp] SEMICOLON non_term_action[step_action] 
   RBRACE OPT_DO action_block[actions]
-  { $$ = elex::for_loop_act($init_action, $bool_exp, $step_action, $actions); }
+  { 
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be boolean expression!"); })
+    $$ = elex::for_loop_act($init_action, $bool_exp, $step_action, $actions); 
+  }
   ;
 
 // this for-each action is unrolled in order to avoid reduce-reduce conflicts with the (actually used) non-file for-each action
@@ -2261,8 +2313,11 @@ comparison_expression :
 
 ternary_assignment_expression : 
   expression[bool_exp] TERNARY expression[if_choice_exp] COLON expression[else_choice_exp] %prec LT_OP
-  { $$ = elex::ternarty_assign_expr($bool_exp, $if_choice_exp, $else_choice_exp); }
-    
+  { 
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be a boolean expression!"); YYABORT; })
+    $$ = elex::ternary_assign_expr($bool_exp, $if_choice_exp, $else_choice_exp); 
+  }
+
 list_concatenation_expression : 
     LBRACE list_concat_expressions RBRACE { $$ = elex::list_concat_expr($2); }
     ;
