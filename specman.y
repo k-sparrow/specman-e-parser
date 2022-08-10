@@ -557,6 +557,7 @@
 
 %nterm <elex::Action>      error_handling_action
 %nterm <elex::Action>      immediate_check_action
+%nterm <elex::Action>      assert_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -2175,23 +2176,35 @@ opt_keeping_constraints_branch :
 error_handling_action :
     immediate_check_action
     { $$ = $1; }
+  
+  | assert_action
+    { $$ = $1; }  
   ;
 
-// check [that] [else dut_error(...);]
+// check [that] bool-exp [else dut_error(...);]
 //
 // simple enough to unroll
 immediate_check_action :
-    CHECK expression[condition] opt_dut_error_call[dut_error]
+    CHECK expression[bool_exp] opt_dut_error_call[dut_error]
     { 
-      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $condition,  { error(@condition, "Conditional argument must be boolean/identifier/casting/method call expressions"); });
-      $$ = elex::check_that_action($condition, $dut_error); 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp,  { error(@bool_exp, "Condition expression must be boolean/identifier/casting/method call expressions"); });
+      $$ = elex::check_that_action($bool_exp, $dut_error); 
     }
   
-  | CHECK THAT expression[condition] opt_dut_error_call[dut_error]
+  | CHECK THAT expression[bool_exp] opt_dut_error_call[dut_error]
     { 
-      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $condition,  { error(@condition, "Conditional argument must be boolean/identifier/casting/method call expressions"); });
-      $$ = elex::check_that_action($condition, $dut_error); 
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp,  { error(@bool_exp, "Condition expression must be boolean/identifier/casting/method call expressions"); });
+      $$ = elex::check_that_action($bool_exp, $dut_error); 
     }
+  ;
+
+// assert bool-exp [else error(...)]
+assert_action :
+  ASSERT expression[bool_exp] opt_dut_error_call[error_]
+  {
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp,  { error(@bool_exp, "Condition expression must be boolean/identifier/casting/method call expressions"); });
+    $$ = elex::assert_action($bool_exp, $error_); 
+  }
   ;
 
 expression : 

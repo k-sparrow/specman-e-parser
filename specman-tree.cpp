@@ -2786,6 +2786,18 @@ auto check_that_action(Expression condition, Expression dut_error_block) -> Acti
     return Action(new check_that_action_class(condition, dut_error_block));
 }
 
+auto assert_action_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "assert_action" << std::endl;
+    if(condition)
+        condition->dump(stream, n+2);
+    if(error_block)
+        error_block->dump(stream, n+2);
+}
+
+auto assert_action(Expression condition, Expression error_block) -> Action {
+    return Action(new assert_action_class(condition, error_block));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "no_action" << std::endl;
 }

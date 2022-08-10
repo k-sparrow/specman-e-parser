@@ -5291,6 +5291,28 @@ class check_that_action_class : public Action_class {
 
 auto check_that_action(Expression condition, Expression dut_error_block) -> Action;
 
+class assert_action_class : public Action_class {
+    protected:
+        Expression condition;
+        Expression error_block;
+    public:
+        assert_action_class(Expression condition, Expression error_block) {
+            this->condition = condition;
+            this->error_block = error_block;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef assert_action_EXTRAS
+    assert_action_EXTRAS
+#endif
+};
+
+auto assert_action(Expression condition, Expression error_block) -> Action;
+
 class no_action_class : public Action_class {
     protected:
     public:
