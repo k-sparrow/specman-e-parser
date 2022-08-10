@@ -1485,21 +1485,16 @@ event_declaration :
     | EVENT ID[id] IS ONLY temporal_expression[temporal] { $$ = elex::event_def_override_sm($id, $temporal); }
 
 temporal_expression : 
-      temporal_expression_base[temporal] AT sampling_event_expression[sample_event] 
-      { 
-          $$ = elex::temporal_expr($temporal, $sample_event); 
-      }
-
-    | AT hier_ref_expression 
-      {
-          $$ = elex::event_ref_expr($2);
-      }
-
-    | CYCLE 
-      {
-          $$ = elex::cycle_temporal_expr();
-      }
-    ;
+    temporal_expression_base[temporal] AT sampling_event_expression[sample_event] 
+    { 
+        $$ = elex::temporal_expr($temporal, $sample_event); 
+    }
+  
+  | temporal_expression_base[temporal] 
+    { 
+        $$ = elex::temporal_expr($temporal, nullptr); 
+    }
+  ;
 
 sampling_event_expression : 
     hier_ref_expression { $$ = $1; }
