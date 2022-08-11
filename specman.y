@@ -365,6 +365,14 @@
 %token <elex::Symbol_> MVL_LITERAL
 /* ------------------ Literals ------------------ */
 
+/* ---------- For Lexer -----------------  */
+// Those actually don't get used in the praser
+// but used by the lexer to ignore anythinhg not inside 
+// the code block
+%token CODE_OPEN
+%token CODE_CLOSE
+/* ---------- For Lexer -----------------  */
+
 %token <elex::Symbol_> ID
 %token <elex::Symbol_> NUMBER
 %token END 0 
