@@ -3534,9 +3534,9 @@ auto gen_act(Expression gen_expr, Expressions constraints) -> Action {
 
 auto do_seq_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\do_seq_act" << std::endl;
-    if(gen_expr){
-        stream << pad(n+2) << "gen_expr: " << std::endl;
-        gen_expr->dump(stream, n+4);
+    if(seq_item){
+        stream << pad(n+2) << "seq_item: " << std::endl;
+        seq_item->dump(stream, n+4);
     }
     if(constraints){
         stream << pad(n+2) << "constraints: " << std::endl;
@@ -3544,8 +3544,20 @@ auto do_seq_act_class::dump(std::ostream& stream, int n) -> void {
     }
 }
 
-auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action {
-    return Action(new do_seq_act_class(gen_expr, constraints));
+auto do_seq_act(Expression seq_item, Expressions constraints) -> Action {
+    return Action(new do_seq_act_class(seq_item, constraints));
+}
+
+auto seq_item_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\seq_item_expr" << std::endl;
+    if(field_type_exprs){
+        stream << pad(n+2) << "field_type_exprs: " << std::endl;
+        field_type_exprs->dump(stream, n+4);
+    }
+}
+
+auto seq_item_expr(Expressions field_type_exprs) -> Expression {
+    return Expression(new seq_item_expr_class(field_type_exprs));
 }
 
 auto check_that_action_class::dump(std::ostream& stream, int n) -> void {

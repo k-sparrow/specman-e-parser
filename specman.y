@@ -2162,8 +2162,8 @@ gen_action :
   ;
 
 do_action : 
-  DO identifier_expression[seq_item] opt_keeping_constraints_branch[constraints]
-  { $$ = elex::do_seq_act($seq_item, $constraints); }
+  DO struct_type_modifiers[seq_item] opt_keeping_constraints_branch[constraints]
+  { $$ = elex::do_seq_act(elex::seq_item_expr($seq_item), $constraints); }
   ;
 
 opt_keeping_constraints_branch :

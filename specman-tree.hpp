@@ -5287,11 +5287,11 @@ auto gen_act(Expression gen_expr, Expressions constraints) -> Action;
 
 class do_seq_act_class : public Action_class {
     protected:
-        Expression gen_expr;
+        Expression seq_item;
         Expressions constraints;
     public:
-        do_seq_act_class(Expression gen_expr, Expressions constraints) {
-            this->gen_expr = gen_expr;
+        do_seq_act_class(Expression seq_item, Expressions constraints) {
+            this->seq_item = seq_item;
             this->constraints = constraints;
         }
 
@@ -5305,7 +5305,27 @@ class do_seq_act_class : public Action_class {
 #endif
 };
 
-auto do_seq_act(Expression gen_expr, Expressions constraints) -> Action;
+auto do_seq_act(Expression seq_item, Expressions constraints) -> Action;
+
+class seq_item_expr_class : public Expression_class {
+    protected:
+        Expressions field_type_exprs;
+    public:
+        seq_item_expr_class(Expressions field_type_exprs) {
+            this->field_type_exprs = field_type_exprs;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef seq_item_expr_EXTRAS
+    seq_item_expr_EXTRAS
+#endif
+};
+
+auto seq_item_expr(Expressions field_type_exprs) -> Expression;
 
 class check_that_action_class : public Action_class {
     protected:
