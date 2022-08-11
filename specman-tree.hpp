@@ -3265,13 +3265,11 @@ class in_enum_expr_class : public Expression_class {
 
 auto in_enum_expr(Expression exp, DataType inside) -> Expression;
 
-class list_indexing_expr_class : public Expression_class {
+class list_index_item_expr_class : public Expression_class {
     protected:
-        Expression list_exp;
         Expression idx_expr;
     public:
-        list_indexing_expr_class(Expression list_exp, Expression idx_expr) {
-            this->list_exp = list_exp;
+        list_index_item_expr_class(Expression idx_expr) {
             this->idx_expr = idx_expr;
         }
 
@@ -3280,12 +3278,34 @@ class list_indexing_expr_class : public Expression_class {
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
 #endif
-#ifdef list_indexing_expr_EXTRAS
-    list_indexing_expr_EXTRAS
+#ifdef list_index_item_expr_EXTRAS
+    list_index_item_expr_EXTRAS
 #endif
 };
 
-auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression;
+auto list_index_item_expr(Expression idx_expr) -> Expression;
+
+class list_index_expr_class : public Expression_class {
+    protected:
+        Expression base_id;
+        Expression idx_expr;
+    public:
+        list_index_expr_class(Expression base_id, Expression idx_expr) {
+            this->base_id = base_id;
+            this->idx_expr = idx_expr;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef list_index_expr_EXTRAS
+    list_index_expr_EXTRAS
+#endif
+};
+
+auto list_index_expr(Expression base_id, Expression idx_expr) -> Expression;
 
 class list_slicing_expr_class : public Expression_class {
     protected:

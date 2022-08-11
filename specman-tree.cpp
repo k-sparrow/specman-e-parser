@@ -1720,16 +1720,26 @@ auto in_enum_expr(Expression exp, DataType inside) -> Expression {
     return Expression(new in_enum_expr_class(exp, inside));
 }
 
-auto list_indexing_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "list_indexing_expr" << std::endl;
-    if(list_exp)
-        list_exp->dump(stream, n+2);
+auto list_index_item_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_index_item_expr" << std::endl;
     if(idx_expr)
         idx_expr->dump(stream, n+2);
 }
 
-auto list_indexing_expr(Expression list_exp, Expression idx_expr) -> Expression {
-    return Expression(new list_indexing_expr_class(list_exp, idx_expr));
+auto list_index_item_expr(Expression idx_expr) -> Expression {
+    return Expression(new list_index_item_expr_class(idx_expr));
+}
+
+auto list_index_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "list_index_expr" << std::endl;
+    if(base_id)
+        base_id->dump(stream, n+2);
+    if(idx_expr)
+        idx_expr->dump(stream, n+2);
+}
+
+auto list_index_expr(Expression base_id, Expression idx_expr) -> Expression {
+    return Expression(new list_index_expr_class(base_id, idx_expr));
 }
 
 auto list_slicing_expr_class::dump(std::ostream& stream, int n) -> void {

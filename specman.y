@@ -100,6 +100,7 @@
     #include <string>
     #include <exception>
     #include <sstream>
+    #include <typeinfo>
     #include "scanner.hpp"
     #include "parser.hpp"
     #include "driver.hpp"
@@ -139,7 +140,20 @@
         else 
           return false;
       };
+
+      auto isIndexItem(Expression exp) -> bool {
+        auto list_idx_expr = std::dynamic_pointer_cast<elex::list_index_item_expr_class>(exp);
+
+        return list_idx_expr != nullptr;
+      }
+
+      auto isRangeItem(Expression exp) -> bool {
+        auto range_idx_expr = std::dynamic_pointer_cast<elex::range_modifier_item_expr_class>(exp);
+
+        return range_idx_expr != nullptr;
+      }
     }
+
     #define CHECK_COND_ELSE_PARSE_ERROR(cond_func, term, error_action) \
       if (!cond_func(term)) error_action;
 
@@ -394,7 +408,6 @@
 %nterm <elex::Statement>  inner_type_statement
 %nterm <elex::Statement>  enumerated_type_statement
 %nterm <elex::Expressions>  subtype_range_list_items
-%nterm <elex::Expression>   subtype_range_list_item
 
 %nterm <elex::Statement>  extend_type_statement
 // %nterm <elex::Statement>  routine_statement
@@ -428,7 +441,6 @@
 %nterm <elex::StructMember>  coverage_group_declaration
 %nterm <elex::CovergroupOptions> coverage_group_options
 %nterm <elex::CovergroupOption>  coverage_group_option
-%nterm <elex::CovergroupOptions> opt_coverage_group_options
 %nterm <elex::CovergroupOption>  global_cg_option
 %nterm <elex::CovergroupOption>  no_collect_cg_option
 %nterm <elex::CovergroupOption>  per_unit_instance_cg_option
@@ -460,7 +472,6 @@
 %nterm <elex::CovergroupItemOption>   when_cg_item_option
 
 %nterm <elex::CovergroupExtensionID>  covergroup_extension_id
-%nterm <elex::CovergroupExtensionID>  opt_covergroup_extension_id
 
 %nterm <elex::FieldStructMember>  scalar_field_declaration
 %nterm <elex::FieldStructMember>  non_decorated_scalar_field_declaration
@@ -510,7 +521,6 @@
 
 /*------ While ------*/
 %nterm <elex::Action>      while_loop_action
-%nterm <elex::Expression>  while_header_expr
 
 /*------ REPEAT -----*/
 %nterm <elex::Action>      repeat_until_loop_action
@@ -614,7 +624,6 @@
 %nterm <elex::Expression>   list_concatenation_expression
 %nterm <elex::Expressions>  list_concat_expressions
 %nterm <elex::Expression>   bit_concatenation_expression
-%nterm <elex::Expressions>  bit_concat_expressions 
 %nterm <elex::Expression>   bit_slicing_expression
 %nterm <elex::Expression>   range_modifier_expression
 %nterm <elex::Expression>   range_modifier_expression_base
@@ -624,34 +633,24 @@
 %nterm <elex::DataType>     scalar_or_enum_data_type
 %nterm <elex::DataType>     scalar_subtype_datatype
 %nterm <elex::DataType>     enum_datatype
-%nterm <elex::DataType>     file_datatype
 
 %nterm <elex::DataType>     scoped_type_identifier_data_type
 %nterm <elex::DataType>     scoped_scalar_type_identifier_data_type
 
 %nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
-%nterm <elex::Expression>   named_action_block
 %nterm <elex::Expression>   opt_iterated_id_expr
 %nterm <elex::Expression>   iterated_id_expr
 
 %nterm <elex::Expression>   id_expr
 %nterm <elex::Expression>   scoped_id_expr
 %nterm <elex::Expression>   identifier_expression
-%nterm <elex::Expression>   type_scalar_expression
 %nterm <elex::Expressions>  enum_list_exprs
 %nterm <elex::Expression>   enum_list_item
 
 %nterm <elex::Expression>   hdl_pathname_expression 
 %nterm <elex::Expression>   hier_ref_expression
 %nterm <elex::Expressions>  dot_separated_expressions
-
-/* %nterm <elex::expression>   ternary_operator_expression   
-%nterm <elex::expression>   casting_operator_expression    */
-
-/* %nterm <elex::Expression>   opt_expr
-%nterm <elex::Expression>   opt_slice_expr */
-%nterm <elex::Expression>   opt_struct_type_id
 
 %nterm <elex::DataType>     predefined_scalar_datatype   
 
@@ -660,7 +659,6 @@
 %nterm <elex::Expressions>  constriant_expression_block
 %nterm <elex::Expression>   method_call_expression
 
-%nterm <elex::Expression>   sized_scalar_expr
 
 %nterm <elex::Expression>   str_expression
 %nterm <elex::Expression>   int_expression
@@ -680,7 +678,6 @@
 %nterm <elex::e_method_int_mod> opt_method_introduction_modifier
 %nterm <elex::e_method_ext_mod> opt_method_extension_modifier
 
-%nterm <elex::Expression>   opt_len_expr
 %start module
 
 %%
@@ -775,7 +772,6 @@ enum_datatype :
 scalar_or_enum_data_type : 
     enum_datatype { $$ = $1; }
   | scalar_subtype_datatype { $$ = $1; }
-  //| file_datatype { $$ = $1; }
   ;
 
 scalar_subtype_datatype :
@@ -816,10 +812,6 @@ width_modifier_expression :
     { $$ = elex::sized_bytes_scalar_expr($width); }  
   ;
 
-file_datatype :
-  FILE %prec BG_LPAREN
-  { $$ = elex::file_dt(); }
-  ;
 
 extend_type_statement :
   EXTEND ID[type_id] COLON LBRACKET enum_list_exprs[enum_items] RBRACKET 
@@ -1612,31 +1604,31 @@ temporal_expression_base_items :
   ;
 
 fixed_repetition_temporal_expression_base : 
-    range_modifier_expression[range] %prec LT_OP
-    { $$ = elex::fixed_repetition_expr($range, elex::cycle_temporal_expr()); }
+    LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET 
+    { $$ = elex::fixed_repetition_expr($rep, elex::cycle_temporal_expr()); }
   
-  | range_modifier_expression[range] MUL temporal_expression_base[temporal] %prec LT_OP
-    { $$ = elex::fixed_repetition_expr($range, $temporal); }
+  | LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET MUL temporal_expression_base[temporal]
+    { $$ = elex::fixed_repetition_expr($rep, $temporal); }
   ;
 
 // %prec FIRST_MATCH is a dummy token needed to solve
 // shift-reduce problems caused by IMPLICATION/OR/AND tokens
 // and the non-terminal match temporal expression after the SEMICOLON
 first_match_repetition_temporal_expression_base : 
-    range_modifier_expression[range] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
-    { $$ = elex::first_match_repetition_expr($range, nullptr, elex::cycle_temporal_expr(), $match); }
+    LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($from, $to, elex::cycle_temporal_expr(), $match); }
 
-  |  range_modifier_expression[range] MUL temporal_expression_base[temporal] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
-    { $$ = elex::first_match_repetition_expr($range, nullptr, $temporal, $match); }
+  |  LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($from, $to, $temporal, $match); }
   ;
 
 // TODO: convert empty repetition terminal into zero/infinite terminal expressions
 true_match_repetition_temporal_expression_base : 
-    BTWS_NOT_OP range_modifier_expression[range]
-    { $$ = elex::true_match_repetition_expr($range, nullptr, elex::cycle_temporal_expr()); }
+    BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET 
+    { $$ = elex::true_match_repetition_expr($from, $to, elex::cycle_temporal_expr()); }
 
-  | BTWS_NOT_OP range_modifier_expression[range] MUL temporal_expression_base[temporal] 
-    { $$ = elex::true_match_repetition_expr($range, nullptr, $temporal); }
+  | BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] 
+    { $$ = elex::true_match_repetition_expr($from, $to, $temporal); }
   ; 
 
 opt_fixed_repetition_rep_base_expr : 
@@ -2505,9 +2497,6 @@ scoped_id_expr :
     id_expr 
     { $$ = $1; }
 
-  | id_expr[id] range_modifier_expression[range]
-    { $$ = elex::list_slicing_expr($id, $range); }  
-  
   | id_expr[id] bit_slicing_expression[slice]
     { $$ = elex::bit_slicing_expr($id, $slice); }
     
@@ -2516,6 +2505,44 @@ scoped_id_expr :
 
   | it_expression 
     { $$ = $1; }
+
+    // id[idx] | id[bot..top]
+  | id_expr[id] range_modifier_expression[range]
+    { 
+      // cast the range pointer from Expression to range_modifier_expr so we can work on its insides
+      auto range_modifier = std::dynamic_pointer_cast<elex::range_modifier_expr_class>($range);
+      
+      // if the range expression is not of type range_modifier_expr, the programmer screwed up and the 
+      // rule action of range_modifier_expr should be examined and re-written
+      if(range_modifier == nullptr) {
+        error(@range, "Programming error: range expression node must be of type range_modifier_expr");
+        YYABORT;
+      }
+
+      elex::Expressions range_items = range_modifier->getRangeItems();
+
+      // When indexing or slicing a list, only a single index or a single range expression is allowed
+      if(range_items->size() != 1) {
+        error(@range, "Programming error: range expression node for list slicing or indexing must have only a single index/range item!");
+        YYABORT;
+      }
+      elex::Expression item = *(range_items->begin());
+
+      if(elex::isIndexItem(item))
+        $$ = elex::list_index_expr($id, item); 
+      
+      else if (elex::isRangeItem(item))
+        $$ = elex::list_slicing_expr($id, item);
+      
+      else {        
+        std::stringstream ss;
+        ss << "Programming error: range expression item node must be of type (list_index_item_expr_class | range_modifier_item_expr_class) "
+           << "But got " << typeid(*item).name() << std::endl;
+        error(@range, ss.str());
+        YYABORT;
+      }
+
+    }  
   ;
 
 
@@ -2610,7 +2637,7 @@ range_modifier_expression_base :
     { $$ = elex::range_modifier_item_expr($bot, $top); }
 
   | fixed_repetition_rep_base_expr[bot] %prec LT_OP
-    { $$ = elex::range_modifier_item_expr($bot, nullptr); }
+    { $$ = elex::list_index_item_expr($bot); }
   ;
 
 bit_slicing_expression :

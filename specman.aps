@@ -212,7 +212,8 @@ module Specman begin
         constructor type_introspec_negation_expr(field_id: Expression; type_id: DataType) : Expression;
 
         constructor in_enum_expr(exp: Expression; inside: DataType) : Expression;
-        constructor list_indexing_expr(list_exp: Expression; idx_expr: Expression) : Expression;
+        constructor list_index_item_expr(idx_expr: Expression) : Expression;
+        constructor list_index_expr(base_id: Expression; idx_expr: Expression) : Expression;
         constructor list_slicing_expr(list_exp: Expression; range_expr: Expression) : Expression;
         constructor bit_slicing_expr(list_exp: Expression; bit_slice_expr: Expression) : Expression;
         constructor list_concat_expr(list_concat_items: Expressions) : Expression;

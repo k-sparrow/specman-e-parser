@@ -33,7 +33,6 @@ public:
 template <class Elem> 
 class list_tree_node : public tree_node
 {
-    // iterators for container
 private:
     std::vector<Elem> m_elems;
 public:
@@ -46,8 +45,8 @@ public:
     list_tree_node(list_tree_node<Elem> const& base, 
                    list_tree_node<Elem> const& ext) : list_tree_node(base) {
 
-        m_elems.reserve(size(m_elems) + distance(begin(ext.m_elems), end(ext.m_elems)));
-        m_elems.insert(end(m_elems), begin(ext.m_elems), end(ext.m_elems));
+        m_elems.reserve(std::size(m_elems) + distance(std::begin(ext.m_elems), std::end(ext.m_elems)));
+        m_elems.insert(std::end(m_elems), std::begin(ext.m_elems), std::end(ext.m_elems));
     }
     ~list_tree_node() { m_elems.clear(); }
 
@@ -56,7 +55,7 @@ public:
     }
 
     virtual auto dump(std::ostream& stream, int n) -> void {
-        if (size(m_elems) == 0)
+        if (this->size() == 0)
         {
             stream << pad(n) << "nil" << std::endl;
         }
@@ -68,4 +67,14 @@ public:
         }
     }
 
+    auto size() const -> size_t { return std::size(m_elems); }
+
+    // iterators for container
+    using iterator       = typename std::vector<Elem>::iterator;
+    using const_iterator = typename std::vector<Elem>::const_iterator;
+
+    auto begin()  -> iterator { return m_elems.begin(); }
+    auto end()    -> iterator { return m_elems.end(); }
+    auto cbegin() -> const_iterator { return m_elems.cbegin(); }
+    auto cend()   -> const_iterator { return m_elems.cend(); }
 };

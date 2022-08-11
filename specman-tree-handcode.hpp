@@ -13,6 +13,12 @@
         auto set_is_instance(elex::Boolean is_instance) { this->is_instance = is_instance; }
 #endif // FieldStructMember_EXTRAS 
 
+// needed for accessing the expression list items
+// to determine
+#ifndef range_modifier_expr_EXTRAS
+#define range_modifier_expr_EXTRAS \
+    auto getRangeItems() -> Expressions { return range_items; }
+#endif // range_modifier_expr_EXTRAS
 
 namespace elex {
     using Boolean = bool;
