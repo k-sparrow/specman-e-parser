@@ -364,7 +364,7 @@
 %precedence LT_ID LT_OP
 %precedence NON_DOT NON_LPAREN NON_ELSE NON_THEN
 %precedence ID
-%left ELSE THEN
+%left ELSE THEN SEMICOLON
 %precedence EXEC  
 %precedence TERNARY RBRACKET
 %left IN IS OR LOGICAL_OR_OP BTWS_OR_OP XOR_OP XOR LSHIFT RSHIFT IMPLICATION
@@ -775,7 +775,7 @@ enum_datatype :
 scalar_or_enum_data_type : 
     enum_datatype { $$ = $1; }
   | scalar_subtype_datatype { $$ = $1; }
-  | file_datatype { $$ = $1; }
+  //| file_datatype { $$ = $1; }
   ;
 
 scalar_subtype_datatype :
@@ -805,15 +805,6 @@ scalar_subtype_datatype :
     width_modifier_expression[width]
     { $$ = elex::predefined_subtype_dt($type_id, $range, $width); }
 
-  ;
-
-
-subtype_range_list_items : 
-    range_modifier_expression_base 
-    { $$ = elex::single_Expressions($1); }
-
-  | subtype_range_list_items COMMA range_modifier_expression_base 
-    { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
   ;
 
 
@@ -1621,31 +1612,31 @@ temporal_expression_base_items :
   ;
 
 fixed_repetition_temporal_expression_base : 
-    LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET 
-    { $$ = elex::fixed_repetition_expr($rep, elex::cycle_temporal_expr()); }
+    range_modifier_expression[range] %prec LT_OP
+    { $$ = elex::fixed_repetition_expr($range, elex::cycle_temporal_expr()); }
   
-  | LBRACKET fixed_repetition_rep_base_expr[rep] RBRACKET MUL temporal_expression_base[temporal]
-    { $$ = elex::fixed_repetition_expr($rep, $temporal); }
+  | range_modifier_expression[range] MUL temporal_expression_base[temporal] %prec LT_OP
+    { $$ = elex::fixed_repetition_expr($range, $temporal); }
   ;
 
 // %prec FIRST_MATCH is a dummy token needed to solve
 // shift-reduce problems caused by IMPLICATION/OR/AND tokens
 // and the non-terminal match temporal expression after the SEMICOLON
 first_match_repetition_temporal_expression_base : 
-    LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
-    { $$ = elex::first_match_repetition_expr($from, $to, elex::cycle_temporal_expr(), $match); }
+    range_modifier_expression[range] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($range, nullptr, elex::cycle_temporal_expr(), $match); }
 
-  |  LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
-    { $$ = elex::first_match_repetition_expr($from, $to, $temporal, $match); }
+  |  range_modifier_expression[range] MUL temporal_expression_base[temporal] SEMICOLON temporal_expression_base[match] %prec FIRST_MATCH
+    { $$ = elex::first_match_repetition_expr($range, nullptr, $temporal, $match); }
   ;
 
 // TODO: convert empty repetition terminal into zero/infinite terminal expressions
 true_match_repetition_temporal_expression_base : 
-    BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET 
-    { $$ = elex::true_match_repetition_expr($from, $to, elex::cycle_temporal_expr()); }
+    BTWS_NOT_OP range_modifier_expression[range]
+    { $$ = elex::true_match_repetition_expr($range, nullptr, elex::cycle_temporal_expr()); }
 
-  | BTWS_NOT_OP LBRACKET opt_fixed_repetition_rep_base_expr[from] DDOT opt_fixed_repetition_rep_base_expr[to] RBRACKET MUL temporal_expression_base[temporal] 
-    { $$ = elex::true_match_repetition_expr($from, $to, $temporal); }
+  | BTWS_NOT_OP range_modifier_expression[range] MUL temporal_expression_base[temporal] 
+    { $$ = elex::true_match_repetition_expr($range, nullptr, $temporal); }
   ; 
 
 opt_fixed_repetition_rep_base_expr : 
@@ -1794,6 +1785,17 @@ variable_declaration_action :
     // var name := exp
   | VAR ID[id] COLON ASSIGN expression[exp]
     { $$ = elex::var_decl_act($id, nullptr, $exp);}
+  
+  // this expansion for the file type is needed in order to avoid adding FILE as a type to the 
+  // 'scoped_type_identifier_data_type' non-terminal, which causes clashes between the two for-each loop actions
+  // (for-each-file-matching is overriden by for-each-type-in)
+    // var name : type
+  | VAR ID[id] COLON FILE
+    { $$ = elex::var_decl_act($id, elex::file_dt(), nullptr); }
+  
+    // var name : type = exp
+  | VAR ID[id] COLON FILE ASSIGN expression[exp]
+    { $$ = elex::var_decl_act($id, elex::file_dt(), $exp);}
   ;
 
 variable_assignment_action : 
@@ -2503,9 +2505,6 @@ scoped_id_expr :
     id_expr 
     { $$ = $1; }
 
-  | id_expr[id] LBRACKET fixed_repetition_rep_base_expr[idx] RBRACKET           
-    { $$ = elex::list_indexing_expr($id, $idx); }
-  
   | id_expr[id] range_modifier_expression[range]
     { $$ = elex::list_slicing_expr($id, $range); }  
   
@@ -2596,6 +2595,14 @@ range_modifier_expression :
       subtype_range_list_items
     RBRACKET 
     { $$ = elex::range_modifier_expr($2); }
+  ;
+
+subtype_range_list_items : 
+    range_modifier_expression_base 
+    { $$ = elex::single_Expressions($1); }
+
+  | subtype_range_list_items COMMA range_modifier_expression_base 
+    { $$ = elex::append_Expressions($1, elex::single_Expressions($3)); }
   ;
 
 range_modifier_expression_base : 
