@@ -31,8 +31,8 @@ namespace elex {
     }
 
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& {
-        if(!rhs) return out << "Symbol: empty" << std::endl;
-        return out << "Symbol: " << rhs->Str();
+        if(!rhs) return out << "empty" << std::endl;
+        return out << rhs->Str();
     }
 
     auto operator + (Symbol const& lhs, std::string const& rhs) -> Symbol {
