@@ -2232,6 +2232,9 @@ expression :
     operator                   
     { $$ = $1; }
 
+  | struct_allocate_expression 
+    { $$ = $1; }
+  
   | identifier_expression %prec LT_OP 
    { $$ = $1; }
   
@@ -2257,7 +2260,7 @@ operator :
   | logical_expression %prec NON_LPAREN        
     { $$ = $1; }
 
-  | arithmetic_expression      
+  | arithmetic_expression 
     { $$ = $1; }
   
   | ternary_assignment_expression
@@ -2266,9 +2269,6 @@ operator :
   | method_call_expression     
     { $$ = $1; }
 
-  | struct_allocate_expression 
-    { $$ = $1; }
-  
   | list_concatenation_expression 
     { $$ = $1; }
 
@@ -2658,17 +2658,18 @@ terminated_constraint_expression :
     ;
 
 constriant_expression_block : 
-      terminated_constraint_expression { 
-          $$ = elex::single_Expressions($1); 
-      }
-    | constriant_expression_block terminated_constraint_expression {
-        $$ = elex::append_Expressions($1, elex::single_Expressions($2));
-      }
-    ;
+    terminated_constraint_expression { 
+        $$ = elex::single_Expressions($1); 
+    }
+  | constriant_expression_block terminated_constraint_expression {
+      $$ = elex::append_Expressions($1, elex::single_Expressions($2));
+    }
+  ;
 
 method_call_expression : 
-    expression[base] LPAREN comma_separated_expressions[arguments] RPAREN { $$ = elex::method_call_expr($base, $arguments); }
-    ;
+  expression[base] LPAREN comma_separated_expressions[arguments] RPAREN 
+  { $$ = elex::method_call_expr($base, $arguments); }
+  ;
 
 comma_separated_expressions : 
     expression                                   
