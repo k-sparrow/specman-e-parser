@@ -2514,18 +2514,14 @@ auto hwp_access_expr(Expression base) -> Expression {
 
 auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\cast_operator_expr" << std::endl;
-    if(casted_expr){
-        stream << pad(n+2) << "casted_expr: " << std::endl;
-        casted_expr->dump(stream, n+4);
-    }
     if(dest_type_expr){
         stream << pad(n+2) << "dest_type_expr: " << std::endl;
         dest_type_expr->dump(stream, n+4);
     }
 }
 
-auto cast_operator_expr(Expression casted_expr, DataType dest_type_expr) -> Expression {
-    return Expression(new cast_operator_expr_class(casted_expr, dest_type_expr));
+auto cast_operator_expr(DataType dest_type_expr) -> Expression {
+    return Expression(new cast_operator_expr_class(dest_type_expr));
 }
 
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {

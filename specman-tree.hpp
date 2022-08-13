@@ -3775,11 +3775,9 @@ auto hwp_access_expr(Expression base) -> Expression;
 
 class cast_operator_expr_class : public Expression_class {
     protected:
-        Expression casted_expr;
         DataType dest_type_expr;
     public:
-        cast_operator_expr_class(Expression casted_expr, DataType dest_type_expr) {
-            this->casted_expr = casted_expr;
+        cast_operator_expr_class(DataType dest_type_expr) {
             this->dest_type_expr = dest_type_expr;
         }
 
@@ -3793,7 +3791,7 @@ class cast_operator_expr_class : public Expression_class {
 #endif
 };
 
-auto cast_operator_expr(Expression casted_expr, DataType dest_type_expr) -> Expression;
+auto cast_operator_expr(DataType dest_type_expr) -> Expression;
 
 class method_call_expr_class : public Expression_class {
     protected:

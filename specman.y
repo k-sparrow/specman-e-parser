@@ -2576,11 +2576,15 @@ scoped_id_expr :
   | id_expr[base] LPAREN comma_separated_expressions[arguments] RPAREN
     { $$ = elex::method_call_expr($base, $arguments); }
 
+  // casting operator
+  | AS_A LPAREN scoped_type_identifier_data_type[type_] RPAREN
+    { $$ = elex::cast_operator_expr($type_); }
+
     // bit slicing expression
     // id[top:bot]
   | id_expr[id] bit_slicing_expression[slice]
     { $$ = elex::bit_slicing_expr($id, $slice); }
-    
+
     // list slicing or indexing expression
     // id[idx] | id[bot..top]
   | id_expr[id] range_modifier_expression[range]
