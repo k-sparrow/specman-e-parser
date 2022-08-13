@@ -262,6 +262,7 @@
 %token START
 %token COMPUTE
 %token RETURN
+%token PRINT
 %token WAIT
 %token SYNC
 %token ONLY
@@ -2195,6 +2196,9 @@ method_call_action :
 
   | RETURN 
     { $$ = elex::return_act(nullptr); }
+
+  | PRINT comma_separated_expressions
+    { $$ = elex::print_call_act($2); }
   ;
 
 gen_action :

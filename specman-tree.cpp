@@ -3250,6 +3250,18 @@ auto default_case_branch_item_case(ActionBlock actions) -> Case {
     return Case(new default_case_branch_item_case_class(actions));
 }
 
+auto print_call_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\print_call_act" << std::endl;
+    if(values){
+        stream << pad(n+2) << "values: " << std::endl;
+        values->dump(stream, n+4);
+    }
+}
+
+auto print_call_act(Expressions values) -> Action {
+    return Action(new print_call_act_class(values));
+}
+
 auto method_call_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\method_call_act" << std::endl;
     if(method_call_expr){

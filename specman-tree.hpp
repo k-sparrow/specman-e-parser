@@ -4889,6 +4889,26 @@ class default_case_branch_item_case_class : public Case_class {
 
 auto default_case_branch_item_case(ActionBlock actions) -> Case;
 
+class print_call_act_class : public Action_class {
+    protected:
+        Expressions values;
+    public:
+        print_call_act_class(Expressions values) {
+            this->values = values;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef print_call_act_EXTRAS
+    print_call_act_EXTRAS
+#endif
+};
+
+auto print_call_act(Expressions values) -> Action;
+
 class method_call_act_class : public Action_class {
     protected:
         Expression method_call_expr;
