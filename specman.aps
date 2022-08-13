@@ -118,6 +118,7 @@ module Specman begin
         constructor inf_repetition_base_expr() : Expression;
         constructor cycle_temporal_expr() : Expression;
         constructor delay_temporal_expr(e : Expression; timescale_unit: Expression) : Expression;
+        constructor consume_temporal_expr(e : Expression) : Expression;
 
         constructor expect_nameless_sm(temporal: Expression; dut_error_call: Expression): StructMember;
         constructor expect_sm(id: Expression; temporal: Expression; dut_error_call: Expression): StructMember;

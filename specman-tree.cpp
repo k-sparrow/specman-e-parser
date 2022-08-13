@@ -1148,6 +1148,18 @@ auto delay_temporal_expr(Expression e, Expression timescale_unit) -> Expression 
     return Expression(new delay_temporal_expr_class(e, timescale_unit));
 }
 
+auto consume_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\consume_temporal_expr" << std::endl;
+    if(e){
+        stream << pad(n+2) << "e: " << std::endl;
+        e->dump(stream, n+4);
+    }
+}
+
+auto consume_temporal_expr(Expression e) -> Expression {
+    return Expression(new consume_temporal_expr_class(e));
+}
+
 auto expect_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\expect_nameless_sm" << std::endl;
     if(temporal){

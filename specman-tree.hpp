@@ -1701,6 +1701,26 @@ class delay_temporal_expr_class : public Expression_class {
 
 auto delay_temporal_expr(Expression e, Expression timescale_unit) -> Expression;
 
+class consume_temporal_expr_class : public Expression_class {
+    protected:
+        Expression e;
+    public:
+        consume_temporal_expr_class(Expression e) {
+            this->e = e;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef consume_temporal_expr_EXTRAS
+    consume_temporal_expr_EXTRAS
+#endif
+};
+
+auto consume_temporal_expr(Expression e) -> Expression;
+
 class expect_nameless_sm_class : public StructMember_class {
     protected:
         Expression temporal;

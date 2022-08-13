@@ -645,6 +645,7 @@
 %nterm <elex::Expression>   binary_temporal_expression_base
 %nterm <elex::Expression>   edge_triggered_temporal_expression_base
 %nterm <elex::Expression>   delay_temporal_expression_base
+%nterm <elex::Expression>   consume_temporal_expression_base
 %nterm <elex::Expression>   timescale_expression
 
 %nterm <elex::Expression>   sequence_temporal_expression_base
@@ -1550,6 +1551,9 @@ temporal_expression_base:
     | delay_temporal_expression_base
       { $$ = $1; }
 
+    | consume_temporal_expression_base
+      { $$ = $1; }
+
     | fixed_repetition_temporal_expression_base
       { $$ = $1; }
 
@@ -1615,8 +1619,8 @@ edge_triggered_temporal_expression_base :
   ;
 
 delay_temporal_expression_base :
-    DELAY LPAREN expression[exp] RPAREN
-    { $$ = elex::delay_temporal_expr($exp, nullptr); }
+  DELAY LPAREN expression[exp] RPAREN
+  { $$ = elex::delay_temporal_expr($exp, nullptr); }
 
 /*   | DELAY LPAREN expression[exp] timescale_expression[tms] RPAREN
     { $$ = elex::delay_temporal_expr($exp, $tms); } */
@@ -1629,6 +1633,11 @@ delay_temporal_expression_base :
   | US
   | MS
   ; */
+
+consume_temporal_expression_base :
+  CONSUME LPAREN temporal_expression_base RPAREN
+  { $$ = elex::consume_temporal_expr($3);}
+  ;
 
 sequence_temporal_expression_base : 
   LBRACE temporal_expression_base_items RBRACE 
