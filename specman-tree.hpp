@@ -3733,12 +3733,32 @@ class ternary_assign_expr_class : public Expression_class {
 
 auto ternary_assign_expr(Expression bool_exp, Expression true_expr, Expression false_expr) -> Expression;
 
+class hwp_access_expr_class : public Expression_class {
+    protected:
+        Expression base;
+    public:
+        hwp_access_expr_class(Expression base) {
+            this->base = base;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef hwp_access_expr_EXTRAS
+    hwp_access_expr_EXTRAS
+#endif
+};
+
+auto hwp_access_expr(Expression base) -> Expression;
+
 class cast_operator_expr_class : public Expression_class {
     protected:
         Expression casted_expr;
-        Expression dest_type_expr;
+        DataType dest_type_expr;
     public:
-        cast_operator_expr_class(Expression casted_expr, Expression dest_type_expr) {
+        cast_operator_expr_class(Expression casted_expr, DataType dest_type_expr) {
             this->casted_expr = casted_expr;
             this->dest_type_expr = dest_type_expr;
         }
@@ -3753,7 +3773,7 @@ class cast_operator_expr_class : public Expression_class {
 #endif
 };
 
-auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression;
+auto cast_operator_expr(Expression casted_expr, DataType dest_type_expr) -> Expression;
 
 class method_call_expr_class : public Expression_class {
     protected:

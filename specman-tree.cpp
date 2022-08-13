@@ -2488,6 +2488,18 @@ auto ternary_assign_expr(Expression bool_exp, Expression true_expr, Expression f
     return Expression(new ternary_assign_expr_class(bool_exp, true_expr, false_expr));
 }
 
+auto hwp_access_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\hwp_access_expr" << std::endl;
+    if(base){
+        stream << pad(n+2) << "base: " << std::endl;
+        base->dump(stream, n+4);
+    }
+}
+
+auto hwp_access_expr(Expression base) -> Expression {
+    return Expression(new hwp_access_expr_class(base));
+}
+
 auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\cast_operator_expr" << std::endl;
     if(casted_expr){
@@ -2500,7 +2512,7 @@ auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
     }
 }
 
-auto cast_operator_expr(Expression casted_expr, Expression dest_type_expr) -> Expression {
+auto cast_operator_expr(Expression casted_expr, DataType dest_type_expr) -> Expression {
     return Expression(new cast_operator_expr_class(casted_expr, dest_type_expr));
 }
 

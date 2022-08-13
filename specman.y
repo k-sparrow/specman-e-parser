@@ -631,6 +631,10 @@
 /* Ternary Expression */
 %nterm <elex::Expression>   ternary_assignment_operator_expression
 
+/* Hardware Port Access Expression */
+%nterm <elex::Expression>   hwp_access_operator_expression
+
+
 /* Temporal Expressions */
 %nterm <elex::Expression>   temporal_expression
 %nterm <elex::Expression>   temporal_expression_base
@@ -2287,6 +2291,9 @@ operator_expression :
   | ternary_assignment_operator_expression
     { $$ = $1; }
 
+  | hwp_access_operator_expression
+    { $$ = $1; }
+
   | identifier_expression %prec LT_OP 
    { $$ = $1; }
   
@@ -2428,6 +2435,12 @@ ternary_assignment_operator_expression :
     CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $bool_exp, { error(@1, "Conditional expression must be a boolean operator_expression!"); YYABORT; })
     $$ = elex::ternary_assign_expr($bool_exp, $if_choice_exp, $else_choice_exp); 
   }
+  ;
+
+hwp_access_operator_expression :
+  identifier_expression[base] HWP
+  { $$ = elex::hwp_access_expr($base); }
+  ;
 
 list_concatenation_operator_expression : 
   LBRACE list_concat_expressions RBRACE { $$ = elex::list_concat_expr($2); }
