@@ -5225,10 +5225,10 @@ auto wait_act(Expression event_id) -> Action;
 
 class all_of_act_class : public Action_class {
     protected:
-        ActionBlocks action_blocks;
+        ActionBlocks threads;
     public:
-        all_of_act_class(ActionBlocks action_blocks) {
-            this->action_blocks = action_blocks;
+        all_of_act_class(ActionBlocks threads) {
+            this->threads = threads;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -5241,14 +5241,14 @@ class all_of_act_class : public Action_class {
 #endif
 };
 
-auto all_of_act(ActionBlocks action_blocks) -> Action;
+auto all_of_act(ActionBlocks threads) -> Action;
 
 class first_of_act_class : public Action_class {
     protected:
-        ActionBlocks action_blocks;
+        ActionBlocks threads;
     public:
-        first_of_act_class(ActionBlocks action_blocks) {
-            this->action_blocks = action_blocks;
+        first_of_act_class(ActionBlocks threads) {
+            this->threads = threads;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -5261,7 +5261,7 @@ class first_of_act_class : public Action_class {
 #endif
 };
 
-auto first_of_act(ActionBlocks action_blocks) -> Action;
+auto first_of_act(ActionBlocks threads) -> Action;
 
 class gen_act_class : public Action_class {
     protected:

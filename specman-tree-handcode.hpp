@@ -17,8 +17,15 @@
 // to determine
 #ifndef range_modifier_expr_EXTRAS
 #define range_modifier_expr_EXTRAS \
-    auto getRangeItems() -> Expressions { return range_items; }
+    public: \
+        auto getRangeItems() -> Expressions { return range_items; }
 #endif // range_modifier_expr_EXTRAS
+
+#ifndef struct_hier_ref_expr_EXTRAS
+#define struct_hier_ref_expr_EXTRAS \
+    public: \
+        auto getHiers() -> Expressions { return hiers; }
+#endif // struct_hier_ref_expr_EXTRAS
 
 namespace elex {
     using Boolean = bool;

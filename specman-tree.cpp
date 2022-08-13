@@ -3494,26 +3494,26 @@ auto wait_act(Expression event_id) -> Action {
 
 auto all_of_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\all_of_act" << std::endl;
-    if(action_blocks){
-        stream << pad(n+2) << "action_blocks: " << std::endl;
-        action_blocks->dump(stream, n+4);
+    if(threads){
+        stream << pad(n+2) << "threads: " << std::endl;
+        threads->dump(stream, n+4);
     }
 }
 
-auto all_of_act(ActionBlocks action_blocks) -> Action {
-    return Action(new all_of_act_class(action_blocks));
+auto all_of_act(ActionBlocks threads) -> Action {
+    return Action(new all_of_act_class(threads));
 }
 
 auto first_of_act_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\first_of_act" << std::endl;
-    if(action_blocks){
-        stream << pad(n+2) << "action_blocks: " << std::endl;
-        action_blocks->dump(stream, n+4);
+    if(threads){
+        stream << pad(n+2) << "threads: " << std::endl;
+        threads->dump(stream, n+4);
     }
 }
 
-auto first_of_act(ActionBlocks action_blocks) -> Action {
-    return Action(new first_of_act_class(action_blocks));
+auto first_of_act(ActionBlocks threads) -> Action {
+    return Action(new first_of_act_class(threads));
 }
 
 auto gen_act_class::dump(std::ostream& stream, int n) -> void {

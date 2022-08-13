@@ -333,8 +333,8 @@ module Specman begin
         constructor emit_act(event_id : Expression) : Action;
         constructor sync_act(event_id : Expression) : Action;
         constructor wait_act(event_id : Expression) : Action;
-        constructor all_of_act(action_blocks: ActionBlocks) : Action;
-        constructor first_of_act(action_blocks: ActionBlocks) : Action;
+        constructor all_of_act(threads: ActionBlocks) : Action;
+        constructor first_of_act(threads: ActionBlocks) : Action;
 
         constructor gen_act(gen_expr: Expression; constraints: Expressions) : Action;
         constructor do_seq_act(seq_item: Expression; constraints: Expressions) : Action;

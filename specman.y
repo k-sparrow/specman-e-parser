@@ -3,6 +3,7 @@
 %define api.token.constructor
 %define api.value.type variant
 %locations
+%verbose
 %define parse.assert true
 %define parse.trace 
 %define parse.error verbose
@@ -17,7 +18,6 @@
 
 /* goes inside header file */
 %code requires {
-    
     #include "specman-tree.hpp"
     using namespace std;
 
@@ -151,6 +151,27 @@
         auto range_idx_expr = std::dynamic_pointer_cast<elex::range_modifier_item_expr_class>(exp);
 
         return range_idx_expr != nullptr;
+      }
+
+      auto isMethodCallExpression(Expression exp) -> bool {
+        // we're supposed to work on hierarchy calls here
+        // so if the expression is not of the appropriate class we return false
+        auto hier_ref_expr = std::dynamic_pointer_cast<elex::struct_hier_ref_expr_class>(exp);
+
+        if(hier_ref_expr == nullptr) return false;
+
+        auto hiers = hier_ref_expr->getHiers(); 
+
+        // find the last expression which is not empty
+        // and check it a method call expression
+        auto exp_iter = std::find_if(hiers->rbegin(), hiers->rend(), 
+                                     [](Expression e){ return e != nullptr; });
+
+        if(exp_iter == hiers->rend()) return false;
+
+        auto method_call_expr = std::dynamic_pointer_cast<elex::method_call_expr_class>(*exp_iter);
+
+        return (method_call_expr != nullptr);
       }
     }
 
@@ -1243,8 +1264,10 @@ opt_dut_error_call :
     %empty                      
     { $$ = elex::no_expr(); }
 
-  | ELSE method_call_operator_expression 
-    { $$ = $2; }
+  // can't use method_call_operator_expression here
+  // since dut_error is not a locally referenced method identifier
+  | ELSE id_expr[base] LPAREN comma_separated_expressions[arguments] RPAREN
+    { $$ = elex::method_call_expr($base, $arguments); }
   ;
 
 expect_or_assume_kwd : 
@@ -1744,7 +1767,9 @@ non_term_action :
     { $$ = $1; }
 
   | method_call_action 
-    { $$ = $1; }
+    { 
+      $$ = $1; 
+    }
   
   | gen_action
     { $$ = $1; }
@@ -2271,9 +2296,6 @@ operator_expression :
   | bit_concatenation_operator_expression  
     { $$ = $1; }
 
-  | method_call_operator_expression     
-    { $$ = $1; }
-
   | str_expression             
     { $$ = $1; }
 
@@ -2512,19 +2534,28 @@ dot_separated_expressions :
     ;
 
 scoped_id_expr : 
-    id_expr 
-    { $$ = $1; }
-
-  | me_expression 
+    me_expression 
     { $$ = $1; }
 
   | it_expression 
     { $$ = $1; }
 
+  // simple identifier
+  // id
+  | id_expr %prec NON_LPAREN
+    { $$ = $1; }
+
+  // method call
+  // id(...)
+  | id_expr[base] LPAREN comma_separated_expressions[arguments] RPAREN
+    { $$ = elex::method_call_expr($base, $arguments); }
+
+    // bit slicing expression
     // id[top:bot]
   | id_expr[id] bit_slicing_expression[slice]
     { $$ = elex::bit_slicing_expr($id, $slice); }
     
+    // list slicing or indexing expression
     // id[idx] | id[bot..top]
   | id_expr[id] range_modifier_expression[range]
     { 
@@ -2678,8 +2709,17 @@ constriant_expression_block :
   ;
 
 method_call_operator_expression : 
-  operator_expression[base] LPAREN comma_separated_expressions[arguments] RPAREN 
-  { $$ = elex::method_call_expr($base, $arguments); }
+  identifier_expression
+  { 
+    CHECK_COND_ELSE_PARSE_ERROR(elex::isMethodCallExpression, $1, 
+                                { 
+                                  std::stringstream ss;
+                                  ss << "Reduced identifier expression for method call action is faulty" << std::endl;
+                                  error(@1, ss.str()); 
+                                  YYABORT; 
+                                })
+    $$ = $1; 
+  }
   ;
 
 comma_separated_expressions : 
@@ -2694,8 +2734,8 @@ comma_separated_expressions :
   ;
 
 identifier_expression : 
-      hier_ref_expression { $$ = $1; }
-    ;
+    hier_ref_expression { $$ = $1; }
+  ;
 
 id_expr : 
   ID { $$ = elex::id_expr($1); }

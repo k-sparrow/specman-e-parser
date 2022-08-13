@@ -70,11 +70,17 @@ public:
     auto size() const -> size_t { return std::size(m_elems); }
 
     // iterators for container
-    using iterator       = typename std::vector<Elem>::iterator;
-    using const_iterator = typename std::vector<Elem>::const_iterator;
+    using iterator               = typename std::vector<Elem>::iterator;
+    using const_iterator         = typename std::vector<Elem>::const_iterator;
+    using reverse_iterator       = typename std::vector<Elem>::reverse_iterator;
+    using const_reverse_iterator = typename std::vector<Elem>::const_reverse_iterator;
 
-    auto begin()  -> iterator { return m_elems.begin(); }
-    auto end()    -> iterator { return m_elems.end(); }
-    auto cbegin() -> const_iterator { return m_elems.cbegin(); }
-    auto cend()   -> const_iterator { return m_elems.cend(); }
+    auto begin()   -> iterator               { return m_elems.begin(); }
+    auto end()     -> iterator               { return m_elems.end(); }
+    auto cbegin()  -> const_iterator         { return m_elems.cbegin(); }
+    auto cend()    -> const_iterator         { return m_elems.cend(); }
+    auto rbegin()  -> reverse_iterator       { return m_elems.rbegin(); }
+    auto rend()    -> reverse_iterator       { return m_elems.rend(); }
+    auto crbegin() -> const_reverse_iterator { return m_elems.crbegin(); }
+    auto crend()   -> const_reverse_iterator { return m_elems.crend(); }
 };

@@ -32,7 +32,7 @@ ${OBJS}:
 	@printf "Generting scanner source...\n"    && ${FLEX} -o ${FCSRC} ${FSRC}
 	@printf "Generting parser source...\n" 	   && ${BISON} -o ${BCSRC} ${BSRC} --xml=${LANG}.xml
 	@printf "Generting parser debug info...\n" && ${XSLT} ${BISON_BIN_DIR}/xslt/xml2xhtml.xsl ${LANG}.xml > ${LANG}.html
-	@printf "Compiling parser...\n" 		   && ${CC} ${CFLAGS} ${CSRC} -o $@
+	@printf "Compiling parser...\n" 		   && ${CC} -DYYDEBUG=1 ${CFLAGS} ${CSRC} -o $@
 
 flex-main: ${FSRC}
 	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp strtab.cpp main-flex.cpp -o $@
