@@ -255,6 +255,7 @@ mvl_single     MVL_[UX01ZWLHN]
 mvl            {mvl_single}|{sized_mvl}
 
 %x CODE
+%x SINGLE_LINE_COMMENT
 %%
 
 <<EOF>>   { return yyterminate(); }
@@ -265,12 +266,25 @@ mvl            {mvl_single}|{sized_mvl}
 .         {} // eat up everything as a comment
 \n        mylineno++;
 
+<SINGLE_LINE_COMMENT>{
+    <<EOF>>   { return yyterminate(); }
+    .         { } // eat everything up as a comment 
+    \n        {   // new line begins, current comment is terminated
+                mylineno++;
+                yy_pop_state(); 
+              } 
+}
+
 <CODE>{
     {code_close} {
                     yy_pop_state();
                  }
 
     {ws}    /* skip blanks and tabs */
+
+    \-\-|\/\/ {
+        yy_push_state(SINGLE_LINE_COMMENT);
+    }
 
     \n        mylineno++;
 
