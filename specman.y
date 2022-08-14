@@ -1761,7 +1761,14 @@ action_blocks_block :
   ;
 
 action : 
-    non_term_action SEMICOLON { $$ = $1; } 
+    non_term_action SEMICOLON 
+    { $$ = $1; } 
+
+  | error           SEMICOLON 
+    { 
+      yyerrok; 
+      $$ = nullptr; 
+    }
   ;
 
 non_term_action : 
@@ -2746,7 +2753,7 @@ method_call_operator_expression :
                                   std::stringstream ss;
                                   ss << "Reduced identifier expression for method call action is faulty" << std::endl;
                                   error(@1, ss.str()); 
-                                  YYABORT; 
+                                  YYERROR; 
                                 })
     $$ = $1; 
   }

@@ -61,8 +61,11 @@ public:
         }
         else {
             stream << pad(n) << "list" << std::endl;
-            for (Elem const& elem : m_elems)
-                elem->dump(stream, n+2);
+            for (Elem const& elem : m_elems) {
+                if(elem){
+                    elem->dump(stream, n+2);
+                }
+            }
             stream << pad(n) << "endlist" << std::endl;
         }
     }
