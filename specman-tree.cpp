@@ -410,6 +410,26 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem {
     return SequenceItem(new sequence_driver_base_kind_it_class(id));
 }
 
+auto define_as_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\define_as_st" << std::endl;
+    stream << pad(n+2) << "macro: ";
+    dump_Symbol_(stream, 0, macro);
+}
+
+auto define_as_st(Symbol_ macro) -> Statement {
+    return Statement(new define_as_st_class(macro));
+}
+
+auto define_as_computed_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\define_as_computed_st" << std::endl;
+    stream << pad(n+2) << "macro: ";
+    dump_Symbol_(stream, 0, macro);
+}
+
+auto define_as_computed_st(Symbol_ macro) -> Statement {
+    return Statement(new define_as_computed_st_class(macro));
+}
+
 auto formal_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\formal" << std::endl;
     stream << pad(n+2) << "name: ";

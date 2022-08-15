@@ -669,6 +669,46 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
 
 auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 
+class define_as_st_class : public Statement_class {
+    protected:
+        Symbol_ macro;
+    public:
+        define_as_st_class(Symbol_ macro) {
+            this->macro = macro;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef define_as_st_EXTRAS
+    define_as_st_EXTRAS
+#endif
+};
+
+auto define_as_st(Symbol_ macro) -> Statement;
+
+class define_as_computed_st_class : public Statement_class {
+    protected:
+        Symbol_ macro;
+    public:
+        define_as_computed_st_class(Symbol_ macro) {
+            this->macro = macro;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef define_as_computed_st_EXTRAS
+    define_as_computed_st_EXTRAS
+#endif
+};
+
+auto define_as_computed_st(Symbol_ macro) -> Statement;
+
 class formal_class : public Formal_class {
     protected:
         Symbol_ name;

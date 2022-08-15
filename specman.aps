@@ -65,6 +65,8 @@ module Specman begin
         constructor sequence_base_kind_it(id: Symbol_) : SequenceItem;
         constructor sequence_driver_base_kind_it(id: Symbol_) : SequenceItem;
 
+        constructor define_as_st(macro: Symbol_) : Statement;
+        constructor define_as_computed_st(macro: Symbol_) : Statement;
         constructor formal(name: Symbol_; type_: DataType) : Formal;
 
         constructor field_sm(field : FieldStructMember) : StructMember;

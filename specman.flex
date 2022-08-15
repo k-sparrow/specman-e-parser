@@ -6,7 +6,8 @@
 
 %{
     #include <iostream>
-    #include <string>
+    #include <string> 
+    #include <cassert>
 
     #include "parser.hpp"
     #include "driver.hpp"
@@ -164,7 +165,19 @@ created_driver       (created_driver)
 sequence_type        (sequence_type)
 sequence_driver_type (sequence_driver_type)
 
-define               (\`?define)
+e_define               (define)
+vlog_define            (`define)
+define_                {vlog_define}|{e_define}                
+as                     (as)
+as_computed            (as{ws}computed)
+/* 
+    `define VLOG_MACRO value            -> (DEFINE_ST)
+    define SIMPLE_MACRO value           -> (PRE_DEFINE_ST -> DEFINE_ST)
+    define <....> as|as computed ...    -> (PRE_DEFINE_ST -> DEFINE_AS_ST)
+*/
+%x PRE_DEFINE_ST 
+%x DEFINE_ST
+%x DEFINE_AS_ST
 
 null	      (NULL)
 true_literal  (TRUE)
@@ -431,8 +444,6 @@ mvl            {mvl_single}|{sized_mvl}
     {sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(Location()); }       
     {sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(Location()); }
 
-    {define}    { return yy::parser::make_DEFINE(Location()); }
-
     {null}	    { return yy::parser::make_NULL_(Location()); }
     {true_literal}	{ return yy::parser::make_TRUE_LITERAL(Location()); }    
     {false_literal}	{ return yy::parser::make_FALSE_LITERAL(Location()); }
@@ -491,6 +502,11 @@ mvl            {mvl_single}|{sized_mvl}
     {dot}         { return yy::parser::make_DOT(Location()); }
     {implication} { return yy::parser::make_IMPLICATION(Location()); }
 
+    {define_}    { 
+                    yy_push_state(PRE_DEFINE_ST); 
+                    return yy::parser::make_DEFINE(Location()); 
+                  }
+
         /* ------------------ Operators ----------------- */
         /* ------------------ Names & Numbers & Literals ----------------- */
 
@@ -528,6 +544,41 @@ mvl            {mvl_single}|{sized_mvl}
     }
 
     .         {  return yy::parser::make_ILLEGAL_TOKEN(YYText(), Location()); }    
+}
+
+<PRE_DEFINE_ST>{
+    \<{name}'{name}\>   { yy_push_state(DEFINE_AS_ST); }
+    .                   {}
+    \n                  { 
+                          yy_pop_state();
+                          BEGIN(CODE);
+                        }
+}
+
+<DEFINE_AS_ST>{
+    {string}        {  
+            std::string str(YYText());
+            if(m_driver.strtable.find(str) == std::end(m_driver.strtable)) {
+                m_driver.strtable[str] = elex::Symbol(new elex::Entry(str, str.length()));
+            }
+            return yy::parser::make_DEFINED_MACRO_CONSTRUCT(m_driver.strtable[str], Location());  
+        }
+
+    {as_computed}   {  return yy::parser::make_AS_COMPUTED(Location());  }
+    {as}            {  return yy::parser::make_AS(Location());  }
+    {lbrace}        {  return yy::parser::make_LBRACE(Location());  }
+    {rbrace}        {  
+        do {
+            std::cout << "Popping a state, hasn't reached CODE yet" << std::endl;
+            yy_pop_state();
+        } 
+        while(yy_top_state() != CODE);
+        std::cout << "Finished popping the stack, have reached CODE" << std::endl;
+        BEGIN(CODE);
+
+        return yy::parser::make_RBRACE(Location());  
+    }
+    .|\n            {} // swallow everything else, we don't analyze macros in the main parser
 }
 
 

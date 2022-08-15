@@ -364,6 +364,9 @@
 %token INSTANCE 
 
 %token DEFINE 
+%token<elex::Symbol_> DEFINED_MACRO_CONSTRUCT
+%token AS
+%token AS_COMPUTED
 
 
 %token LPAREN      
@@ -462,6 +465,7 @@
 // %nterm <elex::Statement>  method_statement
 %nterm <elex::Statement>  c_export_statement
 %nterm <elex::Statement>  import_statement
+%nterm <elex::Statement>  define_as_statement
 
 /* Struct Members */
 %nterm <elex::StructMembers> struct_member_block
@@ -769,10 +773,20 @@ non_term_statement :
   | extend_type_statement        { $$ = $1; }
   | import_statement             { $$ = $1; }
   | sequence_statement           { $$ = $1; }
+  | define_as_statement          { $$ = $1; }
   ;
 
 import_statement : 
   IMPORT ID { $$ = elex::import($2); }
+  ;
+
+define_as_statement :
+    DEFINE DEFINED_MACRO_CONSTRUCT[macro] AS LBRACE RBRACE
+    { $$ = elex::define_as_st($macro); }
+
+  | DEFINE DEFINED_MACRO_CONSTRUCT[macro] AS_COMPUTED LBRACE RBRACE
+    { $$ = elex::define_as_computed_st($macro); }
+
   ;
 
 struct_statement : 
@@ -951,9 +965,10 @@ sequence_item_kwd :
 
 /* Struct Members */
 struct_member_block :
-    LBRACE  struct_members RBRACE
+    LBRACE struct_members RBRACE
     { $$ = $2; }
 
+  // incolmplete (unbalanced) struct member block
   | LBRACE error
     { yyerrok; $$ = nullptr; }
 
