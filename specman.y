@@ -920,11 +920,27 @@ sequence_item_kwd :
 /* Struct Members */
 struct_members : 
     %empty                         { $$ = elex::nil_StructMembers();  }
-    | struct_members struct_member { $$ = elex::append_StructMembers($1, elex::single_StructMembers($2)); }
-    ;
+  | struct_members struct_member   { $$ = elex::append_StructMembers($1, elex::single_StructMembers($2)); }
+  /* error recovery*/
+  | struct_members error  { $$ = $1; }
+  ;
 
-struct_member : non_term_struct_member SEMICOLON { $$ = $1; }
-    ;
+struct_member : 
+    non_term_struct_member SEMICOLON 
+    { $$ = $1; }
+  
+  /* error recovery rules */
+
+  // badly constructed struct member
+  // panic mode will shift until it finds a SEMICOLON
+  // and then reduce
+  | error SEMICOLON
+    { 
+      yyerrok;
+      $$ = nullptr;
+    }
+
+  ;
 
 non_term_struct_member : 
       field_declaration          { $$ = $1; }
