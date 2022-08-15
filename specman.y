@@ -1730,6 +1730,17 @@ actions :
   
   | actions action 
     { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
+  
+  /* error recovery rules */
+  
+  // recover from a non terminated action
+  // in the context of multiple actions in a block 
+  // (as opposed to a single action block of actions which is legal)
+  | actions error 
+    { 
+      yyerrok; 
+      $$ = $1;  
+    }
   ;
 
 action_block : 
@@ -1741,6 +1752,15 @@ action_block :
 
   | LBRACE non_term_action RBRACE
     { $$ = elex::action_block(elex::single_Actions($2)); }
+  
+  /* error recovery */
+  // catching an error where an action block with a single action 
+  // was expected 
+  | LBRACE error RBRACE 
+    {
+      yyerrok; 
+      $$ = elex::action_block(elex::nil_Actions()); 
+    }
   ;
 
 term_action_block :
