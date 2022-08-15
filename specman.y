@@ -363,6 +363,8 @@
 %token RELEASE 
 %token INSTANCE 
 
+%token DEFINE 
+
 
 %token LPAREN      
 %token RPAREN      
@@ -393,10 +395,18 @@
 // the code block
 %token CODE_OPEN
 %token CODE_CLOSE
+
+// this one is caught by the lexer inside a code block
+// it's not actually used by the parser, but exists
+// in order to prevent the lexer from jamming
+%token <std::string> ILLEGAL_TOKEN
 /* ---------- For Lexer -----------------  */
 
+/* ---------- Terminal Tokens ------------ */
 %token <elex::Symbol_> ID
 %token <elex::Symbol_> NUMBER
+
+// end of file token
 %token END 0 
 
 /* token precedence */
@@ -739,7 +749,7 @@ statement :
     { yyerrok; $$ = nullptr; }
 
   // last non terminated statement
-  // since statement is the highest level construct there is
+  // since statement is the highest level syntactic element there is
   // if the last one is not terminated we reach the end of the file
   // so we need to handle it
   | error END
@@ -748,19 +758,19 @@ statement :
   ;
 
 non_term_statement : 
-      package_statement            { $$ = $1; }
-    | struct_statement             { $$ = $1; }
-    | unit_statement               { $$ = $1; }
-    | extend_struct_unit_statement { $$ = $1; }
-    | type_statement               { $$ = $1; }
-    | extend_type_statement        { $$ = $1; }
-    | import_statement             { $$ = $1; }
-    | sequence_statement           { $$ = $1; }
-    ;
+    package_statement            { $$ = $1; }
+  | struct_statement             { $$ = $1; }
+  | unit_statement               { $$ = $1; }
+  | extend_struct_unit_statement { $$ = $1; }
+  | type_statement               { $$ = $1; }
+  | extend_type_statement        { $$ = $1; }
+  | import_statement             { $$ = $1; }
+  | sequence_statement           { $$ = $1; }
+  ;
 
 import_statement : 
-    IMPORT ID { $$ = elex::import($2); }
-    ;
+  IMPORT ID { $$ = elex::import($2); }
+  ;
 
 struct_statement : 
     STRUCT ID[struct_type] LBRACE struct_members[members] RBRACE 

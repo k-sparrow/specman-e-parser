@@ -164,7 +164,7 @@ created_driver       (created_driver)
 sequence_type        (sequence_type)
 sequence_driver_type (sequence_driver_type)
 
-
+define               (\`?define)
 
 null	      (NULL)
 true_literal  (TRUE)
@@ -431,6 +431,8 @@ mvl            {mvl_single}|{sized_mvl}
     {sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(Location()); }       
     {sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(Location()); }
 
+    {define}    { return yy::parser::make_DEFINE(Location()); }
+
     {null}	    { return yy::parser::make_NULL_(Location()); }
     {true_literal}	{ return yy::parser::make_TRUE_LITERAL(Location()); }    
     {false_literal}	{ return yy::parser::make_FALSE_LITERAL(Location()); }
@@ -525,6 +527,7 @@ mvl            {mvl_single}|{sized_mvl}
         return yy::parser::make_STRING_LITERAL(m_driver.strtable[str], Location()); 
     }
 
+    .         {  return yy::parser::make_ILLEGAL_TOKEN(YYText(), Location()); }    
 }
 
 
