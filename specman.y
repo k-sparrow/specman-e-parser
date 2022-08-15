@@ -729,7 +729,23 @@ statements :
     ; 
 
 /* Statements */
-statement : non_term_statement SEMICOLON { $$ = $1; }
+statement : 
+    non_term_statement SEMICOLON 
+    { $$ = $1; }
+
+  /* error recovery rules */
+  // badly constructed statement teminated by a semicolon
+  | error SEMICOLON
+    { yyerrok; $$ = nullptr; }
+
+  // last non terminated statement
+  // since statement is the highest level construct there is
+  // if the last one is not terminated we reach the end of the file
+  // so we need to handle it
+  | error END
+    { yyerrok; $$ = nullptr; }
+
+  ;
 
 non_term_statement : 
       package_statement            { $$ = $1; }

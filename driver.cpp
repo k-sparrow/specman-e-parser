@@ -12,6 +12,7 @@ driver::driver() :
 }
 
 int driver::parse() {
+    m_parser.set_debug_level(1);
     return m_parser.parse();
 }
 
