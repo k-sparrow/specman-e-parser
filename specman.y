@@ -415,6 +415,8 @@
   NON_LPAREN  -> needed to resolve sr-conflict with some optional products starting with LPAREN
   NON_DOT     -> same as NON_LPAREN, but for the DOT token
 */
+%precedence LT_error
+%precedence error
 %precedence LT_ID LT_OP
 %precedence NON_DOT NON_LPAREN NON_ELSE NON_THEN
 %precedence ID
@@ -462,6 +464,7 @@
 %nterm <elex::Statement>  import_statement
 
 /* Struct Members */
+%nterm <elex::StructMembers> struct_member_block
 %nterm <elex::StructMembers> struct_members
 %nterm <elex::StructMember>  struct_member
 %nterm <elex::StructMember>  non_term_struct_member
@@ -773,20 +776,22 @@ import_statement :
   ;
 
 struct_statement : 
-    STRUCT ID[struct_type] LBRACE struct_members[members] RBRACE 
+    STRUCT ID[struct_type] 
+    struct_member_block[members]
     { $$ = elex::struct_st($struct_type, $members); }
 
-  | STRUCT ID[struct_type] LIKE ID[base_struct_type] LBRACE struct_members[members] RBRACE 
+  | STRUCT ID[struct_type] LIKE ID[base_struct_type] 
+    struct_member_block[members]
     { $$ = elex::struct_like_st($struct_type, $base_struct_type, $members); }
   ;
 
 unit_statement   : 
     UNIT ID[unit_type] 
-    LBRACE struct_members[members] RBRACE   
+    struct_member_block[members]
     { $$ = elex::unit_st($unit_type, $members); }
 
   | UNIT ID[unit_type] LIKE ID[base_unit_type] 
-    LBRACE struct_members[members]  RBRACE   
+    struct_member_block[members]
     { $$ = elex::unit_like_st($unit_type, $base_unit_type, $members); }
     ;
 
@@ -795,8 +800,9 @@ package_statement :
     ;
 
 extend_struct_unit_statement : 
-    EXTEND struct_type_modifiers[modifiers] LBRACE struct_members[members] RBRACE 
-    { $$ = elex::extend_struct_st($2, $4); }
+    EXTEND struct_type_modifiers[modifiers] 
+    struct_member_block[members]
+    { $$ = elex::extend_struct_st($modifiers, $members); }
     ;
 
 type_statement : 
@@ -944,8 +950,18 @@ sequence_item_kwd :
   ;
 
 /* Struct Members */
+struct_member_block :
+    LBRACE  struct_members RBRACE
+    { $$ = $2; }
+
+  | LBRACE error
+    { yyerrok; $$ = nullptr; }
+
+  ;
+
+
 struct_members : 
-    %empty                         { $$ = elex::nil_StructMembers();  }
+    %empty %prec LT_error          { $$ = elex::nil_StructMembers();  }
   | struct_members struct_member   { $$ = elex::append_StructMembers($1, elex::single_StructMembers($2)); }
   /* error recovery*/
   | struct_members error  { $$ = $1; }
