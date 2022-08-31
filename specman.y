@@ -1804,16 +1804,6 @@ actions :
   | actions action 
     { $$ = elex::append_Actions($1, elex::single_Actions($2)); }
   
-  /* error recovery rules */
-  
-  // recover from a non terminated action
-  // in the context of multiple actions in a block 
-  // (as opposed to a single action block of actions which is legal)
-  | actions error 
-    { 
-      yyerrok; 
-      $$ = $1;  
-    }
   ;
 
 action_block : 
@@ -2032,13 +2022,13 @@ if_then_else_action :
 if_branch : 
     IF expression THEN
     { 
-      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYABORT; })
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYERROR; })
       $$ = $2; 
     }
 
   | IF expression 
     { 
-      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYABORT; })
+      CHECK_COND_ELSE_PARSE_ERROR(elex::isConditionExpression, $2, { error(@1, "Conditional expression must be boolean expression!"); YYERROR; })
       $$ = $2; 
     }
   ;  
