@@ -257,6 +257,24 @@ auto nil_ActionBlocks() -> ActionBlocks;
 auto single_ActionBlocks(ActionBlock) -> ActionBlocks;
 auto append_ActionBlocks(ActionBlocks, ActionBlocks) -> ActionBlocks;
 
+class FilePath_class;
+typedef std::shared_ptr<FilePath_class> FilePath;
+
+class FilePath_class : public tree_node {
+    public:
+
+#ifdef FilePath_EXTRAS
+    FilePath_EXTRAS
+#endif
+};
+
+typedef list_tree_node<FilePath> FilePaths_class;
+typedef std::shared_ptr<FilePaths_class> FilePaths;
+
+auto nil_FilePaths() -> FilePaths;
+auto single_FilePaths(FilePath) -> FilePaths;
+auto append_FilePaths(FilePaths, FilePaths) -> FilePaths;
+
 class module__class : public Module_class {
     protected:
         Statements stmts;
@@ -505,12 +523,14 @@ class scalar_sized_type_st_class : public Statement_class {
 
 auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr) -> Statement;
 
-class import_class : public Statement_class {
+class import_st_class : public Statement_class {
     protected:
-        Symbol_ pkg_id;
+        FilePaths paths;
+        Boolean is_cyclic;
     public:
-        import_class(Symbol_ pkg_id) {
-            this->pkg_id = pkg_id;
+        import_st_class(FilePaths paths, Boolean is_cyclic) {
+            this->paths = paths;
+            this->is_cyclic = is_cyclic;
         }
 
         virtual auto dump(std::ostream& stream, int n) -> void;
@@ -518,12 +538,32 @@ class import_class : public Statement_class {
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
 #endif
-#ifdef import_EXTRAS
-    import_EXTRAS
+#ifdef import_st_EXTRAS
+    import_st_EXTRAS
 #endif
 };
 
-auto import(Symbol_ pkg_id) -> Statement;
+auto import_st(FilePaths paths, Boolean is_cyclic) -> Statement;
+
+class file_path_fp_class : public FilePath_class {
+    protected:
+        Symbol_ file_path;
+    public:
+        file_path_fp_class(Symbol_ file_path) {
+            this->file_path = file_path;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef FilePath_SHARED_EXTRAS
+    FilePath_SHARED_EXTRAS
+#endif
+#ifdef file_path_fp_EXTRAS
+    file_path_fp_EXTRAS
+#endif
+};
+
+auto file_path_fp(Symbol_ file_path) -> FilePath;
 
 class virtual_sequence_st_class : public Statement_class {
     protected:

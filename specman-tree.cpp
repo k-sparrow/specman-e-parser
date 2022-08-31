@@ -156,6 +156,19 @@ auto append_ActionBlocks(ActionBlocks p1, ActionBlocks p2) -> ActionBlocks {
     return ActionBlocks(new list_tree_node<ActionBlock>(*p1, *p2));
 }
 
+/* implementations for FilePaths */
+auto nil_FilePaths() -> FilePaths {
+    return FilePaths(new list_tree_node<FilePath>());
+}
+
+auto single_FilePaths(FilePath p) -> FilePaths {
+    return FilePaths(new list_tree_node<FilePath>(p));
+}
+
+auto append_FilePaths(FilePaths p1, FilePaths p2) -> FilePaths {
+    return FilePaths(new list_tree_node<FilePath>(*p1, *p2));
+}
+
 auto module__class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\module_" << std::endl;
     if(stmts){
@@ -322,14 +335,28 @@ auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions 
     return Statement(new scalar_sized_type_st_class(type_id, base_type_id, ranges_expr, width_expr));
 }
 
-auto import_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\import" << std::endl;
-    stream << pad(n+2) << "pkg_id: ";
-    dump_Symbol_(stream, 0, pkg_id);
+auto import_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\import_st" << std::endl;
+    if(paths){
+        stream << pad(n+2) << "paths: " << std::endl;
+        paths->dump(stream, n+4);
+    }
+    stream << pad(n+2) << "is_cyclic: ";
+    dump_Boolean(stream, 0, is_cyclic);
 }
 
-auto import(Symbol_ pkg_id) -> Statement {
-    return Statement(new import_class(pkg_id));
+auto import_st(FilePaths paths, Boolean is_cyclic) -> Statement {
+    return Statement(new import_st_class(paths, is_cyclic));
+}
+
+auto file_path_fp_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\file_path_fp" << std::endl;
+    stream << pad(n+2) << "file_path: ";
+    dump_Symbol_(stream, 0, file_path);
+}
+
+auto file_path_fp(Symbol_ file_path) -> FilePath {
+    return FilePath(new file_path_fp_class(file_path));
 }
 
 auto virtual_sequence_st_class::dump(std::ostream& stream, int n) -> void {

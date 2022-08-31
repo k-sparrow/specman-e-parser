@@ -115,7 +115,10 @@ new         (new)
 as_a        (as_a)
 soft        (soft)
 import      (import)
-select      (==[ \t\f\v]*select)
+dir         ([^\/ \n\t\f\v\,;\(\)]*)
+file_name   ({dir}\.e)
+file_path   ({dir}\/)*{file_name}
+select      (==[ \n\t\f\v]*select)
 key         (key)
 on          (on)
 exec        (exec)
@@ -268,6 +271,7 @@ mvl_single     MVL_[UX01ZWLHN]
 mvl            {mvl_single}|{sized_mvl}
 
 %x CODE
+%x IMPORT_
 %x SINGLE_LINE_COMMENT
 %%
 
@@ -394,7 +398,10 @@ mvl            {mvl_single}|{sized_mvl}
     {new}	    { return yy::parser::make_NEW(Location()); }
     {as_a}	    { return yy::parser::make_AS_A(Location()); }
     {soft}	    { return yy::parser::make_SOFT(Location()); }
-    {import}	{ return yy::parser::make_IMPORT(Location()); }
+    {import}	{ 
+        yy_push_state(IMPORT_);
+        return yy::parser::make_IMPORT(Location()); 
+    }
     {select}	{ return yy::parser::make_SELECT(Location()); }
     {key}   	{ return yy::parser::make_KEY(Location()); }
     {on}   	    { return yy::parser::make_ON(Location()); }
@@ -579,6 +586,41 @@ mvl            {mvl_single}|{sized_mvl}
         return yy::parser::make_RBRACE(Location());  
     }
     .|\n            {} // swallow everything else, we don't analyze macros in the main parser
+}
+
+<IMPORT_>{
+    
+    {lparen} { return yy::parser::make_LPAREN(Location()); }
+    {rparen} { return yy::parser::make_RPAREN(Location()); }
+    
+    {file_path}     {            
+            std::string path(YYText());
+            if(m_driver.idtable.find(path) == std::end(m_driver.idtable)) {
+                m_driver.idtable[path] = elex::Symbol(new elex::Entry(path, path.length()));
+            }
+            return yy::parser::make_FILE_PATH(m_driver.idtable[path] , Location()); 
+        }
+    {name}          {
+            std::string path(YYText());
+            path += ".e";
+            if(m_driver.idtable.find(path) == std::end(m_driver.idtable)) {
+                m_driver.idtable[path] = elex::Symbol(new elex::Entry(path, path.length()));
+            }
+            return yy::parser::make_FILE_PATH(m_driver.idtable[path] , Location()); 
+        }
+    
+    {comma} { return yy::parser::make_COMMA(Location()); }
+    {semicolon}     {
+            yy_pop_state();
+            BEGIN(CODE);
+
+            return yy::parser::make_SEMICOLON(Location());
+        }
+
+    
+    {ws}  {} // swallow any whitespace
+    \n    mylineno++;
+    .     {  return yy::parser::make_ILLEGAL_TOKEN(YYText(), Location()); } // anythingelse is illegal inside an import 
 }
 
 

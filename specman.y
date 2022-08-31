@@ -406,6 +406,7 @@
 /* ---------- For Lexer -----------------  */
 
 /* ---------- Terminal Tokens ------------ */
+%token <elex::Symbol_> FILE_PATH
 %token <elex::Symbol_> ID
 %token <elex::Symbol_> NUMBER
 
@@ -464,8 +465,9 @@
 %nterm <elex::e_seq_option>  sequence_item_kwd
 // %nterm <elex::Statement>  method_statement
 %nterm <elex::Statement>  c_export_statement
-%nterm <elex::Statement>  import_statement
 %nterm <elex::Statement>  define_as_statement
+%nterm <elex::Statement>  import_statement
+%nterm <elex::FilePaths>  file_paths_expressions
 
 /* Struct Members */
 %nterm <elex::StructMembers> struct_member_block
@@ -777,8 +779,26 @@ non_term_statement :
   ;
 
 import_statement : 
-  IMPORT ID { $$ = elex::import($2); }
+    IMPORT file_paths_expressions[files] 
+    { 
+      elex::Boolean is_cyclic_import = false;
+      $$ = elex::import_st($files, is_cyclic_import); 
+    }
+
+  | IMPORT LPAREN file_paths_expressions[files] RPAREN
+    { 
+      elex::Boolean is_cyclic_import = true;
+      $$ = elex::import_st($files, is_cyclic_import); 
+    }
+
   ;
+
+file_paths_expressions :
+    FILE_PATH
+    { $$ = elex::single_FilePaths(elex::file_path_fp($1)); }
+  
+  | file_paths_expressions COMMA FILE_PATH
+    { $$ = elex::append_FilePaths($1, elex::single_FilePaths(elex::file_path_fp($3))); }
 
 define_as_statement :
     DEFINE DEFINED_MACRO_CONSTRUCT[macro] AS LBRACE RBRACE
