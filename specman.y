@@ -730,7 +730,6 @@
 %nterm <elex::Formal>       formal
 
 %nterm <elex::DataType>      opt_return_type
-%nterm <elex::DataType>      opt_type
 %nterm <elex::e_method_int_mod> opt_method_introduction_modifier
 %nterm <elex::e_method_ext_mod> opt_method_extension_modifier
 
@@ -2513,8 +2512,14 @@ comparison_operator_expression :
   ;
 
 inclusion_operator_expression : 
-    operator_expression IN operator_expression { $$ = elex::in_expr($1, $3); }
-  | operator_expression IN enum_datatype       { $$ = elex::in_enum_expr($1, $3); }
+    operator_expression IN operator_expression 
+    { $$ = elex::in_expr($1, $3); }
+
+/*   | operator_expression IN enum_datatype       
+    { $$ = elex::in_enum_expr($1, $3); } */
+
+  | operator_expression IN range_modifier_expression       
+    { $$ = elex::in_expr($1, $3); }
   ;
 
 /* 
