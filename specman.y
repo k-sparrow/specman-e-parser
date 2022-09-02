@@ -544,7 +544,6 @@
 %nterm <elex::Action>      variable_declaration_action
 %nterm <elex::Action>      variable_assignment_action
 %nterm <elex::Action>      compound_assignment_action
-%nterm <elex::Expression>  compound_identifier
 %nterm <elex::e_compound_op>  compound_op
 %nterm <elex::Action>  force_action
 %nterm <elex::Action>  release_action
