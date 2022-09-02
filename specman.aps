@@ -43,6 +43,9 @@ module Specman begin
         phylum ActionBlock;
         phylum ActionBlocks = LIST[ActionBlock];
 
+        phylum FSMState;
+        phylum FSMStates = LIST[FSMState];
+
         phylum FilePath;
         phylum FilePaths = LIST[FilePath];
 
@@ -353,6 +356,10 @@ module Specman begin
         constructor check_that_action(condition: Expression; dut_error_block: Expression) : Action;
         constructor assert_action(condition: Expression; error_block: Expression) : Action;
         constructor try_else_action(try_actions: ActionBlock; except_actions: ActionBlock) : Action;
+
+        constructor state_machine_act(state_var: Expression; final_st: Expression; states: FSMStates) : Action; 
+        constructor state_action_fsm(state: Symbol_; actions: ActionBlock) : FSMState; 
+        constructor state_transition_fsm(cur_state: Symbol_; next_state: Symbol_; actions: ActionBlock) : FSMState; 
 
         constructor no_action() : Action;
 

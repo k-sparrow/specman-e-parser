@@ -257,6 +257,24 @@ auto nil_ActionBlocks() -> ActionBlocks;
 auto single_ActionBlocks(ActionBlock) -> ActionBlocks;
 auto append_ActionBlocks(ActionBlocks, ActionBlocks) -> ActionBlocks;
 
+class FSMState_class;
+typedef std::shared_ptr<FSMState_class> FSMState;
+
+class FSMState_class : public tree_node {
+    public:
+
+#ifdef FSMState_EXTRAS
+    FSMState_EXTRAS
+#endif
+};
+
+typedef list_tree_node<FSMState> FSMStates_class;
+typedef std::shared_ptr<FSMStates_class> FSMStates;
+
+auto nil_FSMStates() -> FSMStates;
+auto single_FSMStates(FSMState) -> FSMStates;
+auto append_FSMStates(FSMStates, FSMStates) -> FSMStates;
+
 class FilePath_class;
 typedef std::shared_ptr<FilePath_class> FilePath;
 
@@ -5530,6 +5548,76 @@ class try_else_action_class : public Action_class {
 };
 
 auto try_else_action(ActionBlock try_actions, ActionBlock except_actions) -> Action;
+
+class state_machine_act_class : public Action_class {
+    protected:
+        Expression state_var;
+        Expression final_st;
+        FSMStates states;
+    public:
+        state_machine_act_class(Expression state_var, Expression final_st, FSMStates states) {
+            this->state_var = state_var;
+            this->final_st = final_st;
+            this->states = states;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Action_SHARED_EXTRAS
+    Action_SHARED_EXTRAS
+#endif
+#ifdef state_machine_act_EXTRAS
+    state_machine_act_EXTRAS
+#endif
+};
+
+auto state_machine_act(Expression state_var, Expression final_st, FSMStates states) -> Action;
+
+class state_action_fsm_class : public FSMState_class {
+    protected:
+        Symbol_ state;
+        ActionBlock actions;
+    public:
+        state_action_fsm_class(Symbol_ state, ActionBlock actions) {
+            this->state = state;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef FSMState_SHARED_EXTRAS
+    FSMState_SHARED_EXTRAS
+#endif
+#ifdef state_action_fsm_EXTRAS
+    state_action_fsm_EXTRAS
+#endif
+};
+
+auto state_action_fsm(Symbol_ state, ActionBlock actions) -> FSMState;
+
+class state_transition_fsm_class : public FSMState_class {
+    protected:
+        Symbol_ cur_state;
+        Symbol_ next_state;
+        ActionBlock actions;
+    public:
+        state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions) {
+            this->cur_state = cur_state;
+            this->next_state = next_state;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef FSMState_SHARED_EXTRAS
+    FSMState_SHARED_EXTRAS
+#endif
+#ifdef state_transition_fsm_EXTRAS
+    state_transition_fsm_EXTRAS
+#endif
+};
+
+auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions) -> FSMState;
 
 class no_action_class : public Action_class {
     protected:

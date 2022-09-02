@@ -156,6 +156,19 @@ auto append_ActionBlocks(ActionBlocks p1, ActionBlocks p2) -> ActionBlocks {
     return ActionBlocks(new list_tree_node<ActionBlock>(*p1, *p2));
 }
 
+/* implementations for FSMStates */
+auto nil_FSMStates() -> FSMStates {
+    return FSMStates(new list_tree_node<FSMState>());
+}
+
+auto single_FSMStates(FSMState p) -> FSMStates {
+    return FSMStates(new list_tree_node<FSMState>(p));
+}
+
+auto append_FSMStates(FSMStates p1, FSMStates p2) -> FSMStates {
+    return FSMStates(new list_tree_node<FSMState>(*p1, *p2));
+}
+
 /* implementations for FilePaths */
 auto nil_FilePaths() -> FilePaths {
     return FilePaths(new list_tree_node<FilePath>());
@@ -3685,6 +3698,56 @@ auto try_else_action_class::dump(std::ostream& stream, int n) -> void {
 
 auto try_else_action(ActionBlock try_actions, ActionBlock except_actions) -> Action {
     return Action(new try_else_action_class(try_actions, except_actions));
+}
+
+auto state_machine_act_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\state_machine_act" << std::endl;
+    if(state_var){
+        stream << pad(n+2) << "state_var: " << std::endl;
+        state_var->dump(stream, n+4);
+    }
+    if(final_st){
+        stream << pad(n+2) << "final_st: " << std::endl;
+        final_st->dump(stream, n+4);
+    }
+    if(states){
+        stream << pad(n+2) << "states: " << std::endl;
+        states->dump(stream, n+4);
+    }
+}
+
+auto state_machine_act(Expression state_var, Expression final_st, FSMStates states) -> Action {
+    return Action(new state_machine_act_class(state_var, final_st, states));
+}
+
+auto state_action_fsm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\state_action_fsm" << std::endl;
+    stream << pad(n+2) << "state: ";
+    dump_Symbol_(stream, 0, state);
+    if(actions){
+        stream << pad(n+2) << "actions: " << std::endl;
+        actions->dump(stream, n+4);
+    }
+}
+
+auto state_action_fsm(Symbol_ state, ActionBlock actions) -> FSMState {
+    return FSMState(new state_action_fsm_class(state, actions));
+}
+
+auto state_transition_fsm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\state_transition_fsm" << std::endl;
+    stream << pad(n+2) << "cur_state: ";
+    dump_Symbol_(stream, 0, cur_state);
+    stream << pad(n+2) << "next_state: ";
+    dump_Symbol_(stream, 0, next_state);
+    if(actions){
+        stream << pad(n+2) << "actions: " << std::endl;
+        actions->dump(stream, n+4);
+    }
+}
+
+auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions) -> FSMState {
+    return FSMState(new state_transition_fsm_class(cur_state, next_state, actions));
 }
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {

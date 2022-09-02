@@ -312,6 +312,8 @@
 %token CROSS 
 %token TRANSITION 
 
+%token STATE_MACHINE 
+
 %token NULL_
 %token UNDEF
 %token TRUE_LITERAL
@@ -615,10 +617,20 @@
 /* Do Sequence Actions   */
 %nterm <elex::Action>      do_action
 
+/* Error Handling Actions */
 %nterm <elex::Action>      error_handling_action
 %nterm <elex::Action>      immediate_check_action
 %nterm <elex::Action>      assert_action
 %nterm <elex::Action>      try_else_action
+
+/* State Machine Action */
+%nterm <elex::Action>      state_machine_action  
+%nterm <elex::FSMStates>   states_block
+%nterm <elex::FSMStates>   states
+%nterm <elex::FSMState>    fsm_state
+%nterm <elex::FSMState>    non_terminated_fsm_state
+%nterm <elex::FSMState>    fsm_state_transition  
+%nterm <elex::FSMState>    fsm_state_action
 
 /* Expressions */
 %nterm <elex::Expression>   expression
@@ -1903,6 +1915,9 @@ non_term_action :
   
   | error_handling_action
     { $$ = $1; }
+
+  | state_machine_action 
+    { $$ = $1; }
   ;
 
 variable_creation_or_modification_action : 
@@ -2381,6 +2396,51 @@ try_else_action :
   
   | TRY action_block[try_actions] ELSE action_block[else_actions]
     { $$ = elex::try_else_action($try_actions, $else_actions); }
+  ;
+
+state_machine_action : 
+    STATE_MACHINE hier_ref_expression[state_var] states_block[states]
+    { $$ = elex::state_machine_act($state_var, nullptr, $states); }
+
+  | STATE_MACHINE hier_ref_expression[state_var] UNTIL ID[final_st] states_block[states]
+    { $$ = elex::state_machine_act($state_var, elex::id_expr($final_st), $states); }
+  ;
+
+states_block : 
+    LBRACE non_terminated_fsm_state RBRACE
+    { $$ = elex::single_FSMStates($2); }
+  
+  | LBRACE states RBRACE
+    { $$ = $2; }
+  ;
+
+states : 
+    fsm_state 
+    { $$ = elex::single_FSMStates($1); }
+
+  | states fsm_state 
+    { $$ = elex::append_FSMStates($1, elex::single_FSMStates($2)); }
+
+  ;
+
+fsm_state :
+  non_terminated_fsm_state SEMICOLON
+  { $$ = $1; }
+  ;
+
+non_terminated_fsm_state : 
+    fsm_state_action     { $$ = $1; }
+  | fsm_state_transition { $$ = $1; }
+  ;
+
+fsm_state_action:
+  ID[state] action_block[actions] 
+  { $$ = elex::state_action_fsm($state, $actions); }
+  ;
+
+fsm_state_transition : 
+  ID[cur_state] IMPLICATION ID[next_state] action_block[actions]
+  { $$ = elex::state_transition_fsm($cur_state, $next_state, $actions); }
   ;
 
 expression : 

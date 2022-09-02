@@ -168,6 +168,8 @@ created_driver       (created_driver)
 sequence_type        (sequence_type)
 sequence_driver_type (sequence_driver_type)
 
+state_machine   (state{ws}machine)
+
 e_define               (define)
 vlog_define            (`define)
 define_                {vlog_define}|{e_define}                
@@ -450,6 +452,7 @@ mvl            {mvl_single}|{sized_mvl}
     {created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      
     {sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(Location()); }       
     {sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(Location()); }
+    {state_machine} { return yy::parser::make_STATE_MACHINE(Location()); }
 
     {null}	    { return yy::parser::make_NULL_(Location()); }
     {true_literal}	{ return yy::parser::make_TRUE_LITERAL(Location()); }    
