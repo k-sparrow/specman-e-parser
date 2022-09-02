@@ -3750,6 +3750,20 @@ auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock act
     return FSMState(new state_transition_fsm_class(cur_state, next_state, actions));
 }
 
+auto state_any_transition_fsm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\state_any_transition_fsm" << std::endl;
+    stream << pad(n+2) << "next_state: ";
+    dump_Symbol_(stream, 0, next_state);
+    if(actions){
+        stream << pad(n+2) << "actions: " << std::endl;
+        actions->dump(stream, n+4);
+    }
+}
+
+auto state_any_transition_fsm(Symbol_ next_state, ActionBlock actions) -> FSMState {
+    return FSMState(new state_any_transition_fsm_class(next_state, actions));
+}
+
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\no_action" << std::endl;
 }

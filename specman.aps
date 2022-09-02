@@ -360,6 +360,7 @@ module Specman begin
         constructor state_machine_act(state_var: Expression; final_st: Expression; states: FSMStates) : Action; 
         constructor state_action_fsm(state: Symbol_; actions: ActionBlock) : FSMState; 
         constructor state_transition_fsm(cur_state: Symbol_; next_state: Symbol_; actions: ActionBlock) : FSMState; 
+        constructor state_any_transition_fsm(next_state: Symbol_; actions: ActionBlock) : FSMState; 
 
         constructor no_action() : Action;
 

@@ -5619,6 +5619,28 @@ class state_transition_fsm_class : public FSMState_class {
 
 auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions) -> FSMState;
 
+class state_any_transition_fsm_class : public FSMState_class {
+    protected:
+        Symbol_ next_state;
+        ActionBlock actions;
+    public:
+        state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions) {
+            this->next_state = next_state;
+            this->actions = actions;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef FSMState_SHARED_EXTRAS
+    FSMState_SHARED_EXTRAS
+#endif
+#ifdef state_any_transition_fsm_EXTRAS
+    state_any_transition_fsm_EXTRAS
+#endif
+};
+
+auto state_any_transition_fsm(Symbol_ next_state, ActionBlock actions) -> FSMState;
+
 class no_action_class : public Action_class {
     protected:
     public:

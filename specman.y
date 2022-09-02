@@ -2439,8 +2439,11 @@ fsm_state_action:
   ;
 
 fsm_state_transition : 
-  ID[cur_state] IMPLICATION ID[next_state] action_block[actions]
-  { $$ = elex::state_transition_fsm($cur_state, $next_state, $actions); }
+    ID[cur_state] IMPLICATION ID[next_state] action_block[actions]
+    { $$ = elex::state_transition_fsm($cur_state, $next_state, $actions); }
+  
+  | MUL IMPLICATION ID[dest_state] action_block[actions]
+    { $$ = elex::state_any_transition_fsm($dest_state, $actions); }
   ;
 
 expression : 
