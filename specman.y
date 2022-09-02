@@ -202,6 +202,7 @@
 %token STEP
 %token LINE
 %token FILE
+%token IN_FILE
 %token MATCHING
 %token BREAK
 %token CONTINUE
@@ -2154,26 +2155,31 @@ repeat_until_loop_action :
 
 // for each [type] [(item-name)] [using index (index-name)]
 //    in [reverse] list-exp [do] {action; ...}
+
+// The type and index are unrolled in order to avoid shift reduce conflicts and 
+// reduce collision with the for-each-line in file opt_iterated_id non term
 for_each_loop_action :
-  FOR EACH opt_type[type_] opt_iterated_id_expr[item_name] opt_using_index_branch_expr[index_name]
-  IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
-  { $$ = elex::for_each_loop_act($type_, $item_name, $reverse, $list_expr, $index_name, $actions); }
-  ;
+    // for each [(item-name)] in [reverse] list-exp [do] {action; ...}
+    FOR EACH opt_iterated_id_expr[item_name] 
+    IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_loop_act(nullptr, $item_name, $reverse, $list_expr, nullptr, $actions); }
+   
+    // for each type-element [(item-name)] in [reverse] list-exp [do] {action; ...}
+  | FOR EACH scoped_scalar_type_identifier_data_type[type_] opt_iterated_id_expr[item_name] 
+    IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_loop_act($type_, $item_name, $reverse, $list_expr, nullptr, $actions); }
 
-// [type]
-opt_type : 
-    %empty %prec LT_OP
-    { $$ = nullptr; }
-  
-  | scoped_scalar_type_identifier_data_type
-    { $$ = $1; }
-
-opt_using_index_branch_expr :
-    %empty 
-    { $$ = nullptr; }
-
-  | USING INDEX iterated_id_expr[idx]
-    { $$ = $3; }  
+    // for each [(item-name)] using index (idx) in [reverse] list-exp [do] {action; ...}
+  | FOR EACH opt_iterated_id_expr[item_name] 
+    USING INDEX iterated_id_expr[idx]
+    IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_loop_act(nullptr, $item_name, $reverse, $list_expr, $idx, $actions); }
+   
+    // for each type-element [(item-name)] using index (idx) in [reverse] list-exp [do] {action; ...}
+  | FOR EACH scoped_scalar_type_identifier_data_type[type_] opt_iterated_id_expr[item_name]
+    USING INDEX iterated_id_expr[idx]
+    IN OPT_REVERSE[reverse] identifier_expression[list_expr] OPT_DO action_block[actions] 
+    { $$ = elex::for_each_loop_act($type_, $item_name, $reverse, $list_expr, $idx, $actions); }
   ;
 
 // [REVERSE]
@@ -2219,16 +2225,10 @@ for_loop_action :
 // this for-each action is unrolled in order to avoid reduce-reduce conflicts with the (actually used) non-file for-each action
 // for each [line] [(name)] in file file-name-exp [do] {action; ...}
 for_line_in_file_action :
-    FOR EACH IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
-    { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
-
-  | FOR EACH LINE IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
-    { $$ = elex::for_each_line_in_file_act(nullptr, $file_name_exp, $actions); }
-
-  | FOR EACH iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
+    FOR EACH opt_iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
 
-  | FOR EACH LINE iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
+  | FOR EACH LINE opt_iterated_id_expr[line_it_name] IN FILE file_identifier_expression[file_name_exp] OPT_DO action_block[actions] 
     { $$ = elex::for_each_line_in_file_act($line_it_name, $file_name_exp, $actions); }
   ;
 
@@ -2613,7 +2613,7 @@ struct_type_modifier : // VALUE'id | id
 iterated_id_expr : LPAREN id_expr RPAREN { $$ = $2; };
 
 opt_iterated_id_expr : // [[ (name) ]]
-    %empty           { $$ = elex::no_expr(); }
+    %empty           { $$ = nullptr; }
   | iterated_id_expr { $$ = $1; }
   ;
 
