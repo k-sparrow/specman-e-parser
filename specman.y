@@ -577,7 +577,6 @@
 
 /*------ FOR-EACH -----*/
 %nterm <elex::Action>      for_each_loop_action
-%nterm <elex::Expression>  opt_using_index_branch_expr
 
 /*------ FOR-FROM -----*/
 %nterm <elex::Action>      for_from_to_loop_action
@@ -712,7 +711,8 @@
 
 %nterm <elex::Expression>   constraint_expression
 %nterm <elex::Expression>   terminated_constraint_expression
-%nterm <elex::Expressions>  constriant_expression_block
+%nterm <elex::Expressions>  constraints_list
+%nterm <elex::Expressions>  constraint_expression_block
 %nterm <elex::Expression>   method_call_operator_expression
 
 
@@ -2334,8 +2334,8 @@ opt_keeping_constraints_branch :
     { $$ = nullptr; }
 
   | KEEPING 
-      LBRACE constriant_expression_block RBRACE
-    { $$ = $3; }
+    constraint_expression_block 
+    { $$ = $2; }
   ;
 
 error_handling_action :
@@ -2780,10 +2780,10 @@ constraint_expression :
     | TYPE hier_ref_expression[lhs] EQ hier_ref_expression[rhs]
       { $$ = elex::field_type_constraint_by_field_expr($lhs, $rhs); }
     
-    | ALL OF LBRACE constriant_expression_block RBRACE 
-      { $$ = elex::all_of_constraint_expr($4); } 
+    | ALL OF constraint_expression_block 
+      { $$ = elex::all_of_constraint_expr($3); } 
     
-    | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] LBRACE constriant_expression_block[constraint] RBRACE 
+    | FOR EACH opt_iterated_id_expr[item_name] IN hier_ref_expression[gen_item] constraint_expression_block[constraint]
       { $$ = elex::list_items_constraint_expr($item_name, $gen_item, $constraint); }
 
     | SOFT hier_ref_expression[gen_item] SELECT LBRACE weight_value_pairs[distribution] RBRACE 
@@ -2840,18 +2840,28 @@ bit_slicing_expression :
   { $$ = elex::list_slicing_expr($bot, $top); }
   ;
 
+
+constraint_expression_block : 
+    LBRACE constraint_expression RBRACE
+    { $$ = elex::single_Expressions($2); }
+  
+  | LBRACE constraints_list RBRACE
+    { $$ = $2; }
+  ;
+
+constraints_list :
+    terminated_constraint_expression { 
+        $$ = elex::single_Expressions($1); 
+    }
+  | constraints_list terminated_constraint_expression {
+      $$ = elex::append_Expressions($1, elex::single_Expressions($2));
+    }
+  ;
+
 terminated_constraint_expression : 
     constraint_expression SEMICOLON { $$ = $1; }
     ;
 
-constriant_expression_block : 
-    terminated_constraint_expression { 
-        $$ = elex::single_Expressions($1); 
-    }
-  | constriant_expression_block terminated_constraint_expression {
-      $$ = elex::append_Expressions($1, elex::single_Expressions($2));
-    }
-  ;
 
 method_call_operator_expression : 
   identifier_expression
