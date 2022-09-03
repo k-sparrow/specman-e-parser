@@ -244,7 +244,6 @@
 %token BIND
 %token SIMPLE
 %token PORT
-%token METHOD
 %token LIST
 %token BITS
 %token BYTES
@@ -313,6 +312,9 @@
 %token TRANSITION 
 
 %token STATE_MACHINE 
+%token C_EXPORT
+%token ROUTINE
+%token C_ROUTINE
 
 %token NULL_
 %token UNDEF
@@ -466,8 +468,8 @@
 %nterm <elex::SequenceItems> sequence_options
 %nterm <elex::SequenceItem>  sequence_option
 %nterm <elex::e_seq_option>  sequence_item_kwd
-// %nterm <elex::Statement>  method_statement
 %nterm <elex::Statement>  c_export_statement
+%nterm <elex::Statement>  c_routine_statement
 %nterm <elex::Statement>  define_as_statement
 %nterm <elex::Statement>  import_statement
 %nterm <elex::FilePaths>  file_paths_expressions
@@ -787,6 +789,8 @@ non_term_statement :
   | import_statement             { $$ = $1; }
   | sequence_statement           { $$ = $1; }
   | define_as_statement          { $$ = $1; }
+  | c_export_statement           { $$ = $1; }
+  | c_routine_statement          { $$ = $1; }
   ;
 
 import_statement : 
@@ -818,6 +822,19 @@ define_as_statement :
   | DEFINE DEFINED_MACRO_CONSTRUCT[macro] AS_COMPUTED LBRACE RBRACE
     { $$ = elex::define_as_computed_st($macro); }
 
+  ;
+
+c_export_statement : 
+  C_EXPORT hier_ref_expression
+  { $$ = elex::c_export_st($2); }
+  ;
+
+c_routine_statement : 
+    ROUTINE ID[e_routine_name] LPAREN formals[parameters_list] RPAREN opt_return_type[result_type] IS C_ROUTINE 
+    { $$ = elex::c_routine_st($e_routine_name, $parameters_list, $result_type, $e_routine_name); }
+  | 
+    ROUTINE ID[e_routine_name] LPAREN formals[parameters_list] RPAREN opt_return_type[result_type] IS C_ROUTINE ID[c_routine_name]
+    { $$ = elex::c_routine_st($e_routine_name, $parameters_list, $result_type, $c_routine_name); }
   ;
 
 struct_statement : 
@@ -1540,6 +1557,52 @@ method_declaration :
               $$ = elex::method_dec_undef_sm($id, $args, $return_type); 
             }
           }
+      }
+    
+      /*
+        method([arguments]) [: return_type] is [only] C routine c_method_name 
+      */
+    | ID[e_method_name] LPAREN formals[parameters_list] RPAREN opt_return_type[return_type] 
+      IS opt_method_extension_modifier[method_modifier] C_ROUTINE ID[c_method_name]
+      {
+        switch($method_modifier) {
+          case eEmpty : {
+            $$ = elex::c_method_dec_sm($e_method_name, $parameters_list, $return_type, $c_method_name);
+            break; 
+          }
+          case eOnly : {
+            $$ = elex::c_method_dec_only_sm($e_method_name, $parameters_list, $return_type, $c_method_name);
+            break;
+          }
+          default: { // only `is` or `is only` is allowed for C routine struct member
+            $$ = nullptr; 
+            error(@method_modifier, "Method modifier of C method struct member must be none or only\n");
+            YYERROR;
+          }
+        }
+      }
+
+      /*
+        method([arguments]) [: return_type] is [only] C routine 
+      */
+    | ID[e_method_name] LPAREN formals[parameters_list] RPAREN opt_return_type[return_type] 
+      IS opt_method_extension_modifier[method_modifier] C_ROUTINE 
+      {
+        switch($method_modifier) {
+          case eEmpty : {
+            $$ = elex::c_method_dec_sm($e_method_name, $parameters_list, $return_type, $e_method_name);
+            break; 
+          }
+          case eOnly : {
+            $$ = elex::c_method_dec_only_sm($e_method_name, $parameters_list, $return_type, $e_method_name);
+            break;
+          }
+          default: { // only `is` or `is only` is allowed for C routine struct member
+            $$ = nullptr; 
+            error(@method_modifier, "Method modifier of C method struct member must be none or only\n");
+            YYERROR;
+          }
+        }
       }
     ;     
 

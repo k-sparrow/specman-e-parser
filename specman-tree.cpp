@@ -484,6 +484,38 @@ auto formal(Symbol_ name, DataType type_) -> Formal {
     return Formal(new formal_class(name, type_));
 }
 
+auto c_export_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\c_export_st" << std::endl;
+    if(element){
+        stream << pad(n+2) << "element: " << std::endl;
+        element->dump(stream, n+4);
+    }
+}
+
+auto c_export_st(Expression element) -> Statement {
+    return Statement(new c_export_st_class(element));
+}
+
+auto c_routine_st_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\c_routine_st" << std::endl;
+    stream << pad(n+2) << "e_routine_name: ";
+    dump_Symbol_(stream, 0, e_routine_name);
+    if(parameters_list){
+        stream << pad(n+2) << "parameters_list: " << std::endl;
+        parameters_list->dump(stream, n+4);
+    }
+    if(return_type){
+        stream << pad(n+2) << "return_type: " << std::endl;
+        return_type->dump(stream, n+4);
+    }
+    stream << pad(n+2) << "c_routine_name: ";
+    dump_Symbol_(stream, 0, c_routine_name);
+}
+
+auto c_routine_st(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name) -> Statement {
+    return Statement(new c_routine_st_class(e_routine_name, parameters_list, return_type, c_routine_name));
+}
+
 auto field_sm_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\field_sm" << std::endl;
     if(field){
@@ -812,6 +844,46 @@ auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
 
 auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember {
     return StructMember(new tcm_dec_undef_sm_class(id, arguments, return_type, event_id_expr));
+}
+
+auto c_method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\c_method_dec_sm" << std::endl;
+    stream << pad(n+2) << "e_method_name: ";
+    dump_Symbol_(stream, 0, e_method_name);
+    if(parameters_list){
+        stream << pad(n+2) << "parameters_list: " << std::endl;
+        parameters_list->dump(stream, n+4);
+    }
+    if(return_type){
+        stream << pad(n+2) << "return_type: " << std::endl;
+        return_type->dump(stream, n+4);
+    }
+    stream << pad(n+2) << "c_method_name: ";
+    dump_Symbol_(stream, 0, c_method_name);
+}
+
+auto c_method_dec_sm(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) -> StructMember {
+    return StructMember(new c_method_dec_sm_class(e_method_name, parameters_list, return_type, c_method_name));
+}
+
+auto c_method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\c_method_dec_only_sm" << std::endl;
+    stream << pad(n+2) << "e_method_name: ";
+    dump_Symbol_(stream, 0, e_method_name);
+    if(parameters_list){
+        stream << pad(n+2) << "parameters_list: " << std::endl;
+        parameters_list->dump(stream, n+4);
+    }
+    if(return_type){
+        stream << pad(n+2) << "return_type: " << std::endl;
+        return_type->dump(stream, n+4);
+    }
+    stream << pad(n+2) << "c_method_name: ";
+    dump_Symbol_(stream, 0, c_method_name);
+}
+
+auto c_method_dec_only_sm(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) -> StructMember {
+    return StructMember(new c_method_dec_only_sm_class(e_method_name, parameters_list, return_type, c_method_name));
 }
 
 auto when_subtype_sm_class::dump(std::ostream& stream, int n) -> void {

@@ -789,6 +789,52 @@ class formal_class : public Formal_class {
 
 auto formal(Symbol_ name, DataType type_) -> Formal;
 
+class c_export_st_class : public Statement_class {
+    protected:
+        Expression element;
+    public:
+        c_export_st_class(Expression element) {
+            this->element = element;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef c_export_st_EXTRAS
+    c_export_st_EXTRAS
+#endif
+};
+
+auto c_export_st(Expression element) -> Statement;
+
+class c_routine_st_class : public Statement_class {
+    protected:
+        Symbol_ e_routine_name;
+        Formals parameters_list;
+        DataType return_type;
+        Symbol_ c_routine_name;
+    public:
+        c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name) {
+            this->e_routine_name = e_routine_name;
+            this->parameters_list = parameters_list;
+            this->return_type = return_type;
+            this->c_routine_name = c_routine_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Statement_SHARED_EXTRAS
+    Statement_SHARED_EXTRAS
+#endif
+#ifdef c_routine_st_EXTRAS
+    c_routine_st_EXTRAS
+#endif
+};
+
+auto c_routine_st(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name) -> Statement;
+
 class field_sm_class : public StructMember_class {
     protected:
         FieldStructMember field;
@@ -1192,6 +1238,58 @@ class tcm_dec_undef_sm_class : public StructMember_class {
 };
 
 auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) -> StructMember;
+
+class c_method_dec_sm_class : public StructMember_class {
+    protected:
+        Symbol_ e_method_name;
+        Formals parameters_list;
+        DataType return_type;
+        Symbol_ c_method_name;
+    public:
+        c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) {
+            this->e_method_name = e_method_name;
+            this->parameters_list = parameters_list;
+            this->return_type = return_type;
+            this->c_method_name = c_method_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef c_method_dec_sm_EXTRAS
+    c_method_dec_sm_EXTRAS
+#endif
+};
+
+auto c_method_dec_sm(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) -> StructMember;
+
+class c_method_dec_only_sm_class : public StructMember_class {
+    protected:
+        Symbol_ e_method_name;
+        Formals parameters_list;
+        DataType return_type;
+        Symbol_ c_method_name;
+    public:
+        c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) {
+            this->e_method_name = e_method_name;
+            this->parameters_list = parameters_list;
+            this->return_type = return_type;
+            this->c_method_name = c_method_name;
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef StructMember_SHARED_EXTRAS
+    StructMember_SHARED_EXTRAS
+#endif
+#ifdef c_method_dec_only_sm_EXTRAS
+    c_method_dec_only_sm_EXTRAS
+#endif
+};
+
+auto c_method_dec_only_sm(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) -> StructMember;
 
 class when_subtype_sm_class : public StructMember_class {
     protected:

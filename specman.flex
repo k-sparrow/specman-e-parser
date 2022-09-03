@@ -169,6 +169,9 @@ sequence_type        (sequence_type)
 sequence_driver_type (sequence_driver_type)
 
 state_machine   (state{ws}machine)
+c_export        (C{ws}export)
+routine        (routine)
+c_routine       (C{ws}routine)
 
 e_define               (define)
 vlog_define            (`define)
@@ -360,7 +363,6 @@ mvl            {mvl_single}|{sized_mvl}
     {extend}    { return yy::parser::make_EXTEND(Location());  }
     {simple}    { return yy::parser::make_SIMPLE(Location());  }
     {port}      { return yy::parser::make_PORT(Location());  }
-    {method}    { return yy::parser::make_METHOD(Location());  }
     {list}      { return yy::parser::make_LIST(Location());  }
     {bits}      { return yy::parser::make_BITS(Location());  }
     {bytes}     { return yy::parser::make_BYTES(Location());  }
@@ -452,7 +454,10 @@ mvl            {mvl_single}|{sized_mvl}
     {created_driver}		{ return yy::parser::make_CREATED_DRIVER(Location()); }      
     {sequence_type}		    { return yy::parser::make_SEQUENCE_TYPE(Location()); }       
     {sequence_driver_type}	{ return yy::parser::make_SEQUENCE_DRIVER_TYPE(Location()); }
-    {state_machine} { return yy::parser::make_STATE_MACHINE(Location()); }
+    {state_machine}         { return yy::parser::make_STATE_MACHINE(Location()); }
+    {c_export}              { return yy::parser::make_C_EXPORT(Location()); }
+    {routine}               { return yy::parser::make_ROUTINE(Location()); }
+    {c_routine}             { return yy::parser::make_C_ROUTINE(Location()); }
 
     {null}	    { return yy::parser::make_NULL_(Location()); }
     {true_literal}	{ return yy::parser::make_TRUE_LITERAL(Location()); }    
