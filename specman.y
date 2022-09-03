@@ -316,6 +316,17 @@
 %token ROUTINE
 %token C_ROUTINE
 
+/* Disclaimer: 
+    this is a quick and dirty solution
+    and I don't like it.
+
+    It's a solution intended to fix the problem of 'sys.time'
+    hierarchical reference, where the `time` part 
+    is considered by flex as the keyword 'time' representing the 
+    predefine time type, represented by the TIME token
+*/ 
+%token SYS_TIME 
+
 %token NULL_
 %token UNDEF
 %token TRUE_LITERAL
@@ -2520,7 +2531,6 @@ expression :
 non_operator_expression :
     struct_allocate_expression 
     { $$ = $1; }
-  
   ;
 
 operator_expression :  
@@ -2562,6 +2572,8 @@ operator_expression :
   | hdl_pathname_expression
     { $$ = $1; } 
   
+  | SYS_TIME
+    { $$ = elex::sys_time_ref_expr(); }
   ; 
 
 

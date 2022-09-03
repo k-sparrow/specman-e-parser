@@ -109,7 +109,6 @@ module Specman begin
         constructor simple_event_dec_sm(id: Symbol_) : StructMember;
         constructor event_def_sm(id: Symbol_; temporal: Expression) : StructMember;
         constructor event_def_override_sm(id: Symbol_; temporal: Expression) : StructMember;
-        
 
         constructor temporal_expr(temporal: Expression; sample_event: Expression) : Expression;
         constructor sampling_event_expr(event_expr: Expression) : Expression;
@@ -254,6 +253,7 @@ module Specman begin
         constructor ternary_assign_expr(bool_exp : Expression; true_expr: Expression; false_expr: Expression) : Expression;
         constructor hwp_access_expr(base: Expression) : Expression;
         constructor cast_operator_expr(dest_type_expr: DataType) : Expression;
+        constructor sys_time_ref_expr() : Expression;
 
         constructor method_call_expr(base: Expression; arguments: Expressions) : Expression;
 

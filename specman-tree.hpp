@@ -3989,6 +3989,24 @@ class cast_operator_expr_class : public Expression_class {
 
 auto cast_operator_expr(DataType dest_type_expr) -> Expression;
 
+class sys_time_ref_expr_class : public Expression_class {
+    protected:
+    public:
+        sys_time_ref_expr_class() {
+        }
+
+        virtual auto dump(std::ostream& stream, int n) -> void;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef sys_time_ref_expr_EXTRAS
+    sys_time_ref_expr_EXTRAS
+#endif
+};
+
+auto sys_time_ref_expr() -> Expression;
+
 class method_call_expr_class : public Expression_class {
     protected:
         Expression base;

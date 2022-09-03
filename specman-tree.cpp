@@ -2656,6 +2656,14 @@ auto cast_operator_expr(DataType dest_type_expr) -> Expression {
     return Expression(new cast_operator_expr_class(dest_type_expr));
 }
 
+auto sys_time_ref_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\sys_time_ref_expr" << std::endl;
+}
+
+auto sys_time_ref_expr() -> Expression {
+    return Expression(new sys_time_ref_expr_class());
+}
+
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\method_call_expr" << std::endl;
     if(base){

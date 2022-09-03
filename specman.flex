@@ -275,6 +275,8 @@ sized_mvl      [1-9][0-9]*'[bBoOhHdD]({mvl_bin_chars}|{mvl_dec_chars}|{mvl_oct_c
 mvl_single     MVL_[UX01ZWLHN]
 mvl            {mvl_single}|{sized_mvl}
 
+sys_time       (sys\.time)
+
 %x CODE
 %x IMPORT_
 %x SINGLE_LINE_COMMENT
@@ -443,6 +445,7 @@ mvl            {mvl_single}|{sized_mvl}
     {bit}		{ return yy::parser::make_BIT(Location()); } 
     {byte}		{ return yy::parser::make_BYTE(Location()); } 
     {nibble}	{ return yy::parser::make_NIBBLE(Location()); }
+    {sys_time}	{ return yy::parser::make_SYS_TIME(Location()); } 
     {time}		{ return yy::parser::make_TIME(Location()); } 
     {bool_}		{ return yy::parser::make_BOOL(Location()); } 
     {var}	   	{ return yy::parser::make_VAR(Location()); } 
