@@ -87,7 +87,7 @@ Most of the current language core constructs have been implemented:
     - [x] on-the-fly generation 
     - [x] sequence dispatch (`do` actions)
     - [x] error handling 
-    - [ ] state machine
+    - [x] state machine
 
 - [x] Expression
     - [x] operators
