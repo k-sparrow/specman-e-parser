@@ -15,6 +15,10 @@ using std::size;
 class tree_node;
 typedef std::shared_ptr<tree_node> p_tree_node;
 
+namespace elex {
+    enum class SpecmanCtorKind : int;
+}
+
 class tree_node {
 protected:
     int m_line_number;
@@ -24,7 +28,7 @@ public:
 
     //virtual auto copy() -> p_tree_node = 0;
     virtual auto dump(std::ostream& stream, int n) -> void = 0;
-
+    virtual auto type() const -> elex::SpecmanCtorKind = 0;
     auto get_line_number() const -> int;
     auto set(tree_node*) -> tree_node*;
 };
@@ -70,6 +74,9 @@ public:
         }
     }
 
+    auto type() const -> elex::SpecmanCtorKind override {
+        return static_cast<elex::SpecmanCtorKind>(-1);
+    }
     auto size() const -> size_t { return std::size(m_elems); }
 
     // iterators for container

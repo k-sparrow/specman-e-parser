@@ -14,6 +14,265 @@
 
 namespace elex { 
     
+enum class SpecmanCtorKind {
+    Module = 0,
+    Package,
+    UnitSt,
+    UnitLikeSt,
+    StructSt,
+    StructLikeSt,
+    ExtendStructSt,
+    EnumTypeSt,
+    ExtendEnumTypeSt,
+    ScalarSubtypeSt,
+    ScalarSizedTypeSt,
+    ImportSt,
+    FilePathFp,
+    VirtualSequenceSt,
+    SequenceSt,
+    SequenceItemKindIt,
+    SequenceCreatedKindNameIt,
+    SequenceCreatedDriverNameIt,
+    SequenceBaseKindIt,
+    SequenceDriverBaseKindIt,
+    DefineAsSt,
+    DefineAsComputedSt,
+    Formal,
+    CExportSt,
+    CRoutineSt,
+    FieldSm,
+    StructFieldSm,
+    StructFieldListSm,
+    StructFieldAssocListSm,
+    MethodDecSm,
+    MethodDecAlsoSm,
+    MethodDecFirstSm,
+    MethodDecOnlySm,
+    MethodDecEmptySm,
+    MethodDecUndefSm,
+    TcmDecSm,
+    TcmDecAlsoSm,
+    TcmDecFirstSm,
+    TcmDecOnlySm,
+    TcmDecEmptySm,
+    TcmDecUndefSm,
+    CMethodDecSm,
+    CMethodDecOnlySm,
+    WhenSubtypeSm,
+    ConstraintDefSm,
+    OnEventSm,
+    SimpleEventDecSm,
+    EventDefSm,
+    EventDefOverrideSm,
+    TemporalExpr,
+    SamplingEventExpr,
+    EventRefExpr,
+    ActionAttachedTemporalExpr,
+    NotTemporalExpr,
+    FailTemporalExpr,
+    EventuallyTemporalExpr,
+    DetachTemporalExpr,
+    YieldTemporalExpr,
+    TrueTemporalExpr,
+    RiseTemporalExpr,
+    FallTemporalExpr,
+    ChangeTemporalExpr,
+    AndTemporalExpr,
+    OrTemporalExpr,
+    SequenceTemporalExpr,
+    FixedRepetitionExpr,
+    FirstMatchRepetitionExpr,
+    TrueMatchRepetitionExpr,
+    ZeroRepetitionBaseExpr,
+    InfRepetitionBaseExpr,
+    CycleTemporalExpr,
+    DelayTemporalExpr,
+    ConsumeTemporalExpr,
+    ExpectNamelessSm,
+    ExpectSm,
+    ExpectOverrideSm,
+    AssumeNamelessSm,
+    AssumeSm,
+    AssumeOverrideSm,
+    EmptyCovergroupSm,
+    CovergroupSm,
+    CovergroupExtensionSm,
+    CovergroupPerTypeCeid,
+    CovergroupPerUnitInstanceCeid,
+    CovergroupPerInstanceCeid,
+    GlobalCgo,
+    NoCollectCgo,
+    PerUnitInstanceCgo,
+    RadixDecCgo,
+    RadixHexCgo,
+    RadixBinCgo,
+    TextCgo,
+    WeightCgo,
+    WhenCgo,
+    SimpleCovergroupItemCgi,
+    OnTheFlyCovergroupItemCgi,
+    CrossCovergroupItemCgi,
+    TransitionCovergroupItemCgi,
+    AtLeastCgio,
+    IgnoreCgio,
+    IllegalCgio,
+    NoCollectCgio,
+    NoTraceCgio,
+    NumOfBucketsCgio,
+    PerInstanceCgio,
+    RadixDecCgio,
+    RadixHexCgio,
+    RadixBinCgio,
+    TextCgio,
+    WeightCgio,
+    WhenCgio,
+    TrueLiteralExpr,
+    FalseLiteralExpr,
+    IdExpr,
+    EnumTypeExpr,
+    EnumListItem,
+    BitwiseNotExpr,
+    BitwiseAndExpr,
+    BitwiseOrExpr,
+    BitwiseXorExpr,
+    ShiftLeftExpr,
+    RightLeftExpr,
+    LogicalNotExpr,
+    LogicalAndExpr,
+    LogicalOrExpr,
+    ImplicationExpr,
+    UnaryPositiveExpr,
+    UnaryNegativeExpr,
+    BinaryAddExpr,
+    BinarySubExpr,
+    BinaryMulExpr,
+    BinaryDivExpr,
+    BinaryRemainderExpr,
+    LessThenExpr,
+    GreaterThenExpr,
+    LessThenOrEqualExpr,
+    GreaterThenOrEqualExpr,
+    EqualityExpr,
+    NonEqualityExpr,
+    HdlEqualityExpr,
+    HdlNonEqualityExpr,
+    StrMatchExpr,
+    StrDoesNotMatchExpr,
+    InExpr,
+    TypeIntrospecExpr,
+    TypeIntrospecNegationExpr,
+    InEnumExpr,
+    ListIndexItemExpr,
+    ListIndexExpr,
+    ListSlicingExpr,
+    BitSlicingExpr,
+    ListConcatExpr,
+    BitConcatExpr,
+    BitSliceExpr,
+    RangeModifierItemExpr,
+    RangeModifierExpr,
+    RangesModifierExpr,
+    SizedBitsScalarExpr,
+    SizedBytesScalarExpr,
+    NewAllocateExpr,
+    NewNamelessAllocateExpr,
+    StructTypeExprWithOptActionBlock,
+    NamedActionBlock,
+    StructTypeId,
+    StructTypeModifier,
+    DefinedTypeIdentifierExpr,
+    StructHierRefExpr,
+    HdlPathNameExpr,
+    TernaryAssignExpr,
+    HwpAccessExpr,
+    CastOperatorExpr,
+    SysTimeRefExpr,
+    MethodCallExpr,
+    ConstraintExpr,
+    SoftConstraintExpr,
+    AllOfConstraintExpr,
+    ListItemsConstraintExpr,
+    FieldTypeConstraintByTypeExpr,
+    FieldTypeConstraintByFieldExpr,
+    DistributionConstraintExpr,
+    DistributionBranchCase,
+    MeExpr,
+    ItExpr,
+    StrExpr,
+    IntExpr,
+    EnumDt,
+    ScalarSubtypeDt,
+    DefinedDt,
+    DefinedSubtypeDt,
+    PredefinedSubtypeDt,
+    DefinedStructTypeDt,
+    ListTypeDt,
+    AssocListTypeDt,
+    FileDt,
+    IntPredefinedType,
+    UintPredefinedType,
+    BoolPredefinedType,
+    BitPredefinedType,
+    BytePredefinedType,
+    NibblePredefinedType,
+    TimePredefinedType,
+    NoExpr,
+    VarDeclAct,
+    VarAssignAct,
+    CompoundAddAct,
+    CompoundSubAct,
+    CompoundMulAct,
+    CompoundDivAct,
+    CompoundModAct,
+    CompoundBoolAndAct,
+    CompoundBoolOrAct,
+    CompoundBitAndAct,
+    CompoundBitOrAct,
+    CompoundBitXorAct,
+    CompoundShiftLeftAct,
+    CompoundRightLeftAct,
+    ForceAct,
+    ReleaseAct,
+    IfThenElseAct,
+    NonTermIfThenElseAct,
+    CaseBoolAct,
+    CaseBoolBranchItemCase,
+    CaseLabeledAct,
+    CaseLabeledBranchItemCase,
+    DefaultCaseBranchItemCase,
+    PrintCallAct,
+    MethodCallAct,
+    StartTcmCallAct,
+    ComputeMethodCallAct,
+    ReturnAct,
+    WhileLoopAct,
+    RepeatUntilLoopAct,
+    ForEachLoopAct,
+    ForRangeLoopAct,
+    ForLoopAct,
+    ForEachLineInFileAct,
+    ForEachFileInFilesAct,
+    BreakAct,
+    ContinueAct,
+    EmitAct,
+    SyncAct,
+    WaitAct,
+    AllOfAct,
+    FirstOfAct,
+    GenAct,
+    DoSeqAct,
+    SeqItemExpr,
+    CheckThatAction,
+    AssertAction,
+    TryElseAction,
+    StateMachineAct,
+    StateActionFsm,
+    StateTransitionFsm,
+    StateAnyTransitionFsm,
+    NoAction,
+    ActionBlock
+};
+    
 
 class Module_class;
 typedef std::shared_ptr<Module_class> Module;
@@ -301,7 +560,8 @@ class module__class : public Module_class {
             this->stmts = stmts;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Module_SHARED_EXTRAS
     Module_SHARED_EXTRAS
@@ -321,7 +581,8 @@ class package_class : public Statement_class {
             this->pkg_name = pkg_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -343,7 +604,8 @@ class unit_st_class : public Statement_class {
             this->members = members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -367,7 +629,8 @@ class unit_like_st_class : public Statement_class {
             this->members = members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -389,7 +652,8 @@ class struct_st_class : public Statement_class {
             this->members = members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -413,7 +677,8 @@ class struct_like_st_class : public Statement_class {
             this->members = members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -435,7 +700,8 @@ class extend_struct_st_class : public Statement_class {
             this->members = members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -457,7 +723,8 @@ class enum_type_st_class : public Statement_class {
             this->type_id = type_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -479,7 +746,8 @@ class extend_enum_type_st_class : public Statement_class {
             this->enum_list_items = enum_list_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -503,7 +771,8 @@ class scalar_subtype_st_class : public Statement_class {
             this->ranges = ranges;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -529,7 +798,8 @@ class scalar_sized_type_st_class : public Statement_class {
             this->width_expr = width_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -551,7 +821,8 @@ class import_st_class : public Statement_class {
             this->is_cyclic = is_cyclic;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -571,7 +842,8 @@ class file_path_fp_class : public FilePath_class {
             this->file_path = file_path;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FilePath_SHARED_EXTRAS
     FilePath_SHARED_EXTRAS
@@ -593,7 +865,8 @@ class virtual_sequence_st_class : public Statement_class {
             this->seq_options = seq_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -615,7 +888,8 @@ class sequence_st_class : public Statement_class {
             this->seq_options = seq_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -635,7 +909,8 @@ class sequence_item_kind_it_class : public SequenceItem_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef SequenceItem_SHARED_EXTRAS
     SequenceItem_SHARED_EXTRAS
@@ -655,7 +930,8 @@ class sequence_created_kind_name_it_class : public SequenceItem_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef SequenceItem_SHARED_EXTRAS
     SequenceItem_SHARED_EXTRAS
@@ -675,7 +951,8 @@ class sequence_created_driver_name_it_class : public SequenceItem_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef SequenceItem_SHARED_EXTRAS
     SequenceItem_SHARED_EXTRAS
@@ -695,7 +972,8 @@ class sequence_base_kind_it_class : public SequenceItem_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef SequenceItem_SHARED_EXTRAS
     SequenceItem_SHARED_EXTRAS
@@ -715,7 +993,8 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef SequenceItem_SHARED_EXTRAS
     SequenceItem_SHARED_EXTRAS
@@ -735,7 +1014,8 @@ class define_as_st_class : public Statement_class {
             this->macro = macro;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -755,7 +1035,8 @@ class define_as_computed_st_class : public Statement_class {
             this->macro = macro;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -777,7 +1058,8 @@ class formal_class : public Formal_class {
             this->type_ = type_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Formal_SHARED_EXTRAS
     Formal_SHARED_EXTRAS
@@ -797,7 +1079,8 @@ class c_export_st_class : public Statement_class {
             this->element = element;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -823,7 +1106,8 @@ class c_routine_st_class : public Statement_class {
             this->c_routine_name = c_routine_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Statement_SHARED_EXTRAS
     Statement_SHARED_EXTRAS
@@ -843,7 +1127,8 @@ class field_sm_class : public StructMember_class {
             this->field = field;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -858,14 +1143,15 @@ auto field_sm(FieldStructMember field) -> StructMember;
 class struct_field_sm_class : public FieldStructMember_class {
     protected:
         Symbol_ id;
-        DataType type;
+        DataType type_;
     public:
-        struct_field_sm_class(Symbol_ id, DataType type) {
+        struct_field_sm_class(Symbol_ id, DataType type_) {
             this->id = id;
-            this->type = type;
+            this->type_ = type_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FieldStructMember_SHARED_EXTRAS
     FieldStructMember_SHARED_EXTRAS
@@ -875,7 +1161,7 @@ class struct_field_sm_class : public FieldStructMember_class {
 #endif
 };
 
-auto struct_field_sm(Symbol_ id, DataType type) -> FieldStructMember;
+auto struct_field_sm(Symbol_ id, DataType type_) -> FieldStructMember;
 
 class struct_field_list_sm_class : public FieldStructMember_class {
     protected:
@@ -889,7 +1175,8 @@ class struct_field_list_sm_class : public FieldStructMember_class {
             this->type_ = type_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FieldStructMember_SHARED_EXTRAS
     FieldStructMember_SHARED_EXTRAS
@@ -911,7 +1198,8 @@ class struct_field_assoc_list_sm_class : public FieldStructMember_class {
             this->type_ = type_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FieldStructMember_SHARED_EXTRAS
     FieldStructMember_SHARED_EXTRAS
@@ -937,7 +1225,8 @@ class method_dec_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -963,7 +1252,8 @@ class method_dec_also_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -989,7 +1279,8 @@ class method_dec_first_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1015,7 +1306,8 @@ class method_dec_only_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1039,7 +1331,8 @@ class method_dec_empty_sm_class : public StructMember_class {
             this->return_type = return_type;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1063,7 +1356,8 @@ class method_dec_undef_sm_class : public StructMember_class {
             this->return_type = return_type;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1091,7 +1385,8 @@ class tcm_dec_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1119,7 +1414,8 @@ class tcm_dec_also_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1147,7 +1443,8 @@ class tcm_dec_first_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1175,7 +1472,8 @@ class tcm_dec_only_sm_class : public StructMember_class {
             this->actions_ = actions_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1201,7 +1499,8 @@ class tcm_dec_empty_sm_class : public StructMember_class {
             this->event_id_expr = event_id_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1227,7 +1526,8 @@ class tcm_dec_undef_sm_class : public StructMember_class {
             this->event_id_expr = event_id_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1253,7 +1553,8 @@ class c_method_dec_sm_class : public StructMember_class {
             this->c_method_name = c_method_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1279,7 +1580,8 @@ class c_method_dec_only_sm_class : public StructMember_class {
             this->c_method_name = c_method_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1301,7 +1603,8 @@ class when_subtype_sm_class : public StructMember_class {
             this->subtype_members = subtype_members;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1321,7 +1624,8 @@ class constraint_def_sm_class : public StructMember_class {
             this->constraint_expr = constraint_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1343,7 +1647,8 @@ class on_event_sm_class : public StructMember_class {
             this->action_block = action_block;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1363,7 +1668,8 @@ class simple_event_dec_sm_class : public StructMember_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1385,7 +1691,8 @@ class event_def_sm_class : public StructMember_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1407,7 +1714,8 @@ class event_def_override_sm_class : public StructMember_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1429,7 +1737,8 @@ class temporal_expr_class : public Expression_class {
             this->sample_event = sample_event;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1449,7 +1758,8 @@ class sampling_event_expr_class : public Expression_class {
             this->event_expr = event_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1469,7 +1779,8 @@ class event_ref_expr_class : public Expression_class {
             this->event_name = event_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1491,7 +1802,8 @@ class action_attached_temporal_expr_class : public Expression_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1511,7 +1823,8 @@ class not_temporal_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1531,7 +1844,8 @@ class fail_temporal_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1551,7 +1865,8 @@ class eventually_temporal_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1571,7 +1886,8 @@ class detach_temporal_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1593,7 +1909,8 @@ class yield_temporal_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1613,7 +1930,8 @@ class true_temporal_expr_class : public Expression_class {
             this->bool_expr = bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1633,7 +1951,8 @@ class rise_temporal_expr_class : public Expression_class {
             this->hdl_path = hdl_path;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1653,7 +1972,8 @@ class fall_temporal_expr_class : public Expression_class {
             this->hdl_path = hdl_path;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1673,7 +1993,8 @@ class change_temporal_expr_class : public Expression_class {
             this->hdl_path = hdl_path;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1695,7 +2016,8 @@ class and_temporal_expr_class : public Expression_class {
             this->te2 = te2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1717,7 +2039,8 @@ class or_temporal_expr_class : public Expression_class {
             this->te2 = te2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1737,7 +2060,8 @@ class sequence_temporal_expr_class : public Expression_class {
             this->temporals = temporals;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1759,7 +2083,8 @@ class fixed_repetition_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1785,7 +2110,8 @@ class first_match_repetition_expr_class : public Expression_class {
             this->match_temporal = match_temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1809,7 +2135,8 @@ class true_match_repetition_expr_class : public Expression_class {
             this->temporal = temporal;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1827,7 +2154,8 @@ class zero_repetition_base_expr_class : public Expression_class {
         zero_repetition_base_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1845,7 +2173,8 @@ class inf_repetition_base_expr_class : public Expression_class {
         inf_repetition_base_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1863,7 +2192,8 @@ class cycle_temporal_expr_class : public Expression_class {
         cycle_temporal_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1885,7 +2215,8 @@ class delay_temporal_expr_class : public Expression_class {
             this->timescale_unit = timescale_unit;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1905,7 +2236,8 @@ class consume_temporal_expr_class : public Expression_class {
             this->e = e;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -1927,7 +2259,8 @@ class expect_nameless_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1951,7 +2284,8 @@ class expect_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1975,7 +2309,8 @@ class expect_override_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -1997,7 +2332,8 @@ class assume_nameless_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2021,7 +2357,8 @@ class assume_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2045,7 +2382,8 @@ class assume_override_sm_class : public StructMember_class {
             this->dut_error_call = dut_error_call;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2065,7 +2403,8 @@ class empty_covergroup_sm_class : public StructMember_class {
             this->event_id = event_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2089,7 +2428,8 @@ class covergroup_sm_class : public StructMember_class {
             this->cg_items = cg_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2115,7 +2455,8 @@ class covergroup_extension_sm_class : public StructMember_class {
             this->cg_items = cg_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef StructMember_SHARED_EXTRAS
     StructMember_SHARED_EXTRAS
@@ -2133,7 +2474,8 @@ class covergroup_per_type_ceid_class : public CovergroupExtensionID_class {
         covergroup_per_type_ceid_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupExtensionID_SHARED_EXTRAS
     CovergroupExtensionID_SHARED_EXTRAS
@@ -2153,7 +2495,8 @@ class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_cla
             this->e_path = e_path;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupExtensionID_SHARED_EXTRAS
     CovergroupExtensionID_SHARED_EXTRAS
@@ -2175,7 +2518,8 @@ class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
             this->bucket_name = bucket_name;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupExtensionID_SHARED_EXTRAS
     CovergroupExtensionID_SHARED_EXTRAS
@@ -2195,7 +2539,8 @@ class global_cgo_class : public CovergroupOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2215,7 +2560,8 @@ class no_collect_cgo_class : public CovergroupOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2235,7 +2581,8 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
             this->hier_id = hier_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2253,7 +2600,8 @@ class radix_dec_cgo_class : public CovergroupOption_class {
         radix_dec_cgo_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2271,7 +2619,8 @@ class radix_hex_cgo_class : public CovergroupOption_class {
         radix_hex_cgo_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2289,7 +2638,8 @@ class radix_bin_cgo_class : public CovergroupOption_class {
         radix_bin_cgo_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2309,7 +2659,8 @@ class text_cgo_class : public CovergroupOption_class {
             this->description = description;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2329,7 +2680,8 @@ class weight_cgo_class : public CovergroupOption_class {
             this->value = value;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2349,7 +2701,8 @@ class when_cgo_class : public CovergroupOption_class {
             this->bool_expr = bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupOption_SHARED_EXTRAS
     CovergroupOption_SHARED_EXTRAS
@@ -2371,7 +2724,8 @@ class simple_covergroup_item_cgi_class : public CovergroupItem_class {
             this->cgi_options = cgi_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItem_SHARED_EXTRAS
     CovergroupItem_SHARED_EXTRAS
@@ -2397,7 +2751,8 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
             this->cgi_options = cgi_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItem_SHARED_EXTRAS
     CovergroupItem_SHARED_EXTRAS
@@ -2419,7 +2774,8 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
             this->cgi_options = cgi_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItem_SHARED_EXTRAS
     CovergroupItem_SHARED_EXTRAS
@@ -2441,7 +2797,8 @@ class transition_covergroup_item_cgi_class : public CovergroupItem_class {
             this->cgi_options = cgi_options;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItem_SHARED_EXTRAS
     CovergroupItem_SHARED_EXTRAS
@@ -2461,7 +2818,8 @@ class at_least_cgio_class : public CovergroupItemOption_class {
             this->num = num;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2481,7 +2839,8 @@ class ignore_cgio_class : public CovergroupItemOption_class {
             this->item_bool_expr = item_bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2501,7 +2860,8 @@ class illegal_cgio_class : public CovergroupItemOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2521,7 +2881,8 @@ class no_collect_cgio_class : public CovergroupItemOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2541,7 +2902,8 @@ class no_trace_cgio_class : public CovergroupItemOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2561,7 +2923,8 @@ class num_of_buckets_cgio_class : public CovergroupItemOption_class {
             this->num = num;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2581,7 +2944,8 @@ class per_instance_cgio_class : public CovergroupItemOption_class {
             this->bool_litral = bool_litral;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2599,7 +2963,8 @@ class radix_dec_cgio_class : public CovergroupItemOption_class {
         radix_dec_cgio_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2617,7 +2982,8 @@ class radix_hex_cgio_class : public CovergroupItemOption_class {
         radix_hex_cgio_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2635,7 +3001,8 @@ class radix_bin_cgio_class : public CovergroupItemOption_class {
         radix_bin_cgio_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2655,7 +3022,8 @@ class text_cgio_class : public CovergroupItemOption_class {
             this->description = description;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2675,7 +3043,8 @@ class weight_cgio_class : public CovergroupItemOption_class {
             this->value = value;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2695,7 +3064,8 @@ class when_cgio_class : public CovergroupItemOption_class {
             this->bool_expr = bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef CovergroupItemOption_SHARED_EXTRAS
     CovergroupItemOption_SHARED_EXTRAS
@@ -2713,7 +3083,8 @@ class true_literal_expr_class : public Expression_class {
         true_literal_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2731,7 +3102,8 @@ class false_literal_expr_class : public Expression_class {
         false_literal_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2751,7 +3123,8 @@ class id_expr_class : public Expression_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2773,7 +3146,8 @@ class enum_type_expr_class : public Expression_class {
             this->width_modifier_expr = width_modifier_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2795,7 +3169,8 @@ class enum_list_item_class : public Expression_class {
             this->expr = expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2815,7 +3190,8 @@ class bitwise_not_expr_class : public Expression_class {
             this->e = e;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2837,7 +3213,8 @@ class bitwise_and_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2859,7 +3236,8 @@ class bitwise_or_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2881,7 +3259,8 @@ class bitwise_xor_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2903,7 +3282,8 @@ class shift_left_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2925,7 +3305,8 @@ class right_left_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2945,7 +3326,8 @@ class logical_not_expr_class : public Expression_class {
             this->e = e;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2967,7 +3349,8 @@ class logical_and_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -2989,7 +3372,8 @@ class logical_or_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3011,7 +3395,8 @@ class implication_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3031,7 +3416,8 @@ class unary_positive_expr_class : public Expression_class {
             this->e = e;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3051,7 +3437,8 @@ class unary_negative_expr_class : public Expression_class {
             this->e = e;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3073,7 +3460,8 @@ class binary_add_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3095,7 +3483,8 @@ class binary_sub_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3117,7 +3506,8 @@ class binary_mul_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3139,7 +3529,8 @@ class binary_div_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3161,7 +3552,8 @@ class binary_remainder_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3183,7 +3575,8 @@ class less_then_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3205,7 +3598,8 @@ class greater_then_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3227,7 +3621,8 @@ class less_then_or_equal_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3249,7 +3644,8 @@ class greater_then_or_equal_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3271,7 +3667,8 @@ class equality_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3293,7 +3690,8 @@ class non_equality_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3315,7 +3713,8 @@ class hdl_equality_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3337,7 +3736,8 @@ class hdl_non_equality_expr_class : public Expression_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3359,7 +3759,8 @@ class str_match_expr_class : public Expression_class {
             this->pattern_expr = pattern_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3381,7 +3782,8 @@ class str_does_not_match_expr_class : public Expression_class {
             this->pattern_expr = pattern_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3403,7 +3805,8 @@ class in_expr_class : public Expression_class {
             this->inside = inside;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3425,7 +3828,8 @@ class type_introspec_expr_class : public Expression_class {
             this->type_id = type_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3447,7 +3851,8 @@ class type_introspec_negation_expr_class : public Expression_class {
             this->type_id = type_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3469,7 +3874,8 @@ class in_enum_expr_class : public Expression_class {
             this->inside = inside;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3489,7 +3895,8 @@ class list_index_item_expr_class : public Expression_class {
             this->idx_expr = idx_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3511,7 +3918,8 @@ class list_index_expr_class : public Expression_class {
             this->idx_expr = idx_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3533,7 +3941,8 @@ class list_slicing_expr_class : public Expression_class {
             this->range_expr = range_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3555,7 +3964,8 @@ class bit_slicing_expr_class : public Expression_class {
             this->bit_slice_expr = bit_slice_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3575,7 +3985,8 @@ class list_concat_expr_class : public Expression_class {
             this->list_concat_items = list_concat_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3595,7 +4006,8 @@ class bit_concat_expr_class : public Expression_class {
             this->bit_concat_items = bit_concat_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3617,7 +4029,8 @@ class bit_slice_expr_class : public Expression_class {
             this->top = top;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3639,7 +4052,8 @@ class range_modifier_item_expr_class : public Expression_class {
             this->top = top;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3659,7 +4073,8 @@ class range_modifier_expr_class : public Expression_class {
             this->range_items = range_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3679,7 +4094,8 @@ class ranges_modifier_expr_class : public Expression_class {
             this->ranges = ranges;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3699,7 +4115,8 @@ class sized_bits_scalar_expr_class : public Expression_class {
             this->width_expr = width_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3719,7 +4136,8 @@ class sized_bytes_scalar_expr_class : public Expression_class {
             this->width_expr = width_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3743,7 +4161,8 @@ class new_allocate_expr_class : public Expression_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3765,7 +4184,8 @@ class new_nameless_allocate_expr_class : public Expression_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3787,7 +4207,8 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
             this->opt_action_block_expt = opt_action_block_expt;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3809,7 +4230,8 @@ class named_action_block_class : public Expression_class {
             this->action_block = action_block;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3831,7 +4253,8 @@ class struct_type_id_class : public Expression_class {
             this->struct_id_expr = struct_id_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3853,7 +4276,8 @@ class struct_type_modifier_class : public Expression_class {
             this->id = id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3873,7 +4297,8 @@ class defined_type_identifier_expr_class : public Expression_class {
             this->modifiers = modifiers;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3893,7 +4318,8 @@ class struct_hier_ref_expr_class : public Expression_class {
             this->hiers = hiers;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3913,7 +4339,8 @@ class hdl_path_name_expr_class : public Expression_class {
             this->hdl_hier_ref = hdl_hier_ref;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3937,7 +4364,8 @@ class ternary_assign_expr_class : public Expression_class {
             this->false_expr = false_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3957,7 +4385,8 @@ class hwp_access_expr_class : public Expression_class {
             this->base = base;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3977,7 +4406,8 @@ class cast_operator_expr_class : public Expression_class {
             this->dest_type_expr = dest_type_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -3995,7 +4425,8 @@ class sys_time_ref_expr_class : public Expression_class {
         sys_time_ref_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4017,7 +4448,8 @@ class method_call_expr_class : public Expression_class {
             this->arguments = arguments;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4037,7 +4469,8 @@ class constraint_expr_class : public Expression_class {
             this->bool_expr = bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4057,7 +4490,8 @@ class soft_constraint_expr_class : public Expression_class {
             this->bool_expr = bool_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4077,7 +4511,8 @@ class all_of_constraint_expr_class : public Expression_class {
             this->constraints = constraints;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4101,7 +4536,8 @@ class list_items_constraint_expr_class : public Expression_class {
             this->constraints = constraints;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4123,7 +4559,8 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
             this->type_ = type_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4145,7 +4582,8 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
             this->field = field;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4167,7 +4605,8 @@ class distribution_constraint_expr_class : public Expression_class {
             this->distribution = distribution;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4189,7 +4628,8 @@ class distribution_branch_case_class : public Case_class {
             this->value = value;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Case_SHARED_EXTRAS
     Case_SHARED_EXTRAS
@@ -4207,7 +4647,8 @@ class me_expr_class : public Expression_class {
         me_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4225,7 +4666,8 @@ class it_expr_class : public Expression_class {
         it_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4245,7 +4687,8 @@ class str_expr_class : public Expression_class {
             this->str = str;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4265,7 +4708,8 @@ class int_expr_class : public Expression_class {
             this->int_ = int_;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4287,7 +4731,8 @@ class enum_dt_class : public DataType_class {
             this->width_modifier = width_modifier;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4311,7 +4756,8 @@ class scalar_subtype_dt_class : public DataType_class {
             this->width_modifier = width_modifier;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4333,7 +4779,8 @@ class defined_dt_class : public DataType_class {
             this->width_modifier = width_modifier;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4355,7 +4802,8 @@ class defined_subtype_dt_class : public DataType_class {
             this->range_modifier = range_modifier;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4379,7 +4827,8 @@ class predefined_subtype_dt_class : public DataType_class {
             this->width_modifier = width_modifier;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4399,7 +4848,8 @@ class defined_struct_type_dt_class : public DataType_class {
             this->struct_type_modifiers = struct_type_modifiers;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4419,7 +4869,8 @@ class list_type_dt_class : public DataType_class {
             this->base_type = base_type;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4441,7 +4892,8 @@ class assoc_list_type_dt_class : public DataType_class {
             this->base_type = base_type;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4459,7 +4911,8 @@ class file_dt_class : public DataType_class {
         file_dt_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4477,7 +4930,8 @@ class int_predefined_type_class : public DataType_class {
         int_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4495,7 +4949,8 @@ class uint_predefined_type_class : public DataType_class {
         uint_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4513,7 +4968,8 @@ class bool_predefined_type_class : public DataType_class {
         bool_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4531,7 +4987,8 @@ class bit_predefined_type_class : public DataType_class {
         bit_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4549,7 +5006,8 @@ class byte_predefined_type_class : public DataType_class {
         byte_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4567,7 +5025,8 @@ class nibble_predefined_type_class : public DataType_class {
         nibble_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4585,7 +5044,8 @@ class time_predefined_type_class : public DataType_class {
         time_predefined_type_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef DataType_SHARED_EXTRAS
     DataType_SHARED_EXTRAS
@@ -4603,7 +5063,8 @@ class no_expr_class : public Expression_class {
         no_expr_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -4627,7 +5088,8 @@ class var_decl_act_class : public Action_class {
             this->init_expr = init_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4649,7 +5111,8 @@ class var_assign_act_class : public Action_class {
             this->assign_expr = assign_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4671,7 +5134,8 @@ class compound_add_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4693,7 +5157,8 @@ class compound_sub_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4715,7 +5180,8 @@ class compound_mul_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4737,7 +5203,8 @@ class compound_div_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4759,7 +5226,8 @@ class compound_mod_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4781,7 +5249,8 @@ class compound_bool_and_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4803,7 +5272,8 @@ class compound_bool_or_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4825,7 +5295,8 @@ class compound_bit_and_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4847,7 +5318,8 @@ class compound_bit_or_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4869,7 +5341,8 @@ class compound_bit_xor_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4891,7 +5364,8 @@ class compound_shift_left_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4913,7 +5387,8 @@ class compound_right_left_act_class : public Action_class {
             this->e2 = e2;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4935,7 +5410,8 @@ class force_act_class : public Action_class {
             this->exp = exp;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4955,7 +5431,8 @@ class release_act_class : public Action_class {
             this->hdl_or_port = hdl_or_port;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -4979,7 +5456,8 @@ class if_then_else_act_class : public Action_class {
             this->else_clause = else_clause;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5003,7 +5481,8 @@ class non_term_if_then_else_act_class : public Action_class {
             this->else_clause = else_clause;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5023,7 +5502,8 @@ class case_bool_act_class : public Action_class {
             this->bool_case_branch_items = bool_case_branch_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5045,7 +5525,8 @@ class case_bool_branch_item_case_class : public Case_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Case_SHARED_EXTRAS
     Case_SHARED_EXTRAS
@@ -5067,7 +5548,8 @@ class case_labeled_act_class : public Action_class {
             this->labeled_case_branch_items = labeled_case_branch_items;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5089,7 +5571,8 @@ class case_labeled_branch_item_case_class : public Case_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Case_SHARED_EXTRAS
     Case_SHARED_EXTRAS
@@ -5109,7 +5592,8 @@ class default_case_branch_item_case_class : public Case_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Case_SHARED_EXTRAS
     Case_SHARED_EXTRAS
@@ -5129,7 +5613,8 @@ class print_call_act_class : public Action_class {
             this->values = values;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5149,7 +5634,8 @@ class method_call_act_class : public Action_class {
             this->method_call_expr = method_call_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5169,7 +5655,8 @@ class start_tcm_call_act_class : public Action_class {
             this->method_call_expr = method_call_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5189,7 +5676,8 @@ class compute_method_call_act_class : public Action_class {
             this->method_call_expr = method_call_expr;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5209,7 +5697,8 @@ class return_act_class : public Action_class {
             this->exp = exp;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5231,7 +5720,8 @@ class while_loop_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5253,7 +5743,8 @@ class repeat_until_loop_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5283,7 +5774,8 @@ class for_each_loop_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5313,7 +5805,8 @@ class for_range_loop_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5339,7 +5832,8 @@ class for_loop_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5363,7 +5857,8 @@ class for_each_line_in_file_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5387,7 +5882,8 @@ class for_each_file_in_files_act_class : public Action_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5405,7 +5901,8 @@ class break_act_class : public Action_class {
         break_act_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5423,7 +5920,8 @@ class continue_act_class : public Action_class {
         continue_act_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5443,7 +5941,8 @@ class emit_act_class : public Action_class {
             this->event_id = event_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5463,7 +5962,8 @@ class sync_act_class : public Action_class {
             this->event_id = event_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5483,7 +5983,8 @@ class wait_act_class : public Action_class {
             this->event_id = event_id;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5503,7 +6004,8 @@ class all_of_act_class : public Action_class {
             this->threads = threads;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5523,7 +6025,8 @@ class first_of_act_class : public Action_class {
             this->threads = threads;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5545,7 +6048,8 @@ class gen_act_class : public Action_class {
             this->constraints = constraints;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5567,7 +6071,8 @@ class do_seq_act_class : public Action_class {
             this->constraints = constraints;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5587,7 +6092,8 @@ class seq_item_expr_class : public Expression_class {
             this->field_type_exprs = field_type_exprs;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Expression_SHARED_EXTRAS
     Expression_SHARED_EXTRAS
@@ -5609,7 +6115,8 @@ class check_that_action_class : public Action_class {
             this->dut_error_block = dut_error_block;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5631,7 +6138,8 @@ class assert_action_class : public Action_class {
             this->error_block = error_block;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5653,7 +6161,8 @@ class try_else_action_class : public Action_class {
             this->except_actions = except_actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5677,7 +6186,8 @@ class state_machine_act_class : public Action_class {
             this->states = states;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5699,7 +6209,8 @@ class state_action_fsm_class : public FSMState_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FSMState_SHARED_EXTRAS
     FSMState_SHARED_EXTRAS
@@ -5723,7 +6234,8 @@ class state_transition_fsm_class : public FSMState_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FSMState_SHARED_EXTRAS
     FSMState_SHARED_EXTRAS
@@ -5745,7 +6257,8 @@ class state_any_transition_fsm_class : public FSMState_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef FSMState_SHARED_EXTRAS
     FSMState_SHARED_EXTRAS
@@ -5763,7 +6276,8 @@ class no_action_class : public Action_class {
         no_action_class() {
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef Action_SHARED_EXTRAS
     Action_SHARED_EXTRAS
@@ -5783,7 +6297,8 @@ class action_block_class : public ActionBlock_class {
             this->actions = actions;
         }
 
-        virtual auto dump(std::ostream& stream, int n) -> void;
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
 
 #ifdef ActionBlock_SHARED_EXTRAS
     ActionBlock_SHARED_EXTRAS

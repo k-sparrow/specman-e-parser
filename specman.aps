@@ -81,7 +81,7 @@ module Specman begin
         constructor c_routine_st(e_routine_name: Symbol_; parameters_list: Formals; return_type: DataType; c_routine_name: Symbol_) : Statement;
 
         constructor field_sm(field : FieldStructMember) : StructMember;
-        constructor struct_field_sm(id: Symbol_; type: DataType) : FieldStructMember;
+        constructor struct_field_sm(id: Symbol_; type_: DataType) : FieldStructMember;
         constructor struct_field_list_sm(id: Symbol_; len_expr: Expression; type_: DataType) : FieldStructMember;
         constructor struct_field_assoc_list_sm(id: Symbol_; type_: DataType) : FieldStructMember;
 
