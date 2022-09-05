@@ -114,52 +114,47 @@
     namespace elex {
 
       auto isConditionExpression(Expression exp) -> bool {
-        if( std::dynamic_pointer_cast<elex::logical_not_expr_class>(exp) || 
-            std::dynamic_pointer_cast<elex::logical_and_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::logical_or_expr_class>(exp)  ||
-            std::dynamic_pointer_cast<elex::less_then_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::greater_then_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::less_then_or_equal_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::greater_then_or_equal_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::equality_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::non_equality_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::hdl_equality_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::hdl_non_equality_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::str_match_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::str_does_not_match_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::in_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::type_introspec_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::type_introspec_negation_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::true_literal_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::false_literal_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::method_call_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::id_expr_class>(exp) ||
-            std::dynamic_pointer_cast<elex::struct_hier_ref_expr_class>(exp)
-          ) 
-          return true;
-        else 
-          return false;
+        switch(exp->type()){
+          case elex::SpecmanCtorKind::LogicalNotExpr :
+          case elex::SpecmanCtorKind::LogicalAndExpr :
+          case elex::SpecmanCtorKind::LogicalOrExpr :
+          case elex::SpecmanCtorKind::LessThenExpr :
+          case elex::SpecmanCtorKind::LessThenOrEqualExpr :
+          case elex::SpecmanCtorKind::GreaterThenExpr :
+          case elex::SpecmanCtorKind::GreaterThenOrEqualExpr :
+          case elex::SpecmanCtorKind::EqualityExpr :
+          case elex::SpecmanCtorKind::NonEqualityExpr :
+          case elex::SpecmanCtorKind::HdlEqualityExpr :
+          case elex::SpecmanCtorKind::HdlNonEqualityExpr :
+          case elex::SpecmanCtorKind::StrMatchExpr :
+          case elex::SpecmanCtorKind::StrDoesNotMatchExpr :
+          case elex::SpecmanCtorKind::InExpr :
+          case elex::SpecmanCtorKind::TypeIntrospecExpr :
+          case elex::SpecmanCtorKind::TypeIntrospecNegationExpr :
+          case elex::SpecmanCtorKind::TrueLiteralExpr :
+          case elex::SpecmanCtorKind::FalseLiteralExpr :
+          case elex::SpecmanCtorKind::MethodCallExpr :
+          case elex::SpecmanCtorKind::IdExpr :
+          case elex::SpecmanCtorKind::StructHierRefExpr: 
+                   { return true ; }
+          default: { return false; }
+        }
       };
 
       auto isIndexItem(Expression exp) -> bool {
-        auto list_idx_expr = std::dynamic_pointer_cast<elex::list_index_item_expr_class>(exp);
-
-        return list_idx_expr != nullptr;
+        return exp->type() == elex::SpecmanCtorKind::ListIndexItemExpr;
       }
 
       auto isRangeItem(Expression exp) -> bool {
-        auto range_idx_expr = std::dynamic_pointer_cast<elex::range_modifier_item_expr_class>(exp);
-
-        return range_idx_expr != nullptr;
+        return exp->type() == elex::SpecmanCtorKind::RangeModifierItemExpr;
       }
 
       auto isMethodCallExpression(Expression exp) -> bool {
         // we're supposed to work on hierarchy calls here
         // so if the expression is not of the appropriate class we return false
+        if (exp->type() != elex::SpecmanCtorKind::StructHierRefExpr) return false;
+
         auto hier_ref_expr = std::dynamic_pointer_cast<elex::struct_hier_ref_expr_class>(exp);
-
-        if(hier_ref_expr == nullptr) return false;
-
         auto hiers = hier_ref_expr->getHiers(); 
 
         // find the last expression which is not empty
@@ -169,9 +164,7 @@
 
         if(exp_iter == hiers->rend()) return false;
 
-        auto method_call_expr = std::dynamic_pointer_cast<elex::method_call_expr_class>(*exp_iter);
-
-        return (method_call_expr != nullptr);
+        return (*exp_iter)->type() == elex::SpecmanCtorKind::MethodCallExpr;
       }
     }
 
@@ -179,13 +172,6 @@
       if (!cond_func(term)) error_action;
 
 }
-
-%{
-/*     auto decodeTypeStr() -> e_scalar_predefined_type {
-    } */
-    namespace elex {
-    }
-%}
 
 /* ------------------ Keywords ------------------ */
 %token WHILE
