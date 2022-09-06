@@ -279,6 +279,11 @@ typedef std::shared_ptr<Module_class> Module;
 
 class Module_class : public tree_node {
     public:
+        Module_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Module_EXTRAS
     Module_EXTRAS
@@ -290,6 +295,11 @@ typedef std::shared_ptr<Statement_class> Statement;
 
 class Statement_class : public tree_node {
     public:
+        Statement_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Statement_EXTRAS
     Statement_EXTRAS
@@ -308,6 +318,11 @@ typedef std::shared_ptr<StructMember_class> StructMember;
 
 class StructMember_class : public tree_node {
     public:
+        StructMember_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef StructMember_EXTRAS
     StructMember_EXTRAS
@@ -326,6 +341,11 @@ typedef std::shared_ptr<FieldStructMember_class> FieldStructMember;
 
 class FieldStructMember_class : public tree_node {
     public:
+        FieldStructMember_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef FieldStructMember_EXTRAS
     FieldStructMember_EXTRAS
@@ -337,6 +357,11 @@ typedef std::shared_ptr<Action_class> Action;
 
 class Action_class : public tree_node {
     public:
+        Action_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Action_EXTRAS
     Action_EXTRAS
@@ -355,6 +380,11 @@ typedef std::shared_ptr<Expression_class> Expression;
 
 class Expression_class : public tree_node {
     public:
+        Expression_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Expression_EXTRAS
     Expression_EXTRAS
@@ -373,6 +403,11 @@ typedef std::shared_ptr<DataType_class> DataType;
 
 class DataType_class : public tree_node {
     public:
+        DataType_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef DataType_EXTRAS
     DataType_EXTRAS
@@ -384,6 +419,11 @@ typedef std::shared_ptr<Formal_class> Formal;
 
 class Formal_class : public tree_node {
     public:
+        Formal_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Formal_EXTRAS
     Formal_EXTRAS
@@ -402,6 +442,11 @@ typedef std::shared_ptr<Case_class> Case;
 
 class Case_class : public tree_node {
     public:
+        Case_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef Case_EXTRAS
     Case_EXTRAS
@@ -420,6 +465,11 @@ typedef std::shared_ptr<SequenceItem_class> SequenceItem;
 
 class SequenceItem_class : public tree_node {
     public:
+        SequenceItem_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef SequenceItem_EXTRAS
     SequenceItem_EXTRAS
@@ -438,6 +488,11 @@ typedef std::shared_ptr<CovergroupOption_class> CovergroupOption;
 
 class CovergroupOption_class : public tree_node {
     public:
+        CovergroupOption_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef CovergroupOption_EXTRAS
     CovergroupOption_EXTRAS
@@ -456,6 +511,11 @@ typedef std::shared_ptr<CovergroupItem_class> CovergroupItem;
 
 class CovergroupItem_class : public tree_node {
     public:
+        CovergroupItem_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef CovergroupItem_EXTRAS
     CovergroupItem_EXTRAS
@@ -474,6 +534,11 @@ typedef std::shared_ptr<CovergroupItemOption_class> CovergroupItemOption;
 
 class CovergroupItemOption_class : public tree_node {
     public:
+        CovergroupItemOption_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef CovergroupItemOption_EXTRAS
     CovergroupItemOption_EXTRAS
@@ -492,6 +557,11 @@ typedef std::shared_ptr<CovergroupExtensionID_class> CovergroupExtensionID;
 
 class CovergroupExtensionID_class : public tree_node {
     public:
+        CovergroupExtensionID_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef CovergroupExtensionID_EXTRAS
     CovergroupExtensionID_EXTRAS
@@ -503,6 +573,11 @@ typedef std::shared_ptr<ActionBlock_class> ActionBlock;
 
 class ActionBlock_class : public tree_node {
     public:
+        ActionBlock_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef ActionBlock_EXTRAS
     ActionBlock_EXTRAS
@@ -521,6 +596,11 @@ typedef std::shared_ptr<FSMState_class> FSMState;
 
 class FSMState_class : public tree_node {
     public:
+        FSMState_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef FSMState_EXTRAS
     FSMState_EXTRAS
@@ -539,6 +619,11 @@ typedef std::shared_ptr<FilePath_class> FilePath;
 
 class FilePath_class : public tree_node {
     public:
+        FilePath_class(int lineno = 1)
+            : tree_node(lineno)
+        {
+
+        }
 
 #ifdef FilePath_EXTRAS
     FilePath_EXTRAS
@@ -556,8 +641,11 @@ class module__class : public Module_class {
     protected:
         Statements stmts;
     public:
-        module__class(Statements stmts) {
+        module__class(Statements stmts){
             this->stmts = stmts;
+            if(stmts){
+                this->stmts->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -577,7 +665,7 @@ class package_class : public Statement_class {
     protected:
         Symbol_ pkg_name;
     public:
-        package_class(Symbol_ pkg_name) {
+        package_class(Symbol_ pkg_name){
             this->pkg_name = pkg_name;
         }
 
@@ -599,9 +687,12 @@ class unit_st_class : public Statement_class {
         Symbol_ unit_name;
         StructMembers members;
     public:
-        unit_st_class(Symbol_ unit_name, StructMembers members) {
+        unit_st_class(Symbol_ unit_name, StructMembers members){
             this->unit_name = unit_name;
             this->members = members;
+            if(members){
+                this->members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -623,10 +714,13 @@ class unit_like_st_class : public Statement_class {
         Symbol_ base_unit_name;
         StructMembers members;
     public:
-        unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members) {
+        unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members){
             this->unit_name = unit_name;
             this->base_unit_name = base_unit_name;
             this->members = members;
+            if(members){
+                this->members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -647,9 +741,12 @@ class struct_st_class : public Statement_class {
         Symbol_ struct_name;
         StructMembers members;
     public:
-        struct_st_class(Symbol_ struct_name, StructMembers members) {
+        struct_st_class(Symbol_ struct_name, StructMembers members){
             this->struct_name = struct_name;
             this->members = members;
+            if(members){
+                this->members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -671,10 +768,13 @@ class struct_like_st_class : public Statement_class {
         Symbol_ base_struct_name;
         StructMembers members;
     public:
-        struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members) {
+        struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members){
             this->struct_name = struct_name;
             this->base_struct_name = base_struct_name;
             this->members = members;
+            if(members){
+                this->members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -695,9 +795,15 @@ class extend_struct_st_class : public Statement_class {
         Expressions struct_type_name;
         StructMembers members;
     public:
-        extend_struct_st_class(Expressions struct_type_name, StructMembers members) {
+        extend_struct_st_class(Expressions struct_type_name, StructMembers members){
             this->struct_type_name = struct_type_name;
+            if(struct_type_name){
+                this->struct_type_name->set_parent(this);
+            }
             this->members = members;
+            if(members){
+                this->members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -718,9 +824,12 @@ class enum_type_st_class : public Statement_class {
         Symbol_ id;
         DataType type_id;
     public:
-        enum_type_st_class(Symbol_ id, DataType type_id) {
+        enum_type_st_class(Symbol_ id, DataType type_id){
             this->id = id;
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -741,9 +850,12 @@ class extend_enum_type_st_class : public Statement_class {
         Symbol_ type_id;
         Expressions enum_list_items;
     public:
-        extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items) {
+        extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items){
             this->type_id = type_id;
             this->enum_list_items = enum_list_items;
+            if(enum_list_items){
+                this->enum_list_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -765,10 +877,16 @@ class scalar_subtype_st_class : public Statement_class {
         Expression type_id;
         Expressions ranges;
     public:
-        scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges) {
+        scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges){
             this->subtype_id = subtype_id;
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
             this->ranges = ranges;
+            if(ranges){
+                this->ranges->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -791,11 +909,20 @@ class scalar_sized_type_st_class : public Statement_class {
         Expressions ranges_expr;
         Expression width_expr;
     public:
-        scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr) {
+        scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr){
             this->type_id = type_id;
             this->base_type_id = base_type_id;
+            if(base_type_id){
+                this->base_type_id->set_parent(this);
+            }
             this->ranges_expr = ranges_expr;
+            if(ranges_expr){
+                this->ranges_expr->set_parent(this);
+            }
             this->width_expr = width_expr;
+            if(width_expr){
+                this->width_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -816,8 +943,11 @@ class import_st_class : public Statement_class {
         FilePaths paths;
         Boolean is_cyclic;
     public:
-        import_st_class(FilePaths paths, Boolean is_cyclic) {
+        import_st_class(FilePaths paths, Boolean is_cyclic){
             this->paths = paths;
+            if(paths){
+                this->paths->set_parent(this);
+            }
             this->is_cyclic = is_cyclic;
         }
 
@@ -838,7 +968,7 @@ class file_path_fp_class : public FilePath_class {
     protected:
         Symbol_ file_path;
     public:
-        file_path_fp_class(Symbol_ file_path) {
+        file_path_fp_class(Symbol_ file_path){
             this->file_path = file_path;
         }
 
@@ -860,9 +990,12 @@ class virtual_sequence_st_class : public Statement_class {
         Symbol_ id;
         SequenceItems seq_options;
     public:
-        virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options) {
+        virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options){
             this->id = id;
             this->seq_options = seq_options;
+            if(seq_options){
+                this->seq_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -883,9 +1016,12 @@ class sequence_st_class : public Statement_class {
         Symbol_ id;
         SequenceItems seq_options;
     public:
-        sequence_st_class(Symbol_ id, SequenceItems seq_options) {
+        sequence_st_class(Symbol_ id, SequenceItems seq_options){
             this->id = id;
             this->seq_options = seq_options;
+            if(seq_options){
+                this->seq_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -905,7 +1041,7 @@ class sequence_item_kind_it_class : public SequenceItem_class {
     protected:
         Symbol_ id;
     public:
-        sequence_item_kind_it_class(Symbol_ id) {
+        sequence_item_kind_it_class(Symbol_ id){
             this->id = id;
         }
 
@@ -926,7 +1062,7 @@ class sequence_created_kind_name_it_class : public SequenceItem_class {
     protected:
         Symbol_ id;
     public:
-        sequence_created_kind_name_it_class(Symbol_ id) {
+        sequence_created_kind_name_it_class(Symbol_ id){
             this->id = id;
         }
 
@@ -947,7 +1083,7 @@ class sequence_created_driver_name_it_class : public SequenceItem_class {
     protected:
         Symbol_ id;
     public:
-        sequence_created_driver_name_it_class(Symbol_ id) {
+        sequence_created_driver_name_it_class(Symbol_ id){
             this->id = id;
         }
 
@@ -968,7 +1104,7 @@ class sequence_base_kind_it_class : public SequenceItem_class {
     protected:
         Symbol_ id;
     public:
-        sequence_base_kind_it_class(Symbol_ id) {
+        sequence_base_kind_it_class(Symbol_ id){
             this->id = id;
         }
 
@@ -989,7 +1125,7 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
     protected:
         Symbol_ id;
     public:
-        sequence_driver_base_kind_it_class(Symbol_ id) {
+        sequence_driver_base_kind_it_class(Symbol_ id){
             this->id = id;
         }
 
@@ -1010,7 +1146,7 @@ class define_as_st_class : public Statement_class {
     protected:
         Symbol_ macro;
     public:
-        define_as_st_class(Symbol_ macro) {
+        define_as_st_class(Symbol_ macro){
             this->macro = macro;
         }
 
@@ -1031,7 +1167,7 @@ class define_as_computed_st_class : public Statement_class {
     protected:
         Symbol_ macro;
     public:
-        define_as_computed_st_class(Symbol_ macro) {
+        define_as_computed_st_class(Symbol_ macro){
             this->macro = macro;
         }
 
@@ -1053,9 +1189,12 @@ class formal_class : public Formal_class {
         Symbol_ name;
         DataType type_;
     public:
-        formal_class(Symbol_ name, DataType type_) {
+        formal_class(Symbol_ name, DataType type_){
             this->name = name;
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1075,8 +1214,11 @@ class c_export_st_class : public Statement_class {
     protected:
         Expression element;
     public:
-        c_export_st_class(Expression element) {
+        c_export_st_class(Expression element){
             this->element = element;
+            if(element){
+                this->element->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1099,10 +1241,16 @@ class c_routine_st_class : public Statement_class {
         DataType return_type;
         Symbol_ c_routine_name;
     public:
-        c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name) {
+        c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name){
             this->e_routine_name = e_routine_name;
             this->parameters_list = parameters_list;
+            if(parameters_list){
+                this->parameters_list->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->c_routine_name = c_routine_name;
         }
 
@@ -1123,8 +1271,11 @@ class field_sm_class : public StructMember_class {
     protected:
         FieldStructMember field;
     public:
-        field_sm_class(FieldStructMember field) {
+        field_sm_class(FieldStructMember field){
             this->field = field;
+            if(field){
+                this->field->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1145,9 +1296,12 @@ class struct_field_sm_class : public FieldStructMember_class {
         Symbol_ id;
         DataType type_;
     public:
-        struct_field_sm_class(Symbol_ id, DataType type_) {
+        struct_field_sm_class(Symbol_ id, DataType type_){
             this->id = id;
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1169,10 +1323,16 @@ class struct_field_list_sm_class : public FieldStructMember_class {
         Expression len_expr;
         DataType type_;
     public:
-        struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_) {
+        struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_){
             this->id = id;
             this->len_expr = len_expr;
+            if(len_expr){
+                this->len_expr->set_parent(this);
+            }
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1193,9 +1353,12 @@ class struct_field_assoc_list_sm_class : public FieldStructMember_class {
         Symbol_ id;
         DataType type_;
     public:
-        struct_field_assoc_list_sm_class(Symbol_ id, DataType type_) {
+        struct_field_assoc_list_sm_class(Symbol_ id, DataType type_){
             this->id = id;
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1218,11 +1381,20 @@ class method_dec_sm_class : public StructMember_class {
         DataType return_type;
         ActionBlock actions_;
     public:
-        method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
+        method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1245,11 +1417,20 @@ class method_dec_also_sm_class : public StructMember_class {
         DataType return_type;
         ActionBlock actions_;
     public:
-        method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
+        method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1272,11 +1453,20 @@ class method_dec_first_sm_class : public StructMember_class {
         DataType return_type;
         ActionBlock actions_;
     public:
-        method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
+        method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1299,11 +1489,20 @@ class method_dec_only_sm_class : public StructMember_class {
         DataType return_type;
         ActionBlock actions_;
     public:
-        method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_) {
+        method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1325,10 +1524,16 @@ class method_dec_empty_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
     public:
-        method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type) {
+        method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1350,10 +1555,16 @@ class method_dec_undef_sm_class : public StructMember_class {
         Formals arguments;
         DataType return_type;
     public:
-        method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type) {
+        method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1377,12 +1588,24 @@ class tcm_dec_sm_class : public StructMember_class {
         Expression event_id_expr;
         ActionBlock actions_;
     public:
-        tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
+        tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1406,12 +1629,24 @@ class tcm_dec_also_sm_class : public StructMember_class {
         Expression event_id_expr;
         ActionBlock actions_;
     public:
-        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
+        tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1435,12 +1670,24 @@ class tcm_dec_first_sm_class : public StructMember_class {
         Expression event_id_expr;
         ActionBlock actions_;
     public:
-        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
+        tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1464,12 +1711,24 @@ class tcm_dec_only_sm_class : public StructMember_class {
         Expression event_id_expr;
         ActionBlock actions_;
     public:
-        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_) {
+        tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
             this->actions_ = actions_;
+            if(actions_){
+                this->actions_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1492,11 +1751,20 @@ class tcm_dec_empty_sm_class : public StructMember_class {
         DataType return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) {
+        tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1519,11 +1787,20 @@ class tcm_dec_undef_sm_class : public StructMember_class {
         DataType return_type;
         Expression event_id_expr;
     public:
-        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr) {
+        tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
             this->id = id;
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->event_id_expr = event_id_expr;
+            if(event_id_expr){
+                this->event_id_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1546,10 +1823,16 @@ class c_method_dec_sm_class : public StructMember_class {
         DataType return_type;
         Symbol_ c_method_name;
     public:
-        c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) {
+        c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
             this->e_method_name = e_method_name;
             this->parameters_list = parameters_list;
+            if(parameters_list){
+                this->parameters_list->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->c_method_name = c_method_name;
         }
 
@@ -1573,10 +1856,16 @@ class c_method_dec_only_sm_class : public StructMember_class {
         DataType return_type;
         Symbol_ c_method_name;
     public:
-        c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name) {
+        c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
             this->e_method_name = e_method_name;
             this->parameters_list = parameters_list;
+            if(parameters_list){
+                this->parameters_list->set_parent(this);
+            }
             this->return_type = return_type;
+            if(return_type){
+                this->return_type->set_parent(this);
+            }
             this->c_method_name = c_method_name;
         }
 
@@ -1598,9 +1887,15 @@ class when_subtype_sm_class : public StructMember_class {
         Expressions subtype_mods;
         StructMembers subtype_members;
     public:
-        when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members) {
+        when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members){
             this->subtype_mods = subtype_mods;
+            if(subtype_mods){
+                this->subtype_mods->set_parent(this);
+            }
             this->subtype_members = subtype_members;
+            if(subtype_members){
+                this->subtype_members->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1620,8 +1915,11 @@ class constraint_def_sm_class : public StructMember_class {
     protected:
         Expression constraint_expr;
     public:
-        constraint_def_sm_class(Expression constraint_expr) {
+        constraint_def_sm_class(Expression constraint_expr){
             this->constraint_expr = constraint_expr;
+            if(constraint_expr){
+                this->constraint_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1642,9 +1940,15 @@ class on_event_sm_class : public StructMember_class {
         Expression event_name;
         ActionBlock action_block;
     public:
-        on_event_sm_class(Expression event_name, ActionBlock action_block) {
+        on_event_sm_class(Expression event_name, ActionBlock action_block){
             this->event_name = event_name;
+            if(event_name){
+                this->event_name->set_parent(this);
+            }
             this->action_block = action_block;
+            if(action_block){
+                this->action_block->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1664,7 +1968,7 @@ class simple_event_dec_sm_class : public StructMember_class {
     protected:
         Symbol_ id;
     public:
-        simple_event_dec_sm_class(Symbol_ id) {
+        simple_event_dec_sm_class(Symbol_ id){
             this->id = id;
         }
 
@@ -1686,9 +1990,12 @@ class event_def_sm_class : public StructMember_class {
         Symbol_ id;
         Expression temporal;
     public:
-        event_def_sm_class(Symbol_ id, Expression temporal) {
+        event_def_sm_class(Symbol_ id, Expression temporal){
             this->id = id;
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1709,9 +2016,12 @@ class event_def_override_sm_class : public StructMember_class {
         Symbol_ id;
         Expression temporal;
     public:
-        event_def_override_sm_class(Symbol_ id, Expression temporal) {
+        event_def_override_sm_class(Symbol_ id, Expression temporal){
             this->id = id;
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1732,9 +2042,15 @@ class temporal_expr_class : public Expression_class {
         Expression temporal;
         Expression sample_event;
     public:
-        temporal_expr_class(Expression temporal, Expression sample_event) {
+        temporal_expr_class(Expression temporal, Expression sample_event){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->sample_event = sample_event;
+            if(sample_event){
+                this->sample_event->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1754,8 +2070,11 @@ class sampling_event_expr_class : public Expression_class {
     protected:
         Expression event_expr;
     public:
-        sampling_event_expr_class(Expression event_expr) {
+        sampling_event_expr_class(Expression event_expr){
             this->event_expr = event_expr;
+            if(event_expr){
+                this->event_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1775,8 +2094,11 @@ class event_ref_expr_class : public Expression_class {
     protected:
         Expression event_name;
     public:
-        event_ref_expr_class(Expression event_name) {
+        event_ref_expr_class(Expression event_name){
             this->event_name = event_name;
+            if(event_name){
+                this->event_name->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1797,9 +2119,15 @@ class action_attached_temporal_expr_class : public Expression_class {
         Expression temporal;
         ActionBlock actions;
     public:
-        action_attached_temporal_expr_class(Expression temporal, ActionBlock actions) {
+        action_attached_temporal_expr_class(Expression temporal, ActionBlock actions){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1819,8 +2147,11 @@ class not_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
     public:
-        not_temporal_expr_class(Expression temporal) {
+        not_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1840,8 +2171,11 @@ class fail_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
     public:
-        fail_temporal_expr_class(Expression temporal) {
+        fail_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1861,8 +2195,11 @@ class eventually_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
     public:
-        eventually_temporal_expr_class(Expression temporal) {
+        eventually_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1882,8 +2219,11 @@ class detach_temporal_expr_class : public Expression_class {
     protected:
         Expression temporal;
     public:
-        detach_temporal_expr_class(Expression temporal) {
+        detach_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1904,9 +2244,15 @@ class yield_temporal_expr_class : public Expression_class {
         Expression trigger;
         Expression temporal;
     public:
-        yield_temporal_expr_class(Expression trigger, Expression temporal) {
+        yield_temporal_expr_class(Expression trigger, Expression temporal){
             this->trigger = trigger;
+            if(trigger){
+                this->trigger->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1926,8 +2272,11 @@ class true_temporal_expr_class : public Expression_class {
     protected:
         Expression bool_expr;
     public:
-        true_temporal_expr_class(Expression bool_expr) {
+        true_temporal_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1947,8 +2296,11 @@ class rise_temporal_expr_class : public Expression_class {
     protected:
         Expression hdl_path;
     public:
-        rise_temporal_expr_class(Expression hdl_path) {
+        rise_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
+            if(hdl_path){
+                this->hdl_path->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1968,8 +2320,11 @@ class fall_temporal_expr_class : public Expression_class {
     protected:
         Expression hdl_path;
     public:
-        fall_temporal_expr_class(Expression hdl_path) {
+        fall_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
+            if(hdl_path){
+                this->hdl_path->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1989,8 +2344,11 @@ class change_temporal_expr_class : public Expression_class {
     protected:
         Expression hdl_path;
     public:
-        change_temporal_expr_class(Expression hdl_path) {
+        change_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
+            if(hdl_path){
+                this->hdl_path->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2011,9 +2369,15 @@ class and_temporal_expr_class : public Expression_class {
         Expression te1;
         Expression te2;
     public:
-        and_temporal_expr_class(Expression te1, Expression te2) {
+        and_temporal_expr_class(Expression te1, Expression te2){
             this->te1 = te1;
+            if(te1){
+                this->te1->set_parent(this);
+            }
             this->te2 = te2;
+            if(te2){
+                this->te2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2034,9 +2398,15 @@ class or_temporal_expr_class : public Expression_class {
         Expression te1;
         Expression te2;
     public:
-        or_temporal_expr_class(Expression te1, Expression te2) {
+        or_temporal_expr_class(Expression te1, Expression te2){
             this->te1 = te1;
+            if(te1){
+                this->te1->set_parent(this);
+            }
             this->te2 = te2;
+            if(te2){
+                this->te2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2056,8 +2426,11 @@ class sequence_temporal_expr_class : public Expression_class {
     protected:
         Expressions temporals;
     public:
-        sequence_temporal_expr_class(Expressions temporals) {
+        sequence_temporal_expr_class(Expressions temporals){
             this->temporals = temporals;
+            if(temporals){
+                this->temporals->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2078,9 +2451,15 @@ class fixed_repetition_expr_class : public Expression_class {
         Expression rep;
         Expression temporal;
     public:
-        fixed_repetition_expr_class(Expression rep, Expression temporal) {
+        fixed_repetition_expr_class(Expression rep, Expression temporal){
             this->rep = rep;
+            if(rep){
+                this->rep->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2103,11 +2482,23 @@ class first_match_repetition_expr_class : public Expression_class {
         Expression temporal;
         Expression match_temporal;
     public:
-        first_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal) {
+        first_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal){
             this->from_rep = from_rep;
+            if(from_rep){
+                this->from_rep->set_parent(this);
+            }
             this->to_rep = to_rep;
+            if(to_rep){
+                this->to_rep->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->match_temporal = match_temporal;
+            if(match_temporal){
+                this->match_temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2129,10 +2520,19 @@ class true_match_repetition_expr_class : public Expression_class {
         Expression to_rep;
         Expression temporal;
     public:
-        true_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal) {
+        true_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal){
             this->from_rep = from_rep;
+            if(from_rep){
+                this->from_rep->set_parent(this);
+            }
             this->to_rep = to_rep;
+            if(to_rep){
+                this->to_rep->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2151,7 +2551,7 @@ auto true_match_repetition_expr(Expression from_rep, Expression to_rep, Expressi
 class zero_repetition_base_expr_class : public Expression_class {
     protected:
     public:
-        zero_repetition_base_expr_class() {
+        zero_repetition_base_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2170,7 +2570,7 @@ auto zero_repetition_base_expr() -> Expression;
 class inf_repetition_base_expr_class : public Expression_class {
     protected:
     public:
-        inf_repetition_base_expr_class() {
+        inf_repetition_base_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2189,7 +2589,7 @@ auto inf_repetition_base_expr() -> Expression;
 class cycle_temporal_expr_class : public Expression_class {
     protected:
     public:
-        cycle_temporal_expr_class() {
+        cycle_temporal_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2210,9 +2610,15 @@ class delay_temporal_expr_class : public Expression_class {
         Expression e;
         Expression timescale_unit;
     public:
-        delay_temporal_expr_class(Expression e, Expression timescale_unit) {
+        delay_temporal_expr_class(Expression e, Expression timescale_unit){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
             this->timescale_unit = timescale_unit;
+            if(timescale_unit){
+                this->timescale_unit->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2232,8 +2638,11 @@ class consume_temporal_expr_class : public Expression_class {
     protected:
         Expression e;
     public:
-        consume_temporal_expr_class(Expression e) {
+        consume_temporal_expr_class(Expression e){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2254,9 +2663,15 @@ class expect_nameless_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        expect_nameless_sm_class(Expression temporal, Expression dut_error_call) {
+        expect_nameless_sm_class(Expression temporal, Expression dut_error_call){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2278,10 +2693,19 @@ class expect_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        expect_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
+        expect_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2303,10 +2727,19 @@ class expect_override_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        expect_override_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
+        expect_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2327,9 +2760,15 @@ class assume_nameless_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        assume_nameless_sm_class(Expression temporal, Expression dut_error_call) {
+        assume_nameless_sm_class(Expression temporal, Expression dut_error_call){
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2351,10 +2790,19 @@ class assume_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        assume_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
+        assume_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2376,10 +2824,19 @@ class assume_override_sm_class : public StructMember_class {
         Expression temporal;
         Expression dut_error_call;
     public:
-        assume_override_sm_class(Expression id, Expression temporal, Expression dut_error_call) {
+        assume_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->temporal = temporal;
+            if(temporal){
+                this->temporal->set_parent(this);
+            }
             this->dut_error_call = dut_error_call;
+            if(dut_error_call){
+                this->dut_error_call->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2399,7 +2856,7 @@ class empty_covergroup_sm_class : public StructMember_class {
     protected:
         Symbol_ event_id;
     public:
-        empty_covergroup_sm_class(Symbol_ event_id) {
+        empty_covergroup_sm_class(Symbol_ event_id){
             this->event_id = event_id;
         }
 
@@ -2422,10 +2879,16 @@ class covergroup_sm_class : public StructMember_class {
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
-        covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items) {
+        covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
             this->event_id = event_id;
             this->cg_opts = cg_opts;
+            if(cg_opts){
+                this->cg_opts->set_parent(this);
+            }
             this->cg_items = cg_items;
+            if(cg_items){
+                this->cg_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2448,11 +2911,20 @@ class covergroup_extension_sm_class : public StructMember_class {
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
-        covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items) {
+        covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
             this->event_id = event_id;
             this->instance_id = instance_id;
+            if(instance_id){
+                this->instance_id->set_parent(this);
+            }
             this->cg_opts = cg_opts;
+            if(cg_opts){
+                this->cg_opts->set_parent(this);
+            }
             this->cg_items = cg_items;
+            if(cg_items){
+                this->cg_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2471,7 +2943,7 @@ auto covergroup_extension_sm(Symbol_ event_id, CovergroupExtensionID instance_id
 class covergroup_per_type_ceid_class : public CovergroupExtensionID_class {
     protected:
     public:
-        covergroup_per_type_ceid_class() {
+        covergroup_per_type_ceid_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2491,8 +2963,11 @@ class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_cla
     protected:
         Expression e_path;
     public:
-        covergroup_per_unit_instance_ceid_class(Expression e_path) {
+        covergroup_per_unit_instance_ceid_class(Expression e_path){
             this->e_path = e_path;
+            if(e_path){
+                this->e_path->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2513,7 +2988,7 @@ class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
         Symbol_ item_name;
         Symbol_ bucket_name;
     public:
-        covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name) {
+        covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name){
             this->item_name = item_name;
             this->bucket_name = bucket_name;
         }
@@ -2535,8 +3010,11 @@ class global_cgo_class : public CovergroupOption_class {
     protected:
         Expression bool_litral;
     public:
-        global_cgo_class(Expression bool_litral) {
+        global_cgo_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2556,8 +3034,11 @@ class no_collect_cgo_class : public CovergroupOption_class {
     protected:
         Expression bool_litral;
     public:
-        no_collect_cgo_class(Expression bool_litral) {
+        no_collect_cgo_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2577,8 +3058,11 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
     protected:
         Expression hier_id;
     public:
-        per_unit_instance_cgo_class(Expression hier_id) {
+        per_unit_instance_cgo_class(Expression hier_id){
             this->hier_id = hier_id;
+            if(hier_id){
+                this->hier_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2597,7 +3081,7 @@ auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption;
 class radix_dec_cgo_class : public CovergroupOption_class {
     protected:
     public:
-        radix_dec_cgo_class() {
+        radix_dec_cgo_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2616,7 +3100,7 @@ auto radix_dec_cgo() -> CovergroupOption;
 class radix_hex_cgo_class : public CovergroupOption_class {
     protected:
     public:
-        radix_hex_cgo_class() {
+        radix_hex_cgo_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2635,7 +3119,7 @@ auto radix_hex_cgo() -> CovergroupOption;
 class radix_bin_cgo_class : public CovergroupOption_class {
     protected:
     public:
-        radix_bin_cgo_class() {
+        radix_bin_cgo_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2655,7 +3139,7 @@ class text_cgo_class : public CovergroupOption_class {
     protected:
         Symbol_ description;
     public:
-        text_cgo_class(Symbol_ description) {
+        text_cgo_class(Symbol_ description){
             this->description = description;
         }
 
@@ -2676,7 +3160,7 @@ class weight_cgo_class : public CovergroupOption_class {
     protected:
         Symbol_ value;
     public:
-        weight_cgo_class(Symbol_ value) {
+        weight_cgo_class(Symbol_ value){
             this->value = value;
         }
 
@@ -2697,8 +3181,11 @@ class when_cgo_class : public CovergroupOption_class {
     protected:
         Expression bool_expr;
     public:
-        when_cgo_class(Expression bool_expr) {
+        when_cgo_class(Expression bool_expr){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2719,9 +3206,12 @@ class simple_covergroup_item_cgi_class : public CovergroupItem_class {
         Symbol_ item_id;
         CovergroupItemOptions cgi_options;
     public:
-        simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options) {
+        simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
             this->item_id = item_id;
             this->cgi_options = cgi_options;
+            if(cgi_options){
+                this->cgi_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2744,11 +3234,20 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
         Expression sampled_val;
         CovergroupItemOptions cgi_options;
     public:
-        on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options) {
+        on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options){
             this->item_id = item_id;
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
             this->sampled_val = sampled_val;
+            if(sampled_val){
+                this->sampled_val->set_parent(this);
+            }
             this->cgi_options = cgi_options;
+            if(cgi_options){
+                this->cgi_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2769,9 +3268,15 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
         Expressions cg_items;
         CovergroupItemOptions cgi_options;
     public:
-        cross_covergroup_item_cgi_class(Expressions cg_items, CovergroupItemOptions cgi_options) {
+        cross_covergroup_item_cgi_class(Expressions cg_items, CovergroupItemOptions cgi_options){
             this->cg_items = cg_items;
+            if(cg_items){
+                this->cg_items->set_parent(this);
+            }
             this->cgi_options = cgi_options;
+            if(cgi_options){
+                this->cgi_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2792,9 +3297,12 @@ class transition_covergroup_item_cgi_class : public CovergroupItem_class {
         Symbol_ item_id;
         CovergroupItemOptions cgi_options;
     public:
-        transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options) {
+        transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
             this->item_id = item_id;
             this->cgi_options = cgi_options;
+            if(cgi_options){
+                this->cgi_options->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2814,7 +3322,7 @@ class at_least_cgio_class : public CovergroupItemOption_class {
     protected:
         Symbol_ num;
     public:
-        at_least_cgio_class(Symbol_ num) {
+        at_least_cgio_class(Symbol_ num){
             this->num = num;
         }
 
@@ -2835,8 +3343,11 @@ class ignore_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression item_bool_expr;
     public:
-        ignore_cgio_class(Expression item_bool_expr) {
+        ignore_cgio_class(Expression item_bool_expr){
             this->item_bool_expr = item_bool_expr;
+            if(item_bool_expr){
+                this->item_bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2856,8 +3367,11 @@ class illegal_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression bool_litral;
     public:
-        illegal_cgio_class(Expression bool_litral) {
+        illegal_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2877,8 +3391,11 @@ class no_collect_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression bool_litral;
     public:
-        no_collect_cgio_class(Expression bool_litral) {
+        no_collect_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2898,8 +3415,11 @@ class no_trace_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression bool_litral;
     public:
-        no_trace_cgio_class(Expression bool_litral) {
+        no_trace_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2919,7 +3439,7 @@ class num_of_buckets_cgio_class : public CovergroupItemOption_class {
     protected:
         Symbol_ num;
     public:
-        num_of_buckets_cgio_class(Symbol_ num) {
+        num_of_buckets_cgio_class(Symbol_ num){
             this->num = num;
         }
 
@@ -2940,8 +3460,11 @@ class per_instance_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression bool_litral;
     public:
-        per_instance_cgio_class(Expression bool_litral) {
+        per_instance_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
+            if(bool_litral){
+                this->bool_litral->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2960,7 +3483,7 @@ auto per_instance_cgio(Expression bool_litral) -> CovergroupItemOption;
 class radix_dec_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
-        radix_dec_cgio_class() {
+        radix_dec_cgio_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2979,7 +3502,7 @@ auto radix_dec_cgio() -> CovergroupItemOption;
 class radix_hex_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
-        radix_hex_cgio_class() {
+        radix_hex_cgio_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2998,7 +3521,7 @@ auto radix_hex_cgio() -> CovergroupItemOption;
 class radix_bin_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
-        radix_bin_cgio_class() {
+        radix_bin_cgio_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3018,7 +3541,7 @@ class text_cgio_class : public CovergroupItemOption_class {
     protected:
         Symbol_ description;
     public:
-        text_cgio_class(Symbol_ description) {
+        text_cgio_class(Symbol_ description){
             this->description = description;
         }
 
@@ -3039,7 +3562,7 @@ class weight_cgio_class : public CovergroupItemOption_class {
     protected:
         Symbol_ value;
     public:
-        weight_cgio_class(Symbol_ value) {
+        weight_cgio_class(Symbol_ value){
             this->value = value;
         }
 
@@ -3060,8 +3583,11 @@ class when_cgio_class : public CovergroupItemOption_class {
     protected:
         Expression bool_expr;
     public:
-        when_cgio_class(Expression bool_expr) {
+        when_cgio_class(Expression bool_expr){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3080,7 +3606,7 @@ auto when_cgio(Expression bool_expr) -> CovergroupItemOption;
 class true_literal_expr_class : public Expression_class {
     protected:
     public:
-        true_literal_expr_class() {
+        true_literal_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3099,7 +3625,7 @@ auto true_literal_expr() -> Expression;
 class false_literal_expr_class : public Expression_class {
     protected:
     public:
-        false_literal_expr_class() {
+        false_literal_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3119,7 +3645,7 @@ class id_expr_class : public Expression_class {
     protected:
         Symbol_ id;
     public:
-        id_expr_class(Symbol_ id) {
+        id_expr_class(Symbol_ id){
             this->id = id;
         }
 
@@ -3141,9 +3667,15 @@ class enum_type_expr_class : public Expression_class {
         Expressions enum_list_expr;
         Expression width_modifier_expr;
     public:
-        enum_type_expr_class(Expressions enum_list_expr, Expression width_modifier_expr) {
+        enum_type_expr_class(Expressions enum_list_expr, Expression width_modifier_expr){
             this->enum_list_expr = enum_list_expr;
+            if(enum_list_expr){
+                this->enum_list_expr->set_parent(this);
+            }
             this->width_modifier_expr = width_modifier_expr;
+            if(width_modifier_expr){
+                this->width_modifier_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3164,9 +3696,12 @@ class enum_list_item_class : public Expression_class {
         Symbol_ id;
         Expression expr;
     public:
-        enum_list_item_class(Symbol_ id, Expression expr) {
+        enum_list_item_class(Symbol_ id, Expression expr){
             this->id = id;
             this->expr = expr;
+            if(expr){
+                this->expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3186,8 +3721,11 @@ class bitwise_not_expr_class : public Expression_class {
     protected:
         Expression e;
     public:
-        bitwise_not_expr_class(Expression e) {
+        bitwise_not_expr_class(Expression e){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3208,9 +3746,15 @@ class bitwise_and_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        bitwise_and_expr_class(Expression e1, Expression e2) {
+        bitwise_and_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3231,9 +3775,15 @@ class bitwise_or_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        bitwise_or_expr_class(Expression e1, Expression e2) {
+        bitwise_or_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3254,9 +3804,15 @@ class bitwise_xor_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        bitwise_xor_expr_class(Expression e1, Expression e2) {
+        bitwise_xor_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3277,9 +3833,15 @@ class shift_left_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        shift_left_expr_class(Expression e1, Expression e2) {
+        shift_left_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3300,9 +3862,15 @@ class right_left_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        right_left_expr_class(Expression e1, Expression e2) {
+        right_left_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3322,8 +3890,11 @@ class logical_not_expr_class : public Expression_class {
     protected:
         Expression e;
     public:
-        logical_not_expr_class(Expression e) {
+        logical_not_expr_class(Expression e){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3344,9 +3915,15 @@ class logical_and_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        logical_and_expr_class(Expression e1, Expression e2) {
+        logical_and_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3367,9 +3944,15 @@ class logical_or_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        logical_or_expr_class(Expression e1, Expression e2) {
+        logical_or_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3390,9 +3973,15 @@ class implication_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        implication_expr_class(Expression e1, Expression e2) {
+        implication_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3412,8 +4001,11 @@ class unary_positive_expr_class : public Expression_class {
     protected:
         Expression e;
     public:
-        unary_positive_expr_class(Expression e) {
+        unary_positive_expr_class(Expression e){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3433,8 +4025,11 @@ class unary_negative_expr_class : public Expression_class {
     protected:
         Expression e;
     public:
-        unary_negative_expr_class(Expression e) {
+        unary_negative_expr_class(Expression e){
             this->e = e;
+            if(e){
+                this->e->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3455,9 +4050,15 @@ class binary_add_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        binary_add_expr_class(Expression e1, Expression e2) {
+        binary_add_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3478,9 +4079,15 @@ class binary_sub_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        binary_sub_expr_class(Expression e1, Expression e2) {
+        binary_sub_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3501,9 +4108,15 @@ class binary_mul_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        binary_mul_expr_class(Expression e1, Expression e2) {
+        binary_mul_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3524,9 +4137,15 @@ class binary_div_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        binary_div_expr_class(Expression e1, Expression e2) {
+        binary_div_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3547,9 +4166,15 @@ class binary_remainder_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        binary_remainder_expr_class(Expression e1, Expression e2) {
+        binary_remainder_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3570,9 +4195,15 @@ class less_then_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        less_then_expr_class(Expression e1, Expression e2) {
+        less_then_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3593,9 +4224,15 @@ class greater_then_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        greater_then_expr_class(Expression e1, Expression e2) {
+        greater_then_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3616,9 +4253,15 @@ class less_then_or_equal_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        less_then_or_equal_expr_class(Expression e1, Expression e2) {
+        less_then_or_equal_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3639,9 +4282,15 @@ class greater_then_or_equal_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        greater_then_or_equal_expr_class(Expression e1, Expression e2) {
+        greater_then_or_equal_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3662,9 +4311,15 @@ class equality_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        equality_expr_class(Expression e1, Expression e2) {
+        equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3685,9 +4340,15 @@ class non_equality_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        non_equality_expr_class(Expression e1, Expression e2) {
+        non_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3708,9 +4369,15 @@ class hdl_equality_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        hdl_equality_expr_class(Expression e1, Expression e2) {
+        hdl_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3731,9 +4398,15 @@ class hdl_non_equality_expr_class : public Expression_class {
         Expression e1;
         Expression e2;
     public:
-        hdl_non_equality_expr_class(Expression e1, Expression e2) {
+        hdl_non_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
+            if(e1){
+                this->e1->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3754,9 +4427,15 @@ class str_match_expr_class : public Expression_class {
         Expression str_expr;
         Expression pattern_expr;
     public:
-        str_match_expr_class(Expression str_expr, Expression pattern_expr) {
+        str_match_expr_class(Expression str_expr, Expression pattern_expr){
             this->str_expr = str_expr;
+            if(str_expr){
+                this->str_expr->set_parent(this);
+            }
             this->pattern_expr = pattern_expr;
+            if(pattern_expr){
+                this->pattern_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3777,9 +4456,15 @@ class str_does_not_match_expr_class : public Expression_class {
         Expression str_expr;
         Expression pattern_expr;
     public:
-        str_does_not_match_expr_class(Expression str_expr, Expression pattern_expr) {
+        str_does_not_match_expr_class(Expression str_expr, Expression pattern_expr){
             this->str_expr = str_expr;
+            if(str_expr){
+                this->str_expr->set_parent(this);
+            }
             this->pattern_expr = pattern_expr;
+            if(pattern_expr){
+                this->pattern_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3800,9 +4485,15 @@ class in_expr_class : public Expression_class {
         Expression exp;
         Expression inside;
     public:
-        in_expr_class(Expression exp, Expression inside) {
+        in_expr_class(Expression exp, Expression inside){
             this->exp = exp;
+            if(exp){
+                this->exp->set_parent(this);
+            }
             this->inside = inside;
+            if(inside){
+                this->inside->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3823,9 +4514,15 @@ class type_introspec_expr_class : public Expression_class {
         Expression field_id;
         DataType type_id;
     public:
-        type_introspec_expr_class(Expression field_id, DataType type_id) {
+        type_introspec_expr_class(Expression field_id, DataType type_id){
             this->field_id = field_id;
+            if(field_id){
+                this->field_id->set_parent(this);
+            }
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3846,9 +4543,15 @@ class type_introspec_negation_expr_class : public Expression_class {
         Expression field_id;
         DataType type_id;
     public:
-        type_introspec_negation_expr_class(Expression field_id, DataType type_id) {
+        type_introspec_negation_expr_class(Expression field_id, DataType type_id){
             this->field_id = field_id;
+            if(field_id){
+                this->field_id->set_parent(this);
+            }
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3869,9 +4572,15 @@ class in_enum_expr_class : public Expression_class {
         Expression exp;
         DataType inside;
     public:
-        in_enum_expr_class(Expression exp, DataType inside) {
+        in_enum_expr_class(Expression exp, DataType inside){
             this->exp = exp;
+            if(exp){
+                this->exp->set_parent(this);
+            }
             this->inside = inside;
+            if(inside){
+                this->inside->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3891,8 +4600,11 @@ class list_index_item_expr_class : public Expression_class {
     protected:
         Expression idx_expr;
     public:
-        list_index_item_expr_class(Expression idx_expr) {
+        list_index_item_expr_class(Expression idx_expr){
             this->idx_expr = idx_expr;
+            if(idx_expr){
+                this->idx_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3913,9 +4625,15 @@ class list_index_expr_class : public Expression_class {
         Expression base_id;
         Expression idx_expr;
     public:
-        list_index_expr_class(Expression base_id, Expression idx_expr) {
+        list_index_expr_class(Expression base_id, Expression idx_expr){
             this->base_id = base_id;
+            if(base_id){
+                this->base_id->set_parent(this);
+            }
             this->idx_expr = idx_expr;
+            if(idx_expr){
+                this->idx_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3936,9 +4654,15 @@ class list_slicing_expr_class : public Expression_class {
         Expression list_exp;
         Expression range_expr;
     public:
-        list_slicing_expr_class(Expression list_exp, Expression range_expr) {
+        list_slicing_expr_class(Expression list_exp, Expression range_expr){
             this->list_exp = list_exp;
+            if(list_exp){
+                this->list_exp->set_parent(this);
+            }
             this->range_expr = range_expr;
+            if(range_expr){
+                this->range_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3959,9 +4683,15 @@ class bit_slicing_expr_class : public Expression_class {
         Expression list_exp;
         Expression bit_slice_expr;
     public:
-        bit_slicing_expr_class(Expression list_exp, Expression bit_slice_expr) {
+        bit_slicing_expr_class(Expression list_exp, Expression bit_slice_expr){
             this->list_exp = list_exp;
+            if(list_exp){
+                this->list_exp->set_parent(this);
+            }
             this->bit_slice_expr = bit_slice_expr;
+            if(bit_slice_expr){
+                this->bit_slice_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3981,8 +4711,11 @@ class list_concat_expr_class : public Expression_class {
     protected:
         Expressions list_concat_items;
     public:
-        list_concat_expr_class(Expressions list_concat_items) {
+        list_concat_expr_class(Expressions list_concat_items){
             this->list_concat_items = list_concat_items;
+            if(list_concat_items){
+                this->list_concat_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4002,8 +4735,11 @@ class bit_concat_expr_class : public Expression_class {
     protected:
         Expressions bit_concat_items;
     public:
-        bit_concat_expr_class(Expressions bit_concat_items) {
+        bit_concat_expr_class(Expressions bit_concat_items){
             this->bit_concat_items = bit_concat_items;
+            if(bit_concat_items){
+                this->bit_concat_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4024,9 +4760,15 @@ class bit_slice_expr_class : public Expression_class {
         Expression bottom;
         Expression top;
     public:
-        bit_slice_expr_class(Expression bottom, Expression top) {
+        bit_slice_expr_class(Expression bottom, Expression top){
             this->bottom = bottom;
+            if(bottom){
+                this->bottom->set_parent(this);
+            }
             this->top = top;
+            if(top){
+                this->top->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4047,9 +4789,15 @@ class range_modifier_item_expr_class : public Expression_class {
         Expression bottom;
         Expression top;
     public:
-        range_modifier_item_expr_class(Expression bottom, Expression top) {
+        range_modifier_item_expr_class(Expression bottom, Expression top){
             this->bottom = bottom;
+            if(bottom){
+                this->bottom->set_parent(this);
+            }
             this->top = top;
+            if(top){
+                this->top->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4069,8 +4817,11 @@ class range_modifier_expr_class : public Expression_class {
     protected:
         Expressions range_items;
     public:
-        range_modifier_expr_class(Expressions range_items) {
+        range_modifier_expr_class(Expressions range_items){
             this->range_items = range_items;
+            if(range_items){
+                this->range_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4090,8 +4841,11 @@ class ranges_modifier_expr_class : public Expression_class {
     protected:
         Expressions ranges;
     public:
-        ranges_modifier_expr_class(Expressions ranges) {
+        ranges_modifier_expr_class(Expressions ranges){
             this->ranges = ranges;
+            if(ranges){
+                this->ranges->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4111,8 +4865,11 @@ class sized_bits_scalar_expr_class : public Expression_class {
     protected:
         Expression width_expr;
     public:
-        sized_bits_scalar_expr_class(Expression width_expr) {
+        sized_bits_scalar_expr_class(Expression width_expr){
             this->width_expr = width_expr;
+            if(width_expr){
+                this->width_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4132,8 +4889,11 @@ class sized_bytes_scalar_expr_class : public Expression_class {
     protected:
         Expression width_expr;
     public:
-        sized_bytes_scalar_expr_class(Expression width_expr) {
+        sized_bytes_scalar_expr_class(Expression width_expr){
             this->width_expr = width_expr;
+            if(width_expr){
+                this->width_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4155,10 +4915,16 @@ class new_allocate_expr_class : public Expression_class {
         Symbol_ scoped_name;
         ActionBlock actions;
     public:
-        new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions) {
+        new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions){
             this->struct_type_block = struct_type_block;
+            if(struct_type_block){
+                this->struct_type_block->set_parent(this);
+            }
             this->scoped_name = scoped_name;
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4179,9 +4945,15 @@ class new_nameless_allocate_expr_class : public Expression_class {
         Expression struct_type_block;
         ActionBlock actions;
     public:
-        new_nameless_allocate_expr_class(Expression struct_type_block, ActionBlock actions) {
+        new_nameless_allocate_expr_class(Expression struct_type_block, ActionBlock actions){
             this->struct_type_block = struct_type_block;
+            if(struct_type_block){
+                this->struct_type_block->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4202,9 +4974,15 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
         Expression struct_id_expr;
         Expression opt_action_block_expt;
     public:
-        struct_type_expr_with_opt_action_block_class(Expression struct_id_expr, Expression opt_action_block_expt) {
+        struct_type_expr_with_opt_action_block_class(Expression struct_id_expr, Expression opt_action_block_expt){
             this->struct_id_expr = struct_id_expr;
+            if(struct_id_expr){
+                this->struct_id_expr->set_parent(this);
+            }
             this->opt_action_block_expt = opt_action_block_expt;
+            if(opt_action_block_expt){
+                this->opt_action_block_expt->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4225,9 +5003,15 @@ class named_action_block_class : public Expression_class {
         Expression struct_id_expr;
         Actions action_block;
     public:
-        named_action_block_class(Expression struct_id_expr, Actions action_block) {
+        named_action_block_class(Expression struct_id_expr, Actions action_block){
             this->struct_id_expr = struct_id_expr;
+            if(struct_id_expr){
+                this->struct_id_expr->set_parent(this);
+            }
             this->action_block = action_block;
+            if(action_block){
+                this->action_block->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4248,9 +5032,15 @@ class struct_type_id_class : public Expression_class {
         Expressions struct_type_modifiers;
         Expression struct_id_expr;
     public:
-        struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr) {
+        struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr){
             this->struct_type_modifiers = struct_type_modifiers;
+            if(struct_type_modifiers){
+                this->struct_type_modifiers->set_parent(this);
+            }
             this->struct_id_expr = struct_id_expr;
+            if(struct_id_expr){
+                this->struct_id_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4271,9 +5061,15 @@ class struct_type_modifier_class : public Expression_class {
         Expression value;
         Expression id;
     public:
-        struct_type_modifier_class(Expression value, Expression id) {
+        struct_type_modifier_class(Expression value, Expression id){
             this->value = value;
+            if(value){
+                this->value->set_parent(this);
+            }
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4293,8 +5089,11 @@ class defined_type_identifier_expr_class : public Expression_class {
     protected:
         Expressions modifiers;
     public:
-        defined_type_identifier_expr_class(Expressions modifiers) {
+        defined_type_identifier_expr_class(Expressions modifiers){
             this->modifiers = modifiers;
+            if(modifiers){
+                this->modifiers->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4314,8 +5113,11 @@ class struct_hier_ref_expr_class : public Expression_class {
     protected:
         Expressions hiers;
     public:
-        struct_hier_ref_expr_class(Expressions hiers) {
+        struct_hier_ref_expr_class(Expressions hiers){
             this->hiers = hiers;
+            if(hiers){
+                this->hiers->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4335,7 +5137,7 @@ class hdl_path_name_expr_class : public Expression_class {
     protected:
         Symbol_ hdl_hier_ref;
     public:
-        hdl_path_name_expr_class(Symbol_ hdl_hier_ref) {
+        hdl_path_name_expr_class(Symbol_ hdl_hier_ref){
             this->hdl_hier_ref = hdl_hier_ref;
         }
 
@@ -4358,10 +5160,19 @@ class ternary_assign_expr_class : public Expression_class {
         Expression true_expr;
         Expression false_expr;
     public:
-        ternary_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr) {
+        ternary_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr){
             this->bool_exp = bool_exp;
+            if(bool_exp){
+                this->bool_exp->set_parent(this);
+            }
             this->true_expr = true_expr;
+            if(true_expr){
+                this->true_expr->set_parent(this);
+            }
             this->false_expr = false_expr;
+            if(false_expr){
+                this->false_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4381,8 +5192,11 @@ class hwp_access_expr_class : public Expression_class {
     protected:
         Expression base;
     public:
-        hwp_access_expr_class(Expression base) {
+        hwp_access_expr_class(Expression base){
             this->base = base;
+            if(base){
+                this->base->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4402,8 +5216,11 @@ class cast_operator_expr_class : public Expression_class {
     protected:
         DataType dest_type_expr;
     public:
-        cast_operator_expr_class(DataType dest_type_expr) {
+        cast_operator_expr_class(DataType dest_type_expr){
             this->dest_type_expr = dest_type_expr;
+            if(dest_type_expr){
+                this->dest_type_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4422,7 +5239,7 @@ auto cast_operator_expr(DataType dest_type_expr) -> Expression;
 class sys_time_ref_expr_class : public Expression_class {
     protected:
     public:
-        sys_time_ref_expr_class() {
+        sys_time_ref_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4443,9 +5260,15 @@ class method_call_expr_class : public Expression_class {
         Expression base;
         Expressions arguments;
     public:
-        method_call_expr_class(Expression base, Expressions arguments) {
+        method_call_expr_class(Expression base, Expressions arguments){
             this->base = base;
+            if(base){
+                this->base->set_parent(this);
+            }
             this->arguments = arguments;
+            if(arguments){
+                this->arguments->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4465,8 +5288,11 @@ class constraint_expr_class : public Expression_class {
     protected:
         Expression bool_expr;
     public:
-        constraint_expr_class(Expression bool_expr) {
+        constraint_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4486,8 +5312,11 @@ class soft_constraint_expr_class : public Expression_class {
     protected:
         Expression bool_expr;
     public:
-        soft_constraint_expr_class(Expression bool_expr) {
+        soft_constraint_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4507,8 +5336,11 @@ class all_of_constraint_expr_class : public Expression_class {
     protected:
         Expressions constraints;
     public:
-        all_of_constraint_expr_class(Expressions constraints) {
+        all_of_constraint_expr_class(Expressions constraints){
             this->constraints = constraints;
+            if(constraints){
+                this->constraints->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4530,10 +5362,19 @@ class list_items_constraint_expr_class : public Expression_class {
         Expression gen_item;
         Expressions constraints;
     public:
-        list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expressions constraints) {
+        list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expressions constraints){
             this->item_name = item_name;
+            if(item_name){
+                this->item_name->set_parent(this);
+            }
             this->gen_item = gen_item;
+            if(gen_item){
+                this->gen_item->set_parent(this);
+            }
             this->constraints = constraints;
+            if(constraints){
+                this->constraints->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4554,9 +5395,15 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
         Expression field_;
         DataType type_;
     public:
-        field_type_constraint_by_type_expr_class(Expression field_, DataType type_) {
+        field_type_constraint_by_type_expr_class(Expression field_, DataType type_){
             this->field_ = field_;
+            if(field_){
+                this->field_->set_parent(this);
+            }
             this->type_ = type_;
+            if(type_){
+                this->type_->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4577,9 +5424,15 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
         Expression field_;
         Expression field;
     public:
-        field_type_constraint_by_field_expr_class(Expression field_, Expression field) {
+        field_type_constraint_by_field_expr_class(Expression field_, Expression field){
             this->field_ = field_;
+            if(field_){
+                this->field_->set_parent(this);
+            }
             this->field = field;
+            if(field){
+                this->field->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4600,9 +5453,15 @@ class distribution_constraint_expr_class : public Expression_class {
         Expression gen_item;
         Cases distribution;
     public:
-        distribution_constraint_expr_class(Expression gen_item, Cases distribution) {
+        distribution_constraint_expr_class(Expression gen_item, Cases distribution){
             this->gen_item = gen_item;
+            if(gen_item){
+                this->gen_item->set_parent(this);
+            }
             this->distribution = distribution;
+            if(distribution){
+                this->distribution->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4623,9 +5482,15 @@ class distribution_branch_case_class : public Case_class {
         Expression int_;
         Expression value;
     public:
-        distribution_branch_case_class(Expression int_, Expression value) {
+        distribution_branch_case_class(Expression int_, Expression value){
             this->int_ = int_;
+            if(int_){
+                this->int_->set_parent(this);
+            }
             this->value = value;
+            if(value){
+                this->value->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4644,7 +5509,7 @@ auto distribution_branch_case(Expression int_, Expression value) -> Case;
 class me_expr_class : public Expression_class {
     protected:
     public:
-        me_expr_class() {
+        me_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4663,7 +5528,7 @@ auto me_expr() -> Expression;
 class it_expr_class : public Expression_class {
     protected:
     public:
-        it_expr_class() {
+        it_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4683,7 +5548,7 @@ class str_expr_class : public Expression_class {
     protected:
         Symbol_ str;
     public:
-        str_expr_class(Symbol_ str) {
+        str_expr_class(Symbol_ str){
             this->str = str;
         }
 
@@ -4704,7 +5569,7 @@ class int_expr_class : public Expression_class {
     protected:
         Symbol_ int_;
     public:
-        int_expr_class(Symbol_ int_) {
+        int_expr_class(Symbol_ int_){
             this->int_ = int_;
         }
 
@@ -4726,9 +5591,15 @@ class enum_dt_class : public DataType_class {
         Expressions enum_list_items;
         Expression width_modifier;
     public:
-        enum_dt_class(Expressions enum_list_items, Expression width_modifier) {
+        enum_dt_class(Expressions enum_list_items, Expression width_modifier){
             this->enum_list_items = enum_list_items;
+            if(enum_list_items){
+                this->enum_list_items->set_parent(this);
+            }
             this->width_modifier = width_modifier;
+            if(width_modifier){
+                this->width_modifier->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4750,10 +5621,19 @@ class scalar_subtype_dt_class : public DataType_class {
         Expression range_modifier;
         Expression width_modifier;
     public:
-        scalar_subtype_dt_class(DataType predefined_base_type, Expression range_modifier, Expression width_modifier) {
+        scalar_subtype_dt_class(DataType predefined_base_type, Expression range_modifier, Expression width_modifier){
             this->predefined_base_type = predefined_base_type;
+            if(predefined_base_type){
+                this->predefined_base_type->set_parent(this);
+            }
             this->range_modifier = range_modifier;
+            if(range_modifier){
+                this->range_modifier->set_parent(this);
+            }
             this->width_modifier = width_modifier;
+            if(width_modifier){
+                this->width_modifier->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4774,9 +5654,15 @@ class defined_dt_class : public DataType_class {
         Expressions enum_list_items;
         Expression width_modifier;
     public:
-        defined_dt_class(Expressions enum_list_items, Expression width_modifier) {
+        defined_dt_class(Expressions enum_list_items, Expression width_modifier){
             this->enum_list_items = enum_list_items;
+            if(enum_list_items){
+                this->enum_list_items->set_parent(this);
+            }
             this->width_modifier = width_modifier;
+            if(width_modifier){
+                this->width_modifier->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4797,9 +5683,12 @@ class defined_subtype_dt_class : public DataType_class {
         Symbol_ id;
         Expression range_modifier;
     public:
-        defined_subtype_dt_class(Symbol_ id, Expression range_modifier) {
+        defined_subtype_dt_class(Symbol_ id, Expression range_modifier){
             this->id = id;
             this->range_modifier = range_modifier;
+            if(range_modifier){
+                this->range_modifier->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4821,10 +5710,19 @@ class predefined_subtype_dt_class : public DataType_class {
         Expression range_modifier;
         Expression width_modifier;
     public:
-        predefined_subtype_dt_class(DataType pred_type, Expression range_modifier, Expression width_modifier) {
+        predefined_subtype_dt_class(DataType pred_type, Expression range_modifier, Expression width_modifier){
             this->pred_type = pred_type;
+            if(pred_type){
+                this->pred_type->set_parent(this);
+            }
             this->range_modifier = range_modifier;
+            if(range_modifier){
+                this->range_modifier->set_parent(this);
+            }
             this->width_modifier = width_modifier;
+            if(width_modifier){
+                this->width_modifier->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4844,8 +5742,11 @@ class defined_struct_type_dt_class : public DataType_class {
     protected:
         Expressions struct_type_modifiers;
     public:
-        defined_struct_type_dt_class(Expressions struct_type_modifiers) {
+        defined_struct_type_dt_class(Expressions struct_type_modifiers){
             this->struct_type_modifiers = struct_type_modifiers;
+            if(struct_type_modifiers){
+                this->struct_type_modifiers->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4865,8 +5766,11 @@ class list_type_dt_class : public DataType_class {
     protected:
         DataType base_type;
     public:
-        list_type_dt_class(DataType base_type) {
+        list_type_dt_class(DataType base_type){
             this->base_type = base_type;
+            if(base_type){
+                this->base_type->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4887,9 +5791,12 @@ class assoc_list_type_dt_class : public DataType_class {
         Symbol_ key_id;
         DataType base_type;
     public:
-        assoc_list_type_dt_class(Symbol_ key_id, DataType base_type) {
+        assoc_list_type_dt_class(Symbol_ key_id, DataType base_type){
             this->key_id = key_id;
             this->base_type = base_type;
+            if(base_type){
+                this->base_type->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4908,7 +5815,7 @@ auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType;
 class file_dt_class : public DataType_class {
     protected:
     public:
-        file_dt_class() {
+        file_dt_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4927,7 +5834,7 @@ auto file_dt() -> DataType;
 class int_predefined_type_class : public DataType_class {
     protected:
     public:
-        int_predefined_type_class() {
+        int_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4946,7 +5853,7 @@ auto int_predefined_type() -> DataType;
 class uint_predefined_type_class : public DataType_class {
     protected:
     public:
-        uint_predefined_type_class() {
+        uint_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4965,7 +5872,7 @@ auto uint_predefined_type() -> DataType;
 class bool_predefined_type_class : public DataType_class {
     protected:
     public:
-        bool_predefined_type_class() {
+        bool_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4984,7 +5891,7 @@ auto bool_predefined_type() -> DataType;
 class bit_predefined_type_class : public DataType_class {
     protected:
     public:
-        bit_predefined_type_class() {
+        bit_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5003,7 +5910,7 @@ auto bit_predefined_type() -> DataType;
 class byte_predefined_type_class : public DataType_class {
     protected:
     public:
-        byte_predefined_type_class() {
+        byte_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5022,7 +5929,7 @@ auto byte_predefined_type() -> DataType;
 class nibble_predefined_type_class : public DataType_class {
     protected:
     public:
-        nibble_predefined_type_class() {
+        nibble_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5041,7 +5948,7 @@ auto nibble_predefined_type() -> DataType;
 class time_predefined_type_class : public DataType_class {
     protected:
     public:
-        time_predefined_type_class() {
+        time_predefined_type_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5060,7 +5967,7 @@ auto time_predefined_type() -> DataType;
 class no_expr_class : public Expression_class {
     protected:
     public:
-        no_expr_class() {
+        no_expr_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5082,10 +5989,16 @@ class var_decl_act_class : public Action_class {
         DataType type_id;
         Expression init_expr;
     public:
-        var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr) {
+        var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr){
             this->name = name;
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
             this->init_expr = init_expr;
+            if(init_expr){
+                this->init_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5106,9 +6019,15 @@ class var_assign_act_class : public Action_class {
         Expression id_expr;
         Expression assign_expr;
     public:
-        var_assign_act_class(Expression id_expr, Expression assign_expr) {
+        var_assign_act_class(Expression id_expr, Expression assign_expr){
             this->id_expr = id_expr;
+            if(id_expr){
+                this->id_expr->set_parent(this);
+            }
             this->assign_expr = assign_expr;
+            if(assign_expr){
+                this->assign_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5129,9 +6048,15 @@ class compound_add_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_add_act_class(Expression id, Expression e2) {
+        compound_add_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5152,9 +6077,15 @@ class compound_sub_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_sub_act_class(Expression id, Expression e2) {
+        compound_sub_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5175,9 +6106,15 @@ class compound_mul_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_mul_act_class(Expression id, Expression e2) {
+        compound_mul_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5198,9 +6135,15 @@ class compound_div_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_div_act_class(Expression id, Expression e2) {
+        compound_div_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5221,9 +6164,15 @@ class compound_mod_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_mod_act_class(Expression id, Expression e2) {
+        compound_mod_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5244,9 +6193,15 @@ class compound_bool_and_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_bool_and_act_class(Expression id, Expression e2) {
+        compound_bool_and_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5267,9 +6222,15 @@ class compound_bool_or_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_bool_or_act_class(Expression id, Expression e2) {
+        compound_bool_or_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5290,9 +6251,15 @@ class compound_bit_and_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_bit_and_act_class(Expression id, Expression e2) {
+        compound_bit_and_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5313,9 +6280,15 @@ class compound_bit_or_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_bit_or_act_class(Expression id, Expression e2) {
+        compound_bit_or_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5336,9 +6309,15 @@ class compound_bit_xor_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_bit_xor_act_class(Expression id, Expression e2) {
+        compound_bit_xor_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5359,9 +6338,15 @@ class compound_shift_left_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_shift_left_act_class(Expression id, Expression e2) {
+        compound_shift_left_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5382,9 +6367,15 @@ class compound_right_left_act_class : public Action_class {
         Expression id;
         Expression e2;
     public:
-        compound_right_left_act_class(Expression id, Expression e2) {
+        compound_right_left_act_class(Expression id, Expression e2){
             this->id = id;
+            if(id){
+                this->id->set_parent(this);
+            }
             this->e2 = e2;
+            if(e2){
+                this->e2->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5405,9 +6396,15 @@ class force_act_class : public Action_class {
         Expression hdl_or_port;
         Expression exp;
     public:
-        force_act_class(Expression hdl_or_port, Expression exp) {
+        force_act_class(Expression hdl_or_port, Expression exp){
             this->hdl_or_port = hdl_or_port;
+            if(hdl_or_port){
+                this->hdl_or_port->set_parent(this);
+            }
             this->exp = exp;
+            if(exp){
+                this->exp->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5427,8 +6424,11 @@ class release_act_class : public Action_class {
     protected:
         Expression hdl_or_port;
     public:
-        release_act_class(Expression hdl_or_port) {
+        release_act_class(Expression hdl_or_port){
             this->hdl_or_port = hdl_or_port;
+            if(hdl_or_port){
+                this->hdl_or_port->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5450,10 +6450,19 @@ class if_then_else_act_class : public Action_class {
         ActionBlock actions;
         ActionBlock else_clause;
     public:
-        if_then_else_act_class(Expression condition, ActionBlock actions, ActionBlock else_clause) {
+        if_then_else_act_class(Expression condition, ActionBlock actions, ActionBlock else_clause){
             this->condition = condition;
+            if(condition){
+                this->condition->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
             this->else_clause = else_clause;
+            if(else_clause){
+                this->else_clause->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5475,10 +6484,19 @@ class non_term_if_then_else_act_class : public Action_class {
         ActionBlock actions;
         Action else_clause;
     public:
-        non_term_if_then_else_act_class(Expression condition, ActionBlock actions, Action else_clause) {
+        non_term_if_then_else_act_class(Expression condition, ActionBlock actions, Action else_clause){
             this->condition = condition;
+            if(condition){
+                this->condition->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
             this->else_clause = else_clause;
+            if(else_clause){
+                this->else_clause->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5498,8 +6516,11 @@ class case_bool_act_class : public Action_class {
     protected:
         Cases bool_case_branch_items;
     public:
-        case_bool_act_class(Cases bool_case_branch_items) {
+        case_bool_act_class(Cases bool_case_branch_items){
             this->bool_case_branch_items = bool_case_branch_items;
+            if(bool_case_branch_items){
+                this->bool_case_branch_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5520,9 +6541,15 @@ class case_bool_branch_item_case_class : public Case_class {
         Expression bool_exp;
         ActionBlock actions;
     public:
-        case_bool_branch_item_case_class(Expression bool_exp, ActionBlock actions) {
+        case_bool_branch_item_case_class(Expression bool_exp, ActionBlock actions){
             this->bool_exp = bool_exp;
+            if(bool_exp){
+                this->bool_exp->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5543,9 +6570,15 @@ class case_labeled_act_class : public Action_class {
         Expression exp;
         Cases labeled_case_branch_items;
     public:
-        case_labeled_act_class(Expression exp, Cases labeled_case_branch_items) {
+        case_labeled_act_class(Expression exp, Cases labeled_case_branch_items){
             this->exp = exp;
+            if(exp){
+                this->exp->set_parent(this);
+            }
             this->labeled_case_branch_items = labeled_case_branch_items;
+            if(labeled_case_branch_items){
+                this->labeled_case_branch_items->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5566,9 +6599,15 @@ class case_labeled_branch_item_case_class : public Case_class {
         Expression label_exp;
         ActionBlock actions;
     public:
-        case_labeled_branch_item_case_class(Expression label_exp, ActionBlock actions) {
+        case_labeled_branch_item_case_class(Expression label_exp, ActionBlock actions){
             this->label_exp = label_exp;
+            if(label_exp){
+                this->label_exp->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5588,8 +6627,11 @@ class default_case_branch_item_case_class : public Case_class {
     protected:
         ActionBlock actions;
     public:
-        default_case_branch_item_case_class(ActionBlock actions) {
+        default_case_branch_item_case_class(ActionBlock actions){
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5609,8 +6651,11 @@ class print_call_act_class : public Action_class {
     protected:
         Expressions values;
     public:
-        print_call_act_class(Expressions values) {
+        print_call_act_class(Expressions values){
             this->values = values;
+            if(values){
+                this->values->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5630,8 +6675,11 @@ class method_call_act_class : public Action_class {
     protected:
         Expression method_call_expr;
     public:
-        method_call_act_class(Expression method_call_expr) {
+        method_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
+            if(method_call_expr){
+                this->method_call_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5651,8 +6699,11 @@ class start_tcm_call_act_class : public Action_class {
     protected:
         Expression method_call_expr;
     public:
-        start_tcm_call_act_class(Expression method_call_expr) {
+        start_tcm_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
+            if(method_call_expr){
+                this->method_call_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5672,8 +6723,11 @@ class compute_method_call_act_class : public Action_class {
     protected:
         Expression method_call_expr;
     public:
-        compute_method_call_act_class(Expression method_call_expr) {
+        compute_method_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
+            if(method_call_expr){
+                this->method_call_expr->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5693,8 +6747,11 @@ class return_act_class : public Action_class {
     protected:
         Expression exp;
     public:
-        return_act_class(Expression exp) {
+        return_act_class(Expression exp){
             this->exp = exp;
+            if(exp){
+                this->exp->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5715,9 +6772,15 @@ class while_loop_act_class : public Action_class {
         Expression bool_expr;
         ActionBlock actions;
     public:
-        while_loop_act_class(Expression bool_expr, ActionBlock actions) {
+        while_loop_act_class(Expression bool_expr, ActionBlock actions){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5738,9 +6801,15 @@ class repeat_until_loop_act_class : public Action_class {
         Expression bool_expr;
         ActionBlock actions;
     public:
-        repeat_until_loop_act_class(Expression bool_expr, ActionBlock actions) {
+        repeat_until_loop_act_class(Expression bool_expr, ActionBlock actions){
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5765,13 +6834,28 @@ class for_each_loop_act_class : public Action_class {
         Expression idx_exp;
         ActionBlock actions;
     public:
-        for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions) {
+        for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions){
             this->type_id = type_id;
+            if(type_id){
+                this->type_id->set_parent(this);
+            }
             this->iterated_name = iterated_name;
+            if(iterated_name){
+                this->iterated_name->set_parent(this);
+            }
             this->is_reverese = is_reverese;
             this->list_exp = list_exp;
+            if(list_exp){
+                this->list_exp->set_parent(this);
+            }
             this->idx_exp = idx_exp;
+            if(idx_exp){
+                this->idx_exp->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5796,13 +6880,25 @@ class for_range_loop_act_class : public Action_class {
         Boolean is_down;
         ActionBlock actions;
     public:
-        for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions) {
+        for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions){
             this->var_id = var_id;
             this->from_expr = from_expr;
+            if(from_expr){
+                this->from_expr->set_parent(this);
+            }
             this->to_expr = to_expr;
+            if(to_expr){
+                this->to_expr->set_parent(this);
+            }
             this->step_expr = step_expr;
+            if(step_expr){
+                this->step_expr->set_parent(this);
+            }
             this->is_down = is_down;
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5825,11 +6921,23 @@ class for_loop_act_class : public Action_class {
         Action step_act;
         ActionBlock actions;
     public:
-        for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions) {
+        for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions){
             this->init_act = init_act;
+            if(init_act){
+                this->init_act->set_parent(this);
+            }
             this->bool_expr = bool_expr;
+            if(bool_expr){
+                this->bool_expr->set_parent(this);
+            }
             this->step_act = step_act;
+            if(step_act){
+                this->step_act->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5851,10 +6959,19 @@ class for_each_line_in_file_act_class : public Action_class {
         Expression file_path_expr;
         ActionBlock actions;
     public:
-        for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, ActionBlock actions) {
+        for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, ActionBlock actions){
             this->line_it_name = line_it_name;
+            if(line_it_name){
+                this->line_it_name->set_parent(this);
+            }
             this->file_path_expr = file_path_expr;
+            if(file_path_expr){
+                this->file_path_expr->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5876,10 +6993,19 @@ class for_each_file_in_files_act_class : public Action_class {
         Expression file_pattern_exp;
         ActionBlock actions;
     public:
-        for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions) {
+        for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions){
             this->line_it_name = line_it_name;
+            if(line_it_name){
+                this->line_it_name->set_parent(this);
+            }
             this->file_pattern_exp = file_pattern_exp;
+            if(file_pattern_exp){
+                this->file_pattern_exp->set_parent(this);
+            }
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5898,7 +7024,7 @@ auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern
 class break_act_class : public Action_class {
     protected:
     public:
-        break_act_class() {
+        break_act_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5917,7 +7043,7 @@ auto break_act() -> Action;
 class continue_act_class : public Action_class {
     protected:
     public:
-        continue_act_class() {
+        continue_act_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5937,8 +7063,11 @@ class emit_act_class : public Action_class {
     protected:
         Expression event_id;
     public:
-        emit_act_class(Expression event_id) {
+        emit_act_class(Expression event_id){
             this->event_id = event_id;
+            if(event_id){
+                this->event_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5958,8 +7087,11 @@ class sync_act_class : public Action_class {
     protected:
         Expression event_id;
     public:
-        sync_act_class(Expression event_id) {
+        sync_act_class(Expression event_id){
             this->event_id = event_id;
+            if(event_id){
+                this->event_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5979,8 +7111,11 @@ class wait_act_class : public Action_class {
     protected:
         Expression event_id;
     public:
-        wait_act_class(Expression event_id) {
+        wait_act_class(Expression event_id){
             this->event_id = event_id;
+            if(event_id){
+                this->event_id->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6000,8 +7135,11 @@ class all_of_act_class : public Action_class {
     protected:
         ActionBlocks threads;
     public:
-        all_of_act_class(ActionBlocks threads) {
+        all_of_act_class(ActionBlocks threads){
             this->threads = threads;
+            if(threads){
+                this->threads->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6021,8 +7159,11 @@ class first_of_act_class : public Action_class {
     protected:
         ActionBlocks threads;
     public:
-        first_of_act_class(ActionBlocks threads) {
+        first_of_act_class(ActionBlocks threads){
             this->threads = threads;
+            if(threads){
+                this->threads->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6043,9 +7184,15 @@ class gen_act_class : public Action_class {
         Expression gen_expr;
         Expressions constraints;
     public:
-        gen_act_class(Expression gen_expr, Expressions constraints) {
+        gen_act_class(Expression gen_expr, Expressions constraints){
             this->gen_expr = gen_expr;
+            if(gen_expr){
+                this->gen_expr->set_parent(this);
+            }
             this->constraints = constraints;
+            if(constraints){
+                this->constraints->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6066,9 +7213,15 @@ class do_seq_act_class : public Action_class {
         Expression seq_item;
         Expressions constraints;
     public:
-        do_seq_act_class(Expression seq_item, Expressions constraints) {
+        do_seq_act_class(Expression seq_item, Expressions constraints){
             this->seq_item = seq_item;
+            if(seq_item){
+                this->seq_item->set_parent(this);
+            }
             this->constraints = constraints;
+            if(constraints){
+                this->constraints->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6088,8 +7241,11 @@ class seq_item_expr_class : public Expression_class {
     protected:
         Expressions field_type_exprs;
     public:
-        seq_item_expr_class(Expressions field_type_exprs) {
+        seq_item_expr_class(Expressions field_type_exprs){
             this->field_type_exprs = field_type_exprs;
+            if(field_type_exprs){
+                this->field_type_exprs->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6110,9 +7266,15 @@ class check_that_action_class : public Action_class {
         Expression condition;
         Expression dut_error_block;
     public:
-        check_that_action_class(Expression condition, Expression dut_error_block) {
+        check_that_action_class(Expression condition, Expression dut_error_block){
             this->condition = condition;
+            if(condition){
+                this->condition->set_parent(this);
+            }
             this->dut_error_block = dut_error_block;
+            if(dut_error_block){
+                this->dut_error_block->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6133,9 +7295,15 @@ class assert_action_class : public Action_class {
         Expression condition;
         Expression error_block;
     public:
-        assert_action_class(Expression condition, Expression error_block) {
+        assert_action_class(Expression condition, Expression error_block){
             this->condition = condition;
+            if(condition){
+                this->condition->set_parent(this);
+            }
             this->error_block = error_block;
+            if(error_block){
+                this->error_block->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6156,9 +7324,15 @@ class try_else_action_class : public Action_class {
         ActionBlock try_actions;
         ActionBlock except_actions;
     public:
-        try_else_action_class(ActionBlock try_actions, ActionBlock except_actions) {
+        try_else_action_class(ActionBlock try_actions, ActionBlock except_actions){
             this->try_actions = try_actions;
+            if(try_actions){
+                this->try_actions->set_parent(this);
+            }
             this->except_actions = except_actions;
+            if(except_actions){
+                this->except_actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6180,10 +7354,19 @@ class state_machine_act_class : public Action_class {
         Expression final_st;
         FSMStates states;
     public:
-        state_machine_act_class(Expression state_var, Expression final_st, FSMStates states) {
+        state_machine_act_class(Expression state_var, Expression final_st, FSMStates states){
             this->state_var = state_var;
+            if(state_var){
+                this->state_var->set_parent(this);
+            }
             this->final_st = final_st;
+            if(final_st){
+                this->final_st->set_parent(this);
+            }
             this->states = states;
+            if(states){
+                this->states->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6204,9 +7387,12 @@ class state_action_fsm_class : public FSMState_class {
         Symbol_ state;
         ActionBlock actions;
     public:
-        state_action_fsm_class(Symbol_ state, ActionBlock actions) {
+        state_action_fsm_class(Symbol_ state, ActionBlock actions){
             this->state = state;
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6228,10 +7414,13 @@ class state_transition_fsm_class : public FSMState_class {
         Symbol_ next_state;
         ActionBlock actions;
     public:
-        state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions) {
+        state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions){
             this->cur_state = cur_state;
             this->next_state = next_state;
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6252,9 +7441,12 @@ class state_any_transition_fsm_class : public FSMState_class {
         Symbol_ next_state;
         ActionBlock actions;
     public:
-        state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions) {
+        state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions){
             this->next_state = next_state;
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6273,7 +7465,7 @@ auto state_any_transition_fsm(Symbol_ next_state, ActionBlock actions) -> FSMSta
 class no_action_class : public Action_class {
     protected:
     public:
-        no_action_class() {
+        no_action_class(){
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6293,8 +7485,11 @@ class action_block_class : public ActionBlock_class {
     protected:
         Actions actions;
     public:
-        action_block_class(Actions actions) {
+        action_block_class(Actions actions){
             this->actions = actions;
+            if(actions){
+                this->actions->set_parent(this);
+            }
         }
 
         auto dump(std::ostream& stream, int n) -> void override;

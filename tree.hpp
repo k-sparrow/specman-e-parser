@@ -14,6 +14,7 @@ using std::size;
 
 class tree_node;
 typedef std::shared_ptr<tree_node> p_tree_node;
+typedef std::shared_ptr<tree_node> pw_tree_node;
 
 namespace elex {
     enum class SpecmanCtorKind : int;
@@ -21,7 +22,17 @@ namespace elex {
 
 class tree_node {
 protected:
-    int m_line_number;
+
+    int                       m_line_number;
+
+    // list of weak observers to the childrem
+    std::vector<pw_tree_node> m_children = {};
+    
+    // and observer pointer to the parent
+    // we do not allocate this pointer, nor do we release it's memory
+
+    // std::expreimental::observer_ptr is not used as it's expermintal code
+    tree_node* m_parent = nullptr;
 public:
     tree_node(int lineno = 1);
     virtual ~tree_node() { }
@@ -31,6 +42,7 @@ public:
     virtual auto type() const -> elex::SpecmanCtorKind = 0;
     auto get_line_number() const -> int;
     auto set(tree_node*) -> tree_node*;
+    auto set_parent(tree_node*) -> void;
 };
 
 // class for listed parser elements
