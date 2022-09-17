@@ -16,14 +16,24 @@ namespace ast {
     /* 
     *  Default implementation for ast visitor base
     *  
-    *  Concrete implentation of visitors that follow different
-    *  treatment for a node and a leaf should only implement 
-    *  ConcreteVisitor::visitNode && ConcreteVisitor::visitLeaf
+    *  - Concrete implentation of visitors that follow different
+    *    treatment for a node and a leaf should only implement 
+    *    ConcreteVisitor::visitNode && ConcreteVisitor::visitLeaf
     * 
-    *  Concrete implentation of visitors that do not follow this
-    *  separation should also override IAstNodeVisitor::visit function 
+    *  - Concrete implentation of visitors that do not follow this
+    *    separation should also override IAstNodeVisitor::visit function 
+    *    and implement it as they wish
     */
     auto IAstNodeVisitor::visit(tree_node& node) -> void {
-        this->visitNode(node);
+        switch (node.kind())
+        {
+        case ast::NodeKind::kNode:
+            this->visitNode(node);
+            break;
+        
+        case ast::NodeKind::kLeaf:
+            this->visitLeaf(node);
+            break;
+        }
     }
 }

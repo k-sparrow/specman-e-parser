@@ -20,6 +20,16 @@ namespace elex {
 }
 
 namespace ast {
+
+    /* a node can represent a terminal (higher level construct) or a leaf (literal)
+    * 
+    *  this is a support enumeration for visitor queries 
+    */
+    enum class NodeKind {
+        kNode = 0,
+        kLeaf
+    };
+
     // forward declaration for an abstract node visitor
     class IAstNodeVisitor;
 
@@ -47,9 +57,9 @@ namespace ast {
         tree_node();
         virtual ~tree_node() { }
 
-        //virtual auto copy() -> p_tree_node = 0;
         virtual auto dump(std::ostream& stream, int n) -> void = 0;
         virtual auto type() const -> elex::SpecmanCtorKind = 0;
+        virtual auto kind() const -> NodeKind;
         auto get_source_location() const -> source_location_t { return m_loc; }
         auto set(tree_node*) -> tree_node*;
         auto set_parent(tree_node*) -> void;
@@ -135,8 +145,13 @@ namespace ast {
         auto dump(std::ostream& stream, int n) -> void override {
             stream << value() << std::endl;
         }
+
         auto type() const -> elex::SpecmanCtorKind override {
             return static_cast<elex::SpecmanCtorKind>(-1);
+        }
+
+        auto kind() const -> NodeKind override final {
+            return NodeKind::kLeaf;
         }
     };
 }

@@ -18,4 +18,8 @@ namespace ast {
         this->m_parent = parent;
     }
 
+    auto tree_node::kind() const -> NodeKind {
+        return NodeKind::kNode; // default implementation, leaves will override
+    }
+
 }
