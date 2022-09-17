@@ -15,175 +15,175 @@ namespace elex {
 
 /* implementations for Statements */
 auto nil_Statements() -> Statements {
-    return Statements(new list_tree_node<Statement>());
+    return Statements(new ast::list_tree_node<Statement>());
 }
 
 auto single_Statements(Statement p) -> Statements {
-    return Statements(new list_tree_node<Statement>(p));
+    return Statements(new ast::list_tree_node<Statement>(p));
 }
 
 auto append_Statements(Statements p1, Statements p2) -> Statements {
-    return Statements(new list_tree_node<Statement>(*p1, *p2));
+    return Statements(new ast::list_tree_node<Statement>(*p1, *p2));
 }
 
 /* implementations for StructMembers */
 auto nil_StructMembers() -> StructMembers {
-    return StructMembers(new list_tree_node<StructMember>());
+    return StructMembers(new ast::list_tree_node<StructMember>());
 }
 
 auto single_StructMembers(StructMember p) -> StructMembers {
-    return StructMembers(new list_tree_node<StructMember>(p));
+    return StructMembers(new ast::list_tree_node<StructMember>(p));
 }
 
 auto append_StructMembers(StructMembers p1, StructMembers p2) -> StructMembers {
-    return StructMembers(new list_tree_node<StructMember>(*p1, *p2));
+    return StructMembers(new ast::list_tree_node<StructMember>(*p1, *p2));
 }
 
 /* implementations for Actions */
 auto nil_Actions() -> Actions {
-    return Actions(new list_tree_node<Action>());
+    return Actions(new ast::list_tree_node<Action>());
 }
 
 auto single_Actions(Action p) -> Actions {
-    return Actions(new list_tree_node<Action>(p));
+    return Actions(new ast::list_tree_node<Action>(p));
 }
 
 auto append_Actions(Actions p1, Actions p2) -> Actions {
-    return Actions(new list_tree_node<Action>(*p1, *p2));
+    return Actions(new ast::list_tree_node<Action>(*p1, *p2));
 }
 
 /* implementations for Expressions */
 auto nil_Expressions() -> Expressions {
-    return Expressions(new list_tree_node<Expression>());
+    return Expressions(new ast::list_tree_node<Expression>());
 }
 
 auto single_Expressions(Expression p) -> Expressions {
-    return Expressions(new list_tree_node<Expression>(p));
+    return Expressions(new ast::list_tree_node<Expression>(p));
 }
 
 auto append_Expressions(Expressions p1, Expressions p2) -> Expressions {
-    return Expressions(new list_tree_node<Expression>(*p1, *p2));
+    return Expressions(new ast::list_tree_node<Expression>(*p1, *p2));
 }
 
 /* implementations for Formals */
 auto nil_Formals() -> Formals {
-    return Formals(new list_tree_node<Formal>());
+    return Formals(new ast::list_tree_node<Formal>());
 }
 
 auto single_Formals(Formal p) -> Formals {
-    return Formals(new list_tree_node<Formal>(p));
+    return Formals(new ast::list_tree_node<Formal>(p));
 }
 
 auto append_Formals(Formals p1, Formals p2) -> Formals {
-    return Formals(new list_tree_node<Formal>(*p1, *p2));
+    return Formals(new ast::list_tree_node<Formal>(*p1, *p2));
 }
 
 /* implementations for Cases */
 auto nil_Cases() -> Cases {
-    return Cases(new list_tree_node<Case>());
+    return Cases(new ast::list_tree_node<Case>());
 }
 
 auto single_Cases(Case p) -> Cases {
-    return Cases(new list_tree_node<Case>(p));
+    return Cases(new ast::list_tree_node<Case>(p));
 }
 
 auto append_Cases(Cases p1, Cases p2) -> Cases {
-    return Cases(new list_tree_node<Case>(*p1, *p2));
+    return Cases(new ast::list_tree_node<Case>(*p1, *p2));
 }
 
 /* implementations for SequenceItems */
 auto nil_SequenceItems() -> SequenceItems {
-    return SequenceItems(new list_tree_node<SequenceItem>());
+    return SequenceItems(new ast::list_tree_node<SequenceItem>());
 }
 
 auto single_SequenceItems(SequenceItem p) -> SequenceItems {
-    return SequenceItems(new list_tree_node<SequenceItem>(p));
+    return SequenceItems(new ast::list_tree_node<SequenceItem>(p));
 }
 
 auto append_SequenceItems(SequenceItems p1, SequenceItems p2) -> SequenceItems {
-    return SequenceItems(new list_tree_node<SequenceItem>(*p1, *p2));
+    return SequenceItems(new ast::list_tree_node<SequenceItem>(*p1, *p2));
 }
 
 /* implementations for CovergroupOptions */
 auto nil_CovergroupOptions() -> CovergroupOptions {
-    return CovergroupOptions(new list_tree_node<CovergroupOption>());
+    return CovergroupOptions(new ast::list_tree_node<CovergroupOption>());
 }
 
 auto single_CovergroupOptions(CovergroupOption p) -> CovergroupOptions {
-    return CovergroupOptions(new list_tree_node<CovergroupOption>(p));
+    return CovergroupOptions(new ast::list_tree_node<CovergroupOption>(p));
 }
 
 auto append_CovergroupOptions(CovergroupOptions p1, CovergroupOptions p2) -> CovergroupOptions {
-    return CovergroupOptions(new list_tree_node<CovergroupOption>(*p1, *p2));
+    return CovergroupOptions(new ast::list_tree_node<CovergroupOption>(*p1, *p2));
 }
 
 /* implementations for CovergroupItems */
 auto nil_CovergroupItems() -> CovergroupItems {
-    return CovergroupItems(new list_tree_node<CovergroupItem>());
+    return CovergroupItems(new ast::list_tree_node<CovergroupItem>());
 }
 
 auto single_CovergroupItems(CovergroupItem p) -> CovergroupItems {
-    return CovergroupItems(new list_tree_node<CovergroupItem>(p));
+    return CovergroupItems(new ast::list_tree_node<CovergroupItem>(p));
 }
 
 auto append_CovergroupItems(CovergroupItems p1, CovergroupItems p2) -> CovergroupItems {
-    return CovergroupItems(new list_tree_node<CovergroupItem>(*p1, *p2));
+    return CovergroupItems(new ast::list_tree_node<CovergroupItem>(*p1, *p2));
 }
 
 /* implementations for CovergroupItemOptions */
 auto nil_CovergroupItemOptions() -> CovergroupItemOptions {
-    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>());
+    return CovergroupItemOptions(new ast::list_tree_node<CovergroupItemOption>());
 }
 
 auto single_CovergroupItemOptions(CovergroupItemOption p) -> CovergroupItemOptions {
-    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>(p));
+    return CovergroupItemOptions(new ast::list_tree_node<CovergroupItemOption>(p));
 }
 
 auto append_CovergroupItemOptions(CovergroupItemOptions p1, CovergroupItemOptions p2) -> CovergroupItemOptions {
-    return CovergroupItemOptions(new list_tree_node<CovergroupItemOption>(*p1, *p2));
+    return CovergroupItemOptions(new ast::list_tree_node<CovergroupItemOption>(*p1, *p2));
 }
 
 /* implementations for ActionBlocks */
 auto nil_ActionBlocks() -> ActionBlocks {
-    return ActionBlocks(new list_tree_node<ActionBlock>());
+    return ActionBlocks(new ast::list_tree_node<ActionBlock>());
 }
 
 auto single_ActionBlocks(ActionBlock p) -> ActionBlocks {
-    return ActionBlocks(new list_tree_node<ActionBlock>(p));
+    return ActionBlocks(new ast::list_tree_node<ActionBlock>(p));
 }
 
 auto append_ActionBlocks(ActionBlocks p1, ActionBlocks p2) -> ActionBlocks {
-    return ActionBlocks(new list_tree_node<ActionBlock>(*p1, *p2));
+    return ActionBlocks(new ast::list_tree_node<ActionBlock>(*p1, *p2));
 }
 
 /* implementations for FSMStates */
 auto nil_FSMStates() -> FSMStates {
-    return FSMStates(new list_tree_node<FSMState>());
+    return FSMStates(new ast::list_tree_node<FSMState>());
 }
 
 auto single_FSMStates(FSMState p) -> FSMStates {
-    return FSMStates(new list_tree_node<FSMState>(p));
+    return FSMStates(new ast::list_tree_node<FSMState>(p));
 }
 
 auto append_FSMStates(FSMStates p1, FSMStates p2) -> FSMStates {
-    return FSMStates(new list_tree_node<FSMState>(*p1, *p2));
+    return FSMStates(new ast::list_tree_node<FSMState>(*p1, *p2));
 }
 
 /* implementations for FilePaths */
 auto nil_FilePaths() -> FilePaths {
-    return FilePaths(new list_tree_node<FilePath>());
+    return FilePaths(new ast::list_tree_node<FilePath>());
 }
 
 auto single_FilePaths(FilePath p) -> FilePaths {
-    return FilePaths(new list_tree_node<FilePath>(p));
+    return FilePaths(new ast::list_tree_node<FilePath>(p));
 }
 
 auto append_FilePaths(FilePaths p1, FilePaths p2) -> FilePaths {
-    return FilePaths(new list_tree_node<FilePath>(*p1, *p2));
+    return FilePaths(new ast::list_tree_node<FilePath>(*p1, *p2));
 }
 
 auto module__class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\module_" << std::endl;
+    stream << pad(n) << "\\module_: " << "<" << get_source_location() << ">" << std::endl;
     if(stmts){
         stream << pad(n+2) << "stmts: " << std::endl;
         stmts->dump(stream, n+4);
@@ -200,7 +200,7 @@ auto module_(Statements stmts) -> Module {
 
 
 auto package_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\package" << std::endl;
+    stream << pad(n) << "\\package: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "pkg_name: ";
     dump_Symbol_(stream, 0, pkg_name);
 }
@@ -215,7 +215,7 @@ auto package(Symbol_ pkg_name) -> Statement {
 
 
 auto unit_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\unit_st" << std::endl;
+    stream << pad(n) << "\\unit_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "unit_name: ";
     dump_Symbol_(stream, 0, unit_name);
     if(members){
@@ -234,7 +234,7 @@ auto unit_st(Symbol_ unit_name, StructMembers members) -> Statement {
 
 
 auto unit_like_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\unit_like_st" << std::endl;
+    stream << pad(n) << "\\unit_like_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "unit_name: ";
     dump_Symbol_(stream, 0, unit_name);
     stream << pad(n+2) << "base_unit_name: ";
@@ -255,7 +255,7 @@ auto unit_like_st(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers membe
 
 
 auto struct_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_st" << std::endl;
+    stream << pad(n) << "\\struct_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "struct_name: ";
     dump_Symbol_(stream, 0, struct_name);
     if(members){
@@ -274,7 +274,7 @@ auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement {
 
 
 auto struct_like_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_like_st" << std::endl;
+    stream << pad(n) << "\\struct_like_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "struct_name: ";
     dump_Symbol_(stream, 0, struct_name);
     stream << pad(n+2) << "base_struct_name: ";
@@ -295,7 +295,7 @@ auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers
 
 
 auto extend_struct_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\extend_struct_st" << std::endl;
+    stream << pad(n) << "\\extend_struct_st: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_type_name){
         stream << pad(n+2) << "struct_type_name: " << std::endl;
         struct_type_name->dump(stream, n+4);
@@ -316,7 +316,7 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 
 
 auto enum_type_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\enum_type_st" << std::endl;
+    stream << pad(n) << "\\enum_type_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(type_id){
@@ -335,7 +335,7 @@ auto enum_type_st(Symbol_ id, DataType type_id) -> Statement {
 
 
 auto extend_enum_type_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\extend_enum_type_st" << std::endl;
+    stream << pad(n) << "\\extend_enum_type_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "type_id: ";
     dump_Symbol_(stream, 0, type_id);
     if(enum_list_items){
@@ -354,7 +354,7 @@ auto extend_enum_type_st(Symbol_ type_id, Expressions enum_list_items) -> Statem
 
 
 auto scalar_subtype_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\scalar_subtype_st" << std::endl;
+    stream << pad(n) << "\\scalar_subtype_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "subtype_id: ";
     dump_Symbol_(stream, 0, subtype_id);
     if(type_id){
@@ -377,7 +377,7 @@ auto scalar_subtype_st(Symbol_ subtype_id, Expression type_id, Expressions range
 
 
 auto scalar_sized_type_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\scalar_sized_type_st" << std::endl;
+    stream << pad(n) << "\\scalar_sized_type_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "type_id: ";
     dump_Symbol_(stream, 0, type_id);
     if(base_type_id){
@@ -404,7 +404,7 @@ auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions 
 
 
 auto import_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\import_st" << std::endl;
+    stream << pad(n) << "\\import_st: " << "<" << get_source_location() << ">" << std::endl;
     if(paths){
         stream << pad(n+2) << "paths: " << std::endl;
         paths->dump(stream, n+4);
@@ -423,7 +423,7 @@ auto import_st(FilePaths paths, Boolean is_cyclic) -> Statement {
 
 
 auto file_path_fp_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\file_path_fp" << std::endl;
+    stream << pad(n) << "\\file_path_fp: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "file_path: ";
     dump_Symbol_(stream, 0, file_path);
 }
@@ -438,7 +438,7 @@ auto file_path_fp(Symbol_ file_path) -> FilePath {
 
 
 auto virtual_sequence_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\virtual_sequence_st" << std::endl;
+    stream << pad(n) << "\\virtual_sequence_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(seq_options){
@@ -457,7 +457,7 @@ auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
 
 
 auto sequence_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_st" << std::endl;
+    stream << pad(n) << "\\sequence_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(seq_options){
@@ -476,7 +476,7 @@ auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement {
 
 
 auto sequence_item_kind_it_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_item_kind_it" << std::endl;
+    stream << pad(n) << "\\sequence_item_kind_it: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -491,7 +491,7 @@ auto sequence_item_kind_it(Symbol_ id) -> SequenceItem {
 
 
 auto sequence_created_kind_name_it_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_created_kind_name_it" << std::endl;
+    stream << pad(n) << "\\sequence_created_kind_name_it: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -506,7 +506,7 @@ auto sequence_created_kind_name_it(Symbol_ id) -> SequenceItem {
 
 
 auto sequence_created_driver_name_it_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_created_driver_name_it" << std::endl;
+    stream << pad(n) << "\\sequence_created_driver_name_it: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -521,7 +521,7 @@ auto sequence_created_driver_name_it(Symbol_ id) -> SequenceItem {
 
 
 auto sequence_base_kind_it_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_base_kind_it" << std::endl;
+    stream << pad(n) << "\\sequence_base_kind_it: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -536,7 +536,7 @@ auto sequence_base_kind_it(Symbol_ id) -> SequenceItem {
 
 
 auto sequence_driver_base_kind_it_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_driver_base_kind_it" << std::endl;
+    stream << pad(n) << "\\sequence_driver_base_kind_it: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -551,7 +551,7 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem {
 
 
 auto define_as_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\define_as_st" << std::endl;
+    stream << pad(n) << "\\define_as_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "macro: ";
     dump_Symbol_(stream, 0, macro);
 }
@@ -566,7 +566,7 @@ auto define_as_st(Symbol_ macro) -> Statement {
 
 
 auto define_as_computed_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\define_as_computed_st" << std::endl;
+    stream << pad(n) << "\\define_as_computed_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "macro: ";
     dump_Symbol_(stream, 0, macro);
 }
@@ -581,7 +581,7 @@ auto define_as_computed_st(Symbol_ macro) -> Statement {
 
 
 auto formal_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\formal" << std::endl;
+    stream << pad(n) << "\\formal: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "name: ";
     dump_Symbol_(stream, 0, name);
     if(type_){
@@ -600,7 +600,7 @@ auto formal(Symbol_ name, DataType type_) -> Formal {
 
 
 auto c_export_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\c_export_st" << std::endl;
+    stream << pad(n) << "\\c_export_st: " << "<" << get_source_location() << ">" << std::endl;
     if(element){
         stream << pad(n+2) << "element: " << std::endl;
         element->dump(stream, n+4);
@@ -617,7 +617,7 @@ auto c_export_st(Expression element) -> Statement {
 
 
 auto c_routine_st_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\c_routine_st" << std::endl;
+    stream << pad(n) << "\\c_routine_st: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "e_routine_name: ";
     dump_Symbol_(stream, 0, e_routine_name);
     if(parameters_list){
@@ -642,7 +642,7 @@ auto c_routine_st(Symbol_ e_routine_name, Formals parameters_list, DataType retu
 
 
 auto field_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\field_sm" << std::endl;
+    stream << pad(n) << "\\field_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(field){
         stream << pad(n+2) << "field: " << std::endl;
         field->dump(stream, n+4);
@@ -659,7 +659,7 @@ auto field_sm(FieldStructMember field) -> StructMember {
 
 
 auto struct_field_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_field_sm" << std::endl;
+    stream << pad(n) << "\\struct_field_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(type_){
@@ -678,7 +678,7 @@ auto struct_field_sm(Symbol_ id, DataType type_) -> FieldStructMember {
 
 
 auto struct_field_list_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_field_list_sm" << std::endl;
+    stream << pad(n) << "\\struct_field_list_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(len_expr){
@@ -701,7 +701,7 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_) -> Fi
 
 
 auto struct_field_assoc_list_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_field_assoc_list_sm" << std::endl;
+    stream << pad(n) << "\\struct_field_assoc_list_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(type_){
@@ -720,7 +720,7 @@ auto struct_field_assoc_list_sm(Symbol_ id, DataType type_) -> FieldStructMember
 
 
 auto method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -747,7 +747,7 @@ auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBl
 
 
 auto method_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_also_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_also_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -774,7 +774,7 @@ auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 
 auto method_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_first_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_first_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -801,7 +801,7 @@ auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Ac
 
 
 auto method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_only_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_only_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -828,7 +828,7 @@ auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 
 auto method_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_empty_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_empty_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -851,7 +851,7 @@ auto method_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 
 auto method_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_dec_undef_sm" << std::endl;
+    stream << pad(n) << "\\method_dec_undef_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -874,7 +874,7 @@ auto method_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 
 auto tcm_dec_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -905,7 +905,7 @@ auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression 
 
 
 auto tcm_dec_also_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_also_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_also_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -936,7 +936,7 @@ auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 
 auto tcm_dec_first_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_first_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_first_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -967,7 +967,7 @@ auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 
 auto tcm_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_only_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_only_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -998,7 +998,7 @@ auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 
 auto tcm_dec_empty_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_empty_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_empty_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -1025,7 +1025,7 @@ auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 
 auto tcm_dec_undef_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\tcm_dec_undef_sm" << std::endl;
+    stream << pad(n) << "\\tcm_dec_undef_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(arguments){
@@ -1052,7 +1052,7 @@ auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 
 auto c_method_dec_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\c_method_dec_sm" << std::endl;
+    stream << pad(n) << "\\c_method_dec_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "e_method_name: ";
     dump_Symbol_(stream, 0, e_method_name);
     if(parameters_list){
@@ -1077,7 +1077,7 @@ auto c_method_dec_sm(Symbol_ e_method_name, Formals parameters_list, DataType re
 
 
 auto c_method_dec_only_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\c_method_dec_only_sm" << std::endl;
+    stream << pad(n) << "\\c_method_dec_only_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "e_method_name: ";
     dump_Symbol_(stream, 0, e_method_name);
     if(parameters_list){
@@ -1102,7 +1102,7 @@ auto c_method_dec_only_sm(Symbol_ e_method_name, Formals parameters_list, DataTy
 
 
 auto when_subtype_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\when_subtype_sm" << std::endl;
+    stream << pad(n) << "\\when_subtype_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(subtype_mods){
         stream << pad(n+2) << "subtype_mods: " << std::endl;
         subtype_mods->dump(stream, n+4);
@@ -1123,7 +1123,7 @@ auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) ->
 
 
 auto constraint_def_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\constraint_def_sm" << std::endl;
+    stream << pad(n) << "\\constraint_def_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(constraint_expr){
         stream << pad(n+2) << "constraint_expr: " << std::endl;
         constraint_expr->dump(stream, n+4);
@@ -1140,7 +1140,7 @@ auto constraint_def_sm(Expression constraint_expr) -> StructMember {
 
 
 auto on_event_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\on_event_sm" << std::endl;
+    stream << pad(n) << "\\on_event_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(event_name){
         stream << pad(n+2) << "event_name: " << std::endl;
         event_name->dump(stream, n+4);
@@ -1161,7 +1161,7 @@ auto on_event_sm(Expression event_name, ActionBlock action_block) -> StructMembe
 
 
 auto simple_event_dec_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\simple_event_dec_sm" << std::endl;
+    stream << pad(n) << "\\simple_event_dec_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -1176,7 +1176,7 @@ auto simple_event_dec_sm(Symbol_ id) -> StructMember {
 
 
 auto event_def_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\event_def_sm" << std::endl;
+    stream << pad(n) << "\\event_def_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(temporal){
@@ -1195,7 +1195,7 @@ auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember {
 
 
 auto event_def_override_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\event_def_override_sm" << std::endl;
+    stream << pad(n) << "\\event_def_override_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(temporal){
@@ -1214,7 +1214,7 @@ auto event_def_override_sm(Symbol_ id, Expression temporal) -> StructMember {
 
 
 auto temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\temporal_expr" << std::endl;
+    stream << pad(n) << "\\temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1235,7 +1235,7 @@ auto temporal_expr(Expression temporal, Expression sample_event) -> Expression {
 
 
 auto sampling_event_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sampling_event_expr" << std::endl;
+    stream << pad(n) << "\\sampling_event_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(event_expr){
         stream << pad(n+2) << "event_expr: " << std::endl;
         event_expr->dump(stream, n+4);
@@ -1252,7 +1252,7 @@ auto sampling_event_expr(Expression event_expr) -> Expression {
 
 
 auto event_ref_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\event_ref_expr" << std::endl;
+    stream << pad(n) << "\\event_ref_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(event_name){
         stream << pad(n+2) << "event_name: " << std::endl;
         event_name->dump(stream, n+4);
@@ -1269,7 +1269,7 @@ auto event_ref_expr(Expression event_name) -> Expression {
 
 
 auto action_attached_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\action_attached_temporal_expr" << std::endl;
+    stream << pad(n) << "\\action_attached_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1290,7 +1290,7 @@ auto action_attached_temporal_expr(Expression temporal, ActionBlock actions) -> 
 
 
 auto not_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\not_temporal_expr" << std::endl;
+    stream << pad(n) << "\\not_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1307,7 +1307,7 @@ auto not_temporal_expr(Expression temporal) -> Expression {
 
 
 auto fail_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\fail_temporal_expr" << std::endl;
+    stream << pad(n) << "\\fail_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1324,7 +1324,7 @@ auto fail_temporal_expr(Expression temporal) -> Expression {
 
 
 auto eventually_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\eventually_temporal_expr" << std::endl;
+    stream << pad(n) << "\\eventually_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1341,7 +1341,7 @@ auto eventually_temporal_expr(Expression temporal) -> Expression {
 
 
 auto detach_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\detach_temporal_expr" << std::endl;
+    stream << pad(n) << "\\detach_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1358,7 +1358,7 @@ auto detach_temporal_expr(Expression temporal) -> Expression {
 
 
 auto yield_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\yield_temporal_expr" << std::endl;
+    stream << pad(n) << "\\yield_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(trigger){
         stream << pad(n+2) << "trigger: " << std::endl;
         trigger->dump(stream, n+4);
@@ -1379,7 +1379,7 @@ auto yield_temporal_expr(Expression trigger, Expression temporal) -> Expression 
 
 
 auto true_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\true_temporal_expr" << std::endl;
+    stream << pad(n) << "\\true_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -1396,7 +1396,7 @@ auto true_temporal_expr(Expression bool_expr) -> Expression {
 
 
 auto rise_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\rise_temporal_expr" << std::endl;
+    stream << pad(n) << "\\rise_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(hdl_path){
         stream << pad(n+2) << "hdl_path: " << std::endl;
         hdl_path->dump(stream, n+4);
@@ -1413,7 +1413,7 @@ auto rise_temporal_expr(Expression hdl_path) -> Expression {
 
 
 auto fall_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\fall_temporal_expr" << std::endl;
+    stream << pad(n) << "\\fall_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(hdl_path){
         stream << pad(n+2) << "hdl_path: " << std::endl;
         hdl_path->dump(stream, n+4);
@@ -1430,7 +1430,7 @@ auto fall_temporal_expr(Expression hdl_path) -> Expression {
 
 
 auto change_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\change_temporal_expr" << std::endl;
+    stream << pad(n) << "\\change_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(hdl_path){
         stream << pad(n+2) << "hdl_path: " << std::endl;
         hdl_path->dump(stream, n+4);
@@ -1447,7 +1447,7 @@ auto change_temporal_expr(Expression hdl_path) -> Expression {
 
 
 auto and_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\and_temporal_expr" << std::endl;
+    stream << pad(n) << "\\and_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(te1){
         stream << pad(n+2) << "te1: " << std::endl;
         te1->dump(stream, n+4);
@@ -1468,7 +1468,7 @@ auto and_temporal_expr(Expression te1, Expression te2) -> Expression {
 
 
 auto or_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\or_temporal_expr" << std::endl;
+    stream << pad(n) << "\\or_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(te1){
         stream << pad(n+2) << "te1: " << std::endl;
         te1->dump(stream, n+4);
@@ -1489,7 +1489,7 @@ auto or_temporal_expr(Expression te1, Expression te2) -> Expression {
 
 
 auto sequence_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sequence_temporal_expr" << std::endl;
+    stream << pad(n) << "\\sequence_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(temporals){
         stream << pad(n+2) << "temporals: " << std::endl;
         temporals->dump(stream, n+4);
@@ -1506,7 +1506,7 @@ auto sequence_temporal_expr(Expressions temporals) -> Expression {
 
 
 auto fixed_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\fixed_repetition_expr" << std::endl;
+    stream << pad(n) << "\\fixed_repetition_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(rep){
         stream << pad(n+2) << "rep: " << std::endl;
         rep->dump(stream, n+4);
@@ -1527,7 +1527,7 @@ auto fixed_repetition_expr(Expression rep, Expression temporal) -> Expression {
 
 
 auto first_match_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\first_match_repetition_expr" << std::endl;
+    stream << pad(n) << "\\first_match_repetition_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(from_rep){
         stream << pad(n+2) << "from_rep: " << std::endl;
         from_rep->dump(stream, n+4);
@@ -1556,7 +1556,7 @@ auto first_match_repetition_expr(Expression from_rep, Expression to_rep, Express
 
 
 auto true_match_repetition_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\true_match_repetition_expr" << std::endl;
+    stream << pad(n) << "\\true_match_repetition_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(from_rep){
         stream << pad(n+2) << "from_rep: " << std::endl;
         from_rep->dump(stream, n+4);
@@ -1581,7 +1581,7 @@ auto true_match_repetition_expr(Expression from_rep, Expression to_rep, Expressi
 
 
 auto zero_repetition_base_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\zero_repetition_base_expr" << std::endl;
+    stream << pad(n) << "\\zero_repetition_base_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto zero_repetition_base_expr_class::type() const -> SpecmanCtorKind {
@@ -1594,7 +1594,7 @@ auto zero_repetition_base_expr() -> Expression {
 
 
 auto inf_repetition_base_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\inf_repetition_base_expr" << std::endl;
+    stream << pad(n) << "\\inf_repetition_base_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto inf_repetition_base_expr_class::type() const -> SpecmanCtorKind {
@@ -1607,7 +1607,7 @@ auto inf_repetition_base_expr() -> Expression {
 
 
 auto cycle_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\cycle_temporal_expr" << std::endl;
+    stream << pad(n) << "\\cycle_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto cycle_temporal_expr_class::type() const -> SpecmanCtorKind {
@@ -1620,7 +1620,7 @@ auto cycle_temporal_expr() -> Expression {
 
 
 auto delay_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\delay_temporal_expr" << std::endl;
+    stream << pad(n) << "\\delay_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -1641,7 +1641,7 @@ auto delay_temporal_expr(Expression e, Expression timescale_unit) -> Expression 
 
 
 auto consume_temporal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\consume_temporal_expr" << std::endl;
+    stream << pad(n) << "\\consume_temporal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -1658,7 +1658,7 @@ auto consume_temporal_expr(Expression e) -> Expression {
 
 
 auto expect_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\expect_nameless_sm" << std::endl;
+    stream << pad(n) << "\\expect_nameless_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1679,7 +1679,7 @@ auto expect_nameless_sm(Expression temporal, Expression dut_error_call) -> Struc
 
 
 auto expect_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\expect_sm" << std::endl;
+    stream << pad(n) << "\\expect_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -1704,7 +1704,7 @@ auto expect_sm(Expression id, Expression temporal, Expression dut_error_call) ->
 
 
 auto expect_override_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\expect_override_sm" << std::endl;
+    stream << pad(n) << "\\expect_override_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -1729,7 +1729,7 @@ auto expect_override_sm(Expression id, Expression temporal, Expression dut_error
 
 
 auto assume_nameless_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\assume_nameless_sm" << std::endl;
+    stream << pad(n) << "\\assume_nameless_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(temporal){
         stream << pad(n+2) << "temporal: " << std::endl;
         temporal->dump(stream, n+4);
@@ -1750,7 +1750,7 @@ auto assume_nameless_sm(Expression temporal, Expression dut_error_call) -> Struc
 
 
 auto assume_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\assume_sm" << std::endl;
+    stream << pad(n) << "\\assume_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -1775,7 +1775,7 @@ auto assume_sm(Expression id, Expression temporal, Expression dut_error_call) ->
 
 
 auto assume_override_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\assume_override_sm" << std::endl;
+    stream << pad(n) << "\\assume_override_sm: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -1800,7 +1800,7 @@ auto assume_override_sm(Expression id, Expression temporal, Expression dut_error
 
 
 auto empty_covergroup_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\empty_covergroup_sm" << std::endl;
+    stream << pad(n) << "\\empty_covergroup_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "event_id: ";
     dump_Symbol_(stream, 0, event_id);
 }
@@ -1815,7 +1815,7 @@ auto empty_covergroup_sm(Symbol_ event_id) -> StructMember {
 
 
 auto covergroup_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\covergroup_sm" << std::endl;
+    stream << pad(n) << "\\covergroup_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "event_id: ";
     dump_Symbol_(stream, 0, event_id);
     if(cg_opts){
@@ -1838,7 +1838,7 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
 
 
 auto covergroup_extension_sm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\covergroup_extension_sm" << std::endl;
+    stream << pad(n) << "\\covergroup_extension_sm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "event_id: ";
     dump_Symbol_(stream, 0, event_id);
     if(instance_id){
@@ -1865,7 +1865,7 @@ auto covergroup_extension_sm(Symbol_ event_id, CovergroupExtensionID instance_id
 
 
 auto covergroup_per_type_ceid_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\covergroup_per_type_ceid" << std::endl;
+    stream << pad(n) << "\\covergroup_per_type_ceid: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto covergroup_per_type_ceid_class::type() const -> SpecmanCtorKind {
@@ -1878,7 +1878,7 @@ auto covergroup_per_type_ceid() -> CovergroupExtensionID {
 
 
 auto covergroup_per_unit_instance_ceid_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\covergroup_per_unit_instance_ceid" << std::endl;
+    stream << pad(n) << "\\covergroup_per_unit_instance_ceid: " << "<" << get_source_location() << ">" << std::endl;
     if(e_path){
         stream << pad(n+2) << "e_path: " << std::endl;
         e_path->dump(stream, n+4);
@@ -1895,7 +1895,7 @@ auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtension
 
 
 auto covergroup_per_instance_ceid_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\covergroup_per_instance_ceid" << std::endl;
+    stream << pad(n) << "\\covergroup_per_instance_ceid: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "item_name: ";
     dump_Symbol_(stream, 0, item_name);
     stream << pad(n+2) << "bucket_name: ";
@@ -1912,7 +1912,7 @@ auto covergroup_per_instance_ceid(Symbol_ item_name, Symbol_ bucket_name) -> Cov
 
 
 auto global_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\global_cgo" << std::endl;
+    stream << pad(n) << "\\global_cgo: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -1929,7 +1929,7 @@ auto global_cgo(Expression bool_litral) -> CovergroupOption {
 
 
 auto no_collect_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\no_collect_cgo" << std::endl;
+    stream << pad(n) << "\\no_collect_cgo: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -1946,7 +1946,7 @@ auto no_collect_cgo(Expression bool_litral) -> CovergroupOption {
 
 
 auto per_unit_instance_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\per_unit_instance_cgo" << std::endl;
+    stream << pad(n) << "\\per_unit_instance_cgo: " << "<" << get_source_location() << ">" << std::endl;
     if(hier_id){
         stream << pad(n+2) << "hier_id: " << std::endl;
         hier_id->dump(stream, n+4);
@@ -1963,7 +1963,7 @@ auto per_unit_instance_cgo(Expression hier_id) -> CovergroupOption {
 
 
 auto radix_dec_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_dec_cgo" << std::endl;
+    stream << pad(n) << "\\radix_dec_cgo: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_dec_cgo_class::type() const -> SpecmanCtorKind {
@@ -1976,7 +1976,7 @@ auto radix_dec_cgo() -> CovergroupOption {
 
 
 auto radix_hex_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_hex_cgo" << std::endl;
+    stream << pad(n) << "\\radix_hex_cgo: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_hex_cgo_class::type() const -> SpecmanCtorKind {
@@ -1989,7 +1989,7 @@ auto radix_hex_cgo() -> CovergroupOption {
 
 
 auto radix_bin_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_bin_cgo" << std::endl;
+    stream << pad(n) << "\\radix_bin_cgo: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_bin_cgo_class::type() const -> SpecmanCtorKind {
@@ -2002,7 +2002,7 @@ auto radix_bin_cgo() -> CovergroupOption {
 
 
 auto text_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\text_cgo" << std::endl;
+    stream << pad(n) << "\\text_cgo: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "description: ";
     dump_Symbol_(stream, 0, description);
 }
@@ -2017,7 +2017,7 @@ auto text_cgo(Symbol_ description) -> CovergroupOption {
 
 
 auto weight_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\weight_cgo" << std::endl;
+    stream << pad(n) << "\\weight_cgo: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "value: ";
     dump_Symbol_(stream, 0, value);
 }
@@ -2032,7 +2032,7 @@ auto weight_cgo(Symbol_ value) -> CovergroupOption {
 
 
 auto when_cgo_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\when_cgo" << std::endl;
+    stream << pad(n) << "\\when_cgo: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -2049,7 +2049,7 @@ auto when_cgo(Expression bool_expr) -> CovergroupOption {
 
 
 auto simple_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\simple_covergroup_item_cgi" << std::endl;
+    stream << pad(n) << "\\simple_covergroup_item_cgi: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "item_id: ";
     dump_Symbol_(stream, 0, item_id);
     if(cgi_options){
@@ -2068,7 +2068,7 @@ auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_optio
 
 
 auto on_the_fly_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\on_the_fly_covergroup_item_cgi" << std::endl;
+    stream << pad(n) << "\\on_the_fly_covergroup_item_cgi: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "item_id: ";
     dump_Symbol_(stream, 0, item_id);
     if(type_){
@@ -2095,7 +2095,7 @@ auto on_the_fly_covergroup_item_cgi(Symbol_ item_id, DataType type_, Expression 
 
 
 auto cross_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\cross_covergroup_item_cgi" << std::endl;
+    stream << pad(n) << "\\cross_covergroup_item_cgi: " << "<" << get_source_location() << ">" << std::endl;
     if(cg_items){
         stream << pad(n+2) << "cg_items: " << std::endl;
         cg_items->dump(stream, n+4);
@@ -2116,7 +2116,7 @@ auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_o
 
 
 auto transition_covergroup_item_cgi_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\transition_covergroup_item_cgi" << std::endl;
+    stream << pad(n) << "\\transition_covergroup_item_cgi: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "item_id: ";
     dump_Symbol_(stream, 0, item_id);
     if(cgi_options){
@@ -2135,7 +2135,7 @@ auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_o
 
 
 auto at_least_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\at_least_cgio" << std::endl;
+    stream << pad(n) << "\\at_least_cgio: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "num: ";
     dump_Symbol_(stream, 0, num);
 }
@@ -2150,7 +2150,7 @@ auto at_least_cgio(Symbol_ num) -> CovergroupItemOption {
 
 
 auto ignore_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\ignore_cgio" << std::endl;
+    stream << pad(n) << "\\ignore_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(item_bool_expr){
         stream << pad(n+2) << "item_bool_expr: " << std::endl;
         item_bool_expr->dump(stream, n+4);
@@ -2167,7 +2167,7 @@ auto ignore_cgio(Expression item_bool_expr) -> CovergroupItemOption {
 
 
 auto illegal_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\illegal_cgio" << std::endl;
+    stream << pad(n) << "\\illegal_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -2184,7 +2184,7 @@ auto illegal_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 
 auto no_collect_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\no_collect_cgio" << std::endl;
+    stream << pad(n) << "\\no_collect_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -2201,7 +2201,7 @@ auto no_collect_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 
 auto no_trace_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\no_trace_cgio" << std::endl;
+    stream << pad(n) << "\\no_trace_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -2218,7 +2218,7 @@ auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 
 auto num_of_buckets_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\num_of_buckets_cgio" << std::endl;
+    stream << pad(n) << "\\num_of_buckets_cgio: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "num: ";
     dump_Symbol_(stream, 0, num);
 }
@@ -2233,7 +2233,7 @@ auto num_of_buckets_cgio(Symbol_ num) -> CovergroupItemOption {
 
 
 auto per_instance_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\per_instance_cgio" << std::endl;
+    stream << pad(n) << "\\per_instance_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_litral){
         stream << pad(n+2) << "bool_litral: " << std::endl;
         bool_litral->dump(stream, n+4);
@@ -2250,7 +2250,7 @@ auto per_instance_cgio(Expression bool_litral) -> CovergroupItemOption {
 
 
 auto radix_dec_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_dec_cgio" << std::endl;
+    stream << pad(n) << "\\radix_dec_cgio: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_dec_cgio_class::type() const -> SpecmanCtorKind {
@@ -2263,7 +2263,7 @@ auto radix_dec_cgio() -> CovergroupItemOption {
 
 
 auto radix_hex_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_hex_cgio" << std::endl;
+    stream << pad(n) << "\\radix_hex_cgio: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_hex_cgio_class::type() const -> SpecmanCtorKind {
@@ -2276,7 +2276,7 @@ auto radix_hex_cgio() -> CovergroupItemOption {
 
 
 auto radix_bin_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\radix_bin_cgio" << std::endl;
+    stream << pad(n) << "\\radix_bin_cgio: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto radix_bin_cgio_class::type() const -> SpecmanCtorKind {
@@ -2289,7 +2289,7 @@ auto radix_bin_cgio() -> CovergroupItemOption {
 
 
 auto text_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\text_cgio" << std::endl;
+    stream << pad(n) << "\\text_cgio: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "description: ";
     dump_Symbol_(stream, 0, description);
 }
@@ -2304,7 +2304,7 @@ auto text_cgio(Symbol_ description) -> CovergroupItemOption {
 
 
 auto weight_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\weight_cgio" << std::endl;
+    stream << pad(n) << "\\weight_cgio: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "value: ";
     dump_Symbol_(stream, 0, value);
 }
@@ -2319,7 +2319,7 @@ auto weight_cgio(Symbol_ value) -> CovergroupItemOption {
 
 
 auto when_cgio_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\when_cgio" << std::endl;
+    stream << pad(n) << "\\when_cgio: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -2336,7 +2336,7 @@ auto when_cgio(Expression bool_expr) -> CovergroupItemOption {
 
 
 auto true_literal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\true_literal_expr" << std::endl;
+    stream << pad(n) << "\\true_literal_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto true_literal_expr_class::type() const -> SpecmanCtorKind {
@@ -2349,7 +2349,7 @@ auto true_literal_expr() -> Expression {
 
 
 auto false_literal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\false_literal_expr" << std::endl;
+    stream << pad(n) << "\\false_literal_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto false_literal_expr_class::type() const -> SpecmanCtorKind {
@@ -2362,7 +2362,7 @@ auto false_literal_expr() -> Expression {
 
 
 auto id_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\id_expr" << std::endl;
+    stream << pad(n) << "\\id_expr: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
 }
@@ -2377,7 +2377,7 @@ auto id_expr(Symbol_ id) -> Expression {
 
 
 auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\enum_type_expr" << std::endl;
+    stream << pad(n) << "\\enum_type_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(enum_list_expr){
         stream << pad(n+2) << "enum_list_expr: " << std::endl;
         enum_list_expr->dump(stream, n+4);
@@ -2398,7 +2398,7 @@ auto enum_type_expr(Expressions enum_list_expr, Expression width_modifier_expr) 
 
 
 auto enum_list_item_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\enum_list_item" << std::endl;
+    stream << pad(n) << "\\enum_list_item: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(expr){
@@ -2417,7 +2417,7 @@ auto enum_list_item(Symbol_ id, Expression expr) -> Expression {
 
 
 auto bitwise_not_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bitwise_not_expr" << std::endl;
+    stream << pad(n) << "\\bitwise_not_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -2434,7 +2434,7 @@ auto bitwise_not_expr(Expression e) -> Expression {
 
 
 auto bitwise_and_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bitwise_and_expr" << std::endl;
+    stream << pad(n) << "\\bitwise_and_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2455,7 +2455,7 @@ auto bitwise_and_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto bitwise_or_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bitwise_or_expr" << std::endl;
+    stream << pad(n) << "\\bitwise_or_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2476,7 +2476,7 @@ auto bitwise_or_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto bitwise_xor_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bitwise_xor_expr" << std::endl;
+    stream << pad(n) << "\\bitwise_xor_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2497,7 +2497,7 @@ auto bitwise_xor_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto shift_left_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\shift_left_expr" << std::endl;
+    stream << pad(n) << "\\shift_left_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2518,7 +2518,7 @@ auto shift_left_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto right_left_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\right_left_expr" << std::endl;
+    stream << pad(n) << "\\right_left_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2539,7 +2539,7 @@ auto right_left_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto logical_not_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\logical_not_expr" << std::endl;
+    stream << pad(n) << "\\logical_not_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -2556,7 +2556,7 @@ auto logical_not_expr(Expression e) -> Expression {
 
 
 auto logical_and_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\logical_and_expr" << std::endl;
+    stream << pad(n) << "\\logical_and_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2577,7 +2577,7 @@ auto logical_and_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto logical_or_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\logical_or_expr" << std::endl;
+    stream << pad(n) << "\\logical_or_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2598,7 +2598,7 @@ auto logical_or_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto implication_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\implication_expr" << std::endl;
+    stream << pad(n) << "\\implication_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2619,7 +2619,7 @@ auto implication_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto unary_positive_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\unary_positive_expr" << std::endl;
+    stream << pad(n) << "\\unary_positive_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -2636,7 +2636,7 @@ auto unary_positive_expr(Expression e) -> Expression {
 
 
 auto unary_negative_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\unary_negative_expr" << std::endl;
+    stream << pad(n) << "\\unary_negative_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e){
         stream << pad(n+2) << "e: " << std::endl;
         e->dump(stream, n+4);
@@ -2653,7 +2653,7 @@ auto unary_negative_expr(Expression e) -> Expression {
 
 
 auto binary_add_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\binary_add_expr" << std::endl;
+    stream << pad(n) << "\\binary_add_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2674,7 +2674,7 @@ auto binary_add_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto binary_sub_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\binary_sub_expr" << std::endl;
+    stream << pad(n) << "\\binary_sub_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2695,7 +2695,7 @@ auto binary_sub_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto binary_mul_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\binary_mul_expr" << std::endl;
+    stream << pad(n) << "\\binary_mul_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2716,7 +2716,7 @@ auto binary_mul_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto binary_div_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\binary_div_expr" << std::endl;
+    stream << pad(n) << "\\binary_div_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2737,7 +2737,7 @@ auto binary_div_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto binary_remainder_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\binary_remainder_expr" << std::endl;
+    stream << pad(n) << "\\binary_remainder_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2758,7 +2758,7 @@ auto binary_remainder_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto less_then_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\less_then_expr" << std::endl;
+    stream << pad(n) << "\\less_then_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2779,7 +2779,7 @@ auto less_then_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto greater_then_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\greater_then_expr" << std::endl;
+    stream << pad(n) << "\\greater_then_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2800,7 +2800,7 @@ auto greater_then_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto less_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\less_then_or_equal_expr" << std::endl;
+    stream << pad(n) << "\\less_then_or_equal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2821,7 +2821,7 @@ auto less_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto greater_then_or_equal_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\greater_then_or_equal_expr" << std::endl;
+    stream << pad(n) << "\\greater_then_or_equal_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2842,7 +2842,7 @@ auto greater_then_or_equal_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto equality_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\equality_expr" << std::endl;
+    stream << pad(n) << "\\equality_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2863,7 +2863,7 @@ auto equality_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\non_equality_expr" << std::endl;
+    stream << pad(n) << "\\non_equality_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2884,7 +2884,7 @@ auto non_equality_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto hdl_equality_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\hdl_equality_expr" << std::endl;
+    stream << pad(n) << "\\hdl_equality_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2905,7 +2905,7 @@ auto hdl_equality_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto hdl_non_equality_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\hdl_non_equality_expr" << std::endl;
+    stream << pad(n) << "\\hdl_non_equality_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(e1){
         stream << pad(n+2) << "e1: " << std::endl;
         e1->dump(stream, n+4);
@@ -2926,7 +2926,7 @@ auto hdl_non_equality_expr(Expression e1, Expression e2) -> Expression {
 
 
 auto str_match_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\str_match_expr" << std::endl;
+    stream << pad(n) << "\\str_match_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(str_expr){
         stream << pad(n+2) << "str_expr: " << std::endl;
         str_expr->dump(stream, n+4);
@@ -2947,7 +2947,7 @@ auto str_match_expr(Expression str_expr, Expression pattern_expr) -> Expression 
 
 
 auto str_does_not_match_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\str_does_not_match_expr" << std::endl;
+    stream << pad(n) << "\\str_does_not_match_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(str_expr){
         stream << pad(n+2) << "str_expr: " << std::endl;
         str_expr->dump(stream, n+4);
@@ -2968,7 +2968,7 @@ auto str_does_not_match_expr(Expression str_expr, Expression pattern_expr) -> Ex
 
 
 auto in_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\in_expr" << std::endl;
+    stream << pad(n) << "\\in_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(exp){
         stream << pad(n+2) << "exp: " << std::endl;
         exp->dump(stream, n+4);
@@ -2989,7 +2989,7 @@ auto in_expr(Expression exp, Expression inside) -> Expression {
 
 
 auto type_introspec_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\type_introspec_expr" << std::endl;
+    stream << pad(n) << "\\type_introspec_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(field_id){
         stream << pad(n+2) << "field_id: " << std::endl;
         field_id->dump(stream, n+4);
@@ -3010,7 +3010,7 @@ auto type_introspec_expr(Expression field_id, DataType type_id) -> Expression {
 
 
 auto type_introspec_negation_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\type_introspec_negation_expr" << std::endl;
+    stream << pad(n) << "\\type_introspec_negation_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(field_id){
         stream << pad(n+2) << "field_id: " << std::endl;
         field_id->dump(stream, n+4);
@@ -3031,7 +3031,7 @@ auto type_introspec_negation_expr(Expression field_id, DataType type_id) -> Expr
 
 
 auto in_enum_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\in_enum_expr" << std::endl;
+    stream << pad(n) << "\\in_enum_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(exp){
         stream << pad(n+2) << "exp: " << std::endl;
         exp->dump(stream, n+4);
@@ -3052,7 +3052,7 @@ auto in_enum_expr(Expression exp, DataType inside) -> Expression {
 
 
 auto list_index_item_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_index_item_expr" << std::endl;
+    stream << pad(n) << "\\list_index_item_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(idx_expr){
         stream << pad(n+2) << "idx_expr: " << std::endl;
         idx_expr->dump(stream, n+4);
@@ -3069,7 +3069,7 @@ auto list_index_item_expr(Expression idx_expr) -> Expression {
 
 
 auto list_index_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_index_expr" << std::endl;
+    stream << pad(n) << "\\list_index_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(base_id){
         stream << pad(n+2) << "base_id: " << std::endl;
         base_id->dump(stream, n+4);
@@ -3090,7 +3090,7 @@ auto list_index_expr(Expression base_id, Expression idx_expr) -> Expression {
 
 
 auto list_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_slicing_expr" << std::endl;
+    stream << pad(n) << "\\list_slicing_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(list_exp){
         stream << pad(n+2) << "list_exp: " << std::endl;
         list_exp->dump(stream, n+4);
@@ -3111,7 +3111,7 @@ auto list_slicing_expr(Expression list_exp, Expression range_expr) -> Expression
 
 
 auto bit_slicing_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bit_slicing_expr" << std::endl;
+    stream << pad(n) << "\\bit_slicing_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(list_exp){
         stream << pad(n+2) << "list_exp: " << std::endl;
         list_exp->dump(stream, n+4);
@@ -3132,7 +3132,7 @@ auto bit_slicing_expr(Expression list_exp, Expression bit_slice_expr) -> Express
 
 
 auto list_concat_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_concat_expr" << std::endl;
+    stream << pad(n) << "\\list_concat_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(list_concat_items){
         stream << pad(n+2) << "list_concat_items: " << std::endl;
         list_concat_items->dump(stream, n+4);
@@ -3149,7 +3149,7 @@ auto list_concat_expr(Expressions list_concat_items) -> Expression {
 
 
 auto bit_concat_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bit_concat_expr" << std::endl;
+    stream << pad(n) << "\\bit_concat_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bit_concat_items){
         stream << pad(n+2) << "bit_concat_items: " << std::endl;
         bit_concat_items->dump(stream, n+4);
@@ -3166,7 +3166,7 @@ auto bit_concat_expr(Expressions bit_concat_items) -> Expression {
 
 
 auto bit_slice_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bit_slice_expr" << std::endl;
+    stream << pad(n) << "\\bit_slice_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bottom){
         stream << pad(n+2) << "bottom: " << std::endl;
         bottom->dump(stream, n+4);
@@ -3187,7 +3187,7 @@ auto bit_slice_expr(Expression bottom, Expression top) -> Expression {
 
 
 auto range_modifier_item_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\range_modifier_item_expr" << std::endl;
+    stream << pad(n) << "\\range_modifier_item_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bottom){
         stream << pad(n+2) << "bottom: " << std::endl;
         bottom->dump(stream, n+4);
@@ -3208,7 +3208,7 @@ auto range_modifier_item_expr(Expression bottom, Expression top) -> Expression {
 
 
 auto range_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\range_modifier_expr" << std::endl;
+    stream << pad(n) << "\\range_modifier_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(range_items){
         stream << pad(n+2) << "range_items: " << std::endl;
         range_items->dump(stream, n+4);
@@ -3225,7 +3225,7 @@ auto range_modifier_expr(Expressions range_items) -> Expression {
 
 
 auto ranges_modifier_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\ranges_modifier_expr" << std::endl;
+    stream << pad(n) << "\\ranges_modifier_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(ranges){
         stream << pad(n+2) << "ranges: " << std::endl;
         ranges->dump(stream, n+4);
@@ -3242,7 +3242,7 @@ auto ranges_modifier_expr(Expressions ranges) -> Expression {
 
 
 auto sized_bits_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sized_bits_scalar_expr" << std::endl;
+    stream << pad(n) << "\\sized_bits_scalar_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(width_expr){
         stream << pad(n+2) << "width_expr: " << std::endl;
         width_expr->dump(stream, n+4);
@@ -3259,7 +3259,7 @@ auto sized_bits_scalar_expr(Expression width_expr) -> Expression {
 
 
 auto sized_bytes_scalar_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sized_bytes_scalar_expr" << std::endl;
+    stream << pad(n) << "\\sized_bytes_scalar_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(width_expr){
         stream << pad(n+2) << "width_expr: " << std::endl;
         width_expr->dump(stream, n+4);
@@ -3276,7 +3276,7 @@ auto sized_bytes_scalar_expr(Expression width_expr) -> Expression {
 
 
 auto new_allocate_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\new_allocate_expr" << std::endl;
+    stream << pad(n) << "\\new_allocate_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_type_block){
         stream << pad(n+2) << "struct_type_block: " << std::endl;
         struct_type_block->dump(stream, n+4);
@@ -3299,7 +3299,7 @@ auto new_allocate_expr(Expression struct_type_block, Symbol_ scoped_name, Action
 
 
 auto new_nameless_allocate_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\new_nameless_allocate_expr" << std::endl;
+    stream << pad(n) << "\\new_nameless_allocate_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_type_block){
         stream << pad(n+2) << "struct_type_block: " << std::endl;
         struct_type_block->dump(stream, n+4);
@@ -3320,7 +3320,7 @@ auto new_nameless_allocate_expr(Expression struct_type_block, ActionBlock action
 
 
 auto struct_type_expr_with_opt_action_block_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_type_expr_with_opt_action_block" << std::endl;
+    stream << pad(n) << "\\struct_type_expr_with_opt_action_block: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_id_expr){
         stream << pad(n+2) << "struct_id_expr: " << std::endl;
         struct_id_expr->dump(stream, n+4);
@@ -3341,7 +3341,7 @@ auto struct_type_expr_with_opt_action_block(Expression struct_id_expr, Expressio
 
 
 auto named_action_block_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\named_action_block" << std::endl;
+    stream << pad(n) << "\\named_action_block: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_id_expr){
         stream << pad(n+2) << "struct_id_expr: " << std::endl;
         struct_id_expr->dump(stream, n+4);
@@ -3362,7 +3362,7 @@ auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expr
 
 
 auto struct_type_id_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_type_id" << std::endl;
+    stream << pad(n) << "\\struct_type_id: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_type_modifiers){
         stream << pad(n+2) << "struct_type_modifiers: " << std::endl;
         struct_type_modifiers->dump(stream, n+4);
@@ -3383,7 +3383,7 @@ auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr
 
 
 auto struct_type_modifier_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_type_modifier" << std::endl;
+    stream << pad(n) << "\\struct_type_modifier: " << "<" << get_source_location() << ">" << std::endl;
     if(value){
         stream << pad(n+2) << "value: " << std::endl;
         value->dump(stream, n+4);
@@ -3404,7 +3404,7 @@ auto struct_type_modifier(Expression value, Expression id) -> Expression {
 
 
 auto defined_type_identifier_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\defined_type_identifier_expr" << std::endl;
+    stream << pad(n) << "\\defined_type_identifier_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(modifiers){
         stream << pad(n+2) << "modifiers: " << std::endl;
         modifiers->dump(stream, n+4);
@@ -3421,7 +3421,7 @@ auto defined_type_identifier_expr(Expressions modifiers) -> Expression {
 
 
 auto struct_hier_ref_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_hier_ref_expr" << std::endl;
+    stream << pad(n) << "\\struct_hier_ref_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(hiers){
         stream << pad(n+2) << "hiers: " << std::endl;
         hiers->dump(stream, n+4);
@@ -3438,7 +3438,7 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression {
 
 
 auto hdl_path_name_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\hdl_path_name_expr" << std::endl;
+    stream << pad(n) << "\\hdl_path_name_expr: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "hdl_hier_ref: ";
     dump_Symbol_(stream, 0, hdl_hier_ref);
 }
@@ -3453,7 +3453,7 @@ auto hdl_path_name_expr(Symbol_ hdl_hier_ref) -> Expression {
 
 
 auto ternary_assign_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\ternary_assign_expr" << std::endl;
+    stream << pad(n) << "\\ternary_assign_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_exp){
         stream << pad(n+2) << "bool_exp: " << std::endl;
         bool_exp->dump(stream, n+4);
@@ -3478,7 +3478,7 @@ auto ternary_assign_expr(Expression bool_exp, Expression true_expr, Expression f
 
 
 auto hwp_access_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\hwp_access_expr" << std::endl;
+    stream << pad(n) << "\\hwp_access_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(base){
         stream << pad(n+2) << "base: " << std::endl;
         base->dump(stream, n+4);
@@ -3495,7 +3495,7 @@ auto hwp_access_expr(Expression base) -> Expression {
 
 
 auto cast_operator_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\cast_operator_expr" << std::endl;
+    stream << pad(n) << "\\cast_operator_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(dest_type_expr){
         stream << pad(n+2) << "dest_type_expr: " << std::endl;
         dest_type_expr->dump(stream, n+4);
@@ -3512,7 +3512,7 @@ auto cast_operator_expr(DataType dest_type_expr) -> Expression {
 
 
 auto sys_time_ref_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sys_time_ref_expr" << std::endl;
+    stream << pad(n) << "\\sys_time_ref_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto sys_time_ref_expr_class::type() const -> SpecmanCtorKind {
@@ -3525,7 +3525,7 @@ auto sys_time_ref_expr() -> Expression {
 
 
 auto method_call_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_call_expr" << std::endl;
+    stream << pad(n) << "\\method_call_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(base){
         stream << pad(n+2) << "base: " << std::endl;
         base->dump(stream, n+4);
@@ -3546,7 +3546,7 @@ auto method_call_expr(Expression base, Expressions arguments) -> Expression {
 
 
 auto constraint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\constraint_expr" << std::endl;
+    stream << pad(n) << "\\constraint_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -3563,7 +3563,7 @@ auto constraint_expr(Expression bool_expr) -> Expression {
 
 
 auto soft_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\soft_constraint_expr" << std::endl;
+    stream << pad(n) << "\\soft_constraint_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -3580,7 +3580,7 @@ auto soft_constraint_expr(Expression bool_expr) -> Expression {
 
 
 auto all_of_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\all_of_constraint_expr" << std::endl;
+    stream << pad(n) << "\\all_of_constraint_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(constraints){
         stream << pad(n+2) << "constraints: " << std::endl;
         constraints->dump(stream, n+4);
@@ -3597,7 +3597,7 @@ auto all_of_constraint_expr(Expressions constraints) -> Expression {
 
 
 auto list_items_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_items_constraint_expr" << std::endl;
+    stream << pad(n) << "\\list_items_constraint_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(item_name){
         stream << pad(n+2) << "item_name: " << std::endl;
         item_name->dump(stream, n+4);
@@ -3622,7 +3622,7 @@ auto list_items_constraint_expr(Expression item_name, Expression gen_item, Expre
 
 
 auto field_type_constraint_by_type_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\field_type_constraint_by_type_expr" << std::endl;
+    stream << pad(n) << "\\field_type_constraint_by_type_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(field_){
         stream << pad(n+2) << "field_: " << std::endl;
         field_->dump(stream, n+4);
@@ -3643,7 +3643,7 @@ auto field_type_constraint_by_type_expr(Expression field_, DataType type_) -> Ex
 
 
 auto field_type_constraint_by_field_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\field_type_constraint_by_field_expr" << std::endl;
+    stream << pad(n) << "\\field_type_constraint_by_field_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(field_){
         stream << pad(n+2) << "field_: " << std::endl;
         field_->dump(stream, n+4);
@@ -3664,7 +3664,7 @@ auto field_type_constraint_by_field_expr(Expression field_, Expression field) ->
 
 
 auto distribution_constraint_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\distribution_constraint_expr" << std::endl;
+    stream << pad(n) << "\\distribution_constraint_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(gen_item){
         stream << pad(n+2) << "gen_item: " << std::endl;
         gen_item->dump(stream, n+4);
@@ -3685,7 +3685,7 @@ auto distribution_constraint_expr(Expression gen_item, Cases distribution) -> Ex
 
 
 auto distribution_branch_case_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\distribution_branch_case" << std::endl;
+    stream << pad(n) << "\\distribution_branch_case: " << "<" << get_source_location() << ">" << std::endl;
     if(int_){
         stream << pad(n+2) << "int_: " << std::endl;
         int_->dump(stream, n+4);
@@ -3706,7 +3706,7 @@ auto distribution_branch_case(Expression int_, Expression value) -> Case {
 
 
 auto me_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\me_expr" << std::endl;
+    stream << pad(n) << "\\me_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto me_expr_class::type() const -> SpecmanCtorKind {
@@ -3719,7 +3719,7 @@ auto me_expr() -> Expression {
 
 
 auto it_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\it_expr" << std::endl;
+    stream << pad(n) << "\\it_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto it_expr_class::type() const -> SpecmanCtorKind {
@@ -3732,7 +3732,7 @@ auto it_expr() -> Expression {
 
 
 auto str_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\str_expr" << std::endl;
+    stream << pad(n) << "\\str_expr: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "str: ";
     dump_Symbol_(stream, 0, str);
 }
@@ -3747,7 +3747,7 @@ auto str_expr(Symbol_ str) -> Expression {
 
 
 auto int_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\int_expr" << std::endl;
+    stream << pad(n) << "\\int_expr: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "int_: ";
     dump_Symbol_(stream, 0, int_);
 }
@@ -3762,7 +3762,7 @@ auto int_expr(Symbol_ int_) -> Expression {
 
 
 auto enum_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\enum_dt" << std::endl;
+    stream << pad(n) << "\\enum_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(enum_list_items){
         stream << pad(n+2) << "enum_list_items: " << std::endl;
         enum_list_items->dump(stream, n+4);
@@ -3783,7 +3783,7 @@ auto enum_dt(Expressions enum_list_items, Expression width_modifier) -> DataType
 
 
 auto scalar_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\scalar_subtype_dt" << std::endl;
+    stream << pad(n) << "\\scalar_subtype_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(predefined_base_type){
         stream << pad(n+2) << "predefined_base_type: " << std::endl;
         predefined_base_type->dump(stream, n+4);
@@ -3808,7 +3808,7 @@ auto scalar_subtype_dt(DataType predefined_base_type, Expression range_modifier,
 
 
 auto defined_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\defined_dt" << std::endl;
+    stream << pad(n) << "\\defined_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(enum_list_items){
         stream << pad(n+2) << "enum_list_items: " << std::endl;
         enum_list_items->dump(stream, n+4);
@@ -3829,7 +3829,7 @@ auto defined_dt(Expressions enum_list_items, Expression width_modifier) -> DataT
 
 
 auto defined_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\defined_subtype_dt" << std::endl;
+    stream << pad(n) << "\\defined_subtype_dt: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "id: ";
     dump_Symbol_(stream, 0, id);
     if(range_modifier){
@@ -3848,7 +3848,7 @@ auto defined_subtype_dt(Symbol_ id, Expression range_modifier) -> DataType {
 
 
 auto predefined_subtype_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\predefined_subtype_dt" << std::endl;
+    stream << pad(n) << "\\predefined_subtype_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(pred_type){
         stream << pad(n+2) << "pred_type: " << std::endl;
         pred_type->dump(stream, n+4);
@@ -3873,7 +3873,7 @@ auto predefined_subtype_dt(DataType pred_type, Expression range_modifier, Expres
 
 
 auto defined_struct_type_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\defined_struct_type_dt" << std::endl;
+    stream << pad(n) << "\\defined_struct_type_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(struct_type_modifiers){
         stream << pad(n+2) << "struct_type_modifiers: " << std::endl;
         struct_type_modifiers->dump(stream, n+4);
@@ -3890,7 +3890,7 @@ auto defined_struct_type_dt(Expressions struct_type_modifiers) -> DataType {
 
 
 auto list_type_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\list_type_dt" << std::endl;
+    stream << pad(n) << "\\list_type_dt: " << "<" << get_source_location() << ">" << std::endl;
     if(base_type){
         stream << pad(n+2) << "base_type: " << std::endl;
         base_type->dump(stream, n+4);
@@ -3907,7 +3907,7 @@ auto list_type_dt(DataType base_type) -> DataType {
 
 
 auto assoc_list_type_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\assoc_list_type_dt" << std::endl;
+    stream << pad(n) << "\\assoc_list_type_dt: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "key_id: ";
     dump_Symbol_(stream, 0, key_id);
     if(base_type){
@@ -3926,7 +3926,7 @@ auto assoc_list_type_dt(Symbol_ key_id, DataType base_type) -> DataType {
 
 
 auto file_dt_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\file_dt" << std::endl;
+    stream << pad(n) << "\\file_dt: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto file_dt_class::type() const -> SpecmanCtorKind {
@@ -3939,7 +3939,7 @@ auto file_dt() -> DataType {
 
 
 auto int_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\int_predefined_type" << std::endl;
+    stream << pad(n) << "\\int_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto int_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -3952,7 +3952,7 @@ auto int_predefined_type() -> DataType {
 
 
 auto uint_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\uint_predefined_type" << std::endl;
+    stream << pad(n) << "\\uint_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto uint_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -3965,7 +3965,7 @@ auto uint_predefined_type() -> DataType {
 
 
 auto bool_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bool_predefined_type" << std::endl;
+    stream << pad(n) << "\\bool_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto bool_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -3978,7 +3978,7 @@ auto bool_predefined_type() -> DataType {
 
 
 auto bit_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\bit_predefined_type" << std::endl;
+    stream << pad(n) << "\\bit_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto bit_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -3991,7 +3991,7 @@ auto bit_predefined_type() -> DataType {
 
 
 auto byte_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\byte_predefined_type" << std::endl;
+    stream << pad(n) << "\\byte_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto byte_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -4004,7 +4004,7 @@ auto byte_predefined_type() -> DataType {
 
 
 auto nibble_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\nibble_predefined_type" << std::endl;
+    stream << pad(n) << "\\nibble_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto nibble_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -4017,7 +4017,7 @@ auto nibble_predefined_type() -> DataType {
 
 
 auto time_predefined_type_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\time_predefined_type" << std::endl;
+    stream << pad(n) << "\\time_predefined_type: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto time_predefined_type_class::type() const -> SpecmanCtorKind {
@@ -4030,7 +4030,7 @@ auto time_predefined_type() -> DataType {
 
 
 auto no_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\no_expr" << std::endl;
+    stream << pad(n) << "\\no_expr: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto no_expr_class::type() const -> SpecmanCtorKind {
@@ -4043,7 +4043,7 @@ auto no_expr() -> Expression {
 
 
 auto var_decl_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\var_decl_act" << std::endl;
+    stream << pad(n) << "\\var_decl_act: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "name: ";
     dump_Symbol_(stream, 0, name);
     if(type_id){
@@ -4066,7 +4066,7 @@ auto var_decl_act(Symbol_ name, DataType type_id, Expression init_expr) -> Actio
 
 
 auto var_assign_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\var_assign_act" << std::endl;
+    stream << pad(n) << "\\var_assign_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id_expr){
         stream << pad(n+2) << "id_expr: " << std::endl;
         id_expr->dump(stream, n+4);
@@ -4087,7 +4087,7 @@ auto var_assign_act(Expression id_expr, Expression assign_expr) -> Action {
 
 
 auto compound_add_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_add_act" << std::endl;
+    stream << pad(n) << "\\compound_add_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4108,7 +4108,7 @@ auto compound_add_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_sub_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_sub_act" << std::endl;
+    stream << pad(n) << "\\compound_sub_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4129,7 +4129,7 @@ auto compound_sub_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_mul_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_mul_act" << std::endl;
+    stream << pad(n) << "\\compound_mul_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4150,7 +4150,7 @@ auto compound_mul_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_div_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_div_act" << std::endl;
+    stream << pad(n) << "\\compound_div_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4171,7 +4171,7 @@ auto compound_div_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_mod_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_mod_act" << std::endl;
+    stream << pad(n) << "\\compound_mod_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4192,7 +4192,7 @@ auto compound_mod_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_bool_and_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_bool_and_act" << std::endl;
+    stream << pad(n) << "\\compound_bool_and_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4213,7 +4213,7 @@ auto compound_bool_and_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_bool_or_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_bool_or_act" << std::endl;
+    stream << pad(n) << "\\compound_bool_or_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4234,7 +4234,7 @@ auto compound_bool_or_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_bit_and_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_bit_and_act" << std::endl;
+    stream << pad(n) << "\\compound_bit_and_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4255,7 +4255,7 @@ auto compound_bit_and_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_bit_or_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_bit_or_act" << std::endl;
+    stream << pad(n) << "\\compound_bit_or_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4276,7 +4276,7 @@ auto compound_bit_or_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_bit_xor_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_bit_xor_act" << std::endl;
+    stream << pad(n) << "\\compound_bit_xor_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4297,7 +4297,7 @@ auto compound_bit_xor_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_shift_left_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_shift_left_act" << std::endl;
+    stream << pad(n) << "\\compound_shift_left_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4318,7 +4318,7 @@ auto compound_shift_left_act(Expression id, Expression e2) -> Action {
 
 
 auto compound_right_left_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compound_right_left_act" << std::endl;
+    stream << pad(n) << "\\compound_right_left_act: " << "<" << get_source_location() << ">" << std::endl;
     if(id){
         stream << pad(n+2) << "id: " << std::endl;
         id->dump(stream, n+4);
@@ -4339,7 +4339,7 @@ auto compound_right_left_act(Expression id, Expression e2) -> Action {
 
 
 auto force_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\force_act" << std::endl;
+    stream << pad(n) << "\\force_act: " << "<" << get_source_location() << ">" << std::endl;
     if(hdl_or_port){
         stream << pad(n+2) << "hdl_or_port: " << std::endl;
         hdl_or_port->dump(stream, n+4);
@@ -4360,7 +4360,7 @@ auto force_act(Expression hdl_or_port, Expression exp) -> Action {
 
 
 auto release_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\release_act" << std::endl;
+    stream << pad(n) << "\\release_act: " << "<" << get_source_location() << ">" << std::endl;
     if(hdl_or_port){
         stream << pad(n+2) << "hdl_or_port: " << std::endl;
         hdl_or_port->dump(stream, n+4);
@@ -4377,7 +4377,7 @@ auto release_act(Expression hdl_or_port) -> Action {
 
 
 auto if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\if_then_else_act" << std::endl;
+    stream << pad(n) << "\\if_then_else_act: " << "<" << get_source_location() << ">" << std::endl;
     if(condition){
         stream << pad(n+2) << "condition: " << std::endl;
         condition->dump(stream, n+4);
@@ -4402,7 +4402,7 @@ auto if_then_else_act(Expression condition, ActionBlock actions, ActionBlock els
 
 
 auto non_term_if_then_else_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\non_term_if_then_else_act" << std::endl;
+    stream << pad(n) << "\\non_term_if_then_else_act: " << "<" << get_source_location() << ">" << std::endl;
     if(condition){
         stream << pad(n+2) << "condition: " << std::endl;
         condition->dump(stream, n+4);
@@ -4427,7 +4427,7 @@ auto non_term_if_then_else_act(Expression condition, ActionBlock actions, Action
 
 
 auto case_bool_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\case_bool_act" << std::endl;
+    stream << pad(n) << "\\case_bool_act: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_case_branch_items){
         stream << pad(n+2) << "bool_case_branch_items: " << std::endl;
         bool_case_branch_items->dump(stream, n+4);
@@ -4444,7 +4444,7 @@ auto case_bool_act(Cases bool_case_branch_items) -> Action {
 
 
 auto case_bool_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\case_bool_branch_item_case" << std::endl;
+    stream << pad(n) << "\\case_bool_branch_item_case: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_exp){
         stream << pad(n+2) << "bool_exp: " << std::endl;
         bool_exp->dump(stream, n+4);
@@ -4465,7 +4465,7 @@ auto case_bool_branch_item_case(Expression bool_exp, ActionBlock actions) -> Cas
 
 
 auto case_labeled_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\case_labeled_act" << std::endl;
+    stream << pad(n) << "\\case_labeled_act: " << "<" << get_source_location() << ">" << std::endl;
     if(exp){
         stream << pad(n+2) << "exp: " << std::endl;
         exp->dump(stream, n+4);
@@ -4486,7 +4486,7 @@ auto case_labeled_act(Expression exp, Cases labeled_case_branch_items) -> Action
 
 
 auto case_labeled_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\case_labeled_branch_item_case" << std::endl;
+    stream << pad(n) << "\\case_labeled_branch_item_case: " << "<" << get_source_location() << ">" << std::endl;
     if(label_exp){
         stream << pad(n+2) << "label_exp: " << std::endl;
         label_exp->dump(stream, n+4);
@@ -4507,7 +4507,7 @@ auto case_labeled_branch_item_case(Expression label_exp, ActionBlock actions) ->
 
 
 auto default_case_branch_item_case_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\default_case_branch_item_case" << std::endl;
+    stream << pad(n) << "\\default_case_branch_item_case: " << "<" << get_source_location() << ">" << std::endl;
     if(actions){
         stream << pad(n+2) << "actions: " << std::endl;
         actions->dump(stream, n+4);
@@ -4524,7 +4524,7 @@ auto default_case_branch_item_case(ActionBlock actions) -> Case {
 
 
 auto print_call_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\print_call_act" << std::endl;
+    stream << pad(n) << "\\print_call_act: " << "<" << get_source_location() << ">" << std::endl;
     if(values){
         stream << pad(n+2) << "values: " << std::endl;
         values->dump(stream, n+4);
@@ -4541,7 +4541,7 @@ auto print_call_act(Expressions values) -> Action {
 
 
 auto method_call_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\method_call_act" << std::endl;
+    stream << pad(n) << "\\method_call_act: " << "<" << get_source_location() << ">" << std::endl;
     if(method_call_expr){
         stream << pad(n+2) << "method_call_expr: " << std::endl;
         method_call_expr->dump(stream, n+4);
@@ -4558,7 +4558,7 @@ auto method_call_act(Expression method_call_expr) -> Action {
 
 
 auto start_tcm_call_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\start_tcm_call_act" << std::endl;
+    stream << pad(n) << "\\start_tcm_call_act: " << "<" << get_source_location() << ">" << std::endl;
     if(method_call_expr){
         stream << pad(n+2) << "method_call_expr: " << std::endl;
         method_call_expr->dump(stream, n+4);
@@ -4575,7 +4575,7 @@ auto start_tcm_call_act(Expression method_call_expr) -> Action {
 
 
 auto compute_method_call_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\compute_method_call_act" << std::endl;
+    stream << pad(n) << "\\compute_method_call_act: " << "<" << get_source_location() << ">" << std::endl;
     if(method_call_expr){
         stream << pad(n+2) << "method_call_expr: " << std::endl;
         method_call_expr->dump(stream, n+4);
@@ -4592,7 +4592,7 @@ auto compute_method_call_act(Expression method_call_expr) -> Action {
 
 
 auto return_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\return_act" << std::endl;
+    stream << pad(n) << "\\return_act: " << "<" << get_source_location() << ">" << std::endl;
     if(exp){
         stream << pad(n+2) << "exp: " << std::endl;
         exp->dump(stream, n+4);
@@ -4609,7 +4609,7 @@ auto return_act(Expression exp) -> Action {
 
 
 auto while_loop_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\while_loop_act" << std::endl;
+    stream << pad(n) << "\\while_loop_act: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -4630,7 +4630,7 @@ auto while_loop_act(Expression bool_expr, ActionBlock actions) -> Action {
 
 
 auto repeat_until_loop_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\repeat_until_loop_act" << std::endl;
+    stream << pad(n) << "\\repeat_until_loop_act: " << "<" << get_source_location() << ">" << std::endl;
     if(bool_expr){
         stream << pad(n+2) << "bool_expr: " << std::endl;
         bool_expr->dump(stream, n+4);
@@ -4651,7 +4651,7 @@ auto repeat_until_loop_act(Expression bool_expr, ActionBlock actions) -> Action 
 
 
 auto for_each_loop_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\for_each_loop_act" << std::endl;
+    stream << pad(n) << "\\for_each_loop_act: " << "<" << get_source_location() << ">" << std::endl;
     if(type_id){
         stream << pad(n+2) << "type_id: " << std::endl;
         type_id->dump(stream, n+4);
@@ -4686,7 +4686,7 @@ auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_re
 
 
 auto for_range_loop_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\for_range_loop_act" << std::endl;
+    stream << pad(n) << "\\for_range_loop_act: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "var_id: ";
     dump_Symbol_(stream, 0, var_id);
     if(from_expr){
@@ -4719,7 +4719,7 @@ auto for_range_loop_act(Symbol_ var_id, Expression from_expr, Expression to_expr
 
 
 auto for_loop_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\for_loop_act" << std::endl;
+    stream << pad(n) << "\\for_loop_act: " << "<" << get_source_location() << ">" << std::endl;
     if(init_act){
         stream << pad(n+2) << "init_act: " << std::endl;
         init_act->dump(stream, n+4);
@@ -4748,7 +4748,7 @@ auto for_loop_act(Action init_act, Expression bool_expr, Action step_act, Action
 
 
 auto for_each_line_in_file_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\for_each_line_in_file_act" << std::endl;
+    stream << pad(n) << "\\for_each_line_in_file_act: " << "<" << get_source_location() << ">" << std::endl;
     if(line_it_name){
         stream << pad(n+2) << "line_it_name: " << std::endl;
         line_it_name->dump(stream, n+4);
@@ -4773,7 +4773,7 @@ auto for_each_line_in_file_act(Expression line_it_name, Expression file_path_exp
 
 
 auto for_each_file_in_files_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\for_each_file_in_files_act" << std::endl;
+    stream << pad(n) << "\\for_each_file_in_files_act: " << "<" << get_source_location() << ">" << std::endl;
     if(line_it_name){
         stream << pad(n+2) << "line_it_name: " << std::endl;
         line_it_name->dump(stream, n+4);
@@ -4798,7 +4798,7 @@ auto for_each_file_in_files_act(Expression line_it_name, Expression file_pattern
 
 
 auto break_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\break_act" << std::endl;
+    stream << pad(n) << "\\break_act: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto break_act_class::type() const -> SpecmanCtorKind {
@@ -4811,7 +4811,7 @@ auto break_act() -> Action {
 
 
 auto continue_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\continue_act" << std::endl;
+    stream << pad(n) << "\\continue_act: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto continue_act_class::type() const -> SpecmanCtorKind {
@@ -4824,7 +4824,7 @@ auto continue_act() -> Action {
 
 
 auto emit_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\emit_act" << std::endl;
+    stream << pad(n) << "\\emit_act: " << "<" << get_source_location() << ">" << std::endl;
     if(event_id){
         stream << pad(n+2) << "event_id: " << std::endl;
         event_id->dump(stream, n+4);
@@ -4841,7 +4841,7 @@ auto emit_act(Expression event_id) -> Action {
 
 
 auto sync_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\sync_act" << std::endl;
+    stream << pad(n) << "\\sync_act: " << "<" << get_source_location() << ">" << std::endl;
     if(event_id){
         stream << pad(n+2) << "event_id: " << std::endl;
         event_id->dump(stream, n+4);
@@ -4858,7 +4858,7 @@ auto sync_act(Expression event_id) -> Action {
 
 
 auto wait_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\wait_act" << std::endl;
+    stream << pad(n) << "\\wait_act: " << "<" << get_source_location() << ">" << std::endl;
     if(event_id){
         stream << pad(n+2) << "event_id: " << std::endl;
         event_id->dump(stream, n+4);
@@ -4875,7 +4875,7 @@ auto wait_act(Expression event_id) -> Action {
 
 
 auto all_of_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\all_of_act" << std::endl;
+    stream << pad(n) << "\\all_of_act: " << "<" << get_source_location() << ">" << std::endl;
     if(threads){
         stream << pad(n+2) << "threads: " << std::endl;
         threads->dump(stream, n+4);
@@ -4892,7 +4892,7 @@ auto all_of_act(ActionBlocks threads) -> Action {
 
 
 auto first_of_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\first_of_act" << std::endl;
+    stream << pad(n) << "\\first_of_act: " << "<" << get_source_location() << ">" << std::endl;
     if(threads){
         stream << pad(n+2) << "threads: " << std::endl;
         threads->dump(stream, n+4);
@@ -4909,7 +4909,7 @@ auto first_of_act(ActionBlocks threads) -> Action {
 
 
 auto gen_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\gen_act" << std::endl;
+    stream << pad(n) << "\\gen_act: " << "<" << get_source_location() << ">" << std::endl;
     if(gen_expr){
         stream << pad(n+2) << "gen_expr: " << std::endl;
         gen_expr->dump(stream, n+4);
@@ -4930,7 +4930,7 @@ auto gen_act(Expression gen_expr, Expressions constraints) -> Action {
 
 
 auto do_seq_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\do_seq_act" << std::endl;
+    stream << pad(n) << "\\do_seq_act: " << "<" << get_source_location() << ">" << std::endl;
     if(seq_item){
         stream << pad(n+2) << "seq_item: " << std::endl;
         seq_item->dump(stream, n+4);
@@ -4951,7 +4951,7 @@ auto do_seq_act(Expression seq_item, Expressions constraints) -> Action {
 
 
 auto seq_item_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\seq_item_expr" << std::endl;
+    stream << pad(n) << "\\seq_item_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(field_type_exprs){
         stream << pad(n+2) << "field_type_exprs: " << std::endl;
         field_type_exprs->dump(stream, n+4);
@@ -4968,7 +4968,7 @@ auto seq_item_expr(Expressions field_type_exprs) -> Expression {
 
 
 auto check_that_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\check_that_action" << std::endl;
+    stream << pad(n) << "\\check_that_action: " << "<" << get_source_location() << ">" << std::endl;
     if(condition){
         stream << pad(n+2) << "condition: " << std::endl;
         condition->dump(stream, n+4);
@@ -4989,7 +4989,7 @@ auto check_that_action(Expression condition, Expression dut_error_block) -> Acti
 
 
 auto assert_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\assert_action" << std::endl;
+    stream << pad(n) << "\\assert_action: " << "<" << get_source_location() << ">" << std::endl;
     if(condition){
         stream << pad(n+2) << "condition: " << std::endl;
         condition->dump(stream, n+4);
@@ -5010,7 +5010,7 @@ auto assert_action(Expression condition, Expression error_block) -> Action {
 
 
 auto try_else_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\try_else_action" << std::endl;
+    stream << pad(n) << "\\try_else_action: " << "<" << get_source_location() << ">" << std::endl;
     if(try_actions){
         stream << pad(n+2) << "try_actions: " << std::endl;
         try_actions->dump(stream, n+4);
@@ -5031,7 +5031,7 @@ auto try_else_action(ActionBlock try_actions, ActionBlock except_actions) -> Act
 
 
 auto state_machine_act_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\state_machine_act" << std::endl;
+    stream << pad(n) << "\\state_machine_act: " << "<" << get_source_location() << ">" << std::endl;
     if(state_var){
         stream << pad(n+2) << "state_var: " << std::endl;
         state_var->dump(stream, n+4);
@@ -5056,7 +5056,7 @@ auto state_machine_act(Expression state_var, Expression final_st, FSMStates stat
 
 
 auto state_action_fsm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\state_action_fsm" << std::endl;
+    stream << pad(n) << "\\state_action_fsm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "state: ";
     dump_Symbol_(stream, 0, state);
     if(actions){
@@ -5075,7 +5075,7 @@ auto state_action_fsm(Symbol_ state, ActionBlock actions) -> FSMState {
 
 
 auto state_transition_fsm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\state_transition_fsm" << std::endl;
+    stream << pad(n) << "\\state_transition_fsm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "cur_state: ";
     dump_Symbol_(stream, 0, cur_state);
     stream << pad(n+2) << "next_state: ";
@@ -5096,7 +5096,7 @@ auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock act
 
 
 auto state_any_transition_fsm_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\state_any_transition_fsm" << std::endl;
+    stream << pad(n) << "\\state_any_transition_fsm: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "next_state: ";
     dump_Symbol_(stream, 0, next_state);
     if(actions){
@@ -5115,7 +5115,7 @@ auto state_any_transition_fsm(Symbol_ next_state, ActionBlock actions) -> FSMSta
 
 
 auto no_action_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\no_action" << std::endl;
+    stream << pad(n) << "\\no_action: " << "<" << get_source_location() << ">" << std::endl;
 }
 
 auto no_action_class::type() const -> SpecmanCtorKind {
@@ -5128,7 +5128,7 @@ auto no_action() -> Action {
 
 
 auto action_block_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\action_block" << std::endl;
+    stream << pad(n) << "\\action_block: " << "<" << get_source_location() << ">" << std::endl;
     if(actions){
         stream << pad(n+2) << "actions: " << std::endl;
         actions->dump(stream, n+4);

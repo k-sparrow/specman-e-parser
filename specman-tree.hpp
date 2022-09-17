@@ -277,7 +277,7 @@ enum class SpecmanCtorKind {
 class Module_class;
 typedef std::shared_ptr<Module_class> Module;
 
-class Module_class : public tree_node {
+class Module_class : public ast::tree_node {
     public:
         Module_class()
             : tree_node()
@@ -293,7 +293,7 @@ class Module_class : public tree_node {
 class Statement_class;
 typedef std::shared_ptr<Statement_class> Statement;
 
-class Statement_class : public tree_node {
+class Statement_class : public ast::tree_node {
     public:
         Statement_class()
             : tree_node()
@@ -306,7 +306,7 @@ class Statement_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<Statement> Statements_class;
+typedef ast::list_tree_node<Statement> Statements_class;
 typedef std::shared_ptr<Statements_class> Statements;
 
 auto nil_Statements() -> Statements;
@@ -316,7 +316,7 @@ auto append_Statements(Statements, Statements) -> Statements;
 class StructMember_class;
 typedef std::shared_ptr<StructMember_class> StructMember;
 
-class StructMember_class : public tree_node {
+class StructMember_class : public ast::tree_node {
     public:
         StructMember_class()
             : tree_node()
@@ -329,7 +329,7 @@ class StructMember_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<StructMember> StructMembers_class;
+typedef ast::list_tree_node<StructMember> StructMembers_class;
 typedef std::shared_ptr<StructMembers_class> StructMembers;
 
 auto nil_StructMembers() -> StructMembers;
@@ -339,7 +339,7 @@ auto append_StructMembers(StructMembers, StructMembers) -> StructMembers;
 class FieldStructMember_class;
 typedef std::shared_ptr<FieldStructMember_class> FieldStructMember;
 
-class FieldStructMember_class : public tree_node {
+class FieldStructMember_class : public ast::tree_node {
     public:
         FieldStructMember_class()
             : tree_node()
@@ -355,7 +355,7 @@ class FieldStructMember_class : public tree_node {
 class Action_class;
 typedef std::shared_ptr<Action_class> Action;
 
-class Action_class : public tree_node {
+class Action_class : public ast::tree_node {
     public:
         Action_class()
             : tree_node()
@@ -368,7 +368,7 @@ class Action_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<Action> Actions_class;
+typedef ast::list_tree_node<Action> Actions_class;
 typedef std::shared_ptr<Actions_class> Actions;
 
 auto nil_Actions() -> Actions;
@@ -378,7 +378,7 @@ auto append_Actions(Actions, Actions) -> Actions;
 class Expression_class;
 typedef std::shared_ptr<Expression_class> Expression;
 
-class Expression_class : public tree_node {
+class Expression_class : public ast::tree_node {
     public:
         Expression_class()
             : tree_node()
@@ -391,7 +391,7 @@ class Expression_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<Expression> Expressions_class;
+typedef ast::list_tree_node<Expression> Expressions_class;
 typedef std::shared_ptr<Expressions_class> Expressions;
 
 auto nil_Expressions() -> Expressions;
@@ -401,7 +401,7 @@ auto append_Expressions(Expressions, Expressions) -> Expressions;
 class DataType_class;
 typedef std::shared_ptr<DataType_class> DataType;
 
-class DataType_class : public tree_node {
+class DataType_class : public ast::tree_node {
     public:
         DataType_class()
             : tree_node()
@@ -417,7 +417,7 @@ class DataType_class : public tree_node {
 class Formal_class;
 typedef std::shared_ptr<Formal_class> Formal;
 
-class Formal_class : public tree_node {
+class Formal_class : public ast::tree_node {
     public:
         Formal_class()
             : tree_node()
@@ -430,7 +430,7 @@ class Formal_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<Formal> Formals_class;
+typedef ast::list_tree_node<Formal> Formals_class;
 typedef std::shared_ptr<Formals_class> Formals;
 
 auto nil_Formals() -> Formals;
@@ -440,7 +440,7 @@ auto append_Formals(Formals, Formals) -> Formals;
 class Case_class;
 typedef std::shared_ptr<Case_class> Case;
 
-class Case_class : public tree_node {
+class Case_class : public ast::tree_node {
     public:
         Case_class()
             : tree_node()
@@ -453,7 +453,7 @@ class Case_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<Case> Cases_class;
+typedef ast::list_tree_node<Case> Cases_class;
 typedef std::shared_ptr<Cases_class> Cases;
 
 auto nil_Cases() -> Cases;
@@ -463,7 +463,7 @@ auto append_Cases(Cases, Cases) -> Cases;
 class SequenceItem_class;
 typedef std::shared_ptr<SequenceItem_class> SequenceItem;
 
-class SequenceItem_class : public tree_node {
+class SequenceItem_class : public ast::tree_node {
     public:
         SequenceItem_class()
             : tree_node()
@@ -476,7 +476,7 @@ class SequenceItem_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<SequenceItem> SequenceItems_class;
+typedef ast::list_tree_node<SequenceItem> SequenceItems_class;
 typedef std::shared_ptr<SequenceItems_class> SequenceItems;
 
 auto nil_SequenceItems() -> SequenceItems;
@@ -486,7 +486,7 @@ auto append_SequenceItems(SequenceItems, SequenceItems) -> SequenceItems;
 class CovergroupOption_class;
 typedef std::shared_ptr<CovergroupOption_class> CovergroupOption;
 
-class CovergroupOption_class : public tree_node {
+class CovergroupOption_class : public ast::tree_node {
     public:
         CovergroupOption_class()
             : tree_node()
@@ -499,7 +499,7 @@ class CovergroupOption_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<CovergroupOption> CovergroupOptions_class;
+typedef ast::list_tree_node<CovergroupOption> CovergroupOptions_class;
 typedef std::shared_ptr<CovergroupOptions_class> CovergroupOptions;
 
 auto nil_CovergroupOptions() -> CovergroupOptions;
@@ -509,7 +509,7 @@ auto append_CovergroupOptions(CovergroupOptions, CovergroupOptions) -> Covergrou
 class CovergroupItem_class;
 typedef std::shared_ptr<CovergroupItem_class> CovergroupItem;
 
-class CovergroupItem_class : public tree_node {
+class CovergroupItem_class : public ast::tree_node {
     public:
         CovergroupItem_class()
             : tree_node()
@@ -522,7 +522,7 @@ class CovergroupItem_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<CovergroupItem> CovergroupItems_class;
+typedef ast::list_tree_node<CovergroupItem> CovergroupItems_class;
 typedef std::shared_ptr<CovergroupItems_class> CovergroupItems;
 
 auto nil_CovergroupItems() -> CovergroupItems;
@@ -532,7 +532,7 @@ auto append_CovergroupItems(CovergroupItems, CovergroupItems) -> CovergroupItems
 class CovergroupItemOption_class;
 typedef std::shared_ptr<CovergroupItemOption_class> CovergroupItemOption;
 
-class CovergroupItemOption_class : public tree_node {
+class CovergroupItemOption_class : public ast::tree_node {
     public:
         CovergroupItemOption_class()
             : tree_node()
@@ -545,7 +545,7 @@ class CovergroupItemOption_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<CovergroupItemOption> CovergroupItemOptions_class;
+typedef ast::list_tree_node<CovergroupItemOption> CovergroupItemOptions_class;
 typedef std::shared_ptr<CovergroupItemOptions_class> CovergroupItemOptions;
 
 auto nil_CovergroupItemOptions() -> CovergroupItemOptions;
@@ -555,7 +555,7 @@ auto append_CovergroupItemOptions(CovergroupItemOptions, CovergroupItemOptions) 
 class CovergroupExtensionID_class;
 typedef std::shared_ptr<CovergroupExtensionID_class> CovergroupExtensionID;
 
-class CovergroupExtensionID_class : public tree_node {
+class CovergroupExtensionID_class : public ast::tree_node {
     public:
         CovergroupExtensionID_class()
             : tree_node()
@@ -571,7 +571,7 @@ class CovergroupExtensionID_class : public tree_node {
 class ActionBlock_class;
 typedef std::shared_ptr<ActionBlock_class> ActionBlock;
 
-class ActionBlock_class : public tree_node {
+class ActionBlock_class : public ast::tree_node {
     public:
         ActionBlock_class()
             : tree_node()
@@ -584,7 +584,7 @@ class ActionBlock_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<ActionBlock> ActionBlocks_class;
+typedef ast::list_tree_node<ActionBlock> ActionBlocks_class;
 typedef std::shared_ptr<ActionBlocks_class> ActionBlocks;
 
 auto nil_ActionBlocks() -> ActionBlocks;
@@ -594,7 +594,7 @@ auto append_ActionBlocks(ActionBlocks, ActionBlocks) -> ActionBlocks;
 class FSMState_class;
 typedef std::shared_ptr<FSMState_class> FSMState;
 
-class FSMState_class : public tree_node {
+class FSMState_class : public ast::tree_node {
     public:
         FSMState_class()
             : tree_node()
@@ -607,7 +607,7 @@ class FSMState_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<FSMState> FSMStates_class;
+typedef ast::list_tree_node<FSMState> FSMStates_class;
 typedef std::shared_ptr<FSMStates_class> FSMStates;
 
 auto nil_FSMStates() -> FSMStates;
@@ -617,7 +617,7 @@ auto append_FSMStates(FSMStates, FSMStates) -> FSMStates;
 class FilePath_class;
 typedef std::shared_ptr<FilePath_class> FilePath;
 
-class FilePath_class : public tree_node {
+class FilePath_class : public ast::tree_node {
     public:
         FilePath_class()
             : tree_node()
@@ -630,7 +630,7 @@ class FilePath_class : public tree_node {
 #endif
 };
 
-typedef list_tree_node<FilePath> FilePaths_class;
+typedef ast::list_tree_node<FilePath> FilePaths_class;
 typedef std::shared_ptr<FilePaths_class> FilePaths;
 
 auto nil_FilePaths() -> FilePaths;
