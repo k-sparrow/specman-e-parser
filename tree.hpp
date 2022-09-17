@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "utils.hpp"
+#include "location.hh"
 
 using std::begin;
 using std::end;
@@ -21,9 +22,11 @@ namespace elex {
 }
 
 class tree_node {
+    using source_location_t = yy::location;
 protected:
 
-    int                       m_line_number;
+    int               m_line_number;
+    source_location_t m_loc;
 
     // list of weak observers to the childrem
     std::vector<pw_tree_node> m_children = {};
@@ -34,13 +37,13 @@ protected:
     // std::expreimental::observer_ptr is not used as it's expermintal code
     tree_node* m_parent = nullptr;
 public:
-    tree_node(int lineno = 1);
+    tree_node();
     virtual ~tree_node() { }
 
     //virtual auto copy() -> p_tree_node = 0;
     virtual auto dump(std::ostream& stream, int n) -> void = 0;
     virtual auto type() const -> elex::SpecmanCtorKind = 0;
-    auto get_line_number() const -> int;
+    auto get_source_location() const -> source_location_t { return m_loc; }
     auto set(tree_node*) -> tree_node*;
     auto set_parent(tree_node*) -> void;
 };
@@ -52,12 +55,12 @@ class list_tree_node : public tree_node
 private:
     std::vector<Elem> m_elems;
 public:
-    list_tree_node() : tree_node(0), m_elems({}){}
-    list_tree_node(Elem elem) : tree_node(0) {
+    list_tree_node() : tree_node(), m_elems({}){}
+    list_tree_node(Elem elem) : tree_node() {
         m_elems.push_back(elem);
     }
-    list_tree_node(std::initializer_list<Elem> elems) : tree_node(0), m_elems(elems){}
-    list_tree_node(list_tree_node<Elem> const& cp) : tree_node(cp.get_line_number()), m_elems(cp.m_elems){}
+    list_tree_node(std::initializer_list<Elem> elems) : tree_node(), m_elems(elems){}
+    list_tree_node(list_tree_node<Elem> const& cp) : tree_node(), m_elems(cp.m_elems){ this->m_loc = cp.m_loc; }
     list_tree_node(list_tree_node<Elem> const& base, 
                    list_tree_node<Elem> const& ext) : list_tree_node(base) {
 

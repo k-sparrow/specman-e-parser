@@ -10,7 +10,34 @@
 // if your IDE can't resolve it - call make first
 #include "parser.hpp"
 #include "location.hh"
+
+// symbol tables
 #include "strtab.hpp"
+
+# ifdef YYLLOC_DEFAULT
+ #undef YYLLOC_DEFAULT
+# endif
+
+/*
+* Basically the same default location update macro generated 
+* by Bison itself, but updates the driver's location tracker 
+* at the end of it
+*/
+#  define YYLLOC_DEFAULT(Current, Rhs, N)                               \
+    do  {                                                               \
+      if (N)                                                            \
+        {                                                               \
+          (Current).begin  = YYRHSLOC (Rhs, 1).begin;                   \
+          (Current).end    = YYRHSLOC (Rhs, N).end;                     \
+        }                                                               \
+      else                                                              \
+        {                                                               \
+          (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;      \
+        }                                                               \
+        driver.cur_location = (Current);/* update the driver location*/ \
+    }                                                                   \
+    while (/*CONSTCOND*/ false)
+
 
 namespace yy {
 
@@ -20,12 +47,11 @@ namespace yy {
      * parsed AST and generally is a good place to store additional
      * context data. Both parser and lexer have access to it via internal 
      * references.
-     * 
-     * I know that the AST is a bit too strong word for a simple
-     * vector with nodes, but this is only an example. Get off me.
      */
     class driver
     {
+        // parser current reduced symbol type location
+        static yy::location cur_location;
     public:
         driver();
         
@@ -70,8 +96,21 @@ namespace yy {
         friend class parser;
         friend class scanner;
         
+        /**
+         * Returns a handler to the scanner
+         */
         yy::scanner& getScanner() { return m_scanner; }
         
+        /**
+         * Returns the location of the currently reduced symbol
+         * 
+         * This is tracked by the parser, updated by YYLLOC_DEFAULT action
+         * and consumed by each tree_node at construction time
+         * 
+         * DO NOT confuse this with the location tracked by the lexer
+         * which is consumed by the parser for error messaging
+         */
+        static auto parse_location() -> yy::location { return cur_location; }
     private:
         scanner m_scanner;
         parser m_parser;
@@ -85,6 +124,7 @@ namespace yy {
 
         // parser results
         elex::Module ast_root;
+
     };
 
 }

@@ -1,16 +1,14 @@
 
 #include "tree.hpp"
+#include "driver.hpp"
 
-tree_node::tree_node(int lineno): m_line_number(lineno){
+tree_node::tree_node() : m_loc(yy::driver::parse_location()) {
         
     }
 
-auto tree_node::get_line_number() const -> int {
-    return m_line_number;
-}
 
 auto tree_node::set(tree_node* node_p) -> tree_node* {
-    this->m_line_number = node_p->get_line_number();
+    this->m_loc = node_p->m_loc;
     return this;
 }
 

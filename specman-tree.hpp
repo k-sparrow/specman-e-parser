@@ -279,8 +279,8 @@ typedef std::shared_ptr<Module_class> Module;
 
 class Module_class : public tree_node {
     public:
-        Module_class(int lineno = 1)
-            : tree_node(lineno)
+        Module_class()
+            : tree_node()
         {
 
         }
@@ -295,8 +295,8 @@ typedef std::shared_ptr<Statement_class> Statement;
 
 class Statement_class : public tree_node {
     public:
-        Statement_class(int lineno = 1)
-            : tree_node(lineno)
+        Statement_class()
+            : tree_node()
         {
 
         }
@@ -318,8 +318,8 @@ typedef std::shared_ptr<StructMember_class> StructMember;
 
 class StructMember_class : public tree_node {
     public:
-        StructMember_class(int lineno = 1)
-            : tree_node(lineno)
+        StructMember_class()
+            : tree_node()
         {
 
         }
@@ -341,8 +341,8 @@ typedef std::shared_ptr<FieldStructMember_class> FieldStructMember;
 
 class FieldStructMember_class : public tree_node {
     public:
-        FieldStructMember_class(int lineno = 1)
-            : tree_node(lineno)
+        FieldStructMember_class()
+            : tree_node()
         {
 
         }
@@ -357,8 +357,8 @@ typedef std::shared_ptr<Action_class> Action;
 
 class Action_class : public tree_node {
     public:
-        Action_class(int lineno = 1)
-            : tree_node(lineno)
+        Action_class()
+            : tree_node()
         {
 
         }
@@ -380,8 +380,8 @@ typedef std::shared_ptr<Expression_class> Expression;
 
 class Expression_class : public tree_node {
     public:
-        Expression_class(int lineno = 1)
-            : tree_node(lineno)
+        Expression_class()
+            : tree_node()
         {
 
         }
@@ -403,8 +403,8 @@ typedef std::shared_ptr<DataType_class> DataType;
 
 class DataType_class : public tree_node {
     public:
-        DataType_class(int lineno = 1)
-            : tree_node(lineno)
+        DataType_class()
+            : tree_node()
         {
 
         }
@@ -419,8 +419,8 @@ typedef std::shared_ptr<Formal_class> Formal;
 
 class Formal_class : public tree_node {
     public:
-        Formal_class(int lineno = 1)
-            : tree_node(lineno)
+        Formal_class()
+            : tree_node()
         {
 
         }
@@ -442,8 +442,8 @@ typedef std::shared_ptr<Case_class> Case;
 
 class Case_class : public tree_node {
     public:
-        Case_class(int lineno = 1)
-            : tree_node(lineno)
+        Case_class()
+            : tree_node()
         {
 
         }
@@ -465,8 +465,8 @@ typedef std::shared_ptr<SequenceItem_class> SequenceItem;
 
 class SequenceItem_class : public tree_node {
     public:
-        SequenceItem_class(int lineno = 1)
-            : tree_node(lineno)
+        SequenceItem_class()
+            : tree_node()
         {
 
         }
@@ -488,8 +488,8 @@ typedef std::shared_ptr<CovergroupOption_class> CovergroupOption;
 
 class CovergroupOption_class : public tree_node {
     public:
-        CovergroupOption_class(int lineno = 1)
-            : tree_node(lineno)
+        CovergroupOption_class()
+            : tree_node()
         {
 
         }
@@ -511,8 +511,8 @@ typedef std::shared_ptr<CovergroupItem_class> CovergroupItem;
 
 class CovergroupItem_class : public tree_node {
     public:
-        CovergroupItem_class(int lineno = 1)
-            : tree_node(lineno)
+        CovergroupItem_class()
+            : tree_node()
         {
 
         }
@@ -534,8 +534,8 @@ typedef std::shared_ptr<CovergroupItemOption_class> CovergroupItemOption;
 
 class CovergroupItemOption_class : public tree_node {
     public:
-        CovergroupItemOption_class(int lineno = 1)
-            : tree_node(lineno)
+        CovergroupItemOption_class()
+            : tree_node()
         {
 
         }
@@ -557,8 +557,8 @@ typedef std::shared_ptr<CovergroupExtensionID_class> CovergroupExtensionID;
 
 class CovergroupExtensionID_class : public tree_node {
     public:
-        CovergroupExtensionID_class(int lineno = 1)
-            : tree_node(lineno)
+        CovergroupExtensionID_class()
+            : tree_node()
         {
 
         }
@@ -573,8 +573,8 @@ typedef std::shared_ptr<ActionBlock_class> ActionBlock;
 
 class ActionBlock_class : public tree_node {
     public:
-        ActionBlock_class(int lineno = 1)
-            : tree_node(lineno)
+        ActionBlock_class()
+            : tree_node()
         {
 
         }
@@ -596,8 +596,8 @@ typedef std::shared_ptr<FSMState_class> FSMState;
 
 class FSMState_class : public tree_node {
     public:
-        FSMState_class(int lineno = 1)
-            : tree_node(lineno)
+        FSMState_class()
+            : tree_node()
         {
 
         }
@@ -619,8 +619,8 @@ typedef std::shared_ptr<FilePath_class> FilePath;
 
 class FilePath_class : public tree_node {
     public:
-        FilePath_class(int lineno = 1)
-            : tree_node(lineno)
+        FilePath_class()
+            : tree_node()
         {
 
         }

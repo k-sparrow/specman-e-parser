@@ -4,6 +4,9 @@
 
 using namespace yy;
 
+// initialization of static member current location
+yy::location driver::cur_location = yy::location();
+
 driver::driver() :
     m_scanner(*this),
     m_parser(m_scanner, *this)

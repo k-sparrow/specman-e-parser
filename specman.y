@@ -1436,6 +1436,7 @@ scalar_field_declaration :
   | do_not_gen_physical[gen_phy] non_decorated_scalar_field_declaration[field_decl]
     { 
       $$ = $field_decl;
+      @$ = @1;
       // TODO: consider using enum-tagged classes, can save bad coding errors and redundant downcasting
       auto scalar_field     = std::dynamic_pointer_cast<elex::struct_field_sm_class>($field_decl);  
       auto list_field       = std::dynamic_pointer_cast<elex::struct_field_list_sm_class>($field_decl);  
