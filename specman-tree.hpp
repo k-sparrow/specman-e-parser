@@ -643,7 +643,7 @@ class module__class : public Module_class {
     public:
         module__class(Statements stmts){
             this->stmts = stmts;
-            if(stmts){
+            if(stmts){ // non-terminal might be null due to error reduction rules
                 this->stmts->set_parent(this);
             }
         }
@@ -663,10 +663,11 @@ auto module_(Statements stmts) -> Module;
 
 class package_class : public Statement_class {
     protected:
-        Symbol_ pkg_name;
+        ast::p_tree_node pkg_name;
     public:
         package_class(Symbol_ pkg_name){
-            this->pkg_name = pkg_name;
+            this->pkg_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(pkg_name));
+            this->pkg_name->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -684,13 +685,14 @@ auto package(Symbol_ pkg_name) -> Statement;
 
 class unit_st_class : public Statement_class {
     protected:
-        Symbol_ unit_name;
+        ast::p_tree_node unit_name;
         StructMembers members;
     public:
         unit_st_class(Symbol_ unit_name, StructMembers members){
-            this->unit_name = unit_name;
+            this->unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(unit_name));
+            this->unit_name->set_parent(this);
             this->members = members;
-            if(members){
+            if(members){ // non-terminal might be null due to error reduction rules
                 this->members->set_parent(this);
             }
         }
@@ -710,15 +712,17 @@ auto unit_st(Symbol_ unit_name, StructMembers members) -> Statement;
 
 class unit_like_st_class : public Statement_class {
     protected:
-        Symbol_ unit_name;
-        Symbol_ base_unit_name;
+        ast::p_tree_node unit_name;
+        ast::p_tree_node base_unit_name;
         StructMembers members;
     public:
         unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members){
-            this->unit_name = unit_name;
-            this->base_unit_name = base_unit_name;
+            this->unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(unit_name));
+            this->unit_name->set_parent(this);
+            this->base_unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(base_unit_name));
+            this->base_unit_name->set_parent(this);
             this->members = members;
-            if(members){
+            if(members){ // non-terminal might be null due to error reduction rules
                 this->members->set_parent(this);
             }
         }
@@ -738,13 +742,14 @@ auto unit_like_st(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers membe
 
 class struct_st_class : public Statement_class {
     protected:
-        Symbol_ struct_name;
+        ast::p_tree_node struct_name;
         StructMembers members;
     public:
         struct_st_class(Symbol_ struct_name, StructMembers members){
-            this->struct_name = struct_name;
+            this->struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(struct_name));
+            this->struct_name->set_parent(this);
             this->members = members;
-            if(members){
+            if(members){ // non-terminal might be null due to error reduction rules
                 this->members->set_parent(this);
             }
         }
@@ -764,15 +769,17 @@ auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement;
 
 class struct_like_st_class : public Statement_class {
     protected:
-        Symbol_ struct_name;
-        Symbol_ base_struct_name;
+        ast::p_tree_node struct_name;
+        ast::p_tree_node base_struct_name;
         StructMembers members;
     public:
         struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members){
-            this->struct_name = struct_name;
-            this->base_struct_name = base_struct_name;
+            this->struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(struct_name));
+            this->struct_name->set_parent(this);
+            this->base_struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(base_struct_name));
+            this->base_struct_name->set_parent(this);
             this->members = members;
-            if(members){
+            if(members){ // non-terminal might be null due to error reduction rules
                 this->members->set_parent(this);
             }
         }
@@ -797,11 +804,11 @@ class extend_struct_st_class : public Statement_class {
     public:
         extend_struct_st_class(Expressions struct_type_name, StructMembers members){
             this->struct_type_name = struct_type_name;
-            if(struct_type_name){
+            if(struct_type_name){ // non-terminal might be null due to error reduction rules
                 this->struct_type_name->set_parent(this);
             }
             this->members = members;
-            if(members){
+            if(members){ // non-terminal might be null due to error reduction rules
                 this->members->set_parent(this);
             }
         }
@@ -821,13 +828,14 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 
 class enum_type_st_class : public Statement_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         DataType type_id;
     public:
         enum_type_st_class(Symbol_ id, DataType type_id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
         }
@@ -847,13 +855,14 @@ auto enum_type_st(Symbol_ id, DataType type_id) -> Statement;
 
 class extend_enum_type_st_class : public Statement_class {
     protected:
-        Symbol_ type_id;
+        ast::p_tree_node type_id;
         Expressions enum_list_items;
     public:
         extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items){
-            this->type_id = type_id;
+            this->type_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(type_id));
+            this->type_id->set_parent(this);
             this->enum_list_items = enum_list_items;
-            if(enum_list_items){
+            if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->enum_list_items->set_parent(this);
             }
         }
@@ -873,18 +882,19 @@ auto extend_enum_type_st(Symbol_ type_id, Expressions enum_list_items) -> Statem
 
 class scalar_subtype_st_class : public Statement_class {
     protected:
-        Symbol_ subtype_id;
+        ast::p_tree_node subtype_id;
         Expression type_id;
         Expressions ranges;
     public:
         scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges){
-            this->subtype_id = subtype_id;
+            this->subtype_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(subtype_id));
+            this->subtype_id->set_parent(this);
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
             this->ranges = ranges;
-            if(ranges){
+            if(ranges){ // non-terminal might be null due to error reduction rules
                 this->ranges->set_parent(this);
             }
         }
@@ -904,23 +914,24 @@ auto scalar_subtype_st(Symbol_ subtype_id, Expression type_id, Expressions range
 
 class scalar_sized_type_st_class : public Statement_class {
     protected:
-        Symbol_ type_id;
+        ast::p_tree_node type_id;
         Expression base_type_id;
         Expressions ranges_expr;
         Expression width_expr;
     public:
         scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr){
-            this->type_id = type_id;
+            this->type_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(type_id));
+            this->type_id->set_parent(this);
             this->base_type_id = base_type_id;
-            if(base_type_id){
+            if(base_type_id){ // non-terminal might be null due to error reduction rules
                 this->base_type_id->set_parent(this);
             }
             this->ranges_expr = ranges_expr;
-            if(ranges_expr){
+            if(ranges_expr){ // non-terminal might be null due to error reduction rules
                 this->ranges_expr->set_parent(this);
             }
             this->width_expr = width_expr;
-            if(width_expr){
+            if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->width_expr->set_parent(this);
             }
         }
@@ -941,14 +952,15 @@ auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions 
 class import_st_class : public Statement_class {
     protected:
         FilePaths paths;
-        Boolean is_cyclic;
+        ast::p_tree_node is_cyclic;
     public:
         import_st_class(FilePaths paths, Boolean is_cyclic){
             this->paths = paths;
-            if(paths){
+            if(paths){ // non-terminal might be null due to error reduction rules
                 this->paths->set_parent(this);
             }
-            this->is_cyclic = is_cyclic;
+            this->is_cyclic = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_cyclic));
+            this->is_cyclic->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -966,10 +978,11 @@ auto import_st(FilePaths paths, Boolean is_cyclic) -> Statement;
 
 class file_path_fp_class : public FilePath_class {
     protected:
-        Symbol_ file_path;
+        ast::p_tree_node file_path;
     public:
         file_path_fp_class(Symbol_ file_path){
-            this->file_path = file_path;
+            this->file_path = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(file_path));
+            this->file_path->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -987,13 +1000,14 @@ auto file_path_fp(Symbol_ file_path) -> FilePath;
 
 class virtual_sequence_st_class : public Statement_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         SequenceItems seq_options;
     public:
         virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->seq_options = seq_options;
-            if(seq_options){
+            if(seq_options){ // non-terminal might be null due to error reduction rules
                 this->seq_options->set_parent(this);
             }
         }
@@ -1013,13 +1027,14 @@ auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
 
 class sequence_st_class : public Statement_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         SequenceItems seq_options;
     public:
         sequence_st_class(Symbol_ id, SequenceItems seq_options){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->seq_options = seq_options;
-            if(seq_options){
+            if(seq_options){ // non-terminal might be null due to error reduction rules
                 this->seq_options->set_parent(this);
             }
         }
@@ -1039,10 +1054,11 @@ auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
 
 class sequence_item_kind_it_class : public SequenceItem_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         sequence_item_kind_it_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1060,10 +1076,11 @@ auto sequence_item_kind_it(Symbol_ id) -> SequenceItem;
 
 class sequence_created_kind_name_it_class : public SequenceItem_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         sequence_created_kind_name_it_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1081,10 +1098,11 @@ auto sequence_created_kind_name_it(Symbol_ id) -> SequenceItem;
 
 class sequence_created_driver_name_it_class : public SequenceItem_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         sequence_created_driver_name_it_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1102,10 +1120,11 @@ auto sequence_created_driver_name_it(Symbol_ id) -> SequenceItem;
 
 class sequence_base_kind_it_class : public SequenceItem_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         sequence_base_kind_it_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1123,10 +1142,11 @@ auto sequence_base_kind_it(Symbol_ id) -> SequenceItem;
 
 class sequence_driver_base_kind_it_class : public SequenceItem_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         sequence_driver_base_kind_it_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1144,10 +1164,11 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 
 class define_as_st_class : public Statement_class {
     protected:
-        Symbol_ macro;
+        ast::p_tree_node macro;
     public:
         define_as_st_class(Symbol_ macro){
-            this->macro = macro;
+            this->macro = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(macro));
+            this->macro->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1165,10 +1186,11 @@ auto define_as_st(Symbol_ macro) -> Statement;
 
 class define_as_computed_st_class : public Statement_class {
     protected:
-        Symbol_ macro;
+        ast::p_tree_node macro;
     public:
         define_as_computed_st_class(Symbol_ macro){
-            this->macro = macro;
+            this->macro = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(macro));
+            this->macro->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1186,13 +1208,14 @@ auto define_as_computed_st(Symbol_ macro) -> Statement;
 
 class formal_class : public Formal_class {
     protected:
-        Symbol_ name;
+        ast::p_tree_node name;
         DataType type_;
     public:
         formal_class(Symbol_ name, DataType type_){
-            this->name = name;
+            this->name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(name));
+            this->name->set_parent(this);
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
         }
@@ -1216,7 +1239,7 @@ class c_export_st_class : public Statement_class {
     public:
         c_export_st_class(Expression element){
             this->element = element;
-            if(element){
+            if(element){ // non-terminal might be null due to error reduction rules
                 this->element->set_parent(this);
             }
         }
@@ -1236,22 +1259,24 @@ auto c_export_st(Expression element) -> Statement;
 
 class c_routine_st_class : public Statement_class {
     protected:
-        Symbol_ e_routine_name;
+        ast::p_tree_node e_routine_name;
         Formals parameters_list;
         DataType return_type;
-        Symbol_ c_routine_name;
+        ast::p_tree_node c_routine_name;
     public:
         c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name){
-            this->e_routine_name = e_routine_name;
+            this->e_routine_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_routine_name));
+            this->e_routine_name->set_parent(this);
             this->parameters_list = parameters_list;
-            if(parameters_list){
+            if(parameters_list){ // non-terminal might be null due to error reduction rules
                 this->parameters_list->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
-            this->c_routine_name = c_routine_name;
+            this->c_routine_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_routine_name));
+            this->c_routine_name->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1273,7 +1298,7 @@ class field_sm_class : public StructMember_class {
     public:
         field_sm_class(FieldStructMember field){
             this->field = field;
-            if(field){
+            if(field){ // non-terminal might be null due to error reduction rules
                 this->field->set_parent(this);
             }
         }
@@ -1293,13 +1318,14 @@ auto field_sm(FieldStructMember field) -> StructMember;
 
 class struct_field_sm_class : public FieldStructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         DataType type_;
     public:
         struct_field_sm_class(Symbol_ id, DataType type_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
         }
@@ -1319,18 +1345,19 @@ auto struct_field_sm(Symbol_ id, DataType type_) -> FieldStructMember;
 
 class struct_field_list_sm_class : public FieldStructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Expression len_expr;
         DataType type_;
     public:
         struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->len_expr = len_expr;
-            if(len_expr){
+            if(len_expr){ // non-terminal might be null due to error reduction rules
                 this->len_expr->set_parent(this);
             }
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
         }
@@ -1350,13 +1377,14 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_) -> Fi
 
 class struct_field_assoc_list_sm_class : public FieldStructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         DataType type_;
     public:
         struct_field_assoc_list_sm_class(Symbol_ id, DataType type_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
         }
@@ -1376,23 +1404,24 @@ auto struct_field_assoc_list_sm(Symbol_ id, DataType type_) -> FieldStructMember
 
 class method_dec_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1412,23 +1441,24 @@ auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBl
 
 class method_dec_also_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1448,23 +1478,24 @@ auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 class method_dec_first_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1484,23 +1515,24 @@ auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Ac
 
 class method_dec_only_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1520,18 +1552,19 @@ auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 class method_dec_empty_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
     public:
         method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
         }
@@ -1551,18 +1584,19 @@ auto method_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 class method_dec_undef_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
     public:
         method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
         }
@@ -1582,28 +1616,29 @@ auto method_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 class tcm_dec_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
         ActionBlock actions_;
     public:
         tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1623,28 +1658,29 @@ auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression 
 
 class tcm_dec_also_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
         ActionBlock actions_;
     public:
         tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1664,28 +1700,29 @@ auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 class tcm_dec_first_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
         ActionBlock actions_;
     public:
         tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1705,28 +1742,29 @@ auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class tcm_dec_only_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
         ActionBlock actions_;
     public:
         tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
             this->actions_ = actions_;
-            if(actions_){
+            if(actions_){ // non-terminal might be null due to error reduction rules
                 this->actions_->set_parent(this);
             }
         }
@@ -1746,23 +1784,24 @@ auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 class tcm_dec_empty_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
     public:
         tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
         }
@@ -1782,23 +1821,24 @@ auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class tcm_dec_undef_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
     public:
         tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
             this->event_id_expr = event_id_expr;
-            if(event_id_expr){
+            if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->event_id_expr->set_parent(this);
             }
         }
@@ -1818,22 +1858,24 @@ auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class c_method_dec_sm_class : public StructMember_class {
     protected:
-        Symbol_ e_method_name;
+        ast::p_tree_node e_method_name;
         Formals parameters_list;
         DataType return_type;
-        Symbol_ c_method_name;
+        ast::p_tree_node c_method_name;
     public:
         c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
-            this->e_method_name = e_method_name;
+            this->e_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_method_name));
+            this->e_method_name->set_parent(this);
             this->parameters_list = parameters_list;
-            if(parameters_list){
+            if(parameters_list){ // non-terminal might be null due to error reduction rules
                 this->parameters_list->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
-            this->c_method_name = c_method_name;
+            this->c_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_method_name));
+            this->c_method_name->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1851,22 +1893,24 @@ auto c_method_dec_sm(Symbol_ e_method_name, Formals parameters_list, DataType re
 
 class c_method_dec_only_sm_class : public StructMember_class {
     protected:
-        Symbol_ e_method_name;
+        ast::p_tree_node e_method_name;
         Formals parameters_list;
         DataType return_type;
-        Symbol_ c_method_name;
+        ast::p_tree_node c_method_name;
     public:
         c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
-            this->e_method_name = e_method_name;
+            this->e_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_method_name));
+            this->e_method_name->set_parent(this);
             this->parameters_list = parameters_list;
-            if(parameters_list){
+            if(parameters_list){ // non-terminal might be null due to error reduction rules
                 this->parameters_list->set_parent(this);
             }
             this->return_type = return_type;
-            if(return_type){
+            if(return_type){ // non-terminal might be null due to error reduction rules
                 this->return_type->set_parent(this);
             }
-            this->c_method_name = c_method_name;
+            this->c_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_method_name));
+            this->c_method_name->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1889,11 +1933,11 @@ class when_subtype_sm_class : public StructMember_class {
     public:
         when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members){
             this->subtype_mods = subtype_mods;
-            if(subtype_mods){
+            if(subtype_mods){ // non-terminal might be null due to error reduction rules
                 this->subtype_mods->set_parent(this);
             }
             this->subtype_members = subtype_members;
-            if(subtype_members){
+            if(subtype_members){ // non-terminal might be null due to error reduction rules
                 this->subtype_members->set_parent(this);
             }
         }
@@ -1917,7 +1961,7 @@ class constraint_def_sm_class : public StructMember_class {
     public:
         constraint_def_sm_class(Expression constraint_expr){
             this->constraint_expr = constraint_expr;
-            if(constraint_expr){
+            if(constraint_expr){ // non-terminal might be null due to error reduction rules
                 this->constraint_expr->set_parent(this);
             }
         }
@@ -1942,11 +1986,11 @@ class on_event_sm_class : public StructMember_class {
     public:
         on_event_sm_class(Expression event_name, ActionBlock action_block){
             this->event_name = event_name;
-            if(event_name){
+            if(event_name){ // non-terminal might be null due to error reduction rules
                 this->event_name->set_parent(this);
             }
             this->action_block = action_block;
-            if(action_block){
+            if(action_block){ // non-terminal might be null due to error reduction rules
                 this->action_block->set_parent(this);
             }
         }
@@ -1966,10 +2010,11 @@ auto on_event_sm(Expression event_name, ActionBlock action_block) -> StructMembe
 
 class simple_event_dec_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         simple_event_dec_sm_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1987,13 +2032,14 @@ auto simple_event_dec_sm(Symbol_ id) -> StructMember;
 
 class event_def_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Expression temporal;
     public:
         event_def_sm_class(Symbol_ id, Expression temporal){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2013,13 +2059,14 @@ auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember;
 
 class event_def_override_sm_class : public StructMember_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Expression temporal;
     public:
         event_def_override_sm_class(Symbol_ id, Expression temporal){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2044,11 +2091,11 @@ class temporal_expr_class : public Expression_class {
     public:
         temporal_expr_class(Expression temporal, Expression sample_event){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->sample_event = sample_event;
-            if(sample_event){
+            if(sample_event){ // non-terminal might be null due to error reduction rules
                 this->sample_event->set_parent(this);
             }
         }
@@ -2072,7 +2119,7 @@ class sampling_event_expr_class : public Expression_class {
     public:
         sampling_event_expr_class(Expression event_expr){
             this->event_expr = event_expr;
-            if(event_expr){
+            if(event_expr){ // non-terminal might be null due to error reduction rules
                 this->event_expr->set_parent(this);
             }
         }
@@ -2096,7 +2143,7 @@ class event_ref_expr_class : public Expression_class {
     public:
         event_ref_expr_class(Expression event_name){
             this->event_name = event_name;
-            if(event_name){
+            if(event_name){ // non-terminal might be null due to error reduction rules
                 this->event_name->set_parent(this);
             }
         }
@@ -2121,11 +2168,11 @@ class action_attached_temporal_expr_class : public Expression_class {
     public:
         action_attached_temporal_expr_class(Expression temporal, ActionBlock actions){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -2149,7 +2196,7 @@ class not_temporal_expr_class : public Expression_class {
     public:
         not_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2173,7 +2220,7 @@ class fail_temporal_expr_class : public Expression_class {
     public:
         fail_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2197,7 +2244,7 @@ class eventually_temporal_expr_class : public Expression_class {
     public:
         eventually_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2221,7 +2268,7 @@ class detach_temporal_expr_class : public Expression_class {
     public:
         detach_temporal_expr_class(Expression temporal){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2246,11 +2293,11 @@ class yield_temporal_expr_class : public Expression_class {
     public:
         yield_temporal_expr_class(Expression trigger, Expression temporal){
             this->trigger = trigger;
-            if(trigger){
+            if(trigger){ // non-terminal might be null due to error reduction rules
                 this->trigger->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2274,7 +2321,7 @@ class true_temporal_expr_class : public Expression_class {
     public:
         true_temporal_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
         }
@@ -2298,7 +2345,7 @@ class rise_temporal_expr_class : public Expression_class {
     public:
         rise_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
-            if(hdl_path){
+            if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->hdl_path->set_parent(this);
             }
         }
@@ -2322,7 +2369,7 @@ class fall_temporal_expr_class : public Expression_class {
     public:
         fall_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
-            if(hdl_path){
+            if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->hdl_path->set_parent(this);
             }
         }
@@ -2346,7 +2393,7 @@ class change_temporal_expr_class : public Expression_class {
     public:
         change_temporal_expr_class(Expression hdl_path){
             this->hdl_path = hdl_path;
-            if(hdl_path){
+            if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->hdl_path->set_parent(this);
             }
         }
@@ -2371,11 +2418,11 @@ class and_temporal_expr_class : public Expression_class {
     public:
         and_temporal_expr_class(Expression te1, Expression te2){
             this->te1 = te1;
-            if(te1){
+            if(te1){ // non-terminal might be null due to error reduction rules
                 this->te1->set_parent(this);
             }
             this->te2 = te2;
-            if(te2){
+            if(te2){ // non-terminal might be null due to error reduction rules
                 this->te2->set_parent(this);
             }
         }
@@ -2400,11 +2447,11 @@ class or_temporal_expr_class : public Expression_class {
     public:
         or_temporal_expr_class(Expression te1, Expression te2){
             this->te1 = te1;
-            if(te1){
+            if(te1){ // non-terminal might be null due to error reduction rules
                 this->te1->set_parent(this);
             }
             this->te2 = te2;
-            if(te2){
+            if(te2){ // non-terminal might be null due to error reduction rules
                 this->te2->set_parent(this);
             }
         }
@@ -2428,7 +2475,7 @@ class sequence_temporal_expr_class : public Expression_class {
     public:
         sequence_temporal_expr_class(Expressions temporals){
             this->temporals = temporals;
-            if(temporals){
+            if(temporals){ // non-terminal might be null due to error reduction rules
                 this->temporals->set_parent(this);
             }
         }
@@ -2453,11 +2500,11 @@ class fixed_repetition_expr_class : public Expression_class {
     public:
         fixed_repetition_expr_class(Expression rep, Expression temporal){
             this->rep = rep;
-            if(rep){
+            if(rep){ // non-terminal might be null due to error reduction rules
                 this->rep->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2484,19 +2531,19 @@ class first_match_repetition_expr_class : public Expression_class {
     public:
         first_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal){
             this->from_rep = from_rep;
-            if(from_rep){
+            if(from_rep){ // non-terminal might be null due to error reduction rules
                 this->from_rep->set_parent(this);
             }
             this->to_rep = to_rep;
-            if(to_rep){
+            if(to_rep){ // non-terminal might be null due to error reduction rules
                 this->to_rep->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->match_temporal = match_temporal;
-            if(match_temporal){
+            if(match_temporal){ // non-terminal might be null due to error reduction rules
                 this->match_temporal->set_parent(this);
             }
         }
@@ -2522,15 +2569,15 @@ class true_match_repetition_expr_class : public Expression_class {
     public:
         true_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal){
             this->from_rep = from_rep;
-            if(from_rep){
+            if(from_rep){ // non-terminal might be null due to error reduction rules
                 this->from_rep->set_parent(this);
             }
             this->to_rep = to_rep;
-            if(to_rep){
+            if(to_rep){ // non-terminal might be null due to error reduction rules
                 this->to_rep->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
         }
@@ -2612,11 +2659,11 @@ class delay_temporal_expr_class : public Expression_class {
     public:
         delay_temporal_expr_class(Expression e, Expression timescale_unit){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
             this->timescale_unit = timescale_unit;
-            if(timescale_unit){
+            if(timescale_unit){ // non-terminal might be null due to error reduction rules
                 this->timescale_unit->set_parent(this);
             }
         }
@@ -2640,7 +2687,7 @@ class consume_temporal_expr_class : public Expression_class {
     public:
         consume_temporal_expr_class(Expression e){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
         }
@@ -2665,11 +2712,11 @@ class expect_nameless_sm_class : public StructMember_class {
     public:
         expect_nameless_sm_class(Expression temporal, Expression dut_error_call){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2695,15 +2742,15 @@ class expect_sm_class : public StructMember_class {
     public:
         expect_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2729,15 +2776,15 @@ class expect_override_sm_class : public StructMember_class {
     public:
         expect_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2762,11 +2809,11 @@ class assume_nameless_sm_class : public StructMember_class {
     public:
         assume_nameless_sm_class(Expression temporal, Expression dut_error_call){
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2792,15 +2839,15 @@ class assume_sm_class : public StructMember_class {
     public:
         assume_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2826,15 +2873,15 @@ class assume_override_sm_class : public StructMember_class {
     public:
         assume_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->temporal = temporal;
-            if(temporal){
+            if(temporal){ // non-terminal might be null due to error reduction rules
                 this->temporal->set_parent(this);
             }
             this->dut_error_call = dut_error_call;
-            if(dut_error_call){
+            if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->dut_error_call->set_parent(this);
             }
         }
@@ -2854,10 +2901,11 @@ auto assume_override_sm(Expression id, Expression temporal, Expression dut_error
 
 class empty_covergroup_sm_class : public StructMember_class {
     protected:
-        Symbol_ event_id;
+        ast::p_tree_node event_id;
     public:
         empty_covergroup_sm_class(Symbol_ event_id){
-            this->event_id = event_id;
+            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2875,18 +2923,19 @@ auto empty_covergroup_sm(Symbol_ event_id) -> StructMember;
 
 class covergroup_sm_class : public StructMember_class {
     protected:
-        Symbol_ event_id;
+        ast::p_tree_node event_id;
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
         covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
-            this->event_id = event_id;
+            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id->set_parent(this);
             this->cg_opts = cg_opts;
-            if(cg_opts){
+            if(cg_opts){ // non-terminal might be null due to error reduction rules
                 this->cg_opts->set_parent(this);
             }
             this->cg_items = cg_items;
-            if(cg_items){
+            if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->cg_items->set_parent(this);
             }
         }
@@ -2906,23 +2955,24 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
 
 class covergroup_extension_sm_class : public StructMember_class {
     protected:
-        Symbol_ event_id;
+        ast::p_tree_node event_id;
         CovergroupExtensionID instance_id;
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
         covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
-            this->event_id = event_id;
+            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id->set_parent(this);
             this->instance_id = instance_id;
-            if(instance_id){
+            if(instance_id){ // non-terminal might be null due to error reduction rules
                 this->instance_id->set_parent(this);
             }
             this->cg_opts = cg_opts;
-            if(cg_opts){
+            if(cg_opts){ // non-terminal might be null due to error reduction rules
                 this->cg_opts->set_parent(this);
             }
             this->cg_items = cg_items;
-            if(cg_items){
+            if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->cg_items->set_parent(this);
             }
         }
@@ -2965,7 +3015,7 @@ class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_cla
     public:
         covergroup_per_unit_instance_ceid_class(Expression e_path){
             this->e_path = e_path;
-            if(e_path){
+            if(e_path){ // non-terminal might be null due to error reduction rules
                 this->e_path->set_parent(this);
             }
         }
@@ -2985,12 +3035,14 @@ auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtension
 
 class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
     protected:
-        Symbol_ item_name;
-        Symbol_ bucket_name;
+        ast::p_tree_node item_name;
+        ast::p_tree_node bucket_name;
     public:
         covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name){
-            this->item_name = item_name;
-            this->bucket_name = bucket_name;
+            this->item_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_name));
+            this->item_name->set_parent(this);
+            this->bucket_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(bucket_name));
+            this->bucket_name->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3012,7 +3064,7 @@ class global_cgo_class : public CovergroupOption_class {
     public:
         global_cgo_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3036,7 +3088,7 @@ class no_collect_cgo_class : public CovergroupOption_class {
     public:
         no_collect_cgo_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3060,7 +3112,7 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
     public:
         per_unit_instance_cgo_class(Expression hier_id){
             this->hier_id = hier_id;
-            if(hier_id){
+            if(hier_id){ // non-terminal might be null due to error reduction rules
                 this->hier_id->set_parent(this);
             }
         }
@@ -3137,10 +3189,11 @@ auto radix_bin_cgo() -> CovergroupOption;
 
 class text_cgo_class : public CovergroupOption_class {
     protected:
-        Symbol_ description;
+        ast::p_tree_node description;
     public:
         text_cgo_class(Symbol_ description){
-            this->description = description;
+            this->description = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(description));
+            this->description->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3158,10 +3211,11 @@ auto text_cgo(Symbol_ description) -> CovergroupOption;
 
 class weight_cgo_class : public CovergroupOption_class {
     protected:
-        Symbol_ value;
+        ast::p_tree_node value;
     public:
         weight_cgo_class(Symbol_ value){
-            this->value = value;
+            this->value = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(value));
+            this->value->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3183,7 +3237,7 @@ class when_cgo_class : public CovergroupOption_class {
     public:
         when_cgo_class(Expression bool_expr){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
         }
@@ -3203,13 +3257,14 @@ auto when_cgo(Expression bool_expr) -> CovergroupOption;
 
 class simple_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        Symbol_ item_id;
+        ast::p_tree_node item_id;
         CovergroupItemOptions cgi_options;
     public:
         simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
-            this->item_id = item_id;
+            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id->set_parent(this);
             this->cgi_options = cgi_options;
-            if(cgi_options){
+            if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->cgi_options->set_parent(this);
             }
         }
@@ -3229,23 +3284,24 @@ auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_optio
 
 class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        Symbol_ item_id;
+        ast::p_tree_node item_id;
         DataType type_;
         Expression sampled_val;
         CovergroupItemOptions cgi_options;
     public:
         on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options){
-            this->item_id = item_id;
+            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id->set_parent(this);
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
             this->sampled_val = sampled_val;
-            if(sampled_val){
+            if(sampled_val){ // non-terminal might be null due to error reduction rules
                 this->sampled_val->set_parent(this);
             }
             this->cgi_options = cgi_options;
-            if(cgi_options){
+            if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->cgi_options->set_parent(this);
             }
         }
@@ -3270,11 +3326,11 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
     public:
         cross_covergroup_item_cgi_class(Expressions cg_items, CovergroupItemOptions cgi_options){
             this->cg_items = cg_items;
-            if(cg_items){
+            if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->cg_items->set_parent(this);
             }
             this->cgi_options = cgi_options;
-            if(cgi_options){
+            if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->cgi_options->set_parent(this);
             }
         }
@@ -3294,13 +3350,14 @@ auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_o
 
 class transition_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        Symbol_ item_id;
+        ast::p_tree_node item_id;
         CovergroupItemOptions cgi_options;
     public:
         transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
-            this->item_id = item_id;
+            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id->set_parent(this);
             this->cgi_options = cgi_options;
-            if(cgi_options){
+            if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->cgi_options->set_parent(this);
             }
         }
@@ -3320,10 +3377,11 @@ auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_o
 
 class at_least_cgio_class : public CovergroupItemOption_class {
     protected:
-        Symbol_ num;
+        ast::p_tree_node num;
     public:
         at_least_cgio_class(Symbol_ num){
-            this->num = num;
+            this->num = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(num));
+            this->num->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3345,7 +3403,7 @@ class ignore_cgio_class : public CovergroupItemOption_class {
     public:
         ignore_cgio_class(Expression item_bool_expr){
             this->item_bool_expr = item_bool_expr;
-            if(item_bool_expr){
+            if(item_bool_expr){ // non-terminal might be null due to error reduction rules
                 this->item_bool_expr->set_parent(this);
             }
         }
@@ -3369,7 +3427,7 @@ class illegal_cgio_class : public CovergroupItemOption_class {
     public:
         illegal_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3393,7 +3451,7 @@ class no_collect_cgio_class : public CovergroupItemOption_class {
     public:
         no_collect_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3417,7 +3475,7 @@ class no_trace_cgio_class : public CovergroupItemOption_class {
     public:
         no_trace_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3437,10 +3495,11 @@ auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption;
 
 class num_of_buckets_cgio_class : public CovergroupItemOption_class {
     protected:
-        Symbol_ num;
+        ast::p_tree_node num;
     public:
         num_of_buckets_cgio_class(Symbol_ num){
-            this->num = num;
+            this->num = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(num));
+            this->num->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3462,7 +3521,7 @@ class per_instance_cgio_class : public CovergroupItemOption_class {
     public:
         per_instance_cgio_class(Expression bool_litral){
             this->bool_litral = bool_litral;
-            if(bool_litral){
+            if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->bool_litral->set_parent(this);
             }
         }
@@ -3539,10 +3598,11 @@ auto radix_bin_cgio() -> CovergroupItemOption;
 
 class text_cgio_class : public CovergroupItemOption_class {
     protected:
-        Symbol_ description;
+        ast::p_tree_node description;
     public:
         text_cgio_class(Symbol_ description){
-            this->description = description;
+            this->description = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(description));
+            this->description->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3560,10 +3620,11 @@ auto text_cgio(Symbol_ description) -> CovergroupItemOption;
 
 class weight_cgio_class : public CovergroupItemOption_class {
     protected:
-        Symbol_ value;
+        ast::p_tree_node value;
     public:
         weight_cgio_class(Symbol_ value){
-            this->value = value;
+            this->value = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(value));
+            this->value->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3585,7 +3646,7 @@ class when_cgio_class : public CovergroupItemOption_class {
     public:
         when_cgio_class(Expression bool_expr){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
         }
@@ -3643,10 +3704,11 @@ auto false_literal_expr() -> Expression;
 
 class id_expr_class : public Expression_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
     public:
         id_expr_class(Symbol_ id){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3669,11 +3731,11 @@ class enum_type_expr_class : public Expression_class {
     public:
         enum_type_expr_class(Expressions enum_list_expr, Expression width_modifier_expr){
             this->enum_list_expr = enum_list_expr;
-            if(enum_list_expr){
+            if(enum_list_expr){ // non-terminal might be null due to error reduction rules
                 this->enum_list_expr->set_parent(this);
             }
             this->width_modifier_expr = width_modifier_expr;
-            if(width_modifier_expr){
+            if(width_modifier_expr){ // non-terminal might be null due to error reduction rules
                 this->width_modifier_expr->set_parent(this);
             }
         }
@@ -3693,13 +3755,14 @@ auto enum_type_expr(Expressions enum_list_expr, Expression width_modifier_expr) 
 
 class enum_list_item_class : public Expression_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Expression expr;
     public:
         enum_list_item_class(Symbol_ id, Expression expr){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->expr = expr;
-            if(expr){
+            if(expr){ // non-terminal might be null due to error reduction rules
                 this->expr->set_parent(this);
             }
         }
@@ -3723,7 +3786,7 @@ class bitwise_not_expr_class : public Expression_class {
     public:
         bitwise_not_expr_class(Expression e){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
         }
@@ -3748,11 +3811,11 @@ class bitwise_and_expr_class : public Expression_class {
     public:
         bitwise_and_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3777,11 +3840,11 @@ class bitwise_or_expr_class : public Expression_class {
     public:
         bitwise_or_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3806,11 +3869,11 @@ class bitwise_xor_expr_class : public Expression_class {
     public:
         bitwise_xor_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3835,11 +3898,11 @@ class shift_left_expr_class : public Expression_class {
     public:
         shift_left_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3864,11 +3927,11 @@ class right_left_expr_class : public Expression_class {
     public:
         right_left_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3892,7 +3955,7 @@ class logical_not_expr_class : public Expression_class {
     public:
         logical_not_expr_class(Expression e){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
         }
@@ -3917,11 +3980,11 @@ class logical_and_expr_class : public Expression_class {
     public:
         logical_and_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3946,11 +4009,11 @@ class logical_or_expr_class : public Expression_class {
     public:
         logical_or_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -3975,11 +4038,11 @@ class implication_expr_class : public Expression_class {
     public:
         implication_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4003,7 +4066,7 @@ class unary_positive_expr_class : public Expression_class {
     public:
         unary_positive_expr_class(Expression e){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
         }
@@ -4027,7 +4090,7 @@ class unary_negative_expr_class : public Expression_class {
     public:
         unary_negative_expr_class(Expression e){
             this->e = e;
-            if(e){
+            if(e){ // non-terminal might be null due to error reduction rules
                 this->e->set_parent(this);
             }
         }
@@ -4052,11 +4115,11 @@ class binary_add_expr_class : public Expression_class {
     public:
         binary_add_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4081,11 +4144,11 @@ class binary_sub_expr_class : public Expression_class {
     public:
         binary_sub_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4110,11 +4173,11 @@ class binary_mul_expr_class : public Expression_class {
     public:
         binary_mul_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4139,11 +4202,11 @@ class binary_div_expr_class : public Expression_class {
     public:
         binary_div_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4168,11 +4231,11 @@ class binary_remainder_expr_class : public Expression_class {
     public:
         binary_remainder_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4197,11 +4260,11 @@ class less_then_expr_class : public Expression_class {
     public:
         less_then_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4226,11 +4289,11 @@ class greater_then_expr_class : public Expression_class {
     public:
         greater_then_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4255,11 +4318,11 @@ class less_then_or_equal_expr_class : public Expression_class {
     public:
         less_then_or_equal_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4284,11 +4347,11 @@ class greater_then_or_equal_expr_class : public Expression_class {
     public:
         greater_then_or_equal_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4313,11 +4376,11 @@ class equality_expr_class : public Expression_class {
     public:
         equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4342,11 +4405,11 @@ class non_equality_expr_class : public Expression_class {
     public:
         non_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4371,11 +4434,11 @@ class hdl_equality_expr_class : public Expression_class {
     public:
         hdl_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4400,11 +4463,11 @@ class hdl_non_equality_expr_class : public Expression_class {
     public:
         hdl_non_equality_expr_class(Expression e1, Expression e2){
             this->e1 = e1;
-            if(e1){
+            if(e1){ // non-terminal might be null due to error reduction rules
                 this->e1->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -4429,11 +4492,11 @@ class str_match_expr_class : public Expression_class {
     public:
         str_match_expr_class(Expression str_expr, Expression pattern_expr){
             this->str_expr = str_expr;
-            if(str_expr){
+            if(str_expr){ // non-terminal might be null due to error reduction rules
                 this->str_expr->set_parent(this);
             }
             this->pattern_expr = pattern_expr;
-            if(pattern_expr){
+            if(pattern_expr){ // non-terminal might be null due to error reduction rules
                 this->pattern_expr->set_parent(this);
             }
         }
@@ -4458,11 +4521,11 @@ class str_does_not_match_expr_class : public Expression_class {
     public:
         str_does_not_match_expr_class(Expression str_expr, Expression pattern_expr){
             this->str_expr = str_expr;
-            if(str_expr){
+            if(str_expr){ // non-terminal might be null due to error reduction rules
                 this->str_expr->set_parent(this);
             }
             this->pattern_expr = pattern_expr;
-            if(pattern_expr){
+            if(pattern_expr){ // non-terminal might be null due to error reduction rules
                 this->pattern_expr->set_parent(this);
             }
         }
@@ -4487,11 +4550,11 @@ class in_expr_class : public Expression_class {
     public:
         in_expr_class(Expression exp, Expression inside){
             this->exp = exp;
-            if(exp){
+            if(exp){ // non-terminal might be null due to error reduction rules
                 this->exp->set_parent(this);
             }
             this->inside = inside;
-            if(inside){
+            if(inside){ // non-terminal might be null due to error reduction rules
                 this->inside->set_parent(this);
             }
         }
@@ -4516,11 +4579,11 @@ class type_introspec_expr_class : public Expression_class {
     public:
         type_introspec_expr_class(Expression field_id, DataType type_id){
             this->field_id = field_id;
-            if(field_id){
+            if(field_id){ // non-terminal might be null due to error reduction rules
                 this->field_id->set_parent(this);
             }
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
         }
@@ -4545,11 +4608,11 @@ class type_introspec_negation_expr_class : public Expression_class {
     public:
         type_introspec_negation_expr_class(Expression field_id, DataType type_id){
             this->field_id = field_id;
-            if(field_id){
+            if(field_id){ // non-terminal might be null due to error reduction rules
                 this->field_id->set_parent(this);
             }
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
         }
@@ -4574,11 +4637,11 @@ class in_enum_expr_class : public Expression_class {
     public:
         in_enum_expr_class(Expression exp, DataType inside){
             this->exp = exp;
-            if(exp){
+            if(exp){ // non-terminal might be null due to error reduction rules
                 this->exp->set_parent(this);
             }
             this->inside = inside;
-            if(inside){
+            if(inside){ // non-terminal might be null due to error reduction rules
                 this->inside->set_parent(this);
             }
         }
@@ -4602,7 +4665,7 @@ class list_index_item_expr_class : public Expression_class {
     public:
         list_index_item_expr_class(Expression idx_expr){
             this->idx_expr = idx_expr;
-            if(idx_expr){
+            if(idx_expr){ // non-terminal might be null due to error reduction rules
                 this->idx_expr->set_parent(this);
             }
         }
@@ -4627,11 +4690,11 @@ class list_index_expr_class : public Expression_class {
     public:
         list_index_expr_class(Expression base_id, Expression idx_expr){
             this->base_id = base_id;
-            if(base_id){
+            if(base_id){ // non-terminal might be null due to error reduction rules
                 this->base_id->set_parent(this);
             }
             this->idx_expr = idx_expr;
-            if(idx_expr){
+            if(idx_expr){ // non-terminal might be null due to error reduction rules
                 this->idx_expr->set_parent(this);
             }
         }
@@ -4656,11 +4719,11 @@ class list_slicing_expr_class : public Expression_class {
     public:
         list_slicing_expr_class(Expression list_exp, Expression range_expr){
             this->list_exp = list_exp;
-            if(list_exp){
+            if(list_exp){ // non-terminal might be null due to error reduction rules
                 this->list_exp->set_parent(this);
             }
             this->range_expr = range_expr;
-            if(range_expr){
+            if(range_expr){ // non-terminal might be null due to error reduction rules
                 this->range_expr->set_parent(this);
             }
         }
@@ -4685,11 +4748,11 @@ class bit_slicing_expr_class : public Expression_class {
     public:
         bit_slicing_expr_class(Expression list_exp, Expression bit_slice_expr){
             this->list_exp = list_exp;
-            if(list_exp){
+            if(list_exp){ // non-terminal might be null due to error reduction rules
                 this->list_exp->set_parent(this);
             }
             this->bit_slice_expr = bit_slice_expr;
-            if(bit_slice_expr){
+            if(bit_slice_expr){ // non-terminal might be null due to error reduction rules
                 this->bit_slice_expr->set_parent(this);
             }
         }
@@ -4713,7 +4776,7 @@ class list_concat_expr_class : public Expression_class {
     public:
         list_concat_expr_class(Expressions list_concat_items){
             this->list_concat_items = list_concat_items;
-            if(list_concat_items){
+            if(list_concat_items){ // non-terminal might be null due to error reduction rules
                 this->list_concat_items->set_parent(this);
             }
         }
@@ -4737,7 +4800,7 @@ class bit_concat_expr_class : public Expression_class {
     public:
         bit_concat_expr_class(Expressions bit_concat_items){
             this->bit_concat_items = bit_concat_items;
-            if(bit_concat_items){
+            if(bit_concat_items){ // non-terminal might be null due to error reduction rules
                 this->bit_concat_items->set_parent(this);
             }
         }
@@ -4762,11 +4825,11 @@ class bit_slice_expr_class : public Expression_class {
     public:
         bit_slice_expr_class(Expression bottom, Expression top){
             this->bottom = bottom;
-            if(bottom){
+            if(bottom){ // non-terminal might be null due to error reduction rules
                 this->bottom->set_parent(this);
             }
             this->top = top;
-            if(top){
+            if(top){ // non-terminal might be null due to error reduction rules
                 this->top->set_parent(this);
             }
         }
@@ -4791,11 +4854,11 @@ class range_modifier_item_expr_class : public Expression_class {
     public:
         range_modifier_item_expr_class(Expression bottom, Expression top){
             this->bottom = bottom;
-            if(bottom){
+            if(bottom){ // non-terminal might be null due to error reduction rules
                 this->bottom->set_parent(this);
             }
             this->top = top;
-            if(top){
+            if(top){ // non-terminal might be null due to error reduction rules
                 this->top->set_parent(this);
             }
         }
@@ -4819,7 +4882,7 @@ class range_modifier_expr_class : public Expression_class {
     public:
         range_modifier_expr_class(Expressions range_items){
             this->range_items = range_items;
-            if(range_items){
+            if(range_items){ // non-terminal might be null due to error reduction rules
                 this->range_items->set_parent(this);
             }
         }
@@ -4843,7 +4906,7 @@ class ranges_modifier_expr_class : public Expression_class {
     public:
         ranges_modifier_expr_class(Expressions ranges){
             this->ranges = ranges;
-            if(ranges){
+            if(ranges){ // non-terminal might be null due to error reduction rules
                 this->ranges->set_parent(this);
             }
         }
@@ -4867,7 +4930,7 @@ class sized_bits_scalar_expr_class : public Expression_class {
     public:
         sized_bits_scalar_expr_class(Expression width_expr){
             this->width_expr = width_expr;
-            if(width_expr){
+            if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->width_expr->set_parent(this);
             }
         }
@@ -4891,7 +4954,7 @@ class sized_bytes_scalar_expr_class : public Expression_class {
     public:
         sized_bytes_scalar_expr_class(Expression width_expr){
             this->width_expr = width_expr;
-            if(width_expr){
+            if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->width_expr->set_parent(this);
             }
         }
@@ -4912,17 +4975,18 @@ auto sized_bytes_scalar_expr(Expression width_expr) -> Expression;
 class new_allocate_expr_class : public Expression_class {
     protected:
         Expression struct_type_block;
-        Symbol_ scoped_name;
+        ast::p_tree_node scoped_name;
         ActionBlock actions;
     public:
         new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions){
             this->struct_type_block = struct_type_block;
-            if(struct_type_block){
+            if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->struct_type_block->set_parent(this);
             }
-            this->scoped_name = scoped_name;
+            this->scoped_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(scoped_name));
+            this->scoped_name->set_parent(this);
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -4947,11 +5011,11 @@ class new_nameless_allocate_expr_class : public Expression_class {
     public:
         new_nameless_allocate_expr_class(Expression struct_type_block, ActionBlock actions){
             this->struct_type_block = struct_type_block;
-            if(struct_type_block){
+            if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->struct_type_block->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -4976,11 +5040,11 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
     public:
         struct_type_expr_with_opt_action_block_class(Expression struct_id_expr, Expression opt_action_block_expt){
             this->struct_id_expr = struct_id_expr;
-            if(struct_id_expr){
+            if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->struct_id_expr->set_parent(this);
             }
             this->opt_action_block_expt = opt_action_block_expt;
-            if(opt_action_block_expt){
+            if(opt_action_block_expt){ // non-terminal might be null due to error reduction rules
                 this->opt_action_block_expt->set_parent(this);
             }
         }
@@ -5005,11 +5069,11 @@ class named_action_block_class : public Expression_class {
     public:
         named_action_block_class(Expression struct_id_expr, Actions action_block){
             this->struct_id_expr = struct_id_expr;
-            if(struct_id_expr){
+            if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->struct_id_expr->set_parent(this);
             }
             this->action_block = action_block;
-            if(action_block){
+            if(action_block){ // non-terminal might be null due to error reduction rules
                 this->action_block->set_parent(this);
             }
         }
@@ -5034,11 +5098,11 @@ class struct_type_id_class : public Expression_class {
     public:
         struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr){
             this->struct_type_modifiers = struct_type_modifiers;
-            if(struct_type_modifiers){
+            if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
                 this->struct_type_modifiers->set_parent(this);
             }
             this->struct_id_expr = struct_id_expr;
-            if(struct_id_expr){
+            if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->struct_id_expr->set_parent(this);
             }
         }
@@ -5063,11 +5127,11 @@ class struct_type_modifier_class : public Expression_class {
     public:
         struct_type_modifier_class(Expression value, Expression id){
             this->value = value;
-            if(value){
+            if(value){ // non-terminal might be null due to error reduction rules
                 this->value->set_parent(this);
             }
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
         }
@@ -5091,7 +5155,7 @@ class defined_type_identifier_expr_class : public Expression_class {
     public:
         defined_type_identifier_expr_class(Expressions modifiers){
             this->modifiers = modifiers;
-            if(modifiers){
+            if(modifiers){ // non-terminal might be null due to error reduction rules
                 this->modifiers->set_parent(this);
             }
         }
@@ -5115,7 +5179,7 @@ class struct_hier_ref_expr_class : public Expression_class {
     public:
         struct_hier_ref_expr_class(Expressions hiers){
             this->hiers = hiers;
-            if(hiers){
+            if(hiers){ // non-terminal might be null due to error reduction rules
                 this->hiers->set_parent(this);
             }
         }
@@ -5135,10 +5199,11 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression;
 
 class hdl_path_name_expr_class : public Expression_class {
     protected:
-        Symbol_ hdl_hier_ref;
+        ast::p_tree_node hdl_hier_ref;
     public:
         hdl_path_name_expr_class(Symbol_ hdl_hier_ref){
-            this->hdl_hier_ref = hdl_hier_ref;
+            this->hdl_hier_ref = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(hdl_hier_ref));
+            this->hdl_hier_ref->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5162,15 +5227,15 @@ class ternary_assign_expr_class : public Expression_class {
     public:
         ternary_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr){
             this->bool_exp = bool_exp;
-            if(bool_exp){
+            if(bool_exp){ // non-terminal might be null due to error reduction rules
                 this->bool_exp->set_parent(this);
             }
             this->true_expr = true_expr;
-            if(true_expr){
+            if(true_expr){ // non-terminal might be null due to error reduction rules
                 this->true_expr->set_parent(this);
             }
             this->false_expr = false_expr;
-            if(false_expr){
+            if(false_expr){ // non-terminal might be null due to error reduction rules
                 this->false_expr->set_parent(this);
             }
         }
@@ -5194,7 +5259,7 @@ class hwp_access_expr_class : public Expression_class {
     public:
         hwp_access_expr_class(Expression base){
             this->base = base;
-            if(base){
+            if(base){ // non-terminal might be null due to error reduction rules
                 this->base->set_parent(this);
             }
         }
@@ -5218,7 +5283,7 @@ class cast_operator_expr_class : public Expression_class {
     public:
         cast_operator_expr_class(DataType dest_type_expr){
             this->dest_type_expr = dest_type_expr;
-            if(dest_type_expr){
+            if(dest_type_expr){ // non-terminal might be null due to error reduction rules
                 this->dest_type_expr->set_parent(this);
             }
         }
@@ -5262,11 +5327,11 @@ class method_call_expr_class : public Expression_class {
     public:
         method_call_expr_class(Expression base, Expressions arguments){
             this->base = base;
-            if(base){
+            if(base){ // non-terminal might be null due to error reduction rules
                 this->base->set_parent(this);
             }
             this->arguments = arguments;
-            if(arguments){
+            if(arguments){ // non-terminal might be null due to error reduction rules
                 this->arguments->set_parent(this);
             }
         }
@@ -5290,7 +5355,7 @@ class constraint_expr_class : public Expression_class {
     public:
         constraint_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
         }
@@ -5314,7 +5379,7 @@ class soft_constraint_expr_class : public Expression_class {
     public:
         soft_constraint_expr_class(Expression bool_expr){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
         }
@@ -5338,7 +5403,7 @@ class all_of_constraint_expr_class : public Expression_class {
     public:
         all_of_constraint_expr_class(Expressions constraints){
             this->constraints = constraints;
-            if(constraints){
+            if(constraints){ // non-terminal might be null due to error reduction rules
                 this->constraints->set_parent(this);
             }
         }
@@ -5364,15 +5429,15 @@ class list_items_constraint_expr_class : public Expression_class {
     public:
         list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expressions constraints){
             this->item_name = item_name;
-            if(item_name){
+            if(item_name){ // non-terminal might be null due to error reduction rules
                 this->item_name->set_parent(this);
             }
             this->gen_item = gen_item;
-            if(gen_item){
+            if(gen_item){ // non-terminal might be null due to error reduction rules
                 this->gen_item->set_parent(this);
             }
             this->constraints = constraints;
-            if(constraints){
+            if(constraints){ // non-terminal might be null due to error reduction rules
                 this->constraints->set_parent(this);
             }
         }
@@ -5397,11 +5462,11 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
     public:
         field_type_constraint_by_type_expr_class(Expression field_, DataType type_){
             this->field_ = field_;
-            if(field_){
+            if(field_){ // non-terminal might be null due to error reduction rules
                 this->field_->set_parent(this);
             }
             this->type_ = type_;
-            if(type_){
+            if(type_){ // non-terminal might be null due to error reduction rules
                 this->type_->set_parent(this);
             }
         }
@@ -5426,11 +5491,11 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
     public:
         field_type_constraint_by_field_expr_class(Expression field_, Expression field){
             this->field_ = field_;
-            if(field_){
+            if(field_){ // non-terminal might be null due to error reduction rules
                 this->field_->set_parent(this);
             }
             this->field = field;
-            if(field){
+            if(field){ // non-terminal might be null due to error reduction rules
                 this->field->set_parent(this);
             }
         }
@@ -5455,11 +5520,11 @@ class distribution_constraint_expr_class : public Expression_class {
     public:
         distribution_constraint_expr_class(Expression gen_item, Cases distribution){
             this->gen_item = gen_item;
-            if(gen_item){
+            if(gen_item){ // non-terminal might be null due to error reduction rules
                 this->gen_item->set_parent(this);
             }
             this->distribution = distribution;
-            if(distribution){
+            if(distribution){ // non-terminal might be null due to error reduction rules
                 this->distribution->set_parent(this);
             }
         }
@@ -5484,11 +5549,11 @@ class distribution_branch_case_class : public Case_class {
     public:
         distribution_branch_case_class(Expression int_, Expression value){
             this->int_ = int_;
-            if(int_){
+            if(int_){ // non-terminal might be null due to error reduction rules
                 this->int_->set_parent(this);
             }
             this->value = value;
-            if(value){
+            if(value){ // non-terminal might be null due to error reduction rules
                 this->value->set_parent(this);
             }
         }
@@ -5546,10 +5611,11 @@ auto it_expr() -> Expression;
 
 class str_expr_class : public Expression_class {
     protected:
-        Symbol_ str;
+        ast::p_tree_node str;
     public:
         str_expr_class(Symbol_ str){
-            this->str = str;
+            this->str = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(str));
+            this->str->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5567,10 +5633,11 @@ auto str_expr(Symbol_ str) -> Expression;
 
 class int_expr_class : public Expression_class {
     protected:
-        Symbol_ int_;
+        ast::p_tree_node int_;
     public:
         int_expr_class(Symbol_ int_){
-            this->int_ = int_;
+            this->int_ = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(int_));
+            this->int_->set_parent(this);
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5593,11 +5660,11 @@ class enum_dt_class : public DataType_class {
     public:
         enum_dt_class(Expressions enum_list_items, Expression width_modifier){
             this->enum_list_items = enum_list_items;
-            if(enum_list_items){
+            if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->enum_list_items->set_parent(this);
             }
             this->width_modifier = width_modifier;
-            if(width_modifier){
+            if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->width_modifier->set_parent(this);
             }
         }
@@ -5623,15 +5690,15 @@ class scalar_subtype_dt_class : public DataType_class {
     public:
         scalar_subtype_dt_class(DataType predefined_base_type, Expression range_modifier, Expression width_modifier){
             this->predefined_base_type = predefined_base_type;
-            if(predefined_base_type){
+            if(predefined_base_type){ // non-terminal might be null due to error reduction rules
                 this->predefined_base_type->set_parent(this);
             }
             this->range_modifier = range_modifier;
-            if(range_modifier){
+            if(range_modifier){ // non-terminal might be null due to error reduction rules
                 this->range_modifier->set_parent(this);
             }
             this->width_modifier = width_modifier;
-            if(width_modifier){
+            if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->width_modifier->set_parent(this);
             }
         }
@@ -5656,11 +5723,11 @@ class defined_dt_class : public DataType_class {
     public:
         defined_dt_class(Expressions enum_list_items, Expression width_modifier){
             this->enum_list_items = enum_list_items;
-            if(enum_list_items){
+            if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->enum_list_items->set_parent(this);
             }
             this->width_modifier = width_modifier;
-            if(width_modifier){
+            if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->width_modifier->set_parent(this);
             }
         }
@@ -5680,13 +5747,14 @@ auto defined_dt(Expressions enum_list_items, Expression width_modifier) -> DataT
 
 class defined_subtype_dt_class : public DataType_class {
     protected:
-        Symbol_ id;
+        ast::p_tree_node id;
         Expression range_modifier;
     public:
         defined_subtype_dt_class(Symbol_ id, Expression range_modifier){
-            this->id = id;
+            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id->set_parent(this);
             this->range_modifier = range_modifier;
-            if(range_modifier){
+            if(range_modifier){ // non-terminal might be null due to error reduction rules
                 this->range_modifier->set_parent(this);
             }
         }
@@ -5712,15 +5780,15 @@ class predefined_subtype_dt_class : public DataType_class {
     public:
         predefined_subtype_dt_class(DataType pred_type, Expression range_modifier, Expression width_modifier){
             this->pred_type = pred_type;
-            if(pred_type){
+            if(pred_type){ // non-terminal might be null due to error reduction rules
                 this->pred_type->set_parent(this);
             }
             this->range_modifier = range_modifier;
-            if(range_modifier){
+            if(range_modifier){ // non-terminal might be null due to error reduction rules
                 this->range_modifier->set_parent(this);
             }
             this->width_modifier = width_modifier;
-            if(width_modifier){
+            if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->width_modifier->set_parent(this);
             }
         }
@@ -5744,7 +5812,7 @@ class defined_struct_type_dt_class : public DataType_class {
     public:
         defined_struct_type_dt_class(Expressions struct_type_modifiers){
             this->struct_type_modifiers = struct_type_modifiers;
-            if(struct_type_modifiers){
+            if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
                 this->struct_type_modifiers->set_parent(this);
             }
         }
@@ -5768,7 +5836,7 @@ class list_type_dt_class : public DataType_class {
     public:
         list_type_dt_class(DataType base_type){
             this->base_type = base_type;
-            if(base_type){
+            if(base_type){ // non-terminal might be null due to error reduction rules
                 this->base_type->set_parent(this);
             }
         }
@@ -5788,13 +5856,14 @@ auto list_type_dt(DataType base_type) -> DataType;
 
 class assoc_list_type_dt_class : public DataType_class {
     protected:
-        Symbol_ key_id;
+        ast::p_tree_node key_id;
         DataType base_type;
     public:
         assoc_list_type_dt_class(Symbol_ key_id, DataType base_type){
-            this->key_id = key_id;
+            this->key_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(key_id));
+            this->key_id->set_parent(this);
             this->base_type = base_type;
-            if(base_type){
+            if(base_type){ // non-terminal might be null due to error reduction rules
                 this->base_type->set_parent(this);
             }
         }
@@ -5985,18 +6054,19 @@ auto no_expr() -> Expression;
 
 class var_decl_act_class : public Action_class {
     protected:
-        Symbol_ name;
+        ast::p_tree_node name;
         DataType type_id;
         Expression init_expr;
     public:
         var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr){
-            this->name = name;
+            this->name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(name));
+            this->name->set_parent(this);
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
             this->init_expr = init_expr;
-            if(init_expr){
+            if(init_expr){ // non-terminal might be null due to error reduction rules
                 this->init_expr->set_parent(this);
             }
         }
@@ -6021,11 +6091,11 @@ class var_assign_act_class : public Action_class {
     public:
         var_assign_act_class(Expression id_expr, Expression assign_expr){
             this->id_expr = id_expr;
-            if(id_expr){
+            if(id_expr){ // non-terminal might be null due to error reduction rules
                 this->id_expr->set_parent(this);
             }
             this->assign_expr = assign_expr;
-            if(assign_expr){
+            if(assign_expr){ // non-terminal might be null due to error reduction rules
                 this->assign_expr->set_parent(this);
             }
         }
@@ -6050,11 +6120,11 @@ class compound_add_act_class : public Action_class {
     public:
         compound_add_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6079,11 +6149,11 @@ class compound_sub_act_class : public Action_class {
     public:
         compound_sub_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6108,11 +6178,11 @@ class compound_mul_act_class : public Action_class {
     public:
         compound_mul_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6137,11 +6207,11 @@ class compound_div_act_class : public Action_class {
     public:
         compound_div_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6166,11 +6236,11 @@ class compound_mod_act_class : public Action_class {
     public:
         compound_mod_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6195,11 +6265,11 @@ class compound_bool_and_act_class : public Action_class {
     public:
         compound_bool_and_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6224,11 +6294,11 @@ class compound_bool_or_act_class : public Action_class {
     public:
         compound_bool_or_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6253,11 +6323,11 @@ class compound_bit_and_act_class : public Action_class {
     public:
         compound_bit_and_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6282,11 +6352,11 @@ class compound_bit_or_act_class : public Action_class {
     public:
         compound_bit_or_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6311,11 +6381,11 @@ class compound_bit_xor_act_class : public Action_class {
     public:
         compound_bit_xor_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6340,11 +6410,11 @@ class compound_shift_left_act_class : public Action_class {
     public:
         compound_shift_left_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6369,11 +6439,11 @@ class compound_right_left_act_class : public Action_class {
     public:
         compound_right_left_act_class(Expression id, Expression e2){
             this->id = id;
-            if(id){
+            if(id){ // non-terminal might be null due to error reduction rules
                 this->id->set_parent(this);
             }
             this->e2 = e2;
-            if(e2){
+            if(e2){ // non-terminal might be null due to error reduction rules
                 this->e2->set_parent(this);
             }
         }
@@ -6398,11 +6468,11 @@ class force_act_class : public Action_class {
     public:
         force_act_class(Expression hdl_or_port, Expression exp){
             this->hdl_or_port = hdl_or_port;
-            if(hdl_or_port){
+            if(hdl_or_port){ // non-terminal might be null due to error reduction rules
                 this->hdl_or_port->set_parent(this);
             }
             this->exp = exp;
-            if(exp){
+            if(exp){ // non-terminal might be null due to error reduction rules
                 this->exp->set_parent(this);
             }
         }
@@ -6426,7 +6496,7 @@ class release_act_class : public Action_class {
     public:
         release_act_class(Expression hdl_or_port){
             this->hdl_or_port = hdl_or_port;
-            if(hdl_or_port){
+            if(hdl_or_port){ // non-terminal might be null due to error reduction rules
                 this->hdl_or_port->set_parent(this);
             }
         }
@@ -6452,15 +6522,15 @@ class if_then_else_act_class : public Action_class {
     public:
         if_then_else_act_class(Expression condition, ActionBlock actions, ActionBlock else_clause){
             this->condition = condition;
-            if(condition){
+            if(condition){ // non-terminal might be null due to error reduction rules
                 this->condition->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
             this->else_clause = else_clause;
-            if(else_clause){
+            if(else_clause){ // non-terminal might be null due to error reduction rules
                 this->else_clause->set_parent(this);
             }
         }
@@ -6486,15 +6556,15 @@ class non_term_if_then_else_act_class : public Action_class {
     public:
         non_term_if_then_else_act_class(Expression condition, ActionBlock actions, Action else_clause){
             this->condition = condition;
-            if(condition){
+            if(condition){ // non-terminal might be null due to error reduction rules
                 this->condition->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
             this->else_clause = else_clause;
-            if(else_clause){
+            if(else_clause){ // non-terminal might be null due to error reduction rules
                 this->else_clause->set_parent(this);
             }
         }
@@ -6518,7 +6588,7 @@ class case_bool_act_class : public Action_class {
     public:
         case_bool_act_class(Cases bool_case_branch_items){
             this->bool_case_branch_items = bool_case_branch_items;
-            if(bool_case_branch_items){
+            if(bool_case_branch_items){ // non-terminal might be null due to error reduction rules
                 this->bool_case_branch_items->set_parent(this);
             }
         }
@@ -6543,11 +6613,11 @@ class case_bool_branch_item_case_class : public Case_class {
     public:
         case_bool_branch_item_case_class(Expression bool_exp, ActionBlock actions){
             this->bool_exp = bool_exp;
-            if(bool_exp){
+            if(bool_exp){ // non-terminal might be null due to error reduction rules
                 this->bool_exp->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6572,11 +6642,11 @@ class case_labeled_act_class : public Action_class {
     public:
         case_labeled_act_class(Expression exp, Cases labeled_case_branch_items){
             this->exp = exp;
-            if(exp){
+            if(exp){ // non-terminal might be null due to error reduction rules
                 this->exp->set_parent(this);
             }
             this->labeled_case_branch_items = labeled_case_branch_items;
-            if(labeled_case_branch_items){
+            if(labeled_case_branch_items){ // non-terminal might be null due to error reduction rules
                 this->labeled_case_branch_items->set_parent(this);
             }
         }
@@ -6601,11 +6671,11 @@ class case_labeled_branch_item_case_class : public Case_class {
     public:
         case_labeled_branch_item_case_class(Expression label_exp, ActionBlock actions){
             this->label_exp = label_exp;
-            if(label_exp){
+            if(label_exp){ // non-terminal might be null due to error reduction rules
                 this->label_exp->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6629,7 +6699,7 @@ class default_case_branch_item_case_class : public Case_class {
     public:
         default_case_branch_item_case_class(ActionBlock actions){
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6653,7 +6723,7 @@ class print_call_act_class : public Action_class {
     public:
         print_call_act_class(Expressions values){
             this->values = values;
-            if(values){
+            if(values){ // non-terminal might be null due to error reduction rules
                 this->values->set_parent(this);
             }
         }
@@ -6677,7 +6747,7 @@ class method_call_act_class : public Action_class {
     public:
         method_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
-            if(method_call_expr){
+            if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->method_call_expr->set_parent(this);
             }
         }
@@ -6701,7 +6771,7 @@ class start_tcm_call_act_class : public Action_class {
     public:
         start_tcm_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
-            if(method_call_expr){
+            if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->method_call_expr->set_parent(this);
             }
         }
@@ -6725,7 +6795,7 @@ class compute_method_call_act_class : public Action_class {
     public:
         compute_method_call_act_class(Expression method_call_expr){
             this->method_call_expr = method_call_expr;
-            if(method_call_expr){
+            if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->method_call_expr->set_parent(this);
             }
         }
@@ -6749,7 +6819,7 @@ class return_act_class : public Action_class {
     public:
         return_act_class(Expression exp){
             this->exp = exp;
-            if(exp){
+            if(exp){ // non-terminal might be null due to error reduction rules
                 this->exp->set_parent(this);
             }
         }
@@ -6774,11 +6844,11 @@ class while_loop_act_class : public Action_class {
     public:
         while_loop_act_class(Expression bool_expr, ActionBlock actions){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6803,11 +6873,11 @@ class repeat_until_loop_act_class : public Action_class {
     public:
         repeat_until_loop_act_class(Expression bool_expr, ActionBlock actions){
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6829,31 +6899,32 @@ class for_each_loop_act_class : public Action_class {
     protected:
         DataType type_id;
         Expression iterated_name;
-        Boolean is_reverese;
+        ast::p_tree_node is_reverese;
         Expression list_exp;
         Expression idx_exp;
         ActionBlock actions;
     public:
         for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions){
             this->type_id = type_id;
-            if(type_id){
+            if(type_id){ // non-terminal might be null due to error reduction rules
                 this->type_id->set_parent(this);
             }
             this->iterated_name = iterated_name;
-            if(iterated_name){
+            if(iterated_name){ // non-terminal might be null due to error reduction rules
                 this->iterated_name->set_parent(this);
             }
-            this->is_reverese = is_reverese;
+            this->is_reverese = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_reverese));
+            this->is_reverese->set_parent(this);
             this->list_exp = list_exp;
-            if(list_exp){
+            if(list_exp){ // non-terminal might be null due to error reduction rules
                 this->list_exp->set_parent(this);
             }
             this->idx_exp = idx_exp;
-            if(idx_exp){
+            if(idx_exp){ // non-terminal might be null due to error reduction rules
                 this->idx_exp->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6873,30 +6944,32 @@ auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_re
 
 class for_range_loop_act_class : public Action_class {
     protected:
-        Symbol_ var_id;
+        ast::p_tree_node var_id;
         Expression from_expr;
         Expression to_expr;
         Expression step_expr;
-        Boolean is_down;
+        ast::p_tree_node is_down;
         ActionBlock actions;
     public:
         for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions){
-            this->var_id = var_id;
+            this->var_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(var_id));
+            this->var_id->set_parent(this);
             this->from_expr = from_expr;
-            if(from_expr){
+            if(from_expr){ // non-terminal might be null due to error reduction rules
                 this->from_expr->set_parent(this);
             }
             this->to_expr = to_expr;
-            if(to_expr){
+            if(to_expr){ // non-terminal might be null due to error reduction rules
                 this->to_expr->set_parent(this);
             }
             this->step_expr = step_expr;
-            if(step_expr){
+            if(step_expr){ // non-terminal might be null due to error reduction rules
                 this->step_expr->set_parent(this);
             }
-            this->is_down = is_down;
+            this->is_down = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_down));
+            this->is_down->set_parent(this);
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6923,19 +6996,19 @@ class for_loop_act_class : public Action_class {
     public:
         for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions){
             this->init_act = init_act;
-            if(init_act){
+            if(init_act){ // non-terminal might be null due to error reduction rules
                 this->init_act->set_parent(this);
             }
             this->bool_expr = bool_expr;
-            if(bool_expr){
+            if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->bool_expr->set_parent(this);
             }
             this->step_act = step_act;
-            if(step_act){
+            if(step_act){ // non-terminal might be null due to error reduction rules
                 this->step_act->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6961,15 +7034,15 @@ class for_each_line_in_file_act_class : public Action_class {
     public:
         for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, ActionBlock actions){
             this->line_it_name = line_it_name;
-            if(line_it_name){
+            if(line_it_name){ // non-terminal might be null due to error reduction rules
                 this->line_it_name->set_parent(this);
             }
             this->file_path_expr = file_path_expr;
-            if(file_path_expr){
+            if(file_path_expr){ // non-terminal might be null due to error reduction rules
                 this->file_path_expr->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -6995,15 +7068,15 @@ class for_each_file_in_files_act_class : public Action_class {
     public:
         for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions){
             this->line_it_name = line_it_name;
-            if(line_it_name){
+            if(line_it_name){ // non-terminal might be null due to error reduction rules
                 this->line_it_name->set_parent(this);
             }
             this->file_pattern_exp = file_pattern_exp;
-            if(file_pattern_exp){
+            if(file_pattern_exp){ // non-terminal might be null due to error reduction rules
                 this->file_pattern_exp->set_parent(this);
             }
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -7065,7 +7138,7 @@ class emit_act_class : public Action_class {
     public:
         emit_act_class(Expression event_id){
             this->event_id = event_id;
-            if(event_id){
+            if(event_id){ // non-terminal might be null due to error reduction rules
                 this->event_id->set_parent(this);
             }
         }
@@ -7089,7 +7162,7 @@ class sync_act_class : public Action_class {
     public:
         sync_act_class(Expression event_id){
             this->event_id = event_id;
-            if(event_id){
+            if(event_id){ // non-terminal might be null due to error reduction rules
                 this->event_id->set_parent(this);
             }
         }
@@ -7113,7 +7186,7 @@ class wait_act_class : public Action_class {
     public:
         wait_act_class(Expression event_id){
             this->event_id = event_id;
-            if(event_id){
+            if(event_id){ // non-terminal might be null due to error reduction rules
                 this->event_id->set_parent(this);
             }
         }
@@ -7137,7 +7210,7 @@ class all_of_act_class : public Action_class {
     public:
         all_of_act_class(ActionBlocks threads){
             this->threads = threads;
-            if(threads){
+            if(threads){ // non-terminal might be null due to error reduction rules
                 this->threads->set_parent(this);
             }
         }
@@ -7161,7 +7234,7 @@ class first_of_act_class : public Action_class {
     public:
         first_of_act_class(ActionBlocks threads){
             this->threads = threads;
-            if(threads){
+            if(threads){ // non-terminal might be null due to error reduction rules
                 this->threads->set_parent(this);
             }
         }
@@ -7186,11 +7259,11 @@ class gen_act_class : public Action_class {
     public:
         gen_act_class(Expression gen_expr, Expressions constraints){
             this->gen_expr = gen_expr;
-            if(gen_expr){
+            if(gen_expr){ // non-terminal might be null due to error reduction rules
                 this->gen_expr->set_parent(this);
             }
             this->constraints = constraints;
-            if(constraints){
+            if(constraints){ // non-terminal might be null due to error reduction rules
                 this->constraints->set_parent(this);
             }
         }
@@ -7215,11 +7288,11 @@ class do_seq_act_class : public Action_class {
     public:
         do_seq_act_class(Expression seq_item, Expressions constraints){
             this->seq_item = seq_item;
-            if(seq_item){
+            if(seq_item){ // non-terminal might be null due to error reduction rules
                 this->seq_item->set_parent(this);
             }
             this->constraints = constraints;
-            if(constraints){
+            if(constraints){ // non-terminal might be null due to error reduction rules
                 this->constraints->set_parent(this);
             }
         }
@@ -7243,7 +7316,7 @@ class seq_item_expr_class : public Expression_class {
     public:
         seq_item_expr_class(Expressions field_type_exprs){
             this->field_type_exprs = field_type_exprs;
-            if(field_type_exprs){
+            if(field_type_exprs){ // non-terminal might be null due to error reduction rules
                 this->field_type_exprs->set_parent(this);
             }
         }
@@ -7268,11 +7341,11 @@ class check_that_action_class : public Action_class {
     public:
         check_that_action_class(Expression condition, Expression dut_error_block){
             this->condition = condition;
-            if(condition){
+            if(condition){ // non-terminal might be null due to error reduction rules
                 this->condition->set_parent(this);
             }
             this->dut_error_block = dut_error_block;
-            if(dut_error_block){
+            if(dut_error_block){ // non-terminal might be null due to error reduction rules
                 this->dut_error_block->set_parent(this);
             }
         }
@@ -7297,11 +7370,11 @@ class assert_action_class : public Action_class {
     public:
         assert_action_class(Expression condition, Expression error_block){
             this->condition = condition;
-            if(condition){
+            if(condition){ // non-terminal might be null due to error reduction rules
                 this->condition->set_parent(this);
             }
             this->error_block = error_block;
-            if(error_block){
+            if(error_block){ // non-terminal might be null due to error reduction rules
                 this->error_block->set_parent(this);
             }
         }
@@ -7326,11 +7399,11 @@ class try_else_action_class : public Action_class {
     public:
         try_else_action_class(ActionBlock try_actions, ActionBlock except_actions){
             this->try_actions = try_actions;
-            if(try_actions){
+            if(try_actions){ // non-terminal might be null due to error reduction rules
                 this->try_actions->set_parent(this);
             }
             this->except_actions = except_actions;
-            if(except_actions){
+            if(except_actions){ // non-terminal might be null due to error reduction rules
                 this->except_actions->set_parent(this);
             }
         }
@@ -7356,15 +7429,15 @@ class state_machine_act_class : public Action_class {
     public:
         state_machine_act_class(Expression state_var, Expression final_st, FSMStates states){
             this->state_var = state_var;
-            if(state_var){
+            if(state_var){ // non-terminal might be null due to error reduction rules
                 this->state_var->set_parent(this);
             }
             this->final_st = final_st;
-            if(final_st){
+            if(final_st){ // non-terminal might be null due to error reduction rules
                 this->final_st->set_parent(this);
             }
             this->states = states;
-            if(states){
+            if(states){ // non-terminal might be null due to error reduction rules
                 this->states->set_parent(this);
             }
         }
@@ -7384,13 +7457,14 @@ auto state_machine_act(Expression state_var, Expression final_st, FSMStates stat
 
 class state_action_fsm_class : public FSMState_class {
     protected:
-        Symbol_ state;
+        ast::p_tree_node state;
         ActionBlock actions;
     public:
         state_action_fsm_class(Symbol_ state, ActionBlock actions){
-            this->state = state;
+            this->state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(state));
+            this->state->set_parent(this);
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -7410,15 +7484,17 @@ auto state_action_fsm(Symbol_ state, ActionBlock actions) -> FSMState;
 
 class state_transition_fsm_class : public FSMState_class {
     protected:
-        Symbol_ cur_state;
-        Symbol_ next_state;
+        ast::p_tree_node cur_state;
+        ast::p_tree_node next_state;
         ActionBlock actions;
     public:
         state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions){
-            this->cur_state = cur_state;
-            this->next_state = next_state;
+            this->cur_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(cur_state));
+            this->cur_state->set_parent(this);
+            this->next_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(next_state));
+            this->next_state->set_parent(this);
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -7438,13 +7514,14 @@ auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock act
 
 class state_any_transition_fsm_class : public FSMState_class {
     protected:
-        Symbol_ next_state;
+        ast::p_tree_node next_state;
         ActionBlock actions;
     public:
         state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions){
-            this->next_state = next_state;
+            this->next_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(next_state));
+            this->next_state->set_parent(this);
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }
@@ -7487,7 +7564,7 @@ class action_block_class : public ActionBlock_class {
     public:
         action_block_class(Actions actions){
             this->actions = actions;
-            if(actions){
+            if(actions){ // non-terminal might be null due to error reduction rules
                 this->actions->set_parent(this);
             }
         }

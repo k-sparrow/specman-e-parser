@@ -1,5 +1,6 @@
 
 #include "tree.hpp"
+#include "ast_visitor_base.hpp"
 #include "driver.hpp"
 
 namespace ast {

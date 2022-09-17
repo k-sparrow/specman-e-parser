@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "utils.hpp"
+#include "strtab.hpp"
 #include "location.hh"
 
 using std::begin;
@@ -19,10 +20,15 @@ namespace elex {
 }
 
 namespace ast {
+    // forward declaration for an abstract node visitor
+    class IAstNodeVisitor;
+
+    // type definitions for tree_node
     class tree_node;
     typedef std::shared_ptr<tree_node> p_tree_node;
     typedef std::shared_ptr<tree_node> pw_tree_node;
 
+    // class declaration for tree_node
     class tree_node {
         using source_location_t = yy::location;
     protected:
@@ -47,6 +53,8 @@ namespace ast {
         auto get_source_location() const -> source_location_t { return m_loc; }
         auto set(tree_node*) -> tree_node*;
         auto set_parent(tree_node*) -> void;
+
+        auto accept(IAstNodeVisitor&) -> void;
     };
 
     // class for listed parser elements
@@ -90,7 +98,7 @@ namespace ast {
             }
         }
 
-        auto type() const -> elex::SpecmanCtorKind override {
+        auto type() const -> elex::SpecmanCtorKind final {
             return static_cast<elex::SpecmanCtorKind>(-1);
         }
         auto size() const -> size_t { return std::size(m_elems); }
@@ -109,5 +117,26 @@ namespace ast {
         auto rend()    -> reverse_iterator       { return m_elems.rend(); }
         auto crbegin() -> const_reverse_iterator { return m_elems.crbegin(); }
         auto crend()   -> const_reverse_iterator { return m_elems.crend(); }
+    };
+
+    template <typename T>
+    class leaf_tree_node : public tree_node
+    {
+    private:
+        T m_value;
+    
+    public:
+        leaf_tree_node(T val) : m_value(val) {}
+
+
+    public:
+        auto value() -> T const { return m_value; }
+        
+        auto dump(std::ostream& stream, int n) -> void override {
+            stream << value() << std::endl;
+        }
+        auto type() const -> elex::SpecmanCtorKind override {
+            return static_cast<elex::SpecmanCtorKind>(-1);
+        }
     };
 }

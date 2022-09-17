@@ -31,6 +31,7 @@ namespace elex {
     auto operator +  (Symbol const&, std::string const&)  -> Symbol;
     auto operator +  (Symbol_ const&, std::string const&) -> Symbol;
     auto operator << (std::ostream& out, Symbol const& rhs) -> std::ostream& ;
+    auto operator << (std::ostream& out, Symbol_ const& rhs) -> std::ostream& ;
 
     typedef std::map<std::string, Symbol> SymTable;
 }

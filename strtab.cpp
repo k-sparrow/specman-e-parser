@@ -35,6 +35,10 @@ namespace elex {
         return out << rhs->Str();
     }
 
+    auto operator << (std::ostream& out, Symbol_ const& rhs) -> std::ostream& {
+        return out << rhs.lock();
+    }
+
     auto operator + (Symbol const& lhs, std::string const& rhs) -> Symbol {
         auto new_symbol = (!lhs) ? rhs : lhs->Str() + rhs;
         return std::move(Symbol(new Entry(new_symbol, new_symbol.size())));
