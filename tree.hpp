@@ -81,7 +81,16 @@ namespace ast {
     private:
         auto tie_elems() -> void {
             for (auto& elem : m_elems){
-                this->tie(elem);
+                // Some rules might reduce errors and
+                // propagate them upward to list rules (Statements, StructMembers etc...)
+                // 
+                // error reductions result in nullptr pointers, so
+                // we need to ignore them and not tie them as children
+                // in order to avoid runtime error at construction of list nodes
+                //
+                // Note: for user convenience, consider creating an error node 
+                //      with stashed symbols
+                if (elem) this->tie(elem); 
             }
         }
     public:
