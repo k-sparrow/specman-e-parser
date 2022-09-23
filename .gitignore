@@ -7,3 +7,4 @@ scanner.cpp
 *.log
 *.xml
 *.html
+ectags*
