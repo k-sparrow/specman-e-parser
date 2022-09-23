@@ -36,7 +36,7 @@ namespace ast {
     // type definitions for tree_node
     class tree_node;
     typedef std::shared_ptr<tree_node> p_tree_node;
-    typedef std::shared_ptr<tree_node> pw_tree_node;
+    typedef std::weak_ptr<tree_node> pw_tree_node;
 
     // class declaration for tree_node
     class tree_node {
@@ -63,28 +63,43 @@ namespace ast {
         auto get_source_location() const -> source_location_t { return m_loc; }
         auto set(tree_node*) -> tree_node*;
         auto set_parent(tree_node*) -> void;
+        auto children() const -> std::vector<pw_tree_node> { return m_children; } 
 
         auto accept(IAstNodeVisitor&) -> void;
+    
+    protected:
+        auto tie(p_tree_node) -> void;
     };
 
     // class for listed parser elements
-    template <class Elem> 
+    template <typename Elem = p_tree_node> 
     class list_tree_node : public tree_node
     {
     private:
         std::vector<Elem> m_elems;
+
+    private:
+        auto tie_elems() -> void {
+            for (auto& elem : m_elems){
+                this->tie(elem);
+            }
+        }
     public:
         list_tree_node() : tree_node(), m_elems({}){}
         list_tree_node(Elem elem) : tree_node() {
             m_elems.push_back(elem);
+            this->tie_elems();
         }
-        list_tree_node(std::initializer_list<Elem> elems) : tree_node(), m_elems(elems){}
-        list_tree_node(list_tree_node<Elem> const& cp) : tree_node(), m_elems(cp.m_elems){ this->m_loc = cp.m_loc; }
+        list_tree_node(list_tree_node<Elem> const& cp) : tree_node(), m_elems(cp.m_elems){ 
+            this->m_loc = cp.m_loc; 
+            this->tie_elems();
+        }
         list_tree_node(list_tree_node<Elem> const& base, 
                     list_tree_node<Elem> const& ext) : list_tree_node(base) {
 
             m_elems.reserve(std::size(m_elems) + distance(std::begin(ext.m_elems), std::end(ext.m_elems)));
             m_elems.insert(std::end(m_elems), std::begin(ext.m_elems), std::end(ext.m_elems));
+            this->tie_elems();
         }
         ~list_tree_node() { m_elems.clear(); }
 

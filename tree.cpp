@@ -18,6 +18,14 @@ namespace ast {
         this->m_parent = parent;
     }
 
+    auto tree_node::tie(p_tree_node child) -> void {
+        // set me as the parent of the child
+        child->set_parent(this);
+
+        // add the child to the list of children
+        m_children.push_back(child);
+    }
+
     auto tree_node::kind() const -> NodeKind {
         return NodeKind::kNode; // default implementation, leaves will override
     }

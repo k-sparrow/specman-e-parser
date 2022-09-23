@@ -86,8 +86,16 @@ namespace yy {
         /**
          * assign the root of an ast
          * 
+         * called by Bison just before $accept
          */
         auto set_root(elex::Module) -> void;
+
+        /** 
+         * get the root of the AST
+         */
+        auto get_root() const -> ast::p_tree_node {
+          return (ast_root);
+        }
 
         /**
          * This is needed so that Scanner and Parser can call some
