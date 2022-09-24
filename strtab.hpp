@@ -34,4 +34,9 @@ namespace elex {
     auto operator << (std::ostream& out, Symbol_ const& rhs) -> std::ostream& ;
 
     typedef std::map<std::string, Symbol> SymTable;
+
+    enum class LeafNodeValueType {
+        boolean = 0,
+        symbol 
+    };
 }

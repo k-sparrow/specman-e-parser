@@ -666,7 +666,7 @@ class package_class : public Statement_class {
         ast::p_tree_node pkg_name;
     public:
         package_class(Symbol_ pkg_name){
-            this->pkg_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(pkg_name));
+            this->pkg_name = ast::p_tree_node(new ast::Symbol__leaf_node(pkg_name));
             this->tie(this->pkg_name);
         }
 
@@ -689,7 +689,7 @@ class unit_st_class : public Statement_class {
         StructMembers members;
     public:
         unit_st_class(Symbol_ unit_name, StructMembers members){
-            this->unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(unit_name));
+            this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -717,9 +717,9 @@ class unit_like_st_class : public Statement_class {
         StructMembers members;
     public:
         unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members){
-            this->unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(unit_name));
+            this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
-            this->base_unit_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(base_unit_name));
+            this->base_unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_unit_name));
             this->tie(this->base_unit_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -746,7 +746,7 @@ class struct_st_class : public Statement_class {
         StructMembers members;
     public:
         struct_st_class(Symbol_ struct_name, StructMembers members){
-            this->struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(struct_name));
+            this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -774,9 +774,9 @@ class struct_like_st_class : public Statement_class {
         StructMembers members;
     public:
         struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members){
-            this->struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(struct_name));
+            this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
-            this->base_struct_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(base_struct_name));
+            this->base_struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_struct_name));
             this->tie(this->base_struct_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -832,7 +832,7 @@ class enum_type_st_class : public Statement_class {
         DataType type_id;
     public:
         enum_type_st_class(Symbol_ id, DataType type_id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -859,7 +859,7 @@ class extend_enum_type_st_class : public Statement_class {
         Expressions enum_list_items;
     public:
         extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items){
-            this->type_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(type_id));
+            this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->enum_list_items = enum_list_items;
             if(enum_list_items){ // non-terminal might be null due to error reduction rules
@@ -887,7 +887,7 @@ class scalar_subtype_st_class : public Statement_class {
         Expressions ranges;
     public:
         scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges){
-            this->subtype_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(subtype_id));
+            this->subtype_id = ast::p_tree_node(new ast::Symbol__leaf_node(subtype_id));
             this->tie(this->subtype_id);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -920,7 +920,7 @@ class scalar_sized_type_st_class : public Statement_class {
         Expression width_expr;
     public:
         scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr){
-            this->type_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(type_id));
+            this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->base_type_id = base_type_id;
             if(base_type_id){ // non-terminal might be null due to error reduction rules
@@ -959,7 +959,7 @@ class import_st_class : public Statement_class {
             if(paths){ // non-terminal might be null due to error reduction rules
                 this->tie(this->paths);
             }
-            this->is_cyclic = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_cyclic));
+            this->is_cyclic = ast::p_tree_node(new ast::Boolean_leaf_node(is_cyclic));
             this->tie(this->is_cyclic);
         }
 
@@ -981,7 +981,7 @@ class file_path_fp_class : public FilePath_class {
         ast::p_tree_node file_path;
     public:
         file_path_fp_class(Symbol_ file_path){
-            this->file_path = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(file_path));
+            this->file_path = ast::p_tree_node(new ast::Symbol__leaf_node(file_path));
             this->tie(this->file_path);
         }
 
@@ -1004,7 +1004,7 @@ class virtual_sequence_st_class : public Statement_class {
         SequenceItems seq_options;
     public:
         virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
@@ -1031,7 +1031,7 @@ class sequence_st_class : public Statement_class {
         SequenceItems seq_options;
     public:
         sequence_st_class(Symbol_ id, SequenceItems seq_options){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
@@ -1057,7 +1057,7 @@ class sequence_item_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_item_kind_it_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -1079,7 +1079,7 @@ class sequence_created_kind_name_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_created_kind_name_it_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -1101,7 +1101,7 @@ class sequence_created_driver_name_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_created_driver_name_it_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -1123,7 +1123,7 @@ class sequence_base_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_base_kind_it_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -1145,7 +1145,7 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_driver_base_kind_it_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -1167,7 +1167,7 @@ class define_as_st_class : public Statement_class {
         ast::p_tree_node macro;
     public:
         define_as_st_class(Symbol_ macro){
-            this->macro = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(macro));
+            this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
         }
 
@@ -1189,7 +1189,7 @@ class define_as_computed_st_class : public Statement_class {
         ast::p_tree_node macro;
     public:
         define_as_computed_st_class(Symbol_ macro){
-            this->macro = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(macro));
+            this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
         }
 
@@ -1212,7 +1212,7 @@ class formal_class : public Formal_class {
         DataType type_;
     public:
         formal_class(Symbol_ name, DataType type_){
-            this->name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(name));
+            this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1265,7 +1265,7 @@ class c_routine_st_class : public Statement_class {
         ast::p_tree_node c_routine_name;
     public:
         c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name){
-            this->e_routine_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_routine_name));
+            this->e_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_routine_name));
             this->tie(this->e_routine_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -1275,7 +1275,7 @@ class c_routine_st_class : public Statement_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_routine_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_routine_name));
+            this->c_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_routine_name));
             this->tie(this->c_routine_name);
         }
 
@@ -1322,7 +1322,7 @@ class struct_field_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_sm_class(Symbol_ id, DataType type_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1350,7 +1350,7 @@ class struct_field_list_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->len_expr = len_expr;
             if(len_expr){ // non-terminal might be null due to error reduction rules
@@ -1381,7 +1381,7 @@ class struct_field_assoc_list_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_assoc_list_sm_class(Symbol_ id, DataType type_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1410,7 +1410,7 @@ class method_dec_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1447,7 +1447,7 @@ class method_dec_also_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1484,7 +1484,7 @@ class method_dec_first_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1521,7 +1521,7 @@ class method_dec_only_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1557,7 +1557,7 @@ class method_dec_empty_sm_class : public StructMember_class {
         DataType return_type;
     public:
         method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1589,7 +1589,7 @@ class method_dec_undef_sm_class : public StructMember_class {
         DataType return_type;
     public:
         method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1623,7 +1623,7 @@ class tcm_dec_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1665,7 +1665,7 @@ class tcm_dec_also_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1707,7 +1707,7 @@ class tcm_dec_first_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1749,7 +1749,7 @@ class tcm_dec_only_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1790,7 +1790,7 @@ class tcm_dec_empty_sm_class : public StructMember_class {
         Expression event_id_expr;
     public:
         tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1827,7 +1827,7 @@ class tcm_dec_undef_sm_class : public StructMember_class {
         Expression event_id_expr;
     public:
         tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1864,7 +1864,7 @@ class c_method_dec_sm_class : public StructMember_class {
         ast::p_tree_node c_method_name;
     public:
         c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
-            this->e_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_method_name));
+            this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -1874,7 +1874,7 @@ class c_method_dec_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_method_name));
+            this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
         }
 
@@ -1899,7 +1899,7 @@ class c_method_dec_only_sm_class : public StructMember_class {
         ast::p_tree_node c_method_name;
     public:
         c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
-            this->e_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(e_method_name));
+            this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -1909,7 +1909,7 @@ class c_method_dec_only_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_method_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(c_method_name));
+            this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
         }
 
@@ -2013,7 +2013,7 @@ class simple_event_dec_sm_class : public StructMember_class {
         ast::p_tree_node id;
     public:
         simple_event_dec_sm_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -2036,7 +2036,7 @@ class event_def_sm_class : public StructMember_class {
         Expression temporal;
     public:
         event_def_sm_class(Symbol_ id, Expression temporal){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
@@ -2063,7 +2063,7 @@ class event_def_override_sm_class : public StructMember_class {
         Expression temporal;
     public:
         event_def_override_sm_class(Symbol_ id, Expression temporal){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
@@ -2904,7 +2904,7 @@ class empty_covergroup_sm_class : public StructMember_class {
         ast::p_tree_node event_id;
     public:
         empty_covergroup_sm_class(Symbol_ event_id){
-            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
         }
 
@@ -2928,7 +2928,7 @@ class covergroup_sm_class : public StructMember_class {
         CovergroupItems cg_items;
     public:
         covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
-            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->cg_opts = cg_opts;
             if(cg_opts){ // non-terminal might be null due to error reduction rules
@@ -2961,7 +2961,7 @@ class covergroup_extension_sm_class : public StructMember_class {
         CovergroupItems cg_items;
     public:
         covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
-            this->event_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(event_id));
+            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->instance_id = instance_id;
             if(instance_id){ // non-terminal might be null due to error reduction rules
@@ -3039,9 +3039,9 @@ class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
         ast::p_tree_node bucket_name;
     public:
         covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name){
-            this->item_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_name));
+            this->item_name = ast::p_tree_node(new ast::Symbol__leaf_node(item_name));
             this->tie(this->item_name);
-            this->bucket_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(bucket_name));
+            this->bucket_name = ast::p_tree_node(new ast::Symbol__leaf_node(bucket_name));
             this->tie(this->bucket_name);
         }
 
@@ -3192,7 +3192,7 @@ class text_cgo_class : public CovergroupOption_class {
         ast::p_tree_node description;
     public:
         text_cgo_class(Symbol_ description){
-            this->description = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(description));
+            this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
         }
 
@@ -3214,7 +3214,7 @@ class weight_cgo_class : public CovergroupOption_class {
         ast::p_tree_node value;
     public:
         weight_cgo_class(Symbol_ value){
-            this->value = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(value));
+            this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
         }
 
@@ -3261,7 +3261,7 @@ class simple_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
-            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
@@ -3290,7 +3290,7 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options){
-            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -3354,7 +3354,7 @@ class transition_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
-            this->item_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(item_id));
+            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
@@ -3380,7 +3380,7 @@ class at_least_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node num;
     public:
         at_least_cgio_class(Symbol_ num){
-            this->num = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(num));
+            this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
         }
 
@@ -3498,7 +3498,7 @@ class num_of_buckets_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node num;
     public:
         num_of_buckets_cgio_class(Symbol_ num){
-            this->num = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(num));
+            this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
         }
 
@@ -3601,7 +3601,7 @@ class text_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node description;
     public:
         text_cgio_class(Symbol_ description){
-            this->description = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(description));
+            this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
         }
 
@@ -3623,7 +3623,7 @@ class weight_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node value;
     public:
         weight_cgio_class(Symbol_ value){
-            this->value = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(value));
+            this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
         }
 
@@ -3707,7 +3707,7 @@ class id_expr_class : public Expression_class {
         ast::p_tree_node id;
     public:
         id_expr_class(Symbol_ id){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
         }
 
@@ -3759,7 +3759,7 @@ class enum_list_item_class : public Expression_class {
         Expression expr;
     public:
         enum_list_item_class(Symbol_ id, Expression expr){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->expr = expr;
             if(expr){ // non-terminal might be null due to error reduction rules
@@ -4983,7 +4983,7 @@ class new_allocate_expr_class : public Expression_class {
             if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_block);
             }
-            this->scoped_name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(scoped_name));
+            this->scoped_name = ast::p_tree_node(new ast::Symbol__leaf_node(scoped_name));
             this->tie(this->scoped_name);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -5202,7 +5202,7 @@ class hdl_path_name_expr_class : public Expression_class {
         ast::p_tree_node hdl_hier_ref;
     public:
         hdl_path_name_expr_class(Symbol_ hdl_hier_ref){
-            this->hdl_hier_ref = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(hdl_hier_ref));
+            this->hdl_hier_ref = ast::p_tree_node(new ast::Symbol__leaf_node(hdl_hier_ref));
             this->tie(this->hdl_hier_ref);
         }
 
@@ -5614,7 +5614,7 @@ class str_expr_class : public Expression_class {
         ast::p_tree_node str;
     public:
         str_expr_class(Symbol_ str){
-            this->str = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(str));
+            this->str = ast::p_tree_node(new ast::Symbol__leaf_node(str));
             this->tie(this->str);
         }
 
@@ -5636,7 +5636,7 @@ class int_expr_class : public Expression_class {
         ast::p_tree_node int_;
     public:
         int_expr_class(Symbol_ int_){
-            this->int_ = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(int_));
+            this->int_ = ast::p_tree_node(new ast::Symbol__leaf_node(int_));
             this->tie(this->int_);
         }
 
@@ -5751,7 +5751,7 @@ class defined_subtype_dt_class : public DataType_class {
         Expression range_modifier;
     public:
         defined_subtype_dt_class(Symbol_ id, Expression range_modifier){
-            this->id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(id));
+            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->range_modifier = range_modifier;
             if(range_modifier){ // non-terminal might be null due to error reduction rules
@@ -5860,7 +5860,7 @@ class assoc_list_type_dt_class : public DataType_class {
         DataType base_type;
     public:
         assoc_list_type_dt_class(Symbol_ key_id, DataType base_type){
-            this->key_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(key_id));
+            this->key_id = ast::p_tree_node(new ast::Symbol__leaf_node(key_id));
             this->tie(this->key_id);
             this->base_type = base_type;
             if(base_type){ // non-terminal might be null due to error reduction rules
@@ -6059,7 +6059,7 @@ class var_decl_act_class : public Action_class {
         Expression init_expr;
     public:
         var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr){
-            this->name = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(name));
+            this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -6913,7 +6913,7 @@ class for_each_loop_act_class : public Action_class {
             if(iterated_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->iterated_name);
             }
-            this->is_reverese = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_reverese));
+            this->is_reverese = ast::p_tree_node(new ast::Boolean_leaf_node(is_reverese));
             this->tie(this->is_reverese);
             this->list_exp = list_exp;
             if(list_exp){ // non-terminal might be null due to error reduction rules
@@ -6952,7 +6952,7 @@ class for_range_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions){
-            this->var_id = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(var_id));
+            this->var_id = ast::p_tree_node(new ast::Symbol__leaf_node(var_id));
             this->tie(this->var_id);
             this->from_expr = from_expr;
             if(from_expr){ // non-terminal might be null due to error reduction rules
@@ -6966,7 +6966,7 @@ class for_range_loop_act_class : public Action_class {
             if(step_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->step_expr);
             }
-            this->is_down = ast::p_tree_node(new ast::leaf_tree_node<Boolean>(is_down));
+            this->is_down = ast::p_tree_node(new ast::Boolean_leaf_node(is_down));
             this->tie(this->is_down);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -7461,7 +7461,7 @@ class state_action_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_action_fsm_class(Symbol_ state, ActionBlock actions){
-            this->state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(state));
+            this->state = ast::p_tree_node(new ast::Symbol__leaf_node(state));
             this->tie(this->state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -7489,9 +7489,9 @@ class state_transition_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions){
-            this->cur_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(cur_state));
+            this->cur_state = ast::p_tree_node(new ast::Symbol__leaf_node(cur_state));
             this->tie(this->cur_state);
-            this->next_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(next_state));
+            this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
             this->tie(this->next_state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -7518,7 +7518,7 @@ class state_any_transition_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions){
-            this->next_state = ast::p_tree_node(new ast::leaf_tree_node<Symbol_>(next_state));
+            this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
             this->tie(this->next_state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules

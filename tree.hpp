@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <type_traits>
 
 #include "utils.hpp"
 #include "strtab.hpp"
@@ -173,15 +174,37 @@ namespace ast {
         auto crend()   -> const_reverse_iterator { return m_elems.crend(); }
     };
 
-    template <typename T>
-    class leaf_tree_node : public tree_node
+
+    
+    // base class for leaf nodes
+    // declares the leaf_type method returning the type of data held
+    // by the leaf
+    class leaf_node_base : public tree_node
+    {
+    public:
+        leaf_node_base() : tree_node() {}
+        virtual auto leaf_type() const -> elex::LeafNodeValueType = 0;
+    };
+    
+
+    // Leaf nodes are allowed to hold one the following types:
+    //      elex::Symbol_ - a weak pointer to an symbol entry
+    //      elex::Boolean - a boolean
+    template <typename U>
+    using is_elex_leaf_type = std::enable_if_t<
+            std::is_same_v<U, elex::Symbol_> ||
+            std::is_same_v<U, elex::Boolean>
+    >;
+
+    // ensure at compile time that T is only elex::Symbol_|Boolean
+    template <typename T, typename = is_elex_leaf_type<T>>    
+    class leaf_tree_node : public leaf_node_base
     {
     private:
         T m_value;
     
     public:
         leaf_tree_node(T val) : m_value(val) {}
-
 
     public:
         auto value() -> T const { return m_value; }
@@ -198,4 +221,27 @@ namespace ast {
             return NodeKind::kLeaf;
         }
     };
+
+    using symbol_leaf_node = ast::leaf_tree_node<elex::Symbol_>;
+    class Symbol__leaf_node : public symbol_leaf_node
+    {
+    public:
+        Symbol__leaf_node(elex::Symbol_ val) : symbol_leaf_node(val) {}
+
+        auto leaf_type() const -> elex::LeafNodeValueType override final {
+            return elex::LeafNodeValueType::symbol;
+        }
+    };
+    
+    using boolean_leaf_node = ast::leaf_tree_node<elex::Boolean>;
+    class Boolean_leaf_node : public boolean_leaf_node
+    {
+    public:
+        Boolean_leaf_node(elex::Boolean val) : boolean_leaf_node(val) {}
+
+        auto leaf_type() const -> elex::LeafNodeValueType override final {
+            return elex::LeafNodeValueType::boolean;
+        }
+    };
+    
 }

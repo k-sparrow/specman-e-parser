@@ -17,17 +17,23 @@ namespace ast {
 
         // NOTE: the natural stop condition is a leaf node
         //  this is an additional stop condition
-        case elex::SpecmanCtorKind::IdExpr:
-            m_stream << "Found id expression at <" << node.get_source_location() << ">" << std::endl;
+        case elex::SpecmanCtorKind::StructSt:
+        {
+            auto& struct_stmt_node = dynamic_cast<elex::struct_st_class &>(node);
+            m_stream << "Found struct expression at <" << node.get_source_location() << ">" << std::endl;
+            node.dump(m_stream, 0);
             break;
+        }
 
         // recursive step
         // run through all children
         default:
-            for (pw_tree_node& child : node.children()){
-                child.lock()->accept(*this);
+            {
+                for (pw_tree_node& child : node.children()){
+                    child.lock()->accept(*this);
+                }
+                break;
             }
-            break;
         }
     }
 
