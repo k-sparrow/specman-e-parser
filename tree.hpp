@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #include "utils.hpp"
 #include "strtab.hpp"
@@ -13,6 +14,7 @@ using std::begin;
 using std::end;
 using std::distance;
 using std::size;
+using std::find_if;
 
 
 namespace elex {
@@ -90,7 +92,25 @@ namespace ast {
                 //
                 // Note: for user convenience, consider creating an error node 
                 //      with stashed symbols
-                if (elem) this->tie(elem); 
+                if(elem == nullptr) continue;
+                
+                // append nodes call the delegation constructor for single list copy
+                // constructor which runs tie_elems, then we run the constructor for the append
+                // constructor, which also runs tie_elems, but now ties children
+                // that were already added by the delegation constructor's tie_elems,
+                // which means that we're gonna have duplicated children, which isn't good
+                // for node travelers
+                // Note: this solution isn't optimal in anyway since it runs for O(n^2),
+                // consider a change in code structure or add a weak pool that performs 
+                // lookup for existing children in O(log n)
+                auto child_exists_iter = 
+                    find_if(std::begin(m_children), 
+                            std::end(m_children), 
+                            [elem](pw_tree_node const& child) { return child.lock() == elem; });
+                
+                // candidate wasn't found, hence it's a new child, so add it
+                if (child_exists_iter == std::end(m_children)) 
+                    this->tie(elem); 
             }
         }
     public:

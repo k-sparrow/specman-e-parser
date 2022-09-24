@@ -40,7 +40,7 @@ flex-main: ${FSRC}
 	${CC} ${CFLAGS} parser.cpp driver.cpp scanner.cpp strtab.cpp main-flex.cpp -o $@
 
 ectags: ${CTSRC}
-	${CC} ${CFLAGS} $^ -o $@
+	@printf "Compiling ectags...\n" 		   && ${CC} ${CFLAGS} $^ -o $@
 
 test: 
 	cat example.e | ./${OBJS}
