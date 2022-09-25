@@ -8,3 +8,4 @@ scanner.cpp
 *.xml
 *.html
 ectags*
+tags
