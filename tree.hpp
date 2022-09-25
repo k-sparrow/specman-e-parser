@@ -72,7 +72,7 @@ namespace ast {
     // base class for concrete tree nodes
     class tree_node : public tree_node_base {
     protected:
-        std::unordered_map<std::string, p_tree_node> m_children_pool;
+        std::unordered_map<std::string, pw_tree_node> m_children_pool;
 
         // list of weak observers to the childrem
         std::vector<pw_tree_node> m_children = {};
@@ -84,7 +84,7 @@ namespace ast {
         tree_node() : tree_node_base() {}
 
         auto children() const -> std::vector<pw_tree_node> { return m_children; } 
-        auto get_child_by_name(std::string) const -> pw_tree_node;
+        auto get_child_by_name(std::string) const -> p_tree_node;
     };
 
     // class for listed parser elements

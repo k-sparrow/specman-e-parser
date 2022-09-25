@@ -31,14 +31,16 @@ namespace ast {
         m_children.push_back(child);
     }
 
-    auto tree_node::get_child_by_name(std::string child_name) const -> pw_tree_node {
-        try
+    auto tree_node::get_child_by_name(std::string child_name) const -> p_tree_node {
+        try 
         {
-            return m_children_pool.at(child_name);
+            // child is found, return a pointer to the child
+            return m_children_pool.at(child_name).lock();
         }
-        catch(const std::out_of_range& e)
-        {
-            return pw_tree_node();
+        catch(const std::out_of_range& e) 
+        { 
+            // no child with requested name, return nullptr
+            return nullptr;
         }
         
     }  
