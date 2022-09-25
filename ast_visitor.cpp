@@ -4,12 +4,16 @@
 #include "tree.hpp"
 #include "specman-tree.hpp"
 
+
 namespace ast {
 
     // Ctags printer
     CtagsNodeVisitor::CtagsNodeVisitor(std::ostream& stream) : m_stream(stream){}
 
     auto CtagsNodeVisitor::visitNode(tree_node& node) -> void {
+        // clear the ctags entry at earch new node visit
+        m_entry = {};
+
         switch (node.type())
         {
         // stop condition
@@ -20,8 +24,34 @@ namespace ast {
         case elex::SpecmanCtorKind::StructSt:
         {
             auto& struct_stmt_node = dynamic_cast<elex::struct_st_class &>(node);
-            m_stream << "Found struct expression at <" << node.get_source_location() << ">" << std::endl;
-            node.dump(m_stream, 0);
+            auto struct_name = struct_stmt_node.get_child_by_name("struct_name");
+            auto& struct_name_id = dynamic_cast<ast::Symbol__leaf_node &>(*struct_name);
+
+            // populate the entry
+            const auto& tag_location = struct_name_id.get_source_location();
+            if (tag_location.begin.filename == nullptr){
+                throw std::runtime_error("Missing source file path for input. Please check a file path is supplied to the lexer!");
+            }
+            
+            m_entry.tag_file     = *tag_location.begin.filename;
+            m_entry.tag_location = tag_location.begin.line;
+            m_entry.tag          = struct_name_id.value().lock()->Str();
+
+            // dump the entry to of the struct header to the stream
+            m_stream << m_entry << std::endl;
+
+            // then, recurse through the struct members
+            auto members_node = struct_stmt_node.get_child_by_name("members");
+            
+            // raise in case of nullptr, and reference to the aps file for the correct name
+
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::FieldSm : {
+            m_stream << "Found field declaration at " << node.get_source_location() << std::endl;
             break;
         }
 
@@ -39,5 +69,10 @@ namespace ast {
 
     auto CtagsNodeVisitor::visitLeaf(leaf_node& node) -> void {
         // do nothing right now
+    }
+
+    auto operator<<(std::ostream& stream, CtagsNodeVisitor::ctags_entry const& entry) -> std::ostream& {
+        stream << entry.tag << "\t" << entry.tag_file << "\t" << entry.tag_location;
+        return stream;
     }
 }

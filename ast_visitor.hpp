@@ -9,8 +9,18 @@
 namespace ast {
     class CtagsNodeVisitor : public IAstNodeVisitor
     {
+    private:
+        struct ctags_entry
+        {
+            std::string tag;
+            std::string tag_file;
+            size_t tag_location; // a short pattern or line number
+        };
+
+
     protected:
         std::ostream& m_stream;
+        ctags_entry m_entry;
     public:
         CtagsNodeVisitor() = delete;
         CtagsNodeVisitor(CtagsNodeVisitor const&) = delete;
@@ -20,7 +30,12 @@ namespace ast {
 
         auto visitNode(tree_node&) -> void override final;
         auto visitLeaf(leaf_node&) -> void override final;
+        
+        // for access to inner class
+        friend auto operator<<(std::ostream& stream, CtagsNodeVisitor::ctags_entry const& entry) -> std::ostream&;
     };
+
+    auto operator<<(std::ostream& stream, CtagsNodeVisitor::ctags_entry const& entry) -> std::ostream&;
 }
 
 #endif // AST_VISITOR_H
