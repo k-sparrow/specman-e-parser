@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <algorithm>
 #include <type_traits>
 
@@ -37,41 +38,53 @@ namespace ast {
     class IAstNodeVisitor;
 
     // type definitions for tree_node
-    class tree_node;
-    typedef std::shared_ptr<tree_node> p_tree_node;
-    typedef std::weak_ptr<tree_node> pw_tree_node;
+    class tree_node_base;
+    typedef std::shared_ptr<tree_node_base> p_tree_node;
+    typedef std::weak_ptr<tree_node_base> pw_tree_node;
 
-    // class declaration for tree_node
-    class tree_node {
+    // a common interface for all nodes in the tree 
+    class tree_node_base {
         using source_location_t = yy::location;
     protected:
         // location span of the tree node in the source code
         source_location_t m_loc;
-
-        // list of weak observers to the childrem
-        std::vector<pw_tree_node> m_children = {};
         
         // and observer pointer to the parent
         // we do not allocate this pointer, nor do we release it's memory
 
         // std::expreimental::observer_ptr is not used as it's expermintal code
-        tree_node* m_parent = nullptr;
+        tree_node_base* m_parent = nullptr;
     public:
-        tree_node();
-        virtual ~tree_node() { }
+        tree_node_base();
+        virtual ~tree_node_base() { }
 
         virtual auto dump(std::ostream& stream, int n) -> void = 0;
         virtual auto type() const -> elex::SpecmanCtorKind = 0;
         virtual auto kind() const -> NodeKind;
         auto get_source_location() const -> source_location_t { return m_loc; }
-        auto set(tree_node*) -> tree_node*;
-        auto set_parent(tree_node*) -> void;
-        auto children() const -> std::vector<pw_tree_node> { return m_children; } 
+        auto set(tree_node_base*) -> tree_node_base*;
+        auto set_parent(tree_node_base*) -> void;
 
         auto accept(IAstNodeVisitor&) -> void;
     
+    };
+
+    // base class for concrete tree nodes
+    class tree_node : public tree_node_base {
+    protected:
+        std::unordered_map<std::string, pw_tree_node> m_children_pool;
+
+        // list of weak observers to the childrem
+        std::vector<pw_tree_node> m_children = {};
+
     protected:
         auto tie(p_tree_node) -> void;
+
+    public:
+        tree_node() : tree_node_base() {}
+
+        auto children() const -> std::vector<pw_tree_node> { return m_children; } 
+        auto get_child_by_name(std::string) const -> pw_tree_node;
     };
 
     // class for listed parser elements
@@ -179,10 +192,10 @@ namespace ast {
     // base class for leaf nodes
     // declares the leaf_type method returning the type of data held
     // by the leaf
-    class leaf_node_base : public tree_node
+    class leaf_node : public tree_node_base
     {
     public:
-        leaf_node_base() : tree_node() {}
+        leaf_node() : tree_node_base() {}
         virtual auto leaf_type() const -> elex::LeafNodeValueType = 0;
     };
     
@@ -198,7 +211,7 @@ namespace ast {
 
     // ensure at compile time that T is only elex::Symbol_|Boolean
     template <typename T, typename = is_elex_leaf_type<T>>    
-    class leaf_tree_node : public leaf_node_base
+    class leaf_tree_node : public leaf_node
     {
     private:
         T m_value;

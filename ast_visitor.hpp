@@ -19,7 +19,7 @@ namespace ast {
         explicit CtagsNodeVisitor(std::ostream&);
 
         auto visitNode(tree_node&) -> void override final;
-        auto visitLeaf(tree_node&) -> void override final;
+        auto visitLeaf(leaf_node&) -> void override final;
     };
 }
 

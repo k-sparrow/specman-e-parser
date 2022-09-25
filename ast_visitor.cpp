@@ -37,7 +37,7 @@ namespace ast {
         }
     }
 
-    auto CtagsNodeVisitor::visitLeaf(tree_node& node) -> void {
+    auto CtagsNodeVisitor::visitLeaf(leaf_node& node) -> void {
         // do nothing right now
     }
 }

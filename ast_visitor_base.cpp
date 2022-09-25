@@ -9,7 +9,7 @@ namespace ast {
     *   Takes the visitor, passes itself to it and lets it
     *   do its job
     */
-    auto tree_node::accept(IAstNodeVisitor& visitor) -> void {
+    auto tree_node_base::accept(IAstNodeVisitor& visitor) -> void {
         visitor.visit(*this);
     }
 
@@ -24,15 +24,15 @@ namespace ast {
     *    separation should also override IAstNodeVisitor::visit function 
     *    and implement it as they wish
     */
-    auto IAstNodeVisitor::visit(tree_node& node) -> void {
+    auto IAstNodeVisitor::visit(tree_node_base& node) -> void {
         switch (node.kind())
         {
         case ast::NodeKind::kNode:
-            this->visitNode(node);
+            this->visitNode(dynamic_cast<ast::tree_node&>(node));
             break;
         
         case ast::NodeKind::kLeaf:
-            this->visitLeaf(node);
+            this->visitLeaf(dynamic_cast<ast::leaf_node&>(node));
             break;
         }
     }

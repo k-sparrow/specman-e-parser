@@ -4,18 +4,23 @@
 #include "driver.hpp"
 
 namespace ast {
-    tree_node::tree_node() : m_loc(yy::driver::parse_location()) {
+    tree_node_base::tree_node_base() : m_loc(yy::driver::parse_location()) {
             
         }
 
 
-    auto tree_node::set(tree_node* node_p) -> tree_node* {
+    auto tree_node_base::set(tree_node_base* node_p) -> tree_node_base* {
         this->m_loc = node_p->m_loc;
         return this;
     }
 
-    auto tree_node::set_parent(tree_node* parent) -> void {
+    auto tree_node_base::set_parent(tree_node_base* parent) -> void {
         this->m_parent = parent;
+    }
+
+
+    auto tree_node_base::kind() const -> NodeKind {
+        return NodeKind::kNode; // default implementation, leaves will override
     }
 
     auto tree_node::tie(p_tree_node child) -> void {
@@ -26,8 +31,15 @@ namespace ast {
         m_children.push_back(child);
     }
 
-    auto tree_node::kind() const -> NodeKind {
-        return NodeKind::kNode; // default implementation, leaves will override
-    }
-
+    auto tree_node::get_child_by_name(std::string child_name) const -> pw_tree_node {
+        try
+        {
+            return m_children_pool.at(child_name);
+        }
+        catch(const std::out_of_range& e)
+        {
+            return pw_tree_node();
+        }
+        
+    }  
 }
