@@ -29,7 +29,10 @@ namespace yy {
         
     class scanner : public yyFlexLexer {
     public:
-        scanner(driver &driver) : m_driver(driver), m_location() {}
+        scanner(driver &driver, std::istream* yyin = 0, std::string const* file_path_p = nullptr) : 
+            yyFlexLexer(yyin), 
+            m_driver(driver), 
+            m_location(const_cast<std::string*>(file_path_p)) {}
         virtual ~scanner() {}
         virtual yy::parser::symbol_type get_next_token();
 

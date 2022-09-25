@@ -7,8 +7,8 @@ using namespace yy;
 // initialization of static member current location
 yy::location driver::cur_location = yy::location();
 
-driver::driver() :
-    m_scanner(*this),
+driver::driver(std::string const& file_path, std::istream* yyin) :
+    m_scanner(*this, yyin, &file_path),
     m_parser(m_scanner, *this)
 {
     this->idtable["NO SYMBOL"] = Symbol(new Entry("NO SYMBOL", 0));

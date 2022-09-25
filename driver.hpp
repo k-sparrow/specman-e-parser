@@ -50,10 +50,8 @@ namespace yy {
      */
     class driver
     {
-        // parser current reduced symbol type location
-        static yy::location cur_location;
     public:
-        driver();
+        driver(std::string const& file_path, std::istream* yyin = nullptr);
         
         /**
          * Run parser. Results are stored inside.
@@ -133,6 +131,8 @@ namespace yy {
         // parser results
         elex::Module ast_root;
 
+        // parser current reduced symbol type location
+        static yy::location cur_location;
     };
 
 }
