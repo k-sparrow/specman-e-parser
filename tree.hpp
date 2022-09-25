@@ -72,7 +72,7 @@ namespace ast {
     // base class for concrete tree nodes
     class tree_node : public tree_node_base {
     protected:
-        std::unordered_map<std::string, pw_tree_node> m_children_pool;
+        std::unordered_map<std::string, p_tree_node> m_children_pool;
 
         // list of weak observers to the childrem
         std::vector<pw_tree_node> m_children = {};
@@ -199,6 +199,9 @@ namespace ast {
         virtual auto leaf_type() const -> elex::LeafNodeValueType = 0;
     };
     
+
+    // data type restriction on leaf nodes
+    // Note: a requirement of this project is C++17, so unfortunately - no concepts (C++20)
 
     // Leaf nodes are allowed to hold one the following types:
     //      elex::Symbol_ - a weak pointer to an symbol entry

@@ -642,10 +642,16 @@ class module__class : public Module_class {
         Statements stmts;
     public:
         module__class(Statements stmts){
+            // initialize the members & tie them to me (the parent)
             this->stmts = stmts;
             if(stmts){ // non-terminal might be null due to error reduction rules
                 this->tie(this->stmts);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(stmts),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -666,8 +672,14 @@ class package_class : public Statement_class {
         ast::p_tree_node pkg_name;
     public:
         package_class(Symbol_ pkg_name){
+            // initialize the members & tie them to me (the parent)
             this->pkg_name = ast::p_tree_node(new ast::Symbol__leaf_node(pkg_name));
             this->tie(this->pkg_name);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(pkg_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -689,12 +701,19 @@ class unit_st_class : public Statement_class {
         StructMembers members;
     public:
         unit_st_class(Symbol_ unit_name, StructMembers members){
+            // initialize the members & tie them to me (the parent)
             this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(unit_name),
+                THIS_MAPIFY(members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -717,6 +736,7 @@ class unit_like_st_class : public Statement_class {
         StructMembers members;
     public:
         unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members){
+            // initialize the members & tie them to me (the parent)
             this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
             this->base_unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_unit_name));
@@ -725,6 +745,13 @@ class unit_like_st_class : public Statement_class {
             if(members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(unit_name),
+                THIS_MAPIFY(base_unit_name),
+                THIS_MAPIFY(members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -746,12 +773,19 @@ class struct_st_class : public Statement_class {
         StructMembers members;
     public:
         struct_st_class(Symbol_ struct_name, StructMembers members){
+            // initialize the members & tie them to me (the parent)
             this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_name),
+                THIS_MAPIFY(members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -774,6 +808,7 @@ class struct_like_st_class : public Statement_class {
         StructMembers members;
     public:
         struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members){
+            // initialize the members & tie them to me (the parent)
             this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
             this->base_struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_struct_name));
@@ -782,6 +817,13 @@ class struct_like_st_class : public Statement_class {
             if(members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_name),
+                THIS_MAPIFY(base_struct_name),
+                THIS_MAPIFY(members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -803,6 +845,7 @@ class extend_struct_st_class : public Statement_class {
         StructMembers members;
     public:
         extend_struct_st_class(Expressions struct_type_name, StructMembers members){
+            // initialize the members & tie them to me (the parent)
             this->struct_type_name = struct_type_name;
             if(struct_type_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_name);
@@ -811,6 +854,12 @@ class extend_struct_st_class : public Statement_class {
             if(members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_type_name),
+                THIS_MAPIFY(members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -832,12 +881,19 @@ class enum_type_st_class : public Statement_class {
         DataType type_id;
     public:
         enum_type_st_class(Symbol_ id, DataType type_id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(type_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -859,12 +915,19 @@ class extend_enum_type_st_class : public Statement_class {
         Expressions enum_list_items;
     public:
         extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items){
+            // initialize the members & tie them to me (the parent)
             this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->enum_list_items = enum_list_items;
             if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->enum_list_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(type_id),
+                THIS_MAPIFY(enum_list_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -887,6 +950,7 @@ class scalar_subtype_st_class : public Statement_class {
         Expressions ranges;
     public:
         scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges){
+            // initialize the members & tie them to me (the parent)
             this->subtype_id = ast::p_tree_node(new ast::Symbol__leaf_node(subtype_id));
             this->tie(this->subtype_id);
             this->type_id = type_id;
@@ -897,6 +961,13 @@ class scalar_subtype_st_class : public Statement_class {
             if(ranges){ // non-terminal might be null due to error reduction rules
                 this->tie(this->ranges);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(subtype_id),
+                THIS_MAPIFY(type_id),
+                THIS_MAPIFY(ranges),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -920,6 +991,7 @@ class scalar_sized_type_st_class : public Statement_class {
         Expression width_expr;
     public:
         scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr){
+            // initialize the members & tie them to me (the parent)
             this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->base_type_id = base_type_id;
@@ -934,6 +1006,14 @@ class scalar_sized_type_st_class : public Statement_class {
             if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(type_id),
+                THIS_MAPIFY(base_type_id),
+                THIS_MAPIFY(ranges_expr),
+                THIS_MAPIFY(width_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -955,12 +1035,19 @@ class import_st_class : public Statement_class {
         ast::p_tree_node is_cyclic;
     public:
         import_st_class(FilePaths paths, Boolean is_cyclic){
+            // initialize the members & tie them to me (the parent)
             this->paths = paths;
             if(paths){ // non-terminal might be null due to error reduction rules
                 this->tie(this->paths);
             }
             this->is_cyclic = ast::p_tree_node(new ast::Boolean_leaf_node(is_cyclic));
             this->tie(this->is_cyclic);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(paths),
+                THIS_MAPIFY(is_cyclic),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -981,8 +1068,14 @@ class file_path_fp_class : public FilePath_class {
         ast::p_tree_node file_path;
     public:
         file_path_fp_class(Symbol_ file_path){
+            // initialize the members & tie them to me (the parent)
             this->file_path = ast::p_tree_node(new ast::Symbol__leaf_node(file_path));
             this->tie(this->file_path);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(file_path),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1004,12 +1097,19 @@ class virtual_sequence_st_class : public Statement_class {
         SequenceItems seq_options;
     public:
         virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->seq_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(seq_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1031,12 +1131,19 @@ class sequence_st_class : public Statement_class {
         SequenceItems seq_options;
     public:
         sequence_st_class(Symbol_ id, SequenceItems seq_options){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->seq_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(seq_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1057,8 +1164,14 @@ class sequence_item_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_item_kind_it_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1079,8 +1192,14 @@ class sequence_created_kind_name_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_created_kind_name_it_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1101,8 +1220,14 @@ class sequence_created_driver_name_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_created_driver_name_it_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1123,8 +1248,14 @@ class sequence_base_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_base_kind_it_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1145,8 +1276,14 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
         ast::p_tree_node id;
     public:
         sequence_driver_base_kind_it_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1167,8 +1304,14 @@ class define_as_st_class : public Statement_class {
         ast::p_tree_node macro;
     public:
         define_as_st_class(Symbol_ macro){
+            // initialize the members & tie them to me (the parent)
             this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(macro),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1189,8 +1332,14 @@ class define_as_computed_st_class : public Statement_class {
         ast::p_tree_node macro;
     public:
         define_as_computed_st_class(Symbol_ macro){
+            // initialize the members & tie them to me (the parent)
             this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(macro),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1212,12 +1361,19 @@ class formal_class : public Formal_class {
         DataType type_;
     public:
         formal_class(Symbol_ name, DataType type_){
+            // initialize the members & tie them to me (the parent)
             this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(name),
+                THIS_MAPIFY(type_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1238,10 +1394,16 @@ class c_export_st_class : public Statement_class {
         Expression element;
     public:
         c_export_st_class(Expression element){
+            // initialize the members & tie them to me (the parent)
             this->element = element;
             if(element){ // non-terminal might be null due to error reduction rules
                 this->tie(this->element);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(element),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1265,6 +1427,7 @@ class c_routine_st_class : public Statement_class {
         ast::p_tree_node c_routine_name;
     public:
         c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name){
+            // initialize the members & tie them to me (the parent)
             this->e_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_routine_name));
             this->tie(this->e_routine_name);
             this->parameters_list = parameters_list;
@@ -1277,6 +1440,14 @@ class c_routine_st_class : public Statement_class {
             }
             this->c_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_routine_name));
             this->tie(this->c_routine_name);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e_routine_name),
+                THIS_MAPIFY(parameters_list),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(c_routine_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1297,10 +1468,16 @@ class field_sm_class : public StructMember_class {
         FieldStructMember field;
     public:
         field_sm_class(FieldStructMember field){
+            // initialize the members & tie them to me (the parent)
             this->field = field;
             if(field){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1322,12 +1499,19 @@ class struct_field_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_sm_class(Symbol_ id, DataType type_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(type_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1350,6 +1534,7 @@ class struct_field_list_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->len_expr = len_expr;
@@ -1360,6 +1545,13 @@ class struct_field_list_sm_class : public FieldStructMember_class {
             if(type_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(len_expr),
+                THIS_MAPIFY(type_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1381,12 +1573,19 @@ class struct_field_assoc_list_sm_class : public FieldStructMember_class {
         DataType type_;
     public:
         struct_field_assoc_list_sm_class(Symbol_ id, DataType type_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(type_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1410,6 +1609,7 @@ class method_dec_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1424,6 +1624,14 @@ class method_dec_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1447,6 +1655,7 @@ class method_dec_also_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1461,6 +1670,14 @@ class method_dec_also_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1484,6 +1701,7 @@ class method_dec_first_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1498,6 +1716,14 @@ class method_dec_first_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1521,6 +1747,7 @@ class method_dec_only_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1535,6 +1762,14 @@ class method_dec_only_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1557,6 +1792,7 @@ class method_dec_empty_sm_class : public StructMember_class {
         DataType return_type;
     public:
         method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1567,6 +1803,13 @@ class method_dec_empty_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1589,6 +1832,7 @@ class method_dec_undef_sm_class : public StructMember_class {
         DataType return_type;
     public:
         method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1599,6 +1843,13 @@ class method_dec_undef_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1623,6 +1874,7 @@ class tcm_dec_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1641,6 +1893,15 @@ class tcm_dec_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1665,6 +1926,7 @@ class tcm_dec_also_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1683,6 +1945,15 @@ class tcm_dec_also_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1707,6 +1978,7 @@ class tcm_dec_first_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1725,6 +1997,15 @@ class tcm_dec_first_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1749,6 +2030,7 @@ class tcm_dec_only_sm_class : public StructMember_class {
         ActionBlock actions_;
     public:
         tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1767,6 +2049,15 @@ class tcm_dec_only_sm_class : public StructMember_class {
             if(actions_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+                THIS_MAPIFY(actions_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1790,6 +2081,7 @@ class tcm_dec_empty_sm_class : public StructMember_class {
         Expression event_id_expr;
     public:
         tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1804,6 +2096,14 @@ class tcm_dec_empty_sm_class : public StructMember_class {
             if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_id_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1827,6 +2127,7 @@ class tcm_dec_undef_sm_class : public StructMember_class {
         Expression event_id_expr;
     public:
         tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
@@ -1841,6 +2142,14 @@ class tcm_dec_undef_sm_class : public StructMember_class {
             if(event_id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_id_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(arguments),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(event_id_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1864,6 +2173,7 @@ class c_method_dec_sm_class : public StructMember_class {
         ast::p_tree_node c_method_name;
     public:
         c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
+            // initialize the members & tie them to me (the parent)
             this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
@@ -1876,6 +2186,14 @@ class c_method_dec_sm_class : public StructMember_class {
             }
             this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e_method_name),
+                THIS_MAPIFY(parameters_list),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(c_method_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1899,6 +2217,7 @@ class c_method_dec_only_sm_class : public StructMember_class {
         ast::p_tree_node c_method_name;
     public:
         c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
+            // initialize the members & tie them to me (the parent)
             this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
@@ -1911,6 +2230,14 @@ class c_method_dec_only_sm_class : public StructMember_class {
             }
             this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e_method_name),
+                THIS_MAPIFY(parameters_list),
+                THIS_MAPIFY(return_type),
+                THIS_MAPIFY(c_method_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1932,6 +2259,7 @@ class when_subtype_sm_class : public StructMember_class {
         StructMembers subtype_members;
     public:
         when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members){
+            // initialize the members & tie them to me (the parent)
             this->subtype_mods = subtype_mods;
             if(subtype_mods){ // non-terminal might be null due to error reduction rules
                 this->tie(this->subtype_mods);
@@ -1940,6 +2268,12 @@ class when_subtype_sm_class : public StructMember_class {
             if(subtype_members){ // non-terminal might be null due to error reduction rules
                 this->tie(this->subtype_members);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(subtype_mods),
+                THIS_MAPIFY(subtype_members),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1960,10 +2294,16 @@ class constraint_def_sm_class : public StructMember_class {
         Expression constraint_expr;
     public:
         constraint_def_sm_class(Expression constraint_expr){
+            // initialize the members & tie them to me (the parent)
             this->constraint_expr = constraint_expr;
             if(constraint_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->constraint_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(constraint_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -1985,6 +2325,7 @@ class on_event_sm_class : public StructMember_class {
         ActionBlock action_block;
     public:
         on_event_sm_class(Expression event_name, ActionBlock action_block){
+            // initialize the members & tie them to me (the parent)
             this->event_name = event_name;
             if(event_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_name);
@@ -1993,6 +2334,12 @@ class on_event_sm_class : public StructMember_class {
             if(action_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->action_block);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_name),
+                THIS_MAPIFY(action_block),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2013,8 +2360,14 @@ class simple_event_dec_sm_class : public StructMember_class {
         ast::p_tree_node id;
     public:
         simple_event_dec_sm_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2036,12 +2389,19 @@ class event_def_sm_class : public StructMember_class {
         Expression temporal;
     public:
         event_def_sm_class(Symbol_ id, Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2063,12 +2423,19 @@ class event_def_override_sm_class : public StructMember_class {
         Expression temporal;
     public:
         event_def_override_sm_class(Symbol_ id, Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2090,6 +2457,7 @@ class temporal_expr_class : public Expression_class {
         Expression sample_event;
     public:
         temporal_expr_class(Expression temporal, Expression sample_event){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
@@ -2098,6 +2466,12 @@ class temporal_expr_class : public Expression_class {
             if(sample_event){ // non-terminal might be null due to error reduction rules
                 this->tie(this->sample_event);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(sample_event),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2118,10 +2492,16 @@ class sampling_event_expr_class : public Expression_class {
         Expression event_expr;
     public:
         sampling_event_expr_class(Expression event_expr){
+            // initialize the members & tie them to me (the parent)
             this->event_expr = event_expr;
             if(event_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2142,10 +2522,16 @@ class event_ref_expr_class : public Expression_class {
         Expression event_name;
     public:
         event_ref_expr_class(Expression event_name){
+            // initialize the members & tie them to me (the parent)
             this->event_name = event_name;
             if(event_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_name);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2167,6 +2553,7 @@ class action_attached_temporal_expr_class : public Expression_class {
         ActionBlock actions;
     public:
         action_attached_temporal_expr_class(Expression temporal, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
@@ -2175,6 +2562,12 @@ class action_attached_temporal_expr_class : public Expression_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2195,10 +2588,16 @@ class not_temporal_expr_class : public Expression_class {
         Expression temporal;
     public:
         not_temporal_expr_class(Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2219,10 +2618,16 @@ class fail_temporal_expr_class : public Expression_class {
         Expression temporal;
     public:
         fail_temporal_expr_class(Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2243,10 +2648,16 @@ class eventually_temporal_expr_class : public Expression_class {
         Expression temporal;
     public:
         eventually_temporal_expr_class(Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2267,10 +2678,16 @@ class detach_temporal_expr_class : public Expression_class {
         Expression temporal;
     public:
         detach_temporal_expr_class(Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2292,6 +2709,7 @@ class yield_temporal_expr_class : public Expression_class {
         Expression temporal;
     public:
         yield_temporal_expr_class(Expression trigger, Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->trigger = trigger;
             if(trigger){ // non-terminal might be null due to error reduction rules
                 this->tie(this->trigger);
@@ -2300,6 +2718,12 @@ class yield_temporal_expr_class : public Expression_class {
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(trigger),
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2320,10 +2744,16 @@ class true_temporal_expr_class : public Expression_class {
         Expression bool_expr;
     public:
         true_temporal_expr_class(Expression bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2344,10 +2774,16 @@ class rise_temporal_expr_class : public Expression_class {
         Expression hdl_path;
     public:
         rise_temporal_expr_class(Expression hdl_path){
+            // initialize the members & tie them to me (the parent)
             this->hdl_path = hdl_path;
             if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hdl_path);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_path),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2368,10 +2804,16 @@ class fall_temporal_expr_class : public Expression_class {
         Expression hdl_path;
     public:
         fall_temporal_expr_class(Expression hdl_path){
+            // initialize the members & tie them to me (the parent)
             this->hdl_path = hdl_path;
             if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hdl_path);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_path),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2392,10 +2834,16 @@ class change_temporal_expr_class : public Expression_class {
         Expression hdl_path;
     public:
         change_temporal_expr_class(Expression hdl_path){
+            // initialize the members & tie them to me (the parent)
             this->hdl_path = hdl_path;
             if(hdl_path){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hdl_path);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_path),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2417,6 +2865,7 @@ class and_temporal_expr_class : public Expression_class {
         Expression te2;
     public:
         and_temporal_expr_class(Expression te1, Expression te2){
+            // initialize the members & tie them to me (the parent)
             this->te1 = te1;
             if(te1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->te1);
@@ -2425,6 +2874,12 @@ class and_temporal_expr_class : public Expression_class {
             if(te2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->te2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(te1),
+                THIS_MAPIFY(te2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2446,6 +2901,7 @@ class or_temporal_expr_class : public Expression_class {
         Expression te2;
     public:
         or_temporal_expr_class(Expression te1, Expression te2){
+            // initialize the members & tie them to me (the parent)
             this->te1 = te1;
             if(te1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->te1);
@@ -2454,6 +2910,12 @@ class or_temporal_expr_class : public Expression_class {
             if(te2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->te2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(te1),
+                THIS_MAPIFY(te2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2474,10 +2936,16 @@ class sequence_temporal_expr_class : public Expression_class {
         Expressions temporals;
     public:
         sequence_temporal_expr_class(Expressions temporals){
+            // initialize the members & tie them to me (the parent)
             this->temporals = temporals;
             if(temporals){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporals);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporals),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2499,6 +2967,7 @@ class fixed_repetition_expr_class : public Expression_class {
         Expression temporal;
     public:
         fixed_repetition_expr_class(Expression rep, Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->rep = rep;
             if(rep){ // non-terminal might be null due to error reduction rules
                 this->tie(this->rep);
@@ -2507,6 +2976,12 @@ class fixed_repetition_expr_class : public Expression_class {
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(rep),
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2530,6 +3005,7 @@ class first_match_repetition_expr_class : public Expression_class {
         Expression match_temporal;
     public:
         first_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal, Expression match_temporal){
+            // initialize the members & tie them to me (the parent)
             this->from_rep = from_rep;
             if(from_rep){ // non-terminal might be null due to error reduction rules
                 this->tie(this->from_rep);
@@ -2546,6 +3022,14 @@ class first_match_repetition_expr_class : public Expression_class {
             if(match_temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->match_temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(from_rep),
+                THIS_MAPIFY(to_rep),
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(match_temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2568,6 +3052,7 @@ class true_match_repetition_expr_class : public Expression_class {
         Expression temporal;
     public:
         true_match_repetition_expr_class(Expression from_rep, Expression to_rep, Expression temporal){
+            // initialize the members & tie them to me (the parent)
             this->from_rep = from_rep;
             if(from_rep){ // non-terminal might be null due to error reduction rules
                 this->tie(this->from_rep);
@@ -2580,6 +3065,13 @@ class true_match_repetition_expr_class : public Expression_class {
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(from_rep),
+                THIS_MAPIFY(to_rep),
+                THIS_MAPIFY(temporal),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2599,6 +3091,11 @@ class zero_repetition_base_expr_class : public Expression_class {
     protected:
     public:
         zero_repetition_base_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2618,6 +3115,11 @@ class inf_repetition_base_expr_class : public Expression_class {
     protected:
     public:
         inf_repetition_base_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2637,6 +3139,11 @@ class cycle_temporal_expr_class : public Expression_class {
     protected:
     public:
         cycle_temporal_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2658,6 +3165,7 @@ class delay_temporal_expr_class : public Expression_class {
         Expression timescale_unit;
     public:
         delay_temporal_expr_class(Expression e, Expression timescale_unit){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
@@ -2666,6 +3174,12 @@ class delay_temporal_expr_class : public Expression_class {
             if(timescale_unit){ // non-terminal might be null due to error reduction rules
                 this->tie(this->timescale_unit);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+                THIS_MAPIFY(timescale_unit),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2686,10 +3200,16 @@ class consume_temporal_expr_class : public Expression_class {
         Expression e;
     public:
         consume_temporal_expr_class(Expression e){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2711,6 +3231,7 @@ class expect_nameless_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         expect_nameless_sm_class(Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
@@ -2719,6 +3240,12 @@ class expect_nameless_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2741,6 +3268,7 @@ class expect_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         expect_sm_class(Expression id, Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -2753,6 +3281,13 @@ class expect_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2775,6 +3310,7 @@ class expect_override_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         expect_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -2787,6 +3323,13 @@ class expect_override_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2808,6 +3351,7 @@ class assume_nameless_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         assume_nameless_sm_class(Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
                 this->tie(this->temporal);
@@ -2816,6 +3360,12 @@ class assume_nameless_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2838,6 +3388,7 @@ class assume_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         assume_sm_class(Expression id, Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -2850,6 +3401,13 @@ class assume_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2872,6 +3430,7 @@ class assume_override_sm_class : public StructMember_class {
         Expression dut_error_call;
     public:
         assume_override_sm_class(Expression id, Expression temporal, Expression dut_error_call){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -2884,6 +3443,13 @@ class assume_override_sm_class : public StructMember_class {
             if(dut_error_call){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_call);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(temporal),
+                THIS_MAPIFY(dut_error_call),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2904,8 +3470,14 @@ class empty_covergroup_sm_class : public StructMember_class {
         ast::p_tree_node event_id;
     public:
         empty_covergroup_sm_class(Symbol_ event_id){
+            // initialize the members & tie them to me (the parent)
             this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2928,6 +3500,7 @@ class covergroup_sm_class : public StructMember_class {
         CovergroupItems cg_items;
     public:
         covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
+            // initialize the members & tie them to me (the parent)
             this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->cg_opts = cg_opts;
@@ -2938,6 +3511,13 @@ class covergroup_sm_class : public StructMember_class {
             if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cg_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+                THIS_MAPIFY(cg_opts),
+                THIS_MAPIFY(cg_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2961,6 +3541,7 @@ class covergroup_extension_sm_class : public StructMember_class {
         CovergroupItems cg_items;
     public:
         covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
+            // initialize the members & tie them to me (the parent)
             this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->instance_id = instance_id;
@@ -2975,6 +3556,14 @@ class covergroup_extension_sm_class : public StructMember_class {
             if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cg_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+                THIS_MAPIFY(instance_id),
+                THIS_MAPIFY(cg_opts),
+                THIS_MAPIFY(cg_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -2994,6 +3583,11 @@ class covergroup_per_type_ceid_class : public CovergroupExtensionID_class {
     protected:
     public:
         covergroup_per_type_ceid_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3014,10 +3608,16 @@ class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_cla
         Expression e_path;
     public:
         covergroup_per_unit_instance_ceid_class(Expression e_path){
+            // initialize the members & tie them to me (the parent)
             this->e_path = e_path;
             if(e_path){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e_path);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e_path),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3039,10 +3639,17 @@ class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
         ast::p_tree_node bucket_name;
     public:
         covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name){
+            // initialize the members & tie them to me (the parent)
             this->item_name = ast::p_tree_node(new ast::Symbol__leaf_node(item_name));
             this->tie(this->item_name);
             this->bucket_name = ast::p_tree_node(new ast::Symbol__leaf_node(bucket_name));
             this->tie(this->bucket_name);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_name),
+                THIS_MAPIFY(bucket_name),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3063,10 +3670,16 @@ class global_cgo_class : public CovergroupOption_class {
         Expression bool_litral;
     public:
         global_cgo_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3087,10 +3700,16 @@ class no_collect_cgo_class : public CovergroupOption_class {
         Expression bool_litral;
     public:
         no_collect_cgo_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3111,10 +3730,16 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
         Expression hier_id;
     public:
         per_unit_instance_cgo_class(Expression hier_id){
+            // initialize the members & tie them to me (the parent)
             this->hier_id = hier_id;
             if(hier_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hier_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hier_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3134,6 +3759,11 @@ class radix_dec_cgo_class : public CovergroupOption_class {
     protected:
     public:
         radix_dec_cgo_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3153,6 +3783,11 @@ class radix_hex_cgo_class : public CovergroupOption_class {
     protected:
     public:
         radix_hex_cgo_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3172,6 +3807,11 @@ class radix_bin_cgo_class : public CovergroupOption_class {
     protected:
     public:
         radix_bin_cgo_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3192,8 +3832,14 @@ class text_cgo_class : public CovergroupOption_class {
         ast::p_tree_node description;
     public:
         text_cgo_class(Symbol_ description){
+            // initialize the members & tie them to me (the parent)
             this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(description),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3214,8 +3860,14 @@ class weight_cgo_class : public CovergroupOption_class {
         ast::p_tree_node value;
     public:
         weight_cgo_class(Symbol_ value){
+            // initialize the members & tie them to me (the parent)
             this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(value),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3236,10 +3888,16 @@ class when_cgo_class : public CovergroupOption_class {
         Expression bool_expr;
     public:
         when_cgo_class(Expression bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3261,12 +3919,19 @@ class simple_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
+            // initialize the members & tie them to me (the parent)
             this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cgi_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_id),
+                THIS_MAPIFY(cgi_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3290,6 +3955,7 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options){
+            // initialize the members & tie them to me (the parent)
             this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->type_ = type_;
@@ -3304,6 +3970,14 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
             if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cgi_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_id),
+                THIS_MAPIFY(type_),
+                THIS_MAPIFY(sampled_val),
+                THIS_MAPIFY(cgi_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3325,6 +3999,7 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         cross_covergroup_item_cgi_class(Expressions cg_items, CovergroupItemOptions cgi_options){
+            // initialize the members & tie them to me (the parent)
             this->cg_items = cg_items;
             if(cg_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cg_items);
@@ -3333,6 +4008,12 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
             if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cgi_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(cg_items),
+                THIS_MAPIFY(cgi_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3354,12 +4035,19 @@ class transition_covergroup_item_cgi_class : public CovergroupItem_class {
         CovergroupItemOptions cgi_options;
     public:
         transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
+            // initialize the members & tie them to me (the parent)
             this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
                 this->tie(this->cgi_options);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_id),
+                THIS_MAPIFY(cgi_options),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3380,8 +4068,14 @@ class at_least_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node num;
     public:
         at_least_cgio_class(Symbol_ num){
+            // initialize the members & tie them to me (the parent)
             this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(num),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3402,10 +4096,16 @@ class ignore_cgio_class : public CovergroupItemOption_class {
         Expression item_bool_expr;
     public:
         ignore_cgio_class(Expression item_bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->item_bool_expr = item_bool_expr;
             if(item_bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->item_bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3426,10 +4126,16 @@ class illegal_cgio_class : public CovergroupItemOption_class {
         Expression bool_litral;
     public:
         illegal_cgio_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3450,10 +4156,16 @@ class no_collect_cgio_class : public CovergroupItemOption_class {
         Expression bool_litral;
     public:
         no_collect_cgio_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3474,10 +4186,16 @@ class no_trace_cgio_class : public CovergroupItemOption_class {
         Expression bool_litral;
     public:
         no_trace_cgio_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3498,8 +4216,14 @@ class num_of_buckets_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node num;
     public:
         num_of_buckets_cgio_class(Symbol_ num){
+            // initialize the members & tie them to me (the parent)
             this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(num),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3520,10 +4244,16 @@ class per_instance_cgio_class : public CovergroupItemOption_class {
         Expression bool_litral;
     public:
         per_instance_cgio_class(Expression bool_litral){
+            // initialize the members & tie them to me (the parent)
             this->bool_litral = bool_litral;
             if(bool_litral){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_litral);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_litral),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3543,6 +4273,11 @@ class radix_dec_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
         radix_dec_cgio_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3562,6 +4297,11 @@ class radix_hex_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
         radix_hex_cgio_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3581,6 +4321,11 @@ class radix_bin_cgio_class : public CovergroupItemOption_class {
     protected:
     public:
         radix_bin_cgio_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3601,8 +4346,14 @@ class text_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node description;
     public:
         text_cgio_class(Symbol_ description){
+            // initialize the members & tie them to me (the parent)
             this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(description),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3623,8 +4374,14 @@ class weight_cgio_class : public CovergroupItemOption_class {
         ast::p_tree_node value;
     public:
         weight_cgio_class(Symbol_ value){
+            // initialize the members & tie them to me (the parent)
             this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(value),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3645,10 +4402,16 @@ class when_cgio_class : public CovergroupItemOption_class {
         Expression bool_expr;
     public:
         when_cgio_class(Expression bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3668,6 +4431,11 @@ class true_literal_expr_class : public Expression_class {
     protected:
     public:
         true_literal_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3687,6 +4455,11 @@ class false_literal_expr_class : public Expression_class {
     protected:
     public:
         false_literal_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3707,8 +4480,14 @@ class id_expr_class : public Expression_class {
         ast::p_tree_node id;
     public:
         id_expr_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3730,6 +4509,7 @@ class enum_type_expr_class : public Expression_class {
         Expression width_modifier_expr;
     public:
         enum_type_expr_class(Expressions enum_list_expr, Expression width_modifier_expr){
+            // initialize the members & tie them to me (the parent)
             this->enum_list_expr = enum_list_expr;
             if(enum_list_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->enum_list_expr);
@@ -3738,6 +4518,12 @@ class enum_type_expr_class : public Expression_class {
             if(width_modifier_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_modifier_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(enum_list_expr),
+                THIS_MAPIFY(width_modifier_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3759,12 +4545,19 @@ class enum_list_item_class : public Expression_class {
         Expression expr;
     public:
         enum_list_item_class(Symbol_ id, Expression expr){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->expr = expr;
             if(expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3785,10 +4578,16 @@ class bitwise_not_expr_class : public Expression_class {
         Expression e;
     public:
         bitwise_not_expr_class(Expression e){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3810,6 +4609,7 @@ class bitwise_and_expr_class : public Expression_class {
         Expression e2;
     public:
         bitwise_and_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3818,6 +4618,12 @@ class bitwise_and_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3839,6 +4645,7 @@ class bitwise_or_expr_class : public Expression_class {
         Expression e2;
     public:
         bitwise_or_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3847,6 +4654,12 @@ class bitwise_or_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3868,6 +4681,7 @@ class bitwise_xor_expr_class : public Expression_class {
         Expression e2;
     public:
         bitwise_xor_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3876,6 +4690,12 @@ class bitwise_xor_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3897,6 +4717,7 @@ class shift_left_expr_class : public Expression_class {
         Expression e2;
     public:
         shift_left_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3905,6 +4726,12 @@ class shift_left_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3926,6 +4753,7 @@ class right_left_expr_class : public Expression_class {
         Expression e2;
     public:
         right_left_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3934,6 +4762,12 @@ class right_left_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3954,10 +4788,16 @@ class logical_not_expr_class : public Expression_class {
         Expression e;
     public:
         logical_not_expr_class(Expression e){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -3979,6 +4819,7 @@ class logical_and_expr_class : public Expression_class {
         Expression e2;
     public:
         logical_and_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -3987,6 +4828,12 @@ class logical_and_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4008,6 +4855,7 @@ class logical_or_expr_class : public Expression_class {
         Expression e2;
     public:
         logical_or_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4016,6 +4864,12 @@ class logical_or_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4037,6 +4891,7 @@ class implication_expr_class : public Expression_class {
         Expression e2;
     public:
         implication_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4045,6 +4900,12 @@ class implication_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4065,10 +4926,16 @@ class unary_positive_expr_class : public Expression_class {
         Expression e;
     public:
         unary_positive_expr_class(Expression e){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4089,10 +4956,16 @@ class unary_negative_expr_class : public Expression_class {
         Expression e;
     public:
         unary_negative_expr_class(Expression e){
+            // initialize the members & tie them to me (the parent)
             this->e = e;
             if(e){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4114,6 +4987,7 @@ class binary_add_expr_class : public Expression_class {
         Expression e2;
     public:
         binary_add_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4122,6 +4996,12 @@ class binary_add_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4143,6 +5023,7 @@ class binary_sub_expr_class : public Expression_class {
         Expression e2;
     public:
         binary_sub_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4151,6 +5032,12 @@ class binary_sub_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4172,6 +5059,7 @@ class binary_mul_expr_class : public Expression_class {
         Expression e2;
     public:
         binary_mul_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4180,6 +5068,12 @@ class binary_mul_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4201,6 +5095,7 @@ class binary_div_expr_class : public Expression_class {
         Expression e2;
     public:
         binary_div_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4209,6 +5104,12 @@ class binary_div_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4230,6 +5131,7 @@ class binary_remainder_expr_class : public Expression_class {
         Expression e2;
     public:
         binary_remainder_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4238,6 +5140,12 @@ class binary_remainder_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4259,6 +5167,7 @@ class less_then_expr_class : public Expression_class {
         Expression e2;
     public:
         less_then_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4267,6 +5176,12 @@ class less_then_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4288,6 +5203,7 @@ class greater_then_expr_class : public Expression_class {
         Expression e2;
     public:
         greater_then_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4296,6 +5212,12 @@ class greater_then_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4317,6 +5239,7 @@ class less_then_or_equal_expr_class : public Expression_class {
         Expression e2;
     public:
         less_then_or_equal_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4325,6 +5248,12 @@ class less_then_or_equal_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4346,6 +5275,7 @@ class greater_then_or_equal_expr_class : public Expression_class {
         Expression e2;
     public:
         greater_then_or_equal_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4354,6 +5284,12 @@ class greater_then_or_equal_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4375,6 +5311,7 @@ class equality_expr_class : public Expression_class {
         Expression e2;
     public:
         equality_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4383,6 +5320,12 @@ class equality_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4404,6 +5347,7 @@ class non_equality_expr_class : public Expression_class {
         Expression e2;
     public:
         non_equality_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4412,6 +5356,12 @@ class non_equality_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4433,6 +5383,7 @@ class hdl_equality_expr_class : public Expression_class {
         Expression e2;
     public:
         hdl_equality_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4441,6 +5392,12 @@ class hdl_equality_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4462,6 +5419,7 @@ class hdl_non_equality_expr_class : public Expression_class {
         Expression e2;
     public:
         hdl_non_equality_expr_class(Expression e1, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->e1 = e1;
             if(e1){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e1);
@@ -4470,6 +5428,12 @@ class hdl_non_equality_expr_class : public Expression_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(e1),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4491,6 +5455,7 @@ class str_match_expr_class : public Expression_class {
         Expression pattern_expr;
     public:
         str_match_expr_class(Expression str_expr, Expression pattern_expr){
+            // initialize the members & tie them to me (the parent)
             this->str_expr = str_expr;
             if(str_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->str_expr);
@@ -4499,6 +5464,12 @@ class str_match_expr_class : public Expression_class {
             if(pattern_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->pattern_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(str_expr),
+                THIS_MAPIFY(pattern_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4520,6 +5491,7 @@ class str_does_not_match_expr_class : public Expression_class {
         Expression pattern_expr;
     public:
         str_does_not_match_expr_class(Expression str_expr, Expression pattern_expr){
+            // initialize the members & tie them to me (the parent)
             this->str_expr = str_expr;
             if(str_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->str_expr);
@@ -4528,6 +5500,12 @@ class str_does_not_match_expr_class : public Expression_class {
             if(pattern_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->pattern_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(str_expr),
+                THIS_MAPIFY(pattern_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4549,6 +5527,7 @@ class in_expr_class : public Expression_class {
         Expression inside;
     public:
         in_expr_class(Expression exp, Expression inside){
+            // initialize the members & tie them to me (the parent)
             this->exp = exp;
             if(exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->exp);
@@ -4557,6 +5536,12 @@ class in_expr_class : public Expression_class {
             if(inside){ // non-terminal might be null due to error reduction rules
                 this->tie(this->inside);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(exp),
+                THIS_MAPIFY(inside),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4578,6 +5563,7 @@ class type_introspec_expr_class : public Expression_class {
         DataType type_id;
     public:
         type_introspec_expr_class(Expression field_id, DataType type_id){
+            // initialize the members & tie them to me (the parent)
             this->field_id = field_id;
             if(field_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_id);
@@ -4586,6 +5572,12 @@ class type_introspec_expr_class : public Expression_class {
             if(type_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field_id),
+                THIS_MAPIFY(type_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4607,6 +5599,7 @@ class type_introspec_negation_expr_class : public Expression_class {
         DataType type_id;
     public:
         type_introspec_negation_expr_class(Expression field_id, DataType type_id){
+            // initialize the members & tie them to me (the parent)
             this->field_id = field_id;
             if(field_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_id);
@@ -4615,6 +5608,12 @@ class type_introspec_negation_expr_class : public Expression_class {
             if(type_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field_id),
+                THIS_MAPIFY(type_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4636,6 +5635,7 @@ class in_enum_expr_class : public Expression_class {
         DataType inside;
     public:
         in_enum_expr_class(Expression exp, DataType inside){
+            // initialize the members & tie them to me (the parent)
             this->exp = exp;
             if(exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->exp);
@@ -4644,6 +5644,12 @@ class in_enum_expr_class : public Expression_class {
             if(inside){ // non-terminal might be null due to error reduction rules
                 this->tie(this->inside);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(exp),
+                THIS_MAPIFY(inside),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4664,10 +5670,16 @@ class list_index_item_expr_class : public Expression_class {
         Expression idx_expr;
     public:
         list_index_item_expr_class(Expression idx_expr){
+            // initialize the members & tie them to me (the parent)
             this->idx_expr = idx_expr;
             if(idx_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->idx_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(idx_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4689,6 +5701,7 @@ class list_index_expr_class : public Expression_class {
         Expression idx_expr;
     public:
         list_index_expr_class(Expression base_id, Expression idx_expr){
+            // initialize the members & tie them to me (the parent)
             this->base_id = base_id;
             if(base_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->base_id);
@@ -4697,6 +5710,12 @@ class list_index_expr_class : public Expression_class {
             if(idx_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->idx_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(base_id),
+                THIS_MAPIFY(idx_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4718,6 +5737,7 @@ class list_slicing_expr_class : public Expression_class {
         Expression range_expr;
     public:
         list_slicing_expr_class(Expression list_exp, Expression range_expr){
+            // initialize the members & tie them to me (the parent)
             this->list_exp = list_exp;
             if(list_exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->list_exp);
@@ -4726,6 +5746,12 @@ class list_slicing_expr_class : public Expression_class {
             if(range_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->range_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(list_exp),
+                THIS_MAPIFY(range_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4747,6 +5773,7 @@ class bit_slicing_expr_class : public Expression_class {
         Expression bit_slice_expr;
     public:
         bit_slicing_expr_class(Expression list_exp, Expression bit_slice_expr){
+            // initialize the members & tie them to me (the parent)
             this->list_exp = list_exp;
             if(list_exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->list_exp);
@@ -4755,6 +5782,12 @@ class bit_slicing_expr_class : public Expression_class {
             if(bit_slice_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bit_slice_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(list_exp),
+                THIS_MAPIFY(bit_slice_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4775,10 +5808,16 @@ class list_concat_expr_class : public Expression_class {
         Expressions list_concat_items;
     public:
         list_concat_expr_class(Expressions list_concat_items){
+            // initialize the members & tie them to me (the parent)
             this->list_concat_items = list_concat_items;
             if(list_concat_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->list_concat_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(list_concat_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4799,10 +5838,16 @@ class bit_concat_expr_class : public Expression_class {
         Expressions bit_concat_items;
     public:
         bit_concat_expr_class(Expressions bit_concat_items){
+            // initialize the members & tie them to me (the parent)
             this->bit_concat_items = bit_concat_items;
             if(bit_concat_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bit_concat_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bit_concat_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4824,6 +5869,7 @@ class bit_slice_expr_class : public Expression_class {
         Expression top;
     public:
         bit_slice_expr_class(Expression bottom, Expression top){
+            // initialize the members & tie them to me (the parent)
             this->bottom = bottom;
             if(bottom){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bottom);
@@ -4832,6 +5878,12 @@ class bit_slice_expr_class : public Expression_class {
             if(top){ // non-terminal might be null due to error reduction rules
                 this->tie(this->top);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bottom),
+                THIS_MAPIFY(top),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4853,6 +5905,7 @@ class range_modifier_item_expr_class : public Expression_class {
         Expression top;
     public:
         range_modifier_item_expr_class(Expression bottom, Expression top){
+            // initialize the members & tie them to me (the parent)
             this->bottom = bottom;
             if(bottom){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bottom);
@@ -4861,6 +5914,12 @@ class range_modifier_item_expr_class : public Expression_class {
             if(top){ // non-terminal might be null due to error reduction rules
                 this->tie(this->top);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bottom),
+                THIS_MAPIFY(top),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4881,10 +5940,16 @@ class range_modifier_expr_class : public Expression_class {
         Expressions range_items;
     public:
         range_modifier_expr_class(Expressions range_items){
+            // initialize the members & tie them to me (the parent)
             this->range_items = range_items;
             if(range_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->range_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(range_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4905,10 +5970,16 @@ class ranges_modifier_expr_class : public Expression_class {
         Expressions ranges;
     public:
         ranges_modifier_expr_class(Expressions ranges){
+            // initialize the members & tie them to me (the parent)
             this->ranges = ranges;
             if(ranges){ // non-terminal might be null due to error reduction rules
                 this->tie(this->ranges);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(ranges),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4929,10 +6000,16 @@ class sized_bits_scalar_expr_class : public Expression_class {
         Expression width_expr;
     public:
         sized_bits_scalar_expr_class(Expression width_expr){
+            // initialize the members & tie them to me (the parent)
             this->width_expr = width_expr;
             if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(width_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4953,10 +6030,16 @@ class sized_bytes_scalar_expr_class : public Expression_class {
         Expression width_expr;
     public:
         sized_bytes_scalar_expr_class(Expression width_expr){
+            // initialize the members & tie them to me (the parent)
             this->width_expr = width_expr;
             if(width_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(width_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -4979,6 +6062,7 @@ class new_allocate_expr_class : public Expression_class {
         ActionBlock actions;
     public:
         new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->struct_type_block = struct_type_block;
             if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_block);
@@ -4989,6 +6073,13 @@ class new_allocate_expr_class : public Expression_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_type_block),
+                THIS_MAPIFY(scoped_name),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5010,6 +6101,7 @@ class new_nameless_allocate_expr_class : public Expression_class {
         ActionBlock actions;
     public:
         new_nameless_allocate_expr_class(Expression struct_type_block, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->struct_type_block = struct_type_block;
             if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_block);
@@ -5018,6 +6110,12 @@ class new_nameless_allocate_expr_class : public Expression_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_type_block),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5039,6 +6137,7 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
         Expression opt_action_block_expt;
     public:
         struct_type_expr_with_opt_action_block_class(Expression struct_id_expr, Expression opt_action_block_expt){
+            // initialize the members & tie them to me (the parent)
             this->struct_id_expr = struct_id_expr;
             if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_id_expr);
@@ -5047,6 +6146,12 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
             if(opt_action_block_expt){ // non-terminal might be null due to error reduction rules
                 this->tie(this->opt_action_block_expt);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_id_expr),
+                THIS_MAPIFY(opt_action_block_expt),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5068,6 +6173,7 @@ class named_action_block_class : public Expression_class {
         Actions action_block;
     public:
         named_action_block_class(Expression struct_id_expr, Actions action_block){
+            // initialize the members & tie them to me (the parent)
             this->struct_id_expr = struct_id_expr;
             if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_id_expr);
@@ -5076,6 +6182,12 @@ class named_action_block_class : public Expression_class {
             if(action_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->action_block);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_id_expr),
+                THIS_MAPIFY(action_block),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5097,6 +6209,7 @@ class struct_type_id_class : public Expression_class {
         Expression struct_id_expr;
     public:
         struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr){
+            // initialize the members & tie them to me (the parent)
             this->struct_type_modifiers = struct_type_modifiers;
             if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_modifiers);
@@ -5105,6 +6218,12 @@ class struct_type_id_class : public Expression_class {
             if(struct_id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_id_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_type_modifiers),
+                THIS_MAPIFY(struct_id_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5126,6 +6245,7 @@ class struct_type_modifier_class : public Expression_class {
         Expression id;
     public:
         struct_type_modifier_class(Expression value, Expression id){
+            // initialize the members & tie them to me (the parent)
             this->value = value;
             if(value){ // non-terminal might be null due to error reduction rules
                 this->tie(this->value);
@@ -5134,6 +6254,12 @@ class struct_type_modifier_class : public Expression_class {
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(value),
+                THIS_MAPIFY(id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5154,10 +6280,16 @@ class defined_type_identifier_expr_class : public Expression_class {
         Expressions modifiers;
     public:
         defined_type_identifier_expr_class(Expressions modifiers){
+            // initialize the members & tie them to me (the parent)
             this->modifiers = modifiers;
             if(modifiers){ // non-terminal might be null due to error reduction rules
                 this->tie(this->modifiers);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(modifiers),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5178,10 +6310,16 @@ class struct_hier_ref_expr_class : public Expression_class {
         Expressions hiers;
     public:
         struct_hier_ref_expr_class(Expressions hiers){
+            // initialize the members & tie them to me (the parent)
             this->hiers = hiers;
             if(hiers){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hiers);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hiers),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5202,8 +6340,14 @@ class hdl_path_name_expr_class : public Expression_class {
         ast::p_tree_node hdl_hier_ref;
     public:
         hdl_path_name_expr_class(Symbol_ hdl_hier_ref){
+            // initialize the members & tie them to me (the parent)
             this->hdl_hier_ref = ast::p_tree_node(new ast::Symbol__leaf_node(hdl_hier_ref));
             this->tie(this->hdl_hier_ref);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_hier_ref),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5226,6 +6370,7 @@ class ternary_assign_expr_class : public Expression_class {
         Expression false_expr;
     public:
         ternary_assign_expr_class(Expression bool_exp, Expression true_expr, Expression false_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_exp = bool_exp;
             if(bool_exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_exp);
@@ -5238,6 +6383,13 @@ class ternary_assign_expr_class : public Expression_class {
             if(false_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->false_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_exp),
+                THIS_MAPIFY(true_expr),
+                THIS_MAPIFY(false_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5258,10 +6410,16 @@ class hwp_access_expr_class : public Expression_class {
         Expression base;
     public:
         hwp_access_expr_class(Expression base){
+            // initialize the members & tie them to me (the parent)
             this->base = base;
             if(base){ // non-terminal might be null due to error reduction rules
                 this->tie(this->base);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(base),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5282,10 +6440,16 @@ class cast_operator_expr_class : public Expression_class {
         DataType dest_type_expr;
     public:
         cast_operator_expr_class(DataType dest_type_expr){
+            // initialize the members & tie them to me (the parent)
             this->dest_type_expr = dest_type_expr;
             if(dest_type_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dest_type_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(dest_type_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5305,6 +6469,11 @@ class sys_time_ref_expr_class : public Expression_class {
     protected:
     public:
         sys_time_ref_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5326,6 +6495,7 @@ class method_call_expr_class : public Expression_class {
         Expressions arguments;
     public:
         method_call_expr_class(Expression base, Expressions arguments){
+            // initialize the members & tie them to me (the parent)
             this->base = base;
             if(base){ // non-terminal might be null due to error reduction rules
                 this->tie(this->base);
@@ -5334,6 +6504,12 @@ class method_call_expr_class : public Expression_class {
             if(arguments){ // non-terminal might be null due to error reduction rules
                 this->tie(this->arguments);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(base),
+                THIS_MAPIFY(arguments),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5354,10 +6530,16 @@ class constraint_expr_class : public Expression_class {
         Expression bool_expr;
     public:
         constraint_expr_class(Expression bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5378,10 +6560,16 @@ class soft_constraint_expr_class : public Expression_class {
         Expression bool_expr;
     public:
         soft_constraint_expr_class(Expression bool_expr){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5402,10 +6590,16 @@ class all_of_constraint_expr_class : public Expression_class {
         Expressions constraints;
     public:
         all_of_constraint_expr_class(Expressions constraints){
+            // initialize the members & tie them to me (the parent)
             this->constraints = constraints;
             if(constraints){ // non-terminal might be null due to error reduction rules
                 this->tie(this->constraints);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(constraints),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5428,6 +6622,7 @@ class list_items_constraint_expr_class : public Expression_class {
         Expressions constraints;
     public:
         list_items_constraint_expr_class(Expression item_name, Expression gen_item, Expressions constraints){
+            // initialize the members & tie them to me (the parent)
             this->item_name = item_name;
             if(item_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->item_name);
@@ -5440,6 +6635,13 @@ class list_items_constraint_expr_class : public Expression_class {
             if(constraints){ // non-terminal might be null due to error reduction rules
                 this->tie(this->constraints);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(item_name),
+                THIS_MAPIFY(gen_item),
+                THIS_MAPIFY(constraints),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5461,6 +6663,7 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
         DataType type_;
     public:
         field_type_constraint_by_type_expr_class(Expression field_, DataType type_){
+            // initialize the members & tie them to me (the parent)
             this->field_ = field_;
             if(field_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_);
@@ -5469,6 +6672,12 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
             if(type_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field_),
+                THIS_MAPIFY(type_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5490,6 +6699,7 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
         Expression field;
     public:
         field_type_constraint_by_field_expr_class(Expression field_, Expression field){
+            // initialize the members & tie them to me (the parent)
             this->field_ = field_;
             if(field_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_);
@@ -5498,6 +6708,12 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
             if(field){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field_),
+                THIS_MAPIFY(field),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5519,6 +6735,7 @@ class distribution_constraint_expr_class : public Expression_class {
         Cases distribution;
     public:
         distribution_constraint_expr_class(Expression gen_item, Cases distribution){
+            // initialize the members & tie them to me (the parent)
             this->gen_item = gen_item;
             if(gen_item){ // non-terminal might be null due to error reduction rules
                 this->tie(this->gen_item);
@@ -5527,6 +6744,12 @@ class distribution_constraint_expr_class : public Expression_class {
             if(distribution){ // non-terminal might be null due to error reduction rules
                 this->tie(this->distribution);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(gen_item),
+                THIS_MAPIFY(distribution),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5548,6 +6771,7 @@ class distribution_branch_case_class : public Case_class {
         Expression value;
     public:
         distribution_branch_case_class(Expression int_, Expression value){
+            // initialize the members & tie them to me (the parent)
             this->int_ = int_;
             if(int_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->int_);
@@ -5556,6 +6780,12 @@ class distribution_branch_case_class : public Case_class {
             if(value){ // non-terminal might be null due to error reduction rules
                 this->tie(this->value);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(int_),
+                THIS_MAPIFY(value),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5575,6 +6805,11 @@ class me_expr_class : public Expression_class {
     protected:
     public:
         me_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5594,6 +6829,11 @@ class it_expr_class : public Expression_class {
     protected:
     public:
         it_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5614,8 +6854,14 @@ class str_expr_class : public Expression_class {
         ast::p_tree_node str;
     public:
         str_expr_class(Symbol_ str){
+            // initialize the members & tie them to me (the parent)
             this->str = ast::p_tree_node(new ast::Symbol__leaf_node(str));
             this->tie(this->str);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(str),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5636,8 +6882,14 @@ class int_expr_class : public Expression_class {
         ast::p_tree_node int_;
     public:
         int_expr_class(Symbol_ int_){
+            // initialize the members & tie them to me (the parent)
             this->int_ = ast::p_tree_node(new ast::Symbol__leaf_node(int_));
             this->tie(this->int_);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(int_),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5659,6 +6911,7 @@ class enum_dt_class : public DataType_class {
         Expression width_modifier;
     public:
         enum_dt_class(Expressions enum_list_items, Expression width_modifier){
+            // initialize the members & tie them to me (the parent)
             this->enum_list_items = enum_list_items;
             if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->enum_list_items);
@@ -5667,6 +6920,12 @@ class enum_dt_class : public DataType_class {
             if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_modifier);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(enum_list_items),
+                THIS_MAPIFY(width_modifier),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5689,6 +6948,7 @@ class scalar_subtype_dt_class : public DataType_class {
         Expression width_modifier;
     public:
         scalar_subtype_dt_class(DataType predefined_base_type, Expression range_modifier, Expression width_modifier){
+            // initialize the members & tie them to me (the parent)
             this->predefined_base_type = predefined_base_type;
             if(predefined_base_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->predefined_base_type);
@@ -5701,6 +6961,13 @@ class scalar_subtype_dt_class : public DataType_class {
             if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_modifier);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(predefined_base_type),
+                THIS_MAPIFY(range_modifier),
+                THIS_MAPIFY(width_modifier),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5722,6 +6989,7 @@ class defined_dt_class : public DataType_class {
         Expression width_modifier;
     public:
         defined_dt_class(Expressions enum_list_items, Expression width_modifier){
+            // initialize the members & tie them to me (the parent)
             this->enum_list_items = enum_list_items;
             if(enum_list_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->enum_list_items);
@@ -5730,6 +6998,12 @@ class defined_dt_class : public DataType_class {
             if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_modifier);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(enum_list_items),
+                THIS_MAPIFY(width_modifier),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5751,12 +7025,19 @@ class defined_subtype_dt_class : public DataType_class {
         Expression range_modifier;
     public:
         defined_subtype_dt_class(Symbol_ id, Expression range_modifier){
+            // initialize the members & tie them to me (the parent)
             this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->range_modifier = range_modifier;
             if(range_modifier){ // non-terminal might be null due to error reduction rules
                 this->tie(this->range_modifier);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(range_modifier),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5779,6 +7060,7 @@ class predefined_subtype_dt_class : public DataType_class {
         Expression width_modifier;
     public:
         predefined_subtype_dt_class(DataType pred_type, Expression range_modifier, Expression width_modifier){
+            // initialize the members & tie them to me (the parent)
             this->pred_type = pred_type;
             if(pred_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->pred_type);
@@ -5791,6 +7073,13 @@ class predefined_subtype_dt_class : public DataType_class {
             if(width_modifier){ // non-terminal might be null due to error reduction rules
                 this->tie(this->width_modifier);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(pred_type),
+                THIS_MAPIFY(range_modifier),
+                THIS_MAPIFY(width_modifier),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5811,10 +7100,16 @@ class defined_struct_type_dt_class : public DataType_class {
         Expressions struct_type_modifiers;
     public:
         defined_struct_type_dt_class(Expressions struct_type_modifiers){
+            // initialize the members & tie them to me (the parent)
             this->struct_type_modifiers = struct_type_modifiers;
             if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_modifiers);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(struct_type_modifiers),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5835,10 +7130,16 @@ class list_type_dt_class : public DataType_class {
         DataType base_type;
     public:
         list_type_dt_class(DataType base_type){
+            // initialize the members & tie them to me (the parent)
             this->base_type = base_type;
             if(base_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->base_type);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(base_type),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5860,12 +7161,19 @@ class assoc_list_type_dt_class : public DataType_class {
         DataType base_type;
     public:
         assoc_list_type_dt_class(Symbol_ key_id, DataType base_type){
+            // initialize the members & tie them to me (the parent)
             this->key_id = ast::p_tree_node(new ast::Symbol__leaf_node(key_id));
             this->tie(this->key_id);
             this->base_type = base_type;
             if(base_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->base_type);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(key_id),
+                THIS_MAPIFY(base_type),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5885,6 +7193,11 @@ class file_dt_class : public DataType_class {
     protected:
     public:
         file_dt_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5904,6 +7217,11 @@ class int_predefined_type_class : public DataType_class {
     protected:
     public:
         int_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5923,6 +7241,11 @@ class uint_predefined_type_class : public DataType_class {
     protected:
     public:
         uint_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5942,6 +7265,11 @@ class bool_predefined_type_class : public DataType_class {
     protected:
     public:
         bool_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5961,6 +7289,11 @@ class bit_predefined_type_class : public DataType_class {
     protected:
     public:
         bit_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5980,6 +7313,11 @@ class byte_predefined_type_class : public DataType_class {
     protected:
     public:
         byte_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -5999,6 +7337,11 @@ class nibble_predefined_type_class : public DataType_class {
     protected:
     public:
         nibble_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6018,6 +7361,11 @@ class time_predefined_type_class : public DataType_class {
     protected:
     public:
         time_predefined_type_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6037,6 +7385,11 @@ class no_expr_class : public Expression_class {
     protected:
     public:
         no_expr_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6059,6 +7412,7 @@ class var_decl_act_class : public Action_class {
         Expression init_expr;
     public:
         var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr){
+            // initialize the members & tie them to me (the parent)
             this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_id = type_id;
@@ -6069,6 +7423,13 @@ class var_decl_act_class : public Action_class {
             if(init_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->init_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(name),
+                THIS_MAPIFY(type_id),
+                THIS_MAPIFY(init_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6090,6 +7451,7 @@ class var_assign_act_class : public Action_class {
         Expression assign_expr;
     public:
         var_assign_act_class(Expression id_expr, Expression assign_expr){
+            // initialize the members & tie them to me (the parent)
             this->id_expr = id_expr;
             if(id_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id_expr);
@@ -6098,6 +7460,12 @@ class var_assign_act_class : public Action_class {
             if(assign_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->assign_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id_expr),
+                THIS_MAPIFY(assign_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6119,6 +7487,7 @@ class compound_add_act_class : public Action_class {
         Expression e2;
     public:
         compound_add_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6127,6 +7496,12 @@ class compound_add_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6148,6 +7523,7 @@ class compound_sub_act_class : public Action_class {
         Expression e2;
     public:
         compound_sub_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6156,6 +7532,12 @@ class compound_sub_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6177,6 +7559,7 @@ class compound_mul_act_class : public Action_class {
         Expression e2;
     public:
         compound_mul_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6185,6 +7568,12 @@ class compound_mul_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6206,6 +7595,7 @@ class compound_div_act_class : public Action_class {
         Expression e2;
     public:
         compound_div_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6214,6 +7604,12 @@ class compound_div_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6235,6 +7631,7 @@ class compound_mod_act_class : public Action_class {
         Expression e2;
     public:
         compound_mod_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6243,6 +7640,12 @@ class compound_mod_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6264,6 +7667,7 @@ class compound_bool_and_act_class : public Action_class {
         Expression e2;
     public:
         compound_bool_and_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6272,6 +7676,12 @@ class compound_bool_and_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6293,6 +7703,7 @@ class compound_bool_or_act_class : public Action_class {
         Expression e2;
     public:
         compound_bool_or_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6301,6 +7712,12 @@ class compound_bool_or_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6322,6 +7739,7 @@ class compound_bit_and_act_class : public Action_class {
         Expression e2;
     public:
         compound_bit_and_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6330,6 +7748,12 @@ class compound_bit_and_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6351,6 +7775,7 @@ class compound_bit_or_act_class : public Action_class {
         Expression e2;
     public:
         compound_bit_or_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6359,6 +7784,12 @@ class compound_bit_or_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6380,6 +7811,7 @@ class compound_bit_xor_act_class : public Action_class {
         Expression e2;
     public:
         compound_bit_xor_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6388,6 +7820,12 @@ class compound_bit_xor_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6409,6 +7847,7 @@ class compound_shift_left_act_class : public Action_class {
         Expression e2;
     public:
         compound_shift_left_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6417,6 +7856,12 @@ class compound_shift_left_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6438,6 +7883,7 @@ class compound_right_left_act_class : public Action_class {
         Expression e2;
     public:
         compound_right_left_act_class(Expression id, Expression e2){
+            // initialize the members & tie them to me (the parent)
             this->id = id;
             if(id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->id);
@@ -6446,6 +7892,12 @@ class compound_right_left_act_class : public Action_class {
             if(e2){ // non-terminal might be null due to error reduction rules
                 this->tie(this->e2);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+                THIS_MAPIFY(e2),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6467,6 +7919,7 @@ class force_act_class : public Action_class {
         Expression exp;
     public:
         force_act_class(Expression hdl_or_port, Expression exp){
+            // initialize the members & tie them to me (the parent)
             this->hdl_or_port = hdl_or_port;
             if(hdl_or_port){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hdl_or_port);
@@ -6475,6 +7928,12 @@ class force_act_class : public Action_class {
             if(exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->exp);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_or_port),
+                THIS_MAPIFY(exp),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6495,10 +7954,16 @@ class release_act_class : public Action_class {
         Expression hdl_or_port;
     public:
         release_act_class(Expression hdl_or_port){
+            // initialize the members & tie them to me (the parent)
             this->hdl_or_port = hdl_or_port;
             if(hdl_or_port){ // non-terminal might be null due to error reduction rules
                 this->tie(this->hdl_or_port);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(hdl_or_port),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6521,6 +7986,7 @@ class if_then_else_act_class : public Action_class {
         ActionBlock else_clause;
     public:
         if_then_else_act_class(Expression condition, ActionBlock actions, ActionBlock else_clause){
+            // initialize the members & tie them to me (the parent)
             this->condition = condition;
             if(condition){ // non-terminal might be null due to error reduction rules
                 this->tie(this->condition);
@@ -6533,6 +7999,13 @@ class if_then_else_act_class : public Action_class {
             if(else_clause){ // non-terminal might be null due to error reduction rules
                 this->tie(this->else_clause);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(condition),
+                THIS_MAPIFY(actions),
+                THIS_MAPIFY(else_clause),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6555,6 +8028,7 @@ class non_term_if_then_else_act_class : public Action_class {
         Action else_clause;
     public:
         non_term_if_then_else_act_class(Expression condition, ActionBlock actions, Action else_clause){
+            // initialize the members & tie them to me (the parent)
             this->condition = condition;
             if(condition){ // non-terminal might be null due to error reduction rules
                 this->tie(this->condition);
@@ -6567,6 +8041,13 @@ class non_term_if_then_else_act_class : public Action_class {
             if(else_clause){ // non-terminal might be null due to error reduction rules
                 this->tie(this->else_clause);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(condition),
+                THIS_MAPIFY(actions),
+                THIS_MAPIFY(else_clause),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6587,10 +8068,16 @@ class case_bool_act_class : public Action_class {
         Cases bool_case_branch_items;
     public:
         case_bool_act_class(Cases bool_case_branch_items){
+            // initialize the members & tie them to me (the parent)
             this->bool_case_branch_items = bool_case_branch_items;
             if(bool_case_branch_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_case_branch_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_case_branch_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6612,6 +8099,7 @@ class case_bool_branch_item_case_class : public Case_class {
         ActionBlock actions;
     public:
         case_bool_branch_item_case_class(Expression bool_exp, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->bool_exp = bool_exp;
             if(bool_exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_exp);
@@ -6620,6 +8108,12 @@ class case_bool_branch_item_case_class : public Case_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_exp),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6641,6 +8135,7 @@ class case_labeled_act_class : public Action_class {
         Cases labeled_case_branch_items;
     public:
         case_labeled_act_class(Expression exp, Cases labeled_case_branch_items){
+            // initialize the members & tie them to me (the parent)
             this->exp = exp;
             if(exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->exp);
@@ -6649,6 +8144,12 @@ class case_labeled_act_class : public Action_class {
             if(labeled_case_branch_items){ // non-terminal might be null due to error reduction rules
                 this->tie(this->labeled_case_branch_items);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(exp),
+                THIS_MAPIFY(labeled_case_branch_items),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6670,6 +8171,7 @@ class case_labeled_branch_item_case_class : public Case_class {
         ActionBlock actions;
     public:
         case_labeled_branch_item_case_class(Expression label_exp, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->label_exp = label_exp;
             if(label_exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->label_exp);
@@ -6678,6 +8180,12 @@ class case_labeled_branch_item_case_class : public Case_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(label_exp),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6698,10 +8206,16 @@ class default_case_branch_item_case_class : public Case_class {
         ActionBlock actions;
     public:
         default_case_branch_item_case_class(ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6722,10 +8236,16 @@ class print_call_act_class : public Action_class {
         Expressions values;
     public:
         print_call_act_class(Expressions values){
+            // initialize the members & tie them to me (the parent)
             this->values = values;
             if(values){ // non-terminal might be null due to error reduction rules
                 this->tie(this->values);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(values),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6746,10 +8266,16 @@ class method_call_act_class : public Action_class {
         Expression method_call_expr;
     public:
         method_call_act_class(Expression method_call_expr){
+            // initialize the members & tie them to me (the parent)
             this->method_call_expr = method_call_expr;
             if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->method_call_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(method_call_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6770,10 +8296,16 @@ class start_tcm_call_act_class : public Action_class {
         Expression method_call_expr;
     public:
         start_tcm_call_act_class(Expression method_call_expr){
+            // initialize the members & tie them to me (the parent)
             this->method_call_expr = method_call_expr;
             if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->method_call_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(method_call_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6794,10 +8326,16 @@ class compute_method_call_act_class : public Action_class {
         Expression method_call_expr;
     public:
         compute_method_call_act_class(Expression method_call_expr){
+            // initialize the members & tie them to me (the parent)
             this->method_call_expr = method_call_expr;
             if(method_call_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->method_call_expr);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(method_call_expr),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6818,10 +8356,16 @@ class return_act_class : public Action_class {
         Expression exp;
     public:
         return_act_class(Expression exp){
+            // initialize the members & tie them to me (the parent)
             this->exp = exp;
             if(exp){ // non-terminal might be null due to error reduction rules
                 this->tie(this->exp);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(exp),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6843,6 +8387,7 @@ class while_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         while_loop_act_class(Expression bool_expr, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
@@ -6851,6 +8396,12 @@ class while_loop_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6872,6 +8423,7 @@ class repeat_until_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         repeat_until_loop_act_class(Expression bool_expr, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->bool_expr = bool_expr;
             if(bool_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->bool_expr);
@@ -6880,6 +8432,12 @@ class repeat_until_loop_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(bool_expr),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6905,6 +8463,7 @@ class for_each_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_each_loop_act_class(DataType type_id, Expression iterated_name, Boolean is_reverese, Expression list_exp, Expression idx_exp, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->type_id);
@@ -6927,6 +8486,16 @@ class for_each_loop_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(type_id),
+                THIS_MAPIFY(iterated_name),
+                THIS_MAPIFY(is_reverese),
+                THIS_MAPIFY(list_exp),
+                THIS_MAPIFY(idx_exp),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6952,6 +8521,7 @@ class for_range_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->var_id = ast::p_tree_node(new ast::Symbol__leaf_node(var_id));
             this->tie(this->var_id);
             this->from_expr = from_expr;
@@ -6972,6 +8542,16 @@ class for_range_loop_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(var_id),
+                THIS_MAPIFY(from_expr),
+                THIS_MAPIFY(to_expr),
+                THIS_MAPIFY(step_expr),
+                THIS_MAPIFY(is_down),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -6995,6 +8575,7 @@ class for_loop_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_loop_act_class(Action init_act, Expression bool_expr, Action step_act, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->init_act = init_act;
             if(init_act){ // non-terminal might be null due to error reduction rules
                 this->tie(this->init_act);
@@ -7011,6 +8592,14 @@ class for_loop_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(init_act),
+                THIS_MAPIFY(bool_expr),
+                THIS_MAPIFY(step_act),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7033,6 +8622,7 @@ class for_each_line_in_file_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_each_line_in_file_act_class(Expression line_it_name, Expression file_path_expr, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->line_it_name = line_it_name;
             if(line_it_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->line_it_name);
@@ -7045,6 +8635,13 @@ class for_each_line_in_file_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(line_it_name),
+                THIS_MAPIFY(file_path_expr),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7067,6 +8664,7 @@ class for_each_file_in_files_act_class : public Action_class {
         ActionBlock actions;
     public:
         for_each_file_in_files_act_class(Expression line_it_name, Expression file_pattern_exp, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->line_it_name = line_it_name;
             if(line_it_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->line_it_name);
@@ -7079,6 +8677,13 @@ class for_each_file_in_files_act_class : public Action_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(line_it_name),
+                THIS_MAPIFY(file_pattern_exp),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7098,6 +8703,11 @@ class break_act_class : public Action_class {
     protected:
     public:
         break_act_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7117,6 +8727,11 @@ class continue_act_class : public Action_class {
     protected:
     public:
         continue_act_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7137,10 +8752,16 @@ class emit_act_class : public Action_class {
         Expression event_id;
     public:
         emit_act_class(Expression event_id){
+            // initialize the members & tie them to me (the parent)
             this->event_id = event_id;
             if(event_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7161,10 +8782,16 @@ class sync_act_class : public Action_class {
         Expression event_id;
     public:
         sync_act_class(Expression event_id){
+            // initialize the members & tie them to me (the parent)
             this->event_id = event_id;
             if(event_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7185,10 +8812,16 @@ class wait_act_class : public Action_class {
         Expression event_id;
     public:
         wait_act_class(Expression event_id){
+            // initialize the members & tie them to me (the parent)
             this->event_id = event_id;
             if(event_id){ // non-terminal might be null due to error reduction rules
                 this->tie(this->event_id);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(event_id),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7209,10 +8842,16 @@ class all_of_act_class : public Action_class {
         ActionBlocks threads;
     public:
         all_of_act_class(ActionBlocks threads){
+            // initialize the members & tie them to me (the parent)
             this->threads = threads;
             if(threads){ // non-terminal might be null due to error reduction rules
                 this->tie(this->threads);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(threads),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7233,10 +8872,16 @@ class first_of_act_class : public Action_class {
         ActionBlocks threads;
     public:
         first_of_act_class(ActionBlocks threads){
+            // initialize the members & tie them to me (the parent)
             this->threads = threads;
             if(threads){ // non-terminal might be null due to error reduction rules
                 this->tie(this->threads);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(threads),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7258,6 +8903,7 @@ class gen_act_class : public Action_class {
         Expressions constraints;
     public:
         gen_act_class(Expression gen_expr, Expressions constraints){
+            // initialize the members & tie them to me (the parent)
             this->gen_expr = gen_expr;
             if(gen_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->gen_expr);
@@ -7266,6 +8912,12 @@ class gen_act_class : public Action_class {
             if(constraints){ // non-terminal might be null due to error reduction rules
                 this->tie(this->constraints);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(gen_expr),
+                THIS_MAPIFY(constraints),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7287,6 +8939,7 @@ class do_seq_act_class : public Action_class {
         Expressions constraints;
     public:
         do_seq_act_class(Expression seq_item, Expressions constraints){
+            // initialize the members & tie them to me (the parent)
             this->seq_item = seq_item;
             if(seq_item){ // non-terminal might be null due to error reduction rules
                 this->tie(this->seq_item);
@@ -7295,6 +8948,12 @@ class do_seq_act_class : public Action_class {
             if(constraints){ // non-terminal might be null due to error reduction rules
                 this->tie(this->constraints);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(seq_item),
+                THIS_MAPIFY(constraints),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7315,10 +8974,16 @@ class seq_item_expr_class : public Expression_class {
         Expressions field_type_exprs;
     public:
         seq_item_expr_class(Expressions field_type_exprs){
+            // initialize the members & tie them to me (the parent)
             this->field_type_exprs = field_type_exprs;
             if(field_type_exprs){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_type_exprs);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(field_type_exprs),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7340,6 +9005,7 @@ class check_that_action_class : public Action_class {
         Expression dut_error_block;
     public:
         check_that_action_class(Expression condition, Expression dut_error_block){
+            // initialize the members & tie them to me (the parent)
             this->condition = condition;
             if(condition){ // non-terminal might be null due to error reduction rules
                 this->tie(this->condition);
@@ -7348,6 +9014,12 @@ class check_that_action_class : public Action_class {
             if(dut_error_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->dut_error_block);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(condition),
+                THIS_MAPIFY(dut_error_block),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7369,6 +9041,7 @@ class assert_action_class : public Action_class {
         Expression error_block;
     public:
         assert_action_class(Expression condition, Expression error_block){
+            // initialize the members & tie them to me (the parent)
             this->condition = condition;
             if(condition){ // non-terminal might be null due to error reduction rules
                 this->tie(this->condition);
@@ -7377,6 +9050,12 @@ class assert_action_class : public Action_class {
             if(error_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->error_block);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(condition),
+                THIS_MAPIFY(error_block),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7398,6 +9077,7 @@ class try_else_action_class : public Action_class {
         ActionBlock except_actions;
     public:
         try_else_action_class(ActionBlock try_actions, ActionBlock except_actions){
+            // initialize the members & tie them to me (the parent)
             this->try_actions = try_actions;
             if(try_actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->try_actions);
@@ -7406,6 +9086,12 @@ class try_else_action_class : public Action_class {
             if(except_actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->except_actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(try_actions),
+                THIS_MAPIFY(except_actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7428,6 +9114,7 @@ class state_machine_act_class : public Action_class {
         FSMStates states;
     public:
         state_machine_act_class(Expression state_var, Expression final_st, FSMStates states){
+            // initialize the members & tie them to me (the parent)
             this->state_var = state_var;
             if(state_var){ // non-terminal might be null due to error reduction rules
                 this->tie(this->state_var);
@@ -7440,6 +9127,13 @@ class state_machine_act_class : public Action_class {
             if(states){ // non-terminal might be null due to error reduction rules
                 this->tie(this->states);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(state_var),
+                THIS_MAPIFY(final_st),
+                THIS_MAPIFY(states),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7461,12 +9155,19 @@ class state_action_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_action_fsm_class(Symbol_ state, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->state = ast::p_tree_node(new ast::Symbol__leaf_node(state));
             this->tie(this->state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(state),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7489,6 +9190,7 @@ class state_transition_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->cur_state = ast::p_tree_node(new ast::Symbol__leaf_node(cur_state));
             this->tie(this->cur_state);
             this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
@@ -7497,6 +9199,13 @@ class state_transition_fsm_class : public FSMState_class {
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(cur_state),
+                THIS_MAPIFY(next_state),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7518,12 +9227,19 @@ class state_any_transition_fsm_class : public FSMState_class {
         ActionBlock actions;
     public:
         state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions){
+            // initialize the members & tie them to me (the parent)
             this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
             this->tie(this->next_state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(next_state),
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7543,6 +9259,11 @@ class no_action_class : public Action_class {
     protected:
     public:
         no_action_class(){
+            // initialize the members & tie them to me (the parent)
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;
@@ -7563,10 +9284,16 @@ class action_block_class : public ActionBlock_class {
         Actions actions;
     public:
         action_block_class(Actions actions){
+            // initialize the members & tie them to me (the parent)
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
                 this->tie(this->actions);
             }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(actions),
+            };
         }
 
         auto dump(std::ostream& stream, int n) -> void override;

@@ -5,6 +5,15 @@
 
 using namespace elex;
 
+#ifndef STRINGIFY
+#define STRINGIFY(x) (#x)
+#endif // STRINGIFY
+
+#ifndef MAPIFY
+#define MAPIFY(x)      { (STRINGIFY(x)), (x) }
+#define THIS_MAPIFY(x) { (STRINGIFY(x)), (this->x) }
+#endif // MAPIFY
+
 auto pad(int n) -> char*;
 
 
