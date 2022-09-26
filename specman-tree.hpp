@@ -654,6 +654,14 @@ class module__class : public Module_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStmts() const ->
+            Statements
+        {
+            return stmts;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -669,11 +677,11 @@ auto module_(Statements stmts) -> Module;
 
 class package_class : public Statement_class {
     protected:
-        ast::p_tree_node pkg_name;
+        ast::Symbol__leaf pkg_name;
     public:
         package_class(Symbol_ pkg_name){
             // initialize the members & tie them to me (the parent)
-            this->pkg_name = ast::p_tree_node(new ast::Symbol__leaf_node(pkg_name));
+            this->pkg_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(pkg_name));
             this->tie(this->pkg_name);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -681,6 +689,14 @@ class package_class : public Statement_class {
                 THIS_MAPIFY(pkg_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getPkgName() const ->
+            ast::Symbol__leaf
+        {
+            return pkg_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -697,12 +713,12 @@ auto package(Symbol_ pkg_name) -> Statement;
 
 class unit_st_class : public Statement_class {
     protected:
-        ast::p_tree_node unit_name;
+        ast::Symbol__leaf unit_name;
         StructMembers members;
     public:
         unit_st_class(Symbol_ unit_name, StructMembers members){
             // initialize the members & tie them to me (the parent)
-            this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
+            this->unit_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -715,6 +731,19 @@ class unit_st_class : public Statement_class {
                 THIS_MAPIFY(members),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getUnitName() const ->
+            ast::Symbol__leaf
+        {
+            return unit_name;
+        }
+        auto getMembers() const ->
+            StructMembers
+        {
+            return members;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -731,15 +760,15 @@ auto unit_st(Symbol_ unit_name, StructMembers members) -> Statement;
 
 class unit_like_st_class : public Statement_class {
     protected:
-        ast::p_tree_node unit_name;
-        ast::p_tree_node base_unit_name;
+        ast::Symbol__leaf unit_name;
+        ast::Symbol__leaf base_unit_name;
         StructMembers members;
     public:
         unit_like_st_class(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers members){
             // initialize the members & tie them to me (the parent)
-            this->unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(unit_name));
+            this->unit_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(unit_name));
             this->tie(this->unit_name);
-            this->base_unit_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_unit_name));
+            this->base_unit_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(base_unit_name));
             this->tie(this->base_unit_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -753,6 +782,24 @@ class unit_like_st_class : public Statement_class {
                 THIS_MAPIFY(members),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getUnitName() const ->
+            ast::Symbol__leaf
+        {
+            return unit_name;
+        }
+        auto getBaseUnitName() const ->
+            ast::Symbol__leaf
+        {
+            return base_unit_name;
+        }
+        auto getMembers() const ->
+            StructMembers
+        {
+            return members;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -769,12 +816,12 @@ auto unit_like_st(Symbol_ unit_name, Symbol_ base_unit_name, StructMembers membe
 
 class struct_st_class : public Statement_class {
     protected:
-        ast::p_tree_node struct_name;
+        ast::Symbol__leaf struct_name;
         StructMembers members;
     public:
         struct_st_class(Symbol_ struct_name, StructMembers members){
             // initialize the members & tie them to me (the parent)
-            this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
+            this->struct_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -787,6 +834,19 @@ class struct_st_class : public Statement_class {
                 THIS_MAPIFY(members),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructName() const ->
+            ast::Symbol__leaf
+        {
+            return struct_name;
+        }
+        auto getMembers() const ->
+            StructMembers
+        {
+            return members;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -803,15 +863,15 @@ auto struct_st(Symbol_ struct_name, StructMembers members) -> Statement;
 
 class struct_like_st_class : public Statement_class {
     protected:
-        ast::p_tree_node struct_name;
-        ast::p_tree_node base_struct_name;
+        ast::Symbol__leaf struct_name;
+        ast::Symbol__leaf base_struct_name;
         StructMembers members;
     public:
         struct_like_st_class(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers members){
             // initialize the members & tie them to me (the parent)
-            this->struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(struct_name));
+            this->struct_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(struct_name));
             this->tie(this->struct_name);
-            this->base_struct_name = ast::p_tree_node(new ast::Symbol__leaf_node(base_struct_name));
+            this->base_struct_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(base_struct_name));
             this->tie(this->base_struct_name);
             this->members = members;
             if(members){ // non-terminal might be null due to error reduction rules
@@ -825,6 +885,24 @@ class struct_like_st_class : public Statement_class {
                 THIS_MAPIFY(members),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructName() const ->
+            ast::Symbol__leaf
+        {
+            return struct_name;
+        }
+        auto getBaseStructName() const ->
+            ast::Symbol__leaf
+        {
+            return base_struct_name;
+        }
+        auto getMembers() const ->
+            StructMembers
+        {
+            return members;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -862,6 +940,19 @@ class extend_struct_st_class : public Statement_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStructTypeName() const ->
+            Expressions
+        {
+            return struct_type_name;
+        }
+        auto getMembers() const ->
+            StructMembers
+        {
+            return members;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -877,12 +968,12 @@ auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> St
 
 class enum_type_st_class : public Statement_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         DataType type_id;
     public:
         enum_type_st_class(Symbol_ id, DataType type_id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -895,6 +986,19 @@ class enum_type_st_class : public Statement_class {
                 THIS_MAPIFY(type_id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getTypeId() const ->
+            DataType
+        {
+            return type_id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -911,12 +1015,12 @@ auto enum_type_st(Symbol_ id, DataType type_id) -> Statement;
 
 class extend_enum_type_st_class : public Statement_class {
     protected:
-        ast::p_tree_node type_id;
+        ast::Symbol__leaf type_id;
         Expressions enum_list_items;
     public:
         extend_enum_type_st_class(Symbol_ type_id, Expressions enum_list_items){
             // initialize the members & tie them to me (the parent)
-            this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
+            this->type_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->enum_list_items = enum_list_items;
             if(enum_list_items){ // non-terminal might be null due to error reduction rules
@@ -929,6 +1033,19 @@ class extend_enum_type_st_class : public Statement_class {
                 THIS_MAPIFY(enum_list_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTypeId() const ->
+            ast::Symbol__leaf
+        {
+            return type_id;
+        }
+        auto getEnumListItems() const ->
+            Expressions
+        {
+            return enum_list_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -945,13 +1062,13 @@ auto extend_enum_type_st(Symbol_ type_id, Expressions enum_list_items) -> Statem
 
 class scalar_subtype_st_class : public Statement_class {
     protected:
-        ast::p_tree_node subtype_id;
+        ast::Symbol__leaf subtype_id;
         Expression type_id;
         Expressions ranges;
     public:
         scalar_subtype_st_class(Symbol_ subtype_id, Expression type_id, Expressions ranges){
             // initialize the members & tie them to me (the parent)
-            this->subtype_id = ast::p_tree_node(new ast::Symbol__leaf_node(subtype_id));
+            this->subtype_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(subtype_id));
             this->tie(this->subtype_id);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -970,6 +1087,24 @@ class scalar_subtype_st_class : public Statement_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getSubtypeId() const ->
+            ast::Symbol__leaf
+        {
+            return subtype_id;
+        }
+        auto getTypeId() const ->
+            Expression
+        {
+            return type_id;
+        }
+        auto getRanges() const ->
+            Expressions
+        {
+            return ranges;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -985,14 +1120,14 @@ auto scalar_subtype_st(Symbol_ subtype_id, Expression type_id, Expressions range
 
 class scalar_sized_type_st_class : public Statement_class {
     protected:
-        ast::p_tree_node type_id;
+        ast::Symbol__leaf type_id;
         Expression base_type_id;
         Expressions ranges_expr;
         Expression width_expr;
     public:
         scalar_sized_type_st_class(Symbol_ type_id, Expression base_type_id, Expressions ranges_expr, Expression width_expr){
             // initialize the members & tie them to me (the parent)
-            this->type_id = ast::p_tree_node(new ast::Symbol__leaf_node(type_id));
+            this->type_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(type_id));
             this->tie(this->type_id);
             this->base_type_id = base_type_id;
             if(base_type_id){ // non-terminal might be null due to error reduction rules
@@ -1016,6 +1151,29 @@ class scalar_sized_type_st_class : public Statement_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTypeId() const ->
+            ast::Symbol__leaf
+        {
+            return type_id;
+        }
+        auto getBaseTypeId() const ->
+            Expression
+        {
+            return base_type_id;
+        }
+        auto getRangesExpr() const ->
+            Expressions
+        {
+            return ranges_expr;
+        }
+        auto getWidthExpr() const ->
+            Expression
+        {
+            return width_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -1032,7 +1190,7 @@ auto scalar_sized_type_st(Symbol_ type_id, Expression base_type_id, Expressions 
 class import_st_class : public Statement_class {
     protected:
         FilePaths paths;
-        ast::p_tree_node is_cyclic;
+        ast::Boolean_leaf is_cyclic;
     public:
         import_st_class(FilePaths paths, Boolean is_cyclic){
             // initialize the members & tie them to me (the parent)
@@ -1040,7 +1198,7 @@ class import_st_class : public Statement_class {
             if(paths){ // non-terminal might be null due to error reduction rules
                 this->tie(this->paths);
             }
-            this->is_cyclic = ast::p_tree_node(new ast::Boolean_leaf_node(is_cyclic));
+            this->is_cyclic = ast::Boolean_leaf(new ast::Boolean_leaf_node(is_cyclic));
             this->tie(this->is_cyclic);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1049,6 +1207,19 @@ class import_st_class : public Statement_class {
                 THIS_MAPIFY(is_cyclic),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getPaths() const ->
+            FilePaths
+        {
+            return paths;
+        }
+        auto getIsCyclic() const ->
+            ast::Boolean_leaf
+        {
+            return is_cyclic;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1065,11 +1236,11 @@ auto import_st(FilePaths paths, Boolean is_cyclic) -> Statement;
 
 class file_path_fp_class : public FilePath_class {
     protected:
-        ast::p_tree_node file_path;
+        ast::Symbol__leaf file_path;
     public:
         file_path_fp_class(Symbol_ file_path){
             // initialize the members & tie them to me (the parent)
-            this->file_path = ast::p_tree_node(new ast::Symbol__leaf_node(file_path));
+            this->file_path = ast::Symbol__leaf(new ast::Symbol__leaf_node(file_path));
             this->tie(this->file_path);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1077,6 +1248,14 @@ class file_path_fp_class : public FilePath_class {
                 THIS_MAPIFY(file_path),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getFilePath() const ->
+            ast::Symbol__leaf
+        {
+            return file_path;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1093,12 +1272,12 @@ auto file_path_fp(Symbol_ file_path) -> FilePath;
 
 class virtual_sequence_st_class : public Statement_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         SequenceItems seq_options;
     public:
         virtual_sequence_st_class(Symbol_ id, SequenceItems seq_options){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
@@ -1111,6 +1290,19 @@ class virtual_sequence_st_class : public Statement_class {
                 THIS_MAPIFY(seq_options),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getSeqOptions() const ->
+            SequenceItems
+        {
+            return seq_options;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1127,12 +1319,12 @@ auto virtual_sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
 
 class sequence_st_class : public Statement_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         SequenceItems seq_options;
     public:
         sequence_st_class(Symbol_ id, SequenceItems seq_options){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->seq_options = seq_options;
             if(seq_options){ // non-terminal might be null due to error reduction rules
@@ -1145,6 +1337,19 @@ class sequence_st_class : public Statement_class {
                 THIS_MAPIFY(seq_options),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getSeqOptions() const ->
+            SequenceItems
+        {
+            return seq_options;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1161,11 +1366,11 @@ auto sequence_st(Symbol_ id, SequenceItems seq_options) -> Statement;
 
 class sequence_item_kind_it_class : public SequenceItem_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         sequence_item_kind_it_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1173,6 +1378,14 @@ class sequence_item_kind_it_class : public SequenceItem_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1189,11 +1402,11 @@ auto sequence_item_kind_it(Symbol_ id) -> SequenceItem;
 
 class sequence_created_kind_name_it_class : public SequenceItem_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         sequence_created_kind_name_it_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1201,6 +1414,14 @@ class sequence_created_kind_name_it_class : public SequenceItem_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1217,11 +1438,11 @@ auto sequence_created_kind_name_it(Symbol_ id) -> SequenceItem;
 
 class sequence_created_driver_name_it_class : public SequenceItem_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         sequence_created_driver_name_it_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1229,6 +1450,14 @@ class sequence_created_driver_name_it_class : public SequenceItem_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1245,11 +1474,11 @@ auto sequence_created_driver_name_it(Symbol_ id) -> SequenceItem;
 
 class sequence_base_kind_it_class : public SequenceItem_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         sequence_base_kind_it_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1257,6 +1486,14 @@ class sequence_base_kind_it_class : public SequenceItem_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1273,11 +1510,11 @@ auto sequence_base_kind_it(Symbol_ id) -> SequenceItem;
 
 class sequence_driver_base_kind_it_class : public SequenceItem_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         sequence_driver_base_kind_it_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1285,6 +1522,14 @@ class sequence_driver_base_kind_it_class : public SequenceItem_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1301,11 +1546,11 @@ auto sequence_driver_base_kind_it(Symbol_ id) -> SequenceItem;
 
 class define_as_st_class : public Statement_class {
     protected:
-        ast::p_tree_node macro;
+        ast::Symbol__leaf macro;
     public:
         define_as_st_class(Symbol_ macro){
             // initialize the members & tie them to me (the parent)
-            this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
+            this->macro = ast::Symbol__leaf(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1313,6 +1558,14 @@ class define_as_st_class : public Statement_class {
                 THIS_MAPIFY(macro),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getMacro() const ->
+            ast::Symbol__leaf
+        {
+            return macro;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1329,11 +1582,11 @@ auto define_as_st(Symbol_ macro) -> Statement;
 
 class define_as_computed_st_class : public Statement_class {
     protected:
-        ast::p_tree_node macro;
+        ast::Symbol__leaf macro;
     public:
         define_as_computed_st_class(Symbol_ macro){
             // initialize the members & tie them to me (the parent)
-            this->macro = ast::p_tree_node(new ast::Symbol__leaf_node(macro));
+            this->macro = ast::Symbol__leaf(new ast::Symbol__leaf_node(macro));
             this->tie(this->macro);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1341,6 +1594,14 @@ class define_as_computed_st_class : public Statement_class {
                 THIS_MAPIFY(macro),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getMacro() const ->
+            ast::Symbol__leaf
+        {
+            return macro;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1357,12 +1618,12 @@ auto define_as_computed_st(Symbol_ macro) -> Statement;
 
 class formal_class : public Formal_class {
     protected:
-        ast::p_tree_node name;
+        ast::Symbol__leaf name;
         DataType type_;
     public:
         formal_class(Symbol_ name, DataType type_){
             // initialize the members & tie them to me (the parent)
-            this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
+            this->name = ast::Symbol__leaf(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1375,6 +1636,19 @@ class formal_class : public Formal_class {
                 THIS_MAPIFY(type_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getName() const ->
+            ast::Symbol__leaf
+        {
+            return name;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1406,6 +1680,14 @@ class c_export_st_class : public Statement_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getElement() const ->
+            Expression
+        {
+            return element;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -1421,14 +1703,14 @@ auto c_export_st(Expression element) -> Statement;
 
 class c_routine_st_class : public Statement_class {
     protected:
-        ast::p_tree_node e_routine_name;
+        ast::Symbol__leaf e_routine_name;
         Formals parameters_list;
         DataType return_type;
-        ast::p_tree_node c_routine_name;
+        ast::Symbol__leaf c_routine_name;
     public:
         c_routine_st_class(Symbol_ e_routine_name, Formals parameters_list, DataType return_type, Symbol_ c_routine_name){
             // initialize the members & tie them to me (the parent)
-            this->e_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_routine_name));
+            this->e_routine_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(e_routine_name));
             this->tie(this->e_routine_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -1438,7 +1720,7 @@ class c_routine_st_class : public Statement_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_routine_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_routine_name));
+            this->c_routine_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(c_routine_name));
             this->tie(this->c_routine_name);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -1449,6 +1731,29 @@ class c_routine_st_class : public Statement_class {
                 THIS_MAPIFY(c_routine_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getERoutineName() const ->
+            ast::Symbol__leaf
+        {
+            return e_routine_name;
+        }
+        auto getParametersList() const ->
+            Formals
+        {
+            return parameters_list;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getCRoutineName() const ->
+            ast::Symbol__leaf
+        {
+            return c_routine_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1480,6 +1785,14 @@ class field_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getField() const ->
+            FieldStructMember
+        {
+            return field;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -1495,12 +1808,12 @@ auto field_sm(FieldStructMember field) -> StructMember;
 
 class struct_field_sm_class : public FieldStructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         DataType type_;
     public:
         struct_field_sm_class(Symbol_ id, DataType type_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1513,6 +1826,19 @@ class struct_field_sm_class : public FieldStructMember_class {
                 THIS_MAPIFY(type_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1529,13 +1855,13 @@ auto struct_field_sm(Symbol_ id, DataType type_) -> FieldStructMember;
 
 class struct_field_list_sm_class : public FieldStructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Expression len_expr;
         DataType type_;
     public:
         struct_field_list_sm_class(Symbol_ id, Expression len_expr, DataType type_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->len_expr = len_expr;
             if(len_expr){ // non-terminal might be null due to error reduction rules
@@ -1554,6 +1880,24 @@ class struct_field_list_sm_class : public FieldStructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getLenExpr() const ->
+            Expression
+        {
+            return len_expr;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -1569,12 +1913,12 @@ auto struct_field_list_sm(Symbol_ id, Expression len_expr, DataType type_) -> Fi
 
 class struct_field_assoc_list_sm_class : public FieldStructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         DataType type_;
     public:
         struct_field_assoc_list_sm_class(Symbol_ id, DataType type_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -1587,6 +1931,19 @@ class struct_field_assoc_list_sm_class : public FieldStructMember_class {
                 THIS_MAPIFY(type_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1603,14 +1960,14 @@ auto struct_field_assoc_list_sm(Symbol_ id, DataType type_) -> FieldStructMember
 
 class method_dec_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1633,6 +1990,29 @@ class method_dec_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1649,14 +2029,14 @@ auto method_dec_sm(Symbol_ id, Formals arguments, DataType return_type, ActionBl
 
 class method_dec_also_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1679,6 +2059,29 @@ class method_dec_also_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1695,14 +2098,14 @@ auto method_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 class method_dec_first_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1725,6 +2128,29 @@ class method_dec_first_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1741,14 +2167,14 @@ auto method_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Ac
 
 class method_dec_only_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         ActionBlock actions_;
     public:
         method_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1771,6 +2197,29 @@ class method_dec_only_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1787,13 +2236,13 @@ auto method_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Act
 
 class method_dec_empty_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
     public:
         method_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1811,6 +2260,24 @@ class method_dec_empty_sm_class : public StructMember_class {
                 THIS_MAPIFY(return_type),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1827,13 +2294,13 @@ auto method_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 class method_dec_undef_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
     public:
         method_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1851,6 +2318,24 @@ class method_dec_undef_sm_class : public StructMember_class {
                 THIS_MAPIFY(return_type),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1867,7 +2352,7 @@ auto method_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type) ->
 
 class tcm_dec_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
@@ -1875,7 +2360,7 @@ class tcm_dec_sm_class : public StructMember_class {
     public:
         tcm_dec_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1903,6 +2388,34 @@ class tcm_dec_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1919,7 +2432,7 @@ auto tcm_dec_sm(Symbol_ id, Formals arguments, DataType return_type, Expression 
 
 class tcm_dec_also_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
@@ -1927,7 +2440,7 @@ class tcm_dec_also_sm_class : public StructMember_class {
     public:
         tcm_dec_also_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -1955,6 +2468,34 @@ class tcm_dec_also_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -1971,7 +2512,7 @@ auto tcm_dec_also_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 class tcm_dec_first_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
@@ -1979,7 +2520,7 @@ class tcm_dec_first_sm_class : public StructMember_class {
     public:
         tcm_dec_first_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -2007,6 +2548,34 @@ class tcm_dec_first_sm_class : public StructMember_class {
                 THIS_MAPIFY(actions_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2023,7 +2592,7 @@ auto tcm_dec_first_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class tcm_dec_only_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
@@ -2031,7 +2600,7 @@ class tcm_dec_only_sm_class : public StructMember_class {
     public:
         tcm_dec_only_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr, ActionBlock actions_){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -2060,6 +2629,34 @@ class tcm_dec_only_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions_;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2075,14 +2672,14 @@ auto tcm_dec_only_sm(Symbol_ id, Formals arguments, DataType return_type, Expres
 
 class tcm_dec_empty_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
     public:
         tcm_dec_empty_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -2105,6 +2702,29 @@ class tcm_dec_empty_sm_class : public StructMember_class {
                 THIS_MAPIFY(event_id_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2121,14 +2741,14 @@ auto tcm_dec_empty_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class tcm_dec_undef_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Formals arguments;
         DataType return_type;
         Expression event_id_expr;
     public:
         tcm_dec_undef_sm_class(Symbol_ id, Formals arguments, DataType return_type, Expression event_id_expr){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->arguments = arguments;
             if(arguments){ // non-terminal might be null due to error reduction rules
@@ -2152,6 +2772,29 @@ class tcm_dec_undef_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getArguments() const ->
+            Formals
+        {
+            return arguments;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getEventIdExpr() const ->
+            Expression
+        {
+            return event_id_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2167,14 +2810,14 @@ auto tcm_dec_undef_sm(Symbol_ id, Formals arguments, DataType return_type, Expre
 
 class c_method_dec_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node e_method_name;
+        ast::Symbol__leaf e_method_name;
         Formals parameters_list;
         DataType return_type;
-        ast::p_tree_node c_method_name;
+        ast::Symbol__leaf c_method_name;
     public:
         c_method_dec_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
             // initialize the members & tie them to me (the parent)
-            this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
+            this->e_method_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -2184,7 +2827,7 @@ class c_method_dec_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
+            this->c_method_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -2195,6 +2838,29 @@ class c_method_dec_sm_class : public StructMember_class {
                 THIS_MAPIFY(c_method_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEMethodName() const ->
+            ast::Symbol__leaf
+        {
+            return e_method_name;
+        }
+        auto getParametersList() const ->
+            Formals
+        {
+            return parameters_list;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getCMethodName() const ->
+            ast::Symbol__leaf
+        {
+            return c_method_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2211,14 +2877,14 @@ auto c_method_dec_sm(Symbol_ e_method_name, Formals parameters_list, DataType re
 
 class c_method_dec_only_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node e_method_name;
+        ast::Symbol__leaf e_method_name;
         Formals parameters_list;
         DataType return_type;
-        ast::p_tree_node c_method_name;
+        ast::Symbol__leaf c_method_name;
     public:
         c_method_dec_only_sm_class(Symbol_ e_method_name, Formals parameters_list, DataType return_type, Symbol_ c_method_name){
             // initialize the members & tie them to me (the parent)
-            this->e_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(e_method_name));
+            this->e_method_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(e_method_name));
             this->tie(this->e_method_name);
             this->parameters_list = parameters_list;
             if(parameters_list){ // non-terminal might be null due to error reduction rules
@@ -2228,7 +2894,7 @@ class c_method_dec_only_sm_class : public StructMember_class {
             if(return_type){ // non-terminal might be null due to error reduction rules
                 this->tie(this->return_type);
             }
-            this->c_method_name = ast::p_tree_node(new ast::Symbol__leaf_node(c_method_name));
+            this->c_method_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(c_method_name));
             this->tie(this->c_method_name);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -2239,6 +2905,29 @@ class c_method_dec_only_sm_class : public StructMember_class {
                 THIS_MAPIFY(c_method_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEMethodName() const ->
+            ast::Symbol__leaf
+        {
+            return e_method_name;
+        }
+        auto getParametersList() const ->
+            Formals
+        {
+            return parameters_list;
+        }
+        auto getReturnType() const ->
+            DataType
+        {
+            return return_type;
+        }
+        auto getCMethodName() const ->
+            ast::Symbol__leaf
+        {
+            return c_method_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2276,6 +2965,19 @@ class when_subtype_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getSubtypeMods() const ->
+            Expressions
+        {
+            return subtype_mods;
+        }
+        auto getSubtypeMembers() const ->
+            StructMembers
+        {
+            return subtype_members;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2305,6 +3007,14 @@ class constraint_def_sm_class : public StructMember_class {
                 THIS_MAPIFY(constraint_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getConstraintExpr() const ->
+            Expression
+        {
+            return constraint_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2342,6 +3052,19 @@ class on_event_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEventName() const ->
+            Expression
+        {
+            return event_name;
+        }
+        auto getActionBlock() const ->
+            ActionBlock
+        {
+            return action_block;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2357,11 +3080,11 @@ auto on_event_sm(Expression event_name, ActionBlock action_block) -> StructMembe
 
 class simple_event_dec_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         simple_event_dec_sm_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -2369,6 +3092,14 @@ class simple_event_dec_sm_class : public StructMember_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2385,12 +3116,12 @@ auto simple_event_dec_sm(Symbol_ id) -> StructMember;
 
 class event_def_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Expression temporal;
     public:
         event_def_sm_class(Symbol_ id, Expression temporal){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
@@ -2403,6 +3134,19 @@ class event_def_sm_class : public StructMember_class {
                 THIS_MAPIFY(temporal),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2419,12 +3163,12 @@ auto event_def_sm(Symbol_ id, Expression temporal) -> StructMember;
 
 class event_def_override_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Expression temporal;
     public:
         event_def_override_sm_class(Symbol_ id, Expression temporal){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->temporal = temporal;
             if(temporal){ // non-terminal might be null due to error reduction rules
@@ -2437,6 +3181,19 @@ class event_def_override_sm_class : public StructMember_class {
                 THIS_MAPIFY(temporal),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2474,6 +3231,19 @@ class temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getSampleEvent() const ->
+            Expression
+        {
+            return sample_event;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2504,6 +3274,14 @@ class sampling_event_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEventExpr() const ->
+            Expression
+        {
+            return event_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2533,6 +3311,14 @@ class event_ref_expr_class : public Expression_class {
                 THIS_MAPIFY(event_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEventName() const ->
+            Expression
+        {
+            return event_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2570,6 +3356,19 @@ class action_attached_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2599,6 +3398,14 @@ class not_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(temporal),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2630,6 +3437,14 @@ class fail_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2660,6 +3475,14 @@ class eventually_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2689,6 +3512,14 @@ class detach_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(temporal),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2726,6 +3557,19 @@ class yield_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTrigger() const ->
+            Expression
+        {
+            return trigger;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2755,6 +3599,14 @@ class true_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(bool_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2786,6 +3638,14 @@ class rise_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getHdlPath() const ->
+            Expression
+        {
+            return hdl_path;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2816,6 +3676,14 @@ class fall_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getHdlPath() const ->
+            Expression
+        {
+            return hdl_path;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2845,6 +3713,14 @@ class change_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(hdl_path),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getHdlPath() const ->
+            Expression
+        {
+            return hdl_path;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2882,6 +3758,19 @@ class and_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTe1() const ->
+            Expression
+        {
+            return te1;
+        }
+        auto getTe2() const ->
+            Expression
+        {
+            return te2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2918,6 +3807,19 @@ class or_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTe1() const ->
+            Expression
+        {
+            return te1;
+        }
+        auto getTe2() const ->
+            Expression
+        {
+            return te2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -2947,6 +3849,14 @@ class sequence_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(temporals),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTemporals() const ->
+            Expressions
+        {
+            return temporals;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -2983,6 +3893,19 @@ class fixed_repetition_expr_class : public Expression_class {
                 THIS_MAPIFY(temporal),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getRep() const ->
+            Expression
+        {
+            return rep;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3032,6 +3955,29 @@ class first_match_repetition_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getFromRep() const ->
+            Expression
+        {
+            return from_rep;
+        }
+        auto getToRep() const ->
+            Expression
+        {
+            return to_rep;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getMatchTemporal() const ->
+            Expression
+        {
+            return match_temporal;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3074,6 +4020,24 @@ class true_match_repetition_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getFromRep() const ->
+            Expression
+        {
+            return from_rep;
+        }
+        auto getToRep() const ->
+            Expression
+        {
+            return to_rep;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3097,6 +4061,9 @@ class zero_repetition_base_expr_class : public Expression_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3122,6 +4089,9 @@ class inf_repetition_base_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3145,6 +4115,9 @@ class cycle_temporal_expr_class : public Expression_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3182,6 +4155,19 @@ class delay_temporal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        auto getTimescaleUnit() const ->
+            Expression
+        {
+            return timescale_unit;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3211,6 +4197,14 @@ class consume_temporal_expr_class : public Expression_class {
                 THIS_MAPIFY(e),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3247,6 +4241,19 @@ class expect_nameless_sm_class : public StructMember_class {
                 THIS_MAPIFY(dut_error_call),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3290,6 +4297,24 @@ class expect_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3332,6 +4357,24 @@ class expect_override_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3367,6 +4410,19 @@ class assume_nameless_sm_class : public StructMember_class {
                 THIS_MAPIFY(dut_error_call),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3410,6 +4466,24 @@ class assume_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3452,6 +4526,24 @@ class assume_override_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getTemporal() const ->
+            Expression
+        {
+            return temporal;
+        }
+        auto getDutErrorCall() const ->
+            Expression
+        {
+            return dut_error_call;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3467,11 +4559,11 @@ auto assume_override_sm(Expression id, Expression temporal, Expression dut_error
 
 class empty_covergroup_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node event_id;
+        ast::Symbol__leaf event_id;
     public:
         empty_covergroup_sm_class(Symbol_ event_id){
             // initialize the members & tie them to me (the parent)
-            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
+            this->event_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -3479,6 +4571,14 @@ class empty_covergroup_sm_class : public StructMember_class {
                 THIS_MAPIFY(event_id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            ast::Symbol__leaf
+        {
+            return event_id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3495,13 +4595,13 @@ auto empty_covergroup_sm(Symbol_ event_id) -> StructMember;
 
 class covergroup_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node event_id;
+        ast::Symbol__leaf event_id;
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
         covergroup_sm_class(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
             // initialize the members & tie them to me (the parent)
-            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
+            this->event_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->cg_opts = cg_opts;
             if(cg_opts){ // non-terminal might be null due to error reduction rules
@@ -3520,6 +4620,24 @@ class covergroup_sm_class : public StructMember_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            ast::Symbol__leaf
+        {
+            return event_id;
+        }
+        auto getCgOpts() const ->
+            CovergroupOptions
+        {
+            return cg_opts;
+        }
+        auto getCgItems() const ->
+            CovergroupItems
+        {
+            return cg_items;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3535,14 +4653,14 @@ auto covergroup_sm(Symbol_ event_id, CovergroupOptions cg_opts, CovergroupItems 
 
 class covergroup_extension_sm_class : public StructMember_class {
     protected:
-        ast::p_tree_node event_id;
+        ast::Symbol__leaf event_id;
         CovergroupExtensionID instance_id;
         CovergroupOptions cg_opts;
         CovergroupItems cg_items;
     public:
         covergroup_extension_sm_class(Symbol_ event_id, CovergroupExtensionID instance_id, CovergroupOptions cg_opts, CovergroupItems cg_items){
             // initialize the members & tie them to me (the parent)
-            this->event_id = ast::p_tree_node(new ast::Symbol__leaf_node(event_id));
+            this->event_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(event_id));
             this->tie(this->event_id);
             this->instance_id = instance_id;
             if(instance_id){ // non-terminal might be null due to error reduction rules
@@ -3565,6 +4683,29 @@ class covergroup_extension_sm_class : public StructMember_class {
                 THIS_MAPIFY(cg_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            ast::Symbol__leaf
+        {
+            return event_id;
+        }
+        auto getInstanceId() const ->
+            CovergroupExtensionID
+        {
+            return instance_id;
+        }
+        auto getCgOpts() const ->
+            CovergroupOptions
+        {
+            return cg_opts;
+        }
+        auto getCgItems() const ->
+            CovergroupItems
+        {
+            return cg_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3589,6 +4730,9 @@ class covergroup_per_type_ceid_class : public CovergroupExtensionID_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3620,6 +4764,14 @@ class covergroup_per_unit_instance_ceid_class : public CovergroupExtensionID_cla
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEPath() const ->
+            Expression
+        {
+            return e_path;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3635,14 +4787,14 @@ auto covergroup_per_unit_instance_ceid(Expression e_path) -> CovergroupExtension
 
 class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
     protected:
-        ast::p_tree_node item_name;
-        ast::p_tree_node bucket_name;
+        ast::Symbol__leaf item_name;
+        ast::Symbol__leaf bucket_name;
     public:
         covergroup_per_instance_ceid_class(Symbol_ item_name, Symbol_ bucket_name){
             // initialize the members & tie them to me (the parent)
-            this->item_name = ast::p_tree_node(new ast::Symbol__leaf_node(item_name));
+            this->item_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(item_name));
             this->tie(this->item_name);
-            this->bucket_name = ast::p_tree_node(new ast::Symbol__leaf_node(bucket_name));
+            this->bucket_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(bucket_name));
             this->tie(this->bucket_name);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -3651,6 +4803,19 @@ class covergroup_per_instance_ceid_class : public CovergroupExtensionID_class {
                 THIS_MAPIFY(bucket_name),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getItemName() const ->
+            ast::Symbol__leaf
+        {
+            return item_name;
+        }
+        auto getBucketName() const ->
+            ast::Symbol__leaf
+        {
+            return bucket_name;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3682,6 +4847,14 @@ class global_cgo_class : public CovergroupOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3711,6 +4884,14 @@ class no_collect_cgo_class : public CovergroupOption_class {
                 THIS_MAPIFY(bool_litral),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3742,6 +4923,14 @@ class per_unit_instance_cgo_class : public CovergroupOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getHierId() const ->
+            Expression
+        {
+            return hier_id;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3765,6 +4954,9 @@ class radix_dec_cgo_class : public CovergroupOption_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3790,6 +4982,9 @@ class radix_hex_cgo_class : public CovergroupOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3814,6 +5009,9 @@ class radix_bin_cgo_class : public CovergroupOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3829,11 +5027,11 @@ auto radix_bin_cgo() -> CovergroupOption;
 
 class text_cgo_class : public CovergroupOption_class {
     protected:
-        ast::p_tree_node description;
+        ast::Symbol__leaf description;
     public:
         text_cgo_class(Symbol_ description){
             // initialize the members & tie them to me (the parent)
-            this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
+            this->description = ast::Symbol__leaf(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -3841,6 +5039,14 @@ class text_cgo_class : public CovergroupOption_class {
                 THIS_MAPIFY(description),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getDescription() const ->
+            ast::Symbol__leaf
+        {
+            return description;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3857,11 +5063,11 @@ auto text_cgo(Symbol_ description) -> CovergroupOption;
 
 class weight_cgo_class : public CovergroupOption_class {
     protected:
-        ast::p_tree_node value;
+        ast::Symbol__leaf value;
     public:
         weight_cgo_class(Symbol_ value){
             // initialize the members & tie them to me (the parent)
-            this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
+            this->value = ast::Symbol__leaf(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -3869,6 +5075,14 @@ class weight_cgo_class : public CovergroupOption_class {
                 THIS_MAPIFY(value),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getValue() const ->
+            ast::Symbol__leaf
+        {
+            return value;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3900,6 +5114,14 @@ class when_cgo_class : public CovergroupOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -3915,12 +5137,12 @@ auto when_cgo(Expression bool_expr) -> CovergroupOption;
 
 class simple_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        ast::p_tree_node item_id;
+        ast::Symbol__leaf item_id;
         CovergroupItemOptions cgi_options;
     public:
         simple_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
             // initialize the members & tie them to me (the parent)
-            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
+            this->item_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
@@ -3933,6 +5155,19 @@ class simple_covergroup_item_cgi_class : public CovergroupItem_class {
                 THIS_MAPIFY(cgi_options),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getItemId() const ->
+            ast::Symbol__leaf
+        {
+            return item_id;
+        }
+        auto getCgiOptions() const ->
+            CovergroupItemOptions
+        {
+            return cgi_options;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -3949,14 +5184,14 @@ auto simple_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_optio
 
 class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        ast::p_tree_node item_id;
+        ast::Symbol__leaf item_id;
         DataType type_;
         Expression sampled_val;
         CovergroupItemOptions cgi_options;
     public:
         on_the_fly_covergroup_item_cgi_class(Symbol_ item_id, DataType type_, Expression sampled_val, CovergroupItemOptions cgi_options){
             // initialize the members & tie them to me (the parent)
-            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
+            this->item_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->type_ = type_;
             if(type_){ // non-terminal might be null due to error reduction rules
@@ -3979,6 +5214,29 @@ class on_the_fly_covergroup_item_cgi_class : public CovergroupItem_class {
                 THIS_MAPIFY(cgi_options),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getItemId() const ->
+            ast::Symbol__leaf
+        {
+            return item_id;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        auto getSampledVal() const ->
+            Expression
+        {
+            return sampled_val;
+        }
+        auto getCgiOptions() const ->
+            CovergroupItemOptions
+        {
+            return cgi_options;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4016,6 +5274,19 @@ class cross_covergroup_item_cgi_class : public CovergroupItem_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getCgItems() const ->
+            Expressions
+        {
+            return cg_items;
+        }
+        auto getCgiOptions() const ->
+            CovergroupItemOptions
+        {
+            return cgi_options;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4031,12 +5302,12 @@ auto cross_covergroup_item_cgi(Expressions cg_items, CovergroupItemOptions cgi_o
 
 class transition_covergroup_item_cgi_class : public CovergroupItem_class {
     protected:
-        ast::p_tree_node item_id;
+        ast::Symbol__leaf item_id;
         CovergroupItemOptions cgi_options;
     public:
         transition_covergroup_item_cgi_class(Symbol_ item_id, CovergroupItemOptions cgi_options){
             // initialize the members & tie them to me (the parent)
-            this->item_id = ast::p_tree_node(new ast::Symbol__leaf_node(item_id));
+            this->item_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(item_id));
             this->tie(this->item_id);
             this->cgi_options = cgi_options;
             if(cgi_options){ // non-terminal might be null due to error reduction rules
@@ -4049,6 +5320,19 @@ class transition_covergroup_item_cgi_class : public CovergroupItem_class {
                 THIS_MAPIFY(cgi_options),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getItemId() const ->
+            ast::Symbol__leaf
+        {
+            return item_id;
+        }
+        auto getCgiOptions() const ->
+            CovergroupItemOptions
+        {
+            return cgi_options;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4065,11 +5349,11 @@ auto transition_covergroup_item_cgi(Symbol_ item_id, CovergroupItemOptions cgi_o
 
 class at_least_cgio_class : public CovergroupItemOption_class {
     protected:
-        ast::p_tree_node num;
+        ast::Symbol__leaf num;
     public:
         at_least_cgio_class(Symbol_ num){
             // initialize the members & tie them to me (the parent)
-            this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
+            this->num = ast::Symbol__leaf(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -4077,6 +5361,14 @@ class at_least_cgio_class : public CovergroupItemOption_class {
                 THIS_MAPIFY(num),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getNum() const ->
+            ast::Symbol__leaf
+        {
+            return num;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4108,6 +5400,14 @@ class ignore_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getItemBoolExpr() const ->
+            Expression
+        {
+            return item_bool_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4137,6 +5437,14 @@ class illegal_cgio_class : public CovergroupItemOption_class {
                 THIS_MAPIFY(bool_litral),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4168,6 +5476,14 @@ class no_collect_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4198,6 +5514,14 @@ class no_trace_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4213,11 +5537,11 @@ auto no_trace_cgio(Expression bool_litral) -> CovergroupItemOption;
 
 class num_of_buckets_cgio_class : public CovergroupItemOption_class {
     protected:
-        ast::p_tree_node num;
+        ast::Symbol__leaf num;
     public:
         num_of_buckets_cgio_class(Symbol_ num){
             // initialize the members & tie them to me (the parent)
-            this->num = ast::p_tree_node(new ast::Symbol__leaf_node(num));
+            this->num = ast::Symbol__leaf(new ast::Symbol__leaf_node(num));
             this->tie(this->num);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -4225,6 +5549,14 @@ class num_of_buckets_cgio_class : public CovergroupItemOption_class {
                 THIS_MAPIFY(num),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getNum() const ->
+            ast::Symbol__leaf
+        {
+            return num;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4256,6 +5588,14 @@ class per_instance_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolLitral() const ->
+            Expression
+        {
+            return bool_litral;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4279,6 +5619,9 @@ class radix_dec_cgio_class : public CovergroupItemOption_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4304,6 +5647,9 @@ class radix_hex_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4328,6 +5674,9 @@ class radix_bin_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4343,11 +5692,11 @@ auto radix_bin_cgio() -> CovergroupItemOption;
 
 class text_cgio_class : public CovergroupItemOption_class {
     protected:
-        ast::p_tree_node description;
+        ast::Symbol__leaf description;
     public:
         text_cgio_class(Symbol_ description){
             // initialize the members & tie them to me (the parent)
-            this->description = ast::p_tree_node(new ast::Symbol__leaf_node(description));
+            this->description = ast::Symbol__leaf(new ast::Symbol__leaf_node(description));
             this->tie(this->description);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -4355,6 +5704,14 @@ class text_cgio_class : public CovergroupItemOption_class {
                 THIS_MAPIFY(description),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getDescription() const ->
+            ast::Symbol__leaf
+        {
+            return description;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4371,11 +5728,11 @@ auto text_cgio(Symbol_ description) -> CovergroupItemOption;
 
 class weight_cgio_class : public CovergroupItemOption_class {
     protected:
-        ast::p_tree_node value;
+        ast::Symbol__leaf value;
     public:
         weight_cgio_class(Symbol_ value){
             // initialize the members & tie them to me (the parent)
-            this->value = ast::p_tree_node(new ast::Symbol__leaf_node(value));
+            this->value = ast::Symbol__leaf(new ast::Symbol__leaf_node(value));
             this->tie(this->value);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -4383,6 +5740,14 @@ class weight_cgio_class : public CovergroupItemOption_class {
                 THIS_MAPIFY(value),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getValue() const ->
+            ast::Symbol__leaf
+        {
+            return value;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4414,6 +5779,14 @@ class when_cgio_class : public CovergroupItemOption_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4437,6 +5810,9 @@ class true_literal_expr_class : public Expression_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4462,6 +5838,9 @@ class false_literal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4477,11 +5856,11 @@ auto false_literal_expr() -> Expression;
 
 class id_expr_class : public Expression_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
     public:
         id_expr_class(Symbol_ id){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -4489,6 +5868,14 @@ class id_expr_class : public Expression_class {
                 THIS_MAPIFY(id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4526,6 +5913,19 @@ class enum_type_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEnumListExpr() const ->
+            Expressions
+        {
+            return enum_list_expr;
+        }
+        auto getWidthModifierExpr() const ->
+            Expression
+        {
+            return width_modifier_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4541,12 +5941,12 @@ auto enum_type_expr(Expressions enum_list_expr, Expression width_modifier_expr) 
 
 class enum_list_item_class : public Expression_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Expression expr;
     public:
         enum_list_item_class(Symbol_ id, Expression expr){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->expr = expr;
             if(expr){ // non-terminal might be null due to error reduction rules
@@ -4559,6 +5959,19 @@ class enum_list_item_class : public Expression_class {
                 THIS_MAPIFY(expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getExpr() const ->
+            Expression
+        {
+            return expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4589,6 +6002,14 @@ class bitwise_not_expr_class : public Expression_class {
                 THIS_MAPIFY(e),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4626,6 +6047,19 @@ class bitwise_and_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4661,6 +6095,19 @@ class bitwise_or_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4698,6 +6145,19 @@ class bitwise_xor_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4733,6 +6193,19 @@ class shift_left_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4770,6 +6243,19 @@ class right_left_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4799,6 +6285,14 @@ class logical_not_expr_class : public Expression_class {
                 THIS_MAPIFY(e),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4836,6 +6330,19 @@ class logical_and_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4871,6 +6378,19 @@ class logical_or_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -4908,6 +6428,19 @@ class implication_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4938,6 +6471,14 @@ class unary_positive_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -4967,6 +6508,14 @@ class unary_negative_expr_class : public Expression_class {
                 THIS_MAPIFY(e),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE() const ->
+            Expression
+        {
+            return e;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5004,6 +6553,19 @@ class binary_add_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5039,6 +6601,19 @@ class binary_sub_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5076,6 +6651,19 @@ class binary_mul_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5111,6 +6699,19 @@ class binary_div_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5148,6 +6749,19 @@ class binary_remainder_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5183,6 +6797,19 @@ class less_then_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5220,6 +6847,19 @@ class greater_then_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5255,6 +6895,19 @@ class less_then_or_equal_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5292,6 +6945,19 @@ class greater_then_or_equal_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5327,6 +6993,19 @@ class equality_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5364,6 +7043,19 @@ class non_equality_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5399,6 +7091,19 @@ class hdl_equality_expr_class : public Expression_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5436,6 +7141,19 @@ class hdl_non_equality_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getE1() const ->
+            Expression
+        {
+            return e1;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5471,6 +7189,19 @@ class str_match_expr_class : public Expression_class {
                 THIS_MAPIFY(pattern_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStrExpr() const ->
+            Expression
+        {
+            return str_expr;
+        }
+        auto getPatternExpr() const ->
+            Expression
+        {
+            return pattern_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5508,6 +7239,19 @@ class str_does_not_match_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStrExpr() const ->
+            Expression
+        {
+            return str_expr;
+        }
+        auto getPatternExpr() const ->
+            Expression
+        {
+            return pattern_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5543,6 +7287,19 @@ class in_expr_class : public Expression_class {
                 THIS_MAPIFY(inside),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getExp() const ->
+            Expression
+        {
+            return exp;
+        }
+        auto getInside() const ->
+            Expression
+        {
+            return inside;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5580,6 +7337,19 @@ class type_introspec_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getFieldId() const ->
+            Expression
+        {
+            return field_id;
+        }
+        auto getTypeId() const ->
+            DataType
+        {
+            return type_id;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5615,6 +7385,19 @@ class type_introspec_negation_expr_class : public Expression_class {
                 THIS_MAPIFY(type_id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getFieldId() const ->
+            Expression
+        {
+            return field_id;
+        }
+        auto getTypeId() const ->
+            DataType
+        {
+            return type_id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5652,6 +7435,19 @@ class in_enum_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getExp() const ->
+            Expression
+        {
+            return exp;
+        }
+        auto getInside() const ->
+            DataType
+        {
+            return inside;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5681,6 +7477,14 @@ class list_index_item_expr_class : public Expression_class {
                 THIS_MAPIFY(idx_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getIdxExpr() const ->
+            Expression
+        {
+            return idx_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5718,6 +7522,19 @@ class list_index_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBaseId() const ->
+            Expression
+        {
+            return base_id;
+        }
+        auto getIdxExpr() const ->
+            Expression
+        {
+            return idx_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5753,6 +7570,19 @@ class list_slicing_expr_class : public Expression_class {
                 THIS_MAPIFY(range_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getListExp() const ->
+            Expression
+        {
+            return list_exp;
+        }
+        auto getRangeExpr() const ->
+            Expression
+        {
+            return range_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5790,6 +7620,19 @@ class bit_slicing_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getListExp() const ->
+            Expression
+        {
+            return list_exp;
+        }
+        auto getBitSliceExpr() const ->
+            Expression
+        {
+            return bit_slice_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5820,6 +7663,14 @@ class list_concat_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getListConcatItems() const ->
+            Expressions
+        {
+            return list_concat_items;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5849,6 +7700,14 @@ class bit_concat_expr_class : public Expression_class {
                 THIS_MAPIFY(bit_concat_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBitConcatItems() const ->
+            Expressions
+        {
+            return bit_concat_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5886,6 +7745,19 @@ class bit_slice_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBottom() const ->
+            Expression
+        {
+            return bottom;
+        }
+        auto getTop() const ->
+            Expression
+        {
+            return top;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5922,6 +7794,19 @@ class range_modifier_item_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBottom() const ->
+            Expression
+        {
+            return bottom;
+        }
+        auto getTop() const ->
+            Expression
+        {
+            return top;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -5951,6 +7836,14 @@ class range_modifier_expr_class : public Expression_class {
                 THIS_MAPIFY(range_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getRangeItems() const ->
+            Expressions
+        {
+            return range_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -5982,6 +7875,14 @@ class ranges_modifier_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getRanges() const ->
+            Expressions
+        {
+            return ranges;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6011,6 +7912,14 @@ class sized_bits_scalar_expr_class : public Expression_class {
                 THIS_MAPIFY(width_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getWidthExpr() const ->
+            Expression
+        {
+            return width_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6042,6 +7951,14 @@ class sized_bytes_scalar_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getWidthExpr() const ->
+            Expression
+        {
+            return width_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6058,7 +7975,7 @@ auto sized_bytes_scalar_expr(Expression width_expr) -> Expression;
 class new_allocate_expr_class : public Expression_class {
     protected:
         Expression struct_type_block;
-        ast::p_tree_node scoped_name;
+        ast::Symbol__leaf scoped_name;
         ActionBlock actions;
     public:
         new_allocate_expr_class(Expression struct_type_block, Symbol_ scoped_name, ActionBlock actions){
@@ -6067,7 +7984,7 @@ class new_allocate_expr_class : public Expression_class {
             if(struct_type_block){ // non-terminal might be null due to error reduction rules
                 this->tie(this->struct_type_block);
             }
-            this->scoped_name = ast::p_tree_node(new ast::Symbol__leaf_node(scoped_name));
+            this->scoped_name = ast::Symbol__leaf(new ast::Symbol__leaf_node(scoped_name));
             this->tie(this->scoped_name);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -6081,6 +7998,24 @@ class new_allocate_expr_class : public Expression_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructTypeBlock() const ->
+            Expression
+        {
+            return struct_type_block;
+        }
+        auto getScopedName() const ->
+            ast::Symbol__leaf
+        {
+            return scoped_name;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6118,6 +8053,19 @@ class new_nameless_allocate_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStructTypeBlock() const ->
+            Expression
+        {
+            return struct_type_block;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6153,6 +8101,19 @@ class struct_type_expr_with_opt_action_block_class : public Expression_class {
                 THIS_MAPIFY(opt_action_block_expt),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructIdExpr() const ->
+            Expression
+        {
+            return struct_id_expr;
+        }
+        auto getOptActionBlockExpt() const ->
+            Expression
+        {
+            return opt_action_block_expt;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6190,6 +8151,19 @@ class named_action_block_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStructIdExpr() const ->
+            Expression
+        {
+            return struct_id_expr;
+        }
+        auto getActionBlock() const ->
+            Actions
+        {
+            return action_block;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6225,6 +8199,19 @@ class struct_type_id_class : public Expression_class {
                 THIS_MAPIFY(struct_id_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructTypeModifiers() const ->
+            Expressions
+        {
+            return struct_type_modifiers;
+        }
+        auto getStructIdExpr() const ->
+            Expression
+        {
+            return struct_id_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6262,6 +8249,19 @@ class struct_type_modifier_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getValue() const ->
+            Expression
+        {
+            return value;
+        }
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6291,6 +8291,14 @@ class defined_type_identifier_expr_class : public Expression_class {
                 THIS_MAPIFY(modifiers),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getModifiers() const ->
+            Expressions
+        {
+            return modifiers;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6322,6 +8330,14 @@ class struct_hier_ref_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getHiers() const ->
+            Expressions
+        {
+            return hiers;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6337,11 +8353,11 @@ auto struct_hier_ref_expr(Expressions hiers) -> Expression;
 
 class hdl_path_name_expr_class : public Expression_class {
     protected:
-        ast::p_tree_node hdl_hier_ref;
+        ast::Symbol__leaf hdl_hier_ref;
     public:
         hdl_path_name_expr_class(Symbol_ hdl_hier_ref){
             // initialize the members & tie them to me (the parent)
-            this->hdl_hier_ref = ast::p_tree_node(new ast::Symbol__leaf_node(hdl_hier_ref));
+            this->hdl_hier_ref = ast::Symbol__leaf(new ast::Symbol__leaf_node(hdl_hier_ref));
             this->tie(this->hdl_hier_ref);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -6349,6 +8365,14 @@ class hdl_path_name_expr_class : public Expression_class {
                 THIS_MAPIFY(hdl_hier_ref),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getHdlHierRef() const ->
+            ast::Symbol__leaf
+        {
+            return hdl_hier_ref;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6392,6 +8416,24 @@ class ternary_assign_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExp() const ->
+            Expression
+        {
+            return bool_exp;
+        }
+        auto getTrueExpr() const ->
+            Expression
+        {
+            return true_expr;
+        }
+        auto getFalseExpr() const ->
+            Expression
+        {
+            return false_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6421,6 +8463,14 @@ class hwp_access_expr_class : public Expression_class {
                 THIS_MAPIFY(base),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBase() const ->
+            Expression
+        {
+            return base;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6452,6 +8502,14 @@ class cast_operator_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getDestTypeExpr() const ->
+            DataType
+        {
+            return dest_type_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6475,6 +8533,9 @@ class sys_time_ref_expr_class : public Expression_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6512,6 +8573,19 @@ class method_call_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBase() const ->
+            Expression
+        {
+            return base;
+        }
+        auto getArguments() const ->
+            Expressions
+        {
+            return arguments;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6541,6 +8615,14 @@ class constraint_expr_class : public Expression_class {
                 THIS_MAPIFY(bool_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6572,6 +8654,14 @@ class soft_constraint_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6601,6 +8691,14 @@ class all_of_constraint_expr_class : public Expression_class {
                 THIS_MAPIFY(constraints),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getConstraints() const ->
+            Expressions
+        {
+            return constraints;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6644,6 +8742,24 @@ class list_items_constraint_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getItemName() const ->
+            Expression
+        {
+            return item_name;
+        }
+        auto getGenItem() const ->
+            Expression
+        {
+            return gen_item;
+        }
+        auto getConstraints() const ->
+            Expressions
+        {
+            return constraints;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6680,6 +8796,19 @@ class field_type_constraint_by_type_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getField() const ->
+            Expression
+        {
+            return field_;
+        }
+        auto getType() const ->
+            DataType
+        {
+            return type_;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6696,25 +8825,38 @@ auto field_type_constraint_by_type_expr(Expression field_, DataType type_) -> Ex
 class field_type_constraint_by_field_expr_class : public Expression_class {
     protected:
         Expression field_;
-        Expression field;
+        Expression constrainer_field;
     public:
-        field_type_constraint_by_field_expr_class(Expression field_, Expression field){
+        field_type_constraint_by_field_expr_class(Expression field_, Expression constrainer_field){
             // initialize the members & tie them to me (the parent)
             this->field_ = field_;
             if(field_){ // non-terminal might be null due to error reduction rules
                 this->tie(this->field_);
             }
-            this->field = field;
-            if(field){ // non-terminal might be null due to error reduction rules
-                this->tie(this->field);
+            this->constrainer_field = constrainer_field;
+            if(constrainer_field){ // non-terminal might be null due to error reduction rules
+                this->tie(this->constrainer_field);
             }
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
             this->m_children_pool = {
                 THIS_MAPIFY(field_),
-                THIS_MAPIFY(field),
+                THIS_MAPIFY(constrainer_field),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getField() const ->
+            Expression
+        {
+            return field_;
+        }
+        auto getConstrainerField() const ->
+            Expression
+        {
+            return constrainer_field;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6727,7 +8869,7 @@ class field_type_constraint_by_field_expr_class : public Expression_class {
 #endif
 };
 
-auto field_type_constraint_by_field_expr(Expression field_, Expression field) -> Expression;
+auto field_type_constraint_by_field_expr(Expression field_, Expression constrainer_field) -> Expression;
 
 class distribution_constraint_expr_class : public Expression_class {
     protected:
@@ -6751,6 +8893,19 @@ class distribution_constraint_expr_class : public Expression_class {
                 THIS_MAPIFY(distribution),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getGenItem() const ->
+            Expression
+        {
+            return gen_item;
+        }
+        auto getDistribution() const ->
+            Cases
+        {
+            return distribution;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6788,6 +8943,19 @@ class distribution_branch_case_class : public Case_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getInt() const ->
+            Expression
+        {
+            return int_;
+        }
+        auto getValue() const ->
+            Expression
+        {
+            return value;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6811,6 +8979,9 @@ class me_expr_class : public Expression_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6836,6 +9007,9 @@ class it_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -6851,11 +9025,11 @@ auto it_expr() -> Expression;
 
 class str_expr_class : public Expression_class {
     protected:
-        ast::p_tree_node str;
+        ast::Symbol__leaf str;
     public:
         str_expr_class(Symbol_ str){
             // initialize the members & tie them to me (the parent)
-            this->str = ast::p_tree_node(new ast::Symbol__leaf_node(str));
+            this->str = ast::Symbol__leaf(new ast::Symbol__leaf_node(str));
             this->tie(this->str);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -6863,6 +9037,14 @@ class str_expr_class : public Expression_class {
                 THIS_MAPIFY(str),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStr() const ->
+            ast::Symbol__leaf
+        {
+            return str;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6879,11 +9061,11 @@ auto str_expr(Symbol_ str) -> Expression;
 
 class int_expr_class : public Expression_class {
     protected:
-        ast::p_tree_node int_;
+        ast::Symbol__leaf int_;
     public:
         int_expr_class(Symbol_ int_){
             // initialize the members & tie them to me (the parent)
-            this->int_ = ast::p_tree_node(new ast::Symbol__leaf_node(int_));
+            this->int_ = ast::Symbol__leaf(new ast::Symbol__leaf_node(int_));
             this->tie(this->int_);
 
             // initialize the children pool for easy & fast lookup by get_child_by_name
@@ -6891,6 +9073,14 @@ class int_expr_class : public Expression_class {
                 THIS_MAPIFY(int_),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getInt() const ->
+            ast::Symbol__leaf
+        {
+            return int_;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6927,6 +9117,19 @@ class enum_dt_class : public DataType_class {
                 THIS_MAPIFY(width_modifier),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEnumListItems() const ->
+            Expressions
+        {
+            return enum_list_items;
+        }
+        auto getWidthModifier() const ->
+            Expression
+        {
+            return width_modifier;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -6970,6 +9173,24 @@ class scalar_subtype_dt_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getPredefinedBaseType() const ->
+            DataType
+        {
+            return predefined_base_type;
+        }
+        auto getRangeModifier() const ->
+            Expression
+        {
+            return range_modifier;
+        }
+        auto getWidthModifier() const ->
+            Expression
+        {
+            return width_modifier;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7006,6 +9227,19 @@ class defined_dt_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEnumListItems() const ->
+            Expressions
+        {
+            return enum_list_items;
+        }
+        auto getWidthModifier() const ->
+            Expression
+        {
+            return width_modifier;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7021,12 +9255,12 @@ auto defined_dt(Expressions enum_list_items, Expression width_modifier) -> DataT
 
 class defined_subtype_dt_class : public DataType_class {
     protected:
-        ast::p_tree_node id;
+        ast::Symbol__leaf id;
         Expression range_modifier;
     public:
         defined_subtype_dt_class(Symbol_ id, Expression range_modifier){
             // initialize the members & tie them to me (the parent)
-            this->id = ast::p_tree_node(new ast::Symbol__leaf_node(id));
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
             this->tie(this->id);
             this->range_modifier = range_modifier;
             if(range_modifier){ // non-terminal might be null due to error reduction rules
@@ -7039,6 +9273,19 @@ class defined_subtype_dt_class : public DataType_class {
                 THIS_MAPIFY(range_modifier),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        auto getRangeModifier() const ->
+            Expression
+        {
+            return range_modifier;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7082,6 +9329,24 @@ class predefined_subtype_dt_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getPredType() const ->
+            DataType
+        {
+            return pred_type;
+        }
+        auto getRangeModifier() const ->
+            Expression
+        {
+            return range_modifier;
+        }
+        auto getWidthModifier() const ->
+            Expression
+        {
+            return width_modifier;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7111,6 +9376,14 @@ class defined_struct_type_dt_class : public DataType_class {
                 THIS_MAPIFY(struct_type_modifiers),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getStructTypeModifiers() const ->
+            Expressions
+        {
+            return struct_type_modifiers;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7142,6 +9415,14 @@ class list_type_dt_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBaseType() const ->
+            DataType
+        {
+            return base_type;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7157,12 +9438,12 @@ auto list_type_dt(DataType base_type) -> DataType;
 
 class assoc_list_type_dt_class : public DataType_class {
     protected:
-        ast::p_tree_node key_id;
+        ast::Symbol__leaf key_id;
         DataType base_type;
     public:
         assoc_list_type_dt_class(Symbol_ key_id, DataType base_type){
             // initialize the members & tie them to me (the parent)
-            this->key_id = ast::p_tree_node(new ast::Symbol__leaf_node(key_id));
+            this->key_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(key_id));
             this->tie(this->key_id);
             this->base_type = base_type;
             if(base_type){ // non-terminal might be null due to error reduction rules
@@ -7175,6 +9456,19 @@ class assoc_list_type_dt_class : public DataType_class {
                 THIS_MAPIFY(base_type),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getKeyId() const ->
+            ast::Symbol__leaf
+        {
+            return key_id;
+        }
+        auto getBaseType() const ->
+            DataType
+        {
+            return base_type;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7200,6 +9494,9 @@ class file_dt_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7223,6 +9520,9 @@ class int_predefined_type_class : public DataType_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7248,6 +9548,9 @@ class uint_predefined_type_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7271,6 +9574,9 @@ class bool_predefined_type_class : public DataType_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7296,6 +9602,9 @@ class bit_predefined_type_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7319,6 +9628,9 @@ class byte_predefined_type_class : public DataType_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7344,6 +9656,9 @@ class nibble_predefined_type_class : public DataType_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7367,6 +9682,9 @@ class time_predefined_type_class : public DataType_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7392,6 +9710,9 @@ class no_expr_class : public Expression_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7407,13 +9728,13 @@ auto no_expr() -> Expression;
 
 class var_decl_act_class : public Action_class {
     protected:
-        ast::p_tree_node name;
+        ast::Symbol__leaf name;
         DataType type_id;
         Expression init_expr;
     public:
         var_decl_act_class(Symbol_ name, DataType type_id, Expression init_expr){
             // initialize the members & tie them to me (the parent)
-            this->name = ast::p_tree_node(new ast::Symbol__leaf_node(name));
+            this->name = ast::Symbol__leaf(new ast::Symbol__leaf_node(name));
             this->tie(this->name);
             this->type_id = type_id;
             if(type_id){ // non-terminal might be null due to error reduction rules
@@ -7431,6 +9752,24 @@ class var_decl_act_class : public Action_class {
                 THIS_MAPIFY(init_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getName() const ->
+            ast::Symbol__leaf
+        {
+            return name;
+        }
+        auto getTypeId() const ->
+            DataType
+        {
+            return type_id;
+        }
+        auto getInitExpr() const ->
+            Expression
+        {
+            return init_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7468,6 +9807,19 @@ class var_assign_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getIdExpr() const ->
+            Expression
+        {
+            return id_expr;
+        }
+        auto getAssignExpr() const ->
+            Expression
+        {
+            return assign_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7503,6 +9855,19 @@ class compound_add_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7540,6 +9905,19 @@ class compound_sub_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7575,6 +9953,19 @@ class compound_mul_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7612,6 +10003,19 @@ class compound_div_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7647,6 +10051,19 @@ class compound_mod_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7684,6 +10101,19 @@ class compound_bool_and_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7719,6 +10149,19 @@ class compound_bool_or_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7756,6 +10199,19 @@ class compound_bit_and_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7791,6 +10247,19 @@ class compound_bit_or_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7828,6 +10297,19 @@ class compound_bit_xor_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7863,6 +10345,19 @@ class compound_shift_left_act_class : public Action_class {
                 THIS_MAPIFY(e2),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -7900,6 +10395,19 @@ class compound_right_left_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        auto getE2() const ->
+            Expression
+        {
+            return e2;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7936,6 +10444,19 @@ class force_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getHdlOrPort() const ->
+            Expression
+        {
+            return hdl_or_port;
+        }
+        auto getExp() const ->
+            Expression
+        {
+            return exp;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -7965,6 +10486,14 @@ class release_act_class : public Action_class {
                 THIS_MAPIFY(hdl_or_port),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getHdlOrPort() const ->
+            Expression
+        {
+            return hdl_or_port;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8008,6 +10537,24 @@ class if_then_else_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getCondition() const ->
+            Expression
+        {
+            return condition;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        auto getElseClause() const ->
+            ActionBlock
+        {
+            return else_clause;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8050,6 +10597,24 @@ class non_term_if_then_else_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getCondition() const ->
+            Expression
+        {
+            return condition;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        auto getElseClause() const ->
+            Action
+        {
+            return else_clause;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8079,6 +10644,14 @@ class case_bool_act_class : public Action_class {
                 THIS_MAPIFY(bool_case_branch_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getBoolCaseBranchItems() const ->
+            Cases
+        {
+            return bool_case_branch_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8116,6 +10689,19 @@ class case_bool_branch_item_case_class : public Case_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExp() const ->
+            Expression
+        {
+            return bool_exp;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8151,6 +10737,19 @@ class case_labeled_act_class : public Action_class {
                 THIS_MAPIFY(labeled_case_branch_items),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getExp() const ->
+            Expression
+        {
+            return exp;
+        }
+        auto getLabeledCaseBranchItems() const ->
+            Cases
+        {
+            return labeled_case_branch_items;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8188,6 +10787,19 @@ class case_labeled_branch_item_case_class : public Case_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getLabelExp() const ->
+            Expression
+        {
+            return label_exp;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8217,6 +10829,14 @@ class default_case_branch_item_case_class : public Case_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8248,6 +10868,14 @@ class print_call_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getValues() const ->
+            Expressions
+        {
+            return values;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8277,6 +10905,14 @@ class method_call_act_class : public Action_class {
                 THIS_MAPIFY(method_call_expr),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getMethodCallExpr() const ->
+            Expression
+        {
+            return method_call_expr;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8308,6 +10944,14 @@ class start_tcm_call_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getMethodCallExpr() const ->
+            Expression
+        {
+            return method_call_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8338,6 +10982,14 @@ class compute_method_call_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getMethodCallExpr() const ->
+            Expression
+        {
+            return method_call_expr;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8367,6 +11019,14 @@ class return_act_class : public Action_class {
                 THIS_MAPIFY(exp),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getExp() const ->
+            Expression
+        {
+            return exp;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8404,6 +11064,19 @@ class while_loop_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8440,6 +11113,19 @@ class repeat_until_loop_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8457,7 +11143,7 @@ class for_each_loop_act_class : public Action_class {
     protected:
         DataType type_id;
         Expression iterated_name;
-        ast::p_tree_node is_reverese;
+        ast::Boolean_leaf is_reverese;
         Expression list_exp;
         Expression idx_exp;
         ActionBlock actions;
@@ -8472,7 +11158,7 @@ class for_each_loop_act_class : public Action_class {
             if(iterated_name){ // non-terminal might be null due to error reduction rules
                 this->tie(this->iterated_name);
             }
-            this->is_reverese = ast::p_tree_node(new ast::Boolean_leaf_node(is_reverese));
+            this->is_reverese = ast::Boolean_leaf(new ast::Boolean_leaf_node(is_reverese));
             this->tie(this->is_reverese);
             this->list_exp = list_exp;
             if(list_exp){ // non-terminal might be null due to error reduction rules
@@ -8498,6 +11184,39 @@ class for_each_loop_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getTypeId() const ->
+            DataType
+        {
+            return type_id;
+        }
+        auto getIteratedName() const ->
+            Expression
+        {
+            return iterated_name;
+        }
+        auto getIsReverese() const ->
+            ast::Boolean_leaf
+        {
+            return is_reverese;
+        }
+        auto getListExp() const ->
+            Expression
+        {
+            return list_exp;
+        }
+        auto getIdxExp() const ->
+            Expression
+        {
+            return idx_exp;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8513,16 +11232,16 @@ auto for_each_loop_act(DataType type_id, Expression iterated_name, Boolean is_re
 
 class for_range_loop_act_class : public Action_class {
     protected:
-        ast::p_tree_node var_id;
+        ast::Symbol__leaf var_id;
         Expression from_expr;
         Expression to_expr;
         Expression step_expr;
-        ast::p_tree_node is_down;
+        ast::Boolean_leaf is_down;
         ActionBlock actions;
     public:
         for_range_loop_act_class(Symbol_ var_id, Expression from_expr, Expression to_expr, Expression step_expr, Boolean is_down, ActionBlock actions){
             // initialize the members & tie them to me (the parent)
-            this->var_id = ast::p_tree_node(new ast::Symbol__leaf_node(var_id));
+            this->var_id = ast::Symbol__leaf(new ast::Symbol__leaf_node(var_id));
             this->tie(this->var_id);
             this->from_expr = from_expr;
             if(from_expr){ // non-terminal might be null due to error reduction rules
@@ -8536,7 +11255,7 @@ class for_range_loop_act_class : public Action_class {
             if(step_expr){ // non-terminal might be null due to error reduction rules
                 this->tie(this->step_expr);
             }
-            this->is_down = ast::p_tree_node(new ast::Boolean_leaf_node(is_down));
+            this->is_down = ast::Boolean_leaf(new ast::Boolean_leaf_node(is_down));
             this->tie(this->is_down);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -8553,6 +11272,39 @@ class for_range_loop_act_class : public Action_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getVarId() const ->
+            ast::Symbol__leaf
+        {
+            return var_id;
+        }
+        auto getFromExpr() const ->
+            Expression
+        {
+            return from_expr;
+        }
+        auto getToExpr() const ->
+            Expression
+        {
+            return to_expr;
+        }
+        auto getStepExpr() const ->
+            Expression
+        {
+            return step_expr;
+        }
+        auto getIsDown() const ->
+            ast::Boolean_leaf
+        {
+            return is_down;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8602,6 +11354,29 @@ class for_loop_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getInitAct() const ->
+            Action
+        {
+            return init_act;
+        }
+        auto getBoolExpr() const ->
+            Expression
+        {
+            return bool_expr;
+        }
+        auto getStepAct() const ->
+            Action
+        {
+            return step_act;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8643,6 +11418,24 @@ class for_each_line_in_file_act_class : public Action_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getLineItName() const ->
+            Expression
+        {
+            return line_it_name;
+        }
+        auto getFilePathExpr() const ->
+            Expression
+        {
+            return file_path_expr;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8686,6 +11479,24 @@ class for_each_file_in_files_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getLineItName() const ->
+            Expression
+        {
+            return line_it_name;
+        }
+        auto getFilePatternExp() const ->
+            Expression
+        {
+            return file_pattern_exp;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8710,6 +11521,9 @@ class break_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8733,6 +11547,9 @@ class continue_act_class : public Action_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8764,6 +11581,14 @@ class emit_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            Expression
+        {
+            return event_id;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8793,6 +11618,14 @@ class sync_act_class : public Action_class {
                 THIS_MAPIFY(event_id),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            Expression
+        {
+            return event_id;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8824,6 +11657,14 @@ class wait_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getEventId() const ->
+            Expression
+        {
+            return event_id;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8854,6 +11695,14 @@ class all_of_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getThreads() const ->
+            ActionBlocks
+        {
+            return threads;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8883,6 +11732,14 @@ class first_of_act_class : public Action_class {
                 THIS_MAPIFY(threads),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getThreads() const ->
+            ActionBlocks
+        {
+            return threads;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -8920,6 +11777,19 @@ class gen_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getGenExpr() const ->
+            Expression
+        {
+            return gen_expr;
+        }
+        auto getConstraints() const ->
+            Expressions
+        {
+            return constraints;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8956,6 +11826,19 @@ class do_seq_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getSeqItem() const ->
+            Expression
+        {
+            return seq_item;
+        }
+        auto getConstraints() const ->
+            Expressions
+        {
+            return constraints;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -8985,6 +11868,14 @@ class seq_item_expr_class : public Expression_class {
                 THIS_MAPIFY(field_type_exprs),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getFieldTypeExprs() const ->
+            Expressions
+        {
+            return field_type_exprs;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9022,6 +11913,19 @@ class check_that_action_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getCondition() const ->
+            Expression
+        {
+            return condition;
+        }
+        auto getDutErrorBlock() const ->
+            Expression
+        {
+            return dut_error_block;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -9058,6 +11962,19 @@ class assert_action_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getCondition() const ->
+            Expression
+        {
+            return condition;
+        }
+        auto getErrorBlock() const ->
+            Expression
+        {
+            return error_block;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -9093,6 +12010,19 @@ class try_else_action_class : public Action_class {
                 THIS_MAPIFY(except_actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getTryActions() const ->
+            ActionBlock
+        {
+            return try_actions;
+        }
+        auto getExceptActions() const ->
+            ActionBlock
+        {
+            return except_actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9136,6 +12066,24 @@ class state_machine_act_class : public Action_class {
             };
         }
 
+        // -------------- Getters ------------------ //
+        auto getStateVar() const ->
+            Expression
+        {
+            return state_var;
+        }
+        auto getFinalSt() const ->
+            Expression
+        {
+            return final_st;
+        }
+        auto getStates() const ->
+            FSMStates
+        {
+            return states;
+        }
+        // -------------- Getters ------------------ //
+
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
 
@@ -9151,12 +12099,12 @@ auto state_machine_act(Expression state_var, Expression final_st, FSMStates stat
 
 class state_action_fsm_class : public FSMState_class {
     protected:
-        ast::p_tree_node state;
+        ast::Symbol__leaf state;
         ActionBlock actions;
     public:
         state_action_fsm_class(Symbol_ state, ActionBlock actions){
             // initialize the members & tie them to me (the parent)
-            this->state = ast::p_tree_node(new ast::Symbol__leaf_node(state));
+            this->state = ast::Symbol__leaf(new ast::Symbol__leaf_node(state));
             this->tie(this->state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -9169,6 +12117,19 @@ class state_action_fsm_class : public FSMState_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getState() const ->
+            ast::Symbol__leaf
+        {
+            return state;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9185,15 +12146,15 @@ auto state_action_fsm(Symbol_ state, ActionBlock actions) -> FSMState;
 
 class state_transition_fsm_class : public FSMState_class {
     protected:
-        ast::p_tree_node cur_state;
-        ast::p_tree_node next_state;
+        ast::Symbol__leaf cur_state;
+        ast::Symbol__leaf next_state;
         ActionBlock actions;
     public:
         state_transition_fsm_class(Symbol_ cur_state, Symbol_ next_state, ActionBlock actions){
             // initialize the members & tie them to me (the parent)
-            this->cur_state = ast::p_tree_node(new ast::Symbol__leaf_node(cur_state));
+            this->cur_state = ast::Symbol__leaf(new ast::Symbol__leaf_node(cur_state));
             this->tie(this->cur_state);
-            this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
+            this->next_state = ast::Symbol__leaf(new ast::Symbol__leaf_node(next_state));
             this->tie(this->next_state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -9207,6 +12168,24 @@ class state_transition_fsm_class : public FSMState_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getCurState() const ->
+            ast::Symbol__leaf
+        {
+            return cur_state;
+        }
+        auto getNextState() const ->
+            ast::Symbol__leaf
+        {
+            return next_state;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9223,12 +12202,12 @@ auto state_transition_fsm(Symbol_ cur_state, Symbol_ next_state, ActionBlock act
 
 class state_any_transition_fsm_class : public FSMState_class {
     protected:
-        ast::p_tree_node next_state;
+        ast::Symbol__leaf next_state;
         ActionBlock actions;
     public:
         state_any_transition_fsm_class(Symbol_ next_state, ActionBlock actions){
             // initialize the members & tie them to me (the parent)
-            this->next_state = ast::p_tree_node(new ast::Symbol__leaf_node(next_state));
+            this->next_state = ast::Symbol__leaf(new ast::Symbol__leaf_node(next_state));
             this->tie(this->next_state);
             this->actions = actions;
             if(actions){ // non-terminal might be null due to error reduction rules
@@ -9241,6 +12220,19 @@ class state_any_transition_fsm_class : public FSMState_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getNextState() const ->
+            ast::Symbol__leaf
+        {
+            return next_state;
+        }
+        auto getActions() const ->
+            ActionBlock
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9265,6 +12257,9 @@ class no_action_class : public Action_class {
             this->m_children_pool = {
             };
         }
+
+        // -------------- Getters ------------------ //
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;
@@ -9295,6 +12290,14 @@ class action_block_class : public ActionBlock_class {
                 THIS_MAPIFY(actions),
             };
         }
+
+        // -------------- Getters ------------------ //
+        auto getActions() const ->
+            Actions
+        {
+            return actions;
+        }
+        // -------------- Getters ------------------ //
 
         auto dump(std::ostream& stream, int n) -> void override;
         auto type() const -> SpecmanCtorKind override;

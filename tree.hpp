@@ -188,10 +188,12 @@ namespace ast {
     };
 
 
-    
     // base class for leaf nodes
     // declares the leaf_type method returning the type of data held
     // by the leaf
+    class leaf_node;
+    typedef std::shared_ptr<leaf_node> p_leaf_node;
+
     class leaf_node : public tree_node_base
     {
     public:
@@ -239,6 +241,9 @@ namespace ast {
     };
 
     using symbol_leaf_node = ast::leaf_tree_node<elex::Symbol_>;
+    class Symbol__leaf_node;
+    using Symbol__leaf = std::shared_ptr<Symbol__leaf_node>;
+
     class Symbol__leaf_node : public symbol_leaf_node
     {
     public:
@@ -250,6 +255,9 @@ namespace ast {
     };
     
     using boolean_leaf_node = ast::leaf_tree_node<elex::Boolean>;
+    class Boolean_leaf_node;
+    using Boolean_leaf = std::shared_ptr<Boolean_leaf_node>;
+
     class Boolean_leaf_node : public boolean_leaf_node
     {
     public:

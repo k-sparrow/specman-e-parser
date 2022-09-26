@@ -11,6 +11,7 @@ driver::driver(std::string const& file_path, std::istream* yyin) :
     m_scanner(*this, yyin, &file_path),
     m_parser(m_scanner, *this)
 {
+    // TODO: super idiotic. consider a replacement
     this->idtable["NO SYMBOL"] = Symbol(new Entry("NO SYMBOL", 0));
 }
 

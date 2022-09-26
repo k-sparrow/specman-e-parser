@@ -3648,9 +3648,9 @@ auto field_type_constraint_by_field_expr_class::dump(std::ostream& stream, int n
         stream << pad(n+2) << "field_: " << std::endl;
         field_->dump(stream, n+4);
     }
-    if(field){
-        stream << pad(n+2) << "field: " << std::endl;
-        field->dump(stream, n+4);
+    if(constrainer_field){
+        stream << pad(n+2) << "constrainer_field: " << std::endl;
+        constrainer_field->dump(stream, n+4);
     }
 }
 
@@ -3658,8 +3658,8 @@ auto field_type_constraint_by_field_expr_class::type() const -> SpecmanCtorKind 
     return SpecmanCtorKind::FieldTypeConstraintByFieldExpr;
 }
 
-auto field_type_constraint_by_field_expr(Expression field_, Expression field) -> Expression {
-    return Expression(new field_type_constraint_by_field_expr_class(field_, field));
+auto field_type_constraint_by_field_expr(Expression field_, Expression constrainer_field) -> Expression {
+    return Expression(new field_type_constraint_by_field_expr_class(field_, constrainer_field));
 }
 
 
