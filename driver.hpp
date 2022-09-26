@@ -57,7 +57,7 @@ namespace yy {
          * Run parser. Results are stored inside.
          * \returns 0 on success, 1 on failure
          */
-        int parse();
+        int parse(unsigned int debug_level = 0);
         
         /**
          * Clear AST

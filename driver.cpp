@@ -14,8 +14,8 @@ driver::driver(std::string const& file_path, std::istream* yyin) :
     this->idtable["NO SYMBOL"] = Symbol(new Entry("NO SYMBOL", 0));
 }
 
-int driver::parse() {
-    m_parser.set_debug_level(1);
+int driver::parse(unsigned int debug_level) {
+    m_parser.set_debug_level(debug_level);
     return m_parser.parse();
 }
 

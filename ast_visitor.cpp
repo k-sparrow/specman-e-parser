@@ -51,7 +51,69 @@ namespace ast {
         }
 
         case elex::SpecmanCtorKind::FieldSm : {
-            m_stream << "Found field declaration at " << node.get_source_location() << std::endl;
+            auto field = node.get_child_by_name("field");
+            if (field != nullptr) {
+                switch (field->type())
+                {
+                // scalar
+                case elex::SpecmanCtorKind::StructFieldSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_sm_class&>(*field);
+                    auto field_id  = field_sm.get_child_by_name("id");
+                    auto& field_id_leaf = dynamic_cast<ast::Symbol__leaf_node&>(*field_id);
+
+                    // populate the entry
+                    const auto& tag_location = field_id_leaf.get_source_location();
+                    if (tag_location.begin.filename == nullptr){
+                        throw std::runtime_error("Missing source file path for input. Please check a file path is supplied to the lexer!");
+                    }
+                    m_entry.tag_file     = *tag_location.begin.filename;
+                    m_entry.tag_location = tag_location.begin.line;
+                    m_entry.tag = field_id_leaf.value().lock()->Str();
+
+                    break;
+                }
+                
+                // listed 
+                case elex::SpecmanCtorKind::StructFieldListSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
+                    auto field_id  = field_sm.get_child_by_name("id");
+                    auto& field_id_leaf = dynamic_cast<ast::Symbol__leaf_node&>(*field_id);
+
+                    // populate the entry
+                    const auto& tag_location = field_id_leaf.get_source_location();
+                    if (tag_location.begin.filename == nullptr){
+                        throw std::runtime_error("Missing source file path for input. Please check a file path is supplied to the lexer!");
+                    }
+                    m_entry.tag_file     = *tag_location.begin.filename;
+                    m_entry.tag_location = tag_location.begin.line;
+                    m_entry.tag = field_id_leaf.value().lock()->Str();
+
+                    break;
+                }
+
+                // associative listed
+                case elex::SpecmanCtorKind::StructFieldAssocListSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
+                    auto field_id  = field_sm.get_child_by_name("id");
+                    auto& field_id_leaf = dynamic_cast<ast::Symbol__leaf_node&>(*field_id);
+
+                    // populate the entry
+                    const auto& tag_location = field_id_leaf.get_source_location();
+                    if (tag_location.begin.filename == nullptr){
+                        throw std::runtime_error("Missing source file path for input. Please check a file path is supplied to the lexer!");
+                    }
+                    m_entry.tag_file     = *tag_location.begin.filename;
+                    m_entry.tag_location = tag_location.begin.line;
+                    m_entry.tag = field_id_leaf.value().lock()->Str();
+
+                    break;
+                }
+                default: // do noting, and return
+                    return;
+                }
+            }
+            // dump field info
+            m_stream << m_entry << std::endl;
             break;
         }
 
