@@ -199,6 +199,42 @@ auto module_(Statements stmts) -> Module {
 }
 
 
+auto id_expr_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\id_expr: " << "<" << get_source_location() << ">" << std::endl;
+    stream << pad(n+2) << "id: ";
+    id->dump(stream, 0);
+}
+
+auto id_expr_class::type() const -> SpecmanCtorKind {
+    return SpecmanCtorKind::IdExpr;
+}
+
+auto id_expr(Symbol_ id) -> Expression {
+    return Expression(new id_expr_class(id));
+}
+
+
+auto struct_type_modifier_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\struct_type_modifier: " << "<" << get_source_location() << ">" << std::endl;
+    if(value){
+        stream << pad(n+2) << "value: " << std::endl;
+        value->dump(stream, n+4);
+    }
+    if(id){
+        stream << pad(n+2) << "id: " << std::endl;
+        id->dump(stream, n+4);
+    }
+}
+
+auto struct_type_modifier_class::type() const -> SpecmanCtorKind {
+    return SpecmanCtorKind::StructTypeModifier;
+}
+
+auto struct_type_modifier(Expression value, Expression id) -> Expression {
+    return Expression(new struct_type_modifier_class(value, id));
+}
+
+
 auto package_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\package: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "pkg_name: ";
@@ -2361,21 +2397,6 @@ auto false_literal_expr() -> Expression {
 }
 
 
-auto id_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\id_expr: " << "<" << get_source_location() << ">" << std::endl;
-    stream << pad(n+2) << "id: ";
-    id->dump(stream, 0);
-}
-
-auto id_expr_class::type() const -> SpecmanCtorKind {
-    return SpecmanCtorKind::IdExpr;
-}
-
-auto id_expr(Symbol_ id) -> Expression {
-    return Expression(new id_expr_class(id));
-}
-
-
 auto enum_type_expr_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\enum_type_expr: " << "<" << get_source_location() << ">" << std::endl;
     if(enum_list_expr){
@@ -3379,27 +3400,6 @@ auto struct_type_id_class::type() const -> SpecmanCtorKind {
 
 auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression {
     return Expression(new struct_type_id_class(struct_type_modifiers, struct_id_expr));
-}
-
-
-auto struct_type_modifier_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\struct_type_modifier: " << "<" << get_source_location() << ">" << std::endl;
-    if(value){
-        stream << pad(n+2) << "value: " << std::endl;
-        value->dump(stream, n+4);
-    }
-    if(id){
-        stream << pad(n+2) << "id: " << std::endl;
-        id->dump(stream, n+4);
-    }
-}
-
-auto struct_type_modifier_class::type() const -> SpecmanCtorKind {
-    return SpecmanCtorKind::StructTypeModifier;
-}
-
-auto struct_type_modifier(Expression value, Expression id) -> Expression {
-    return Expression(new struct_type_modifier_class(value, id));
 }
 
 

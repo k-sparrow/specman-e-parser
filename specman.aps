@@ -51,6 +51,9 @@ module Specman begin
 
         constructor module_(stmts: Statements) : Module;
 
+        constructor id_expr(id: Symbol_) : Expression;
+        constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
+        
         constructor package(pkg_name: Symbol_) : Statement;
         constructor unit_st(unit_name: Symbol_; members: StructMembers) : Statement;
         constructor unit_like_st(unit_name: Symbol_; base_unit_name: Symbol_; members: StructMembers) : Statement;
@@ -185,8 +188,6 @@ module Specman begin
         constructor true_literal_expr() : Expression;
         constructor false_literal_expr() : Expression;
 
-        constructor id_expr(id: Symbol_) : Expression;
-        
         constructor enum_type_expr(enum_list_expr: Expressions; width_modifier_expr: Expression) : Expression;
         constructor enum_list_item(id: Symbol_; expr: Expression) : Expression;
         
@@ -246,7 +247,6 @@ module Specman begin
         constructor struct_type_expr_with_opt_action_block(struct_id_expr : Expression; opt_action_block_expt : Expression) : Expression;
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
         constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
-        constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
         constructor defined_type_identifier_expr(modifiers: Expressions) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;

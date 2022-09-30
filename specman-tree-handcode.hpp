@@ -27,6 +27,57 @@
         auto getHiers() -> Expressions { return hiers; }
 #endif // struct_hier_ref_expr_EXTRAS
 
+#ifndef id_expr_EXTRAS
+#define id_expr_EXTRAS                      \
+    public:                                 \
+        auto str() const -> std::string {   \
+            return id->value().lock()->Str();      \
+        }
+#endif // id_expr_EXTRAS
+
+#ifndef struct_type_modifier_EXTRAS
+#define struct_type_modifier_EXTRAS                                          \
+    public:                                                                 \
+        auto str() const -> std::string {                                   \
+            auto& id_node = dynamic_cast<elex::id_expr_class&>(*id);        \
+            auto& value_node = dynamic_cast<elex::id_expr_class&>(*value);  \
+                                                                            \
+            return value_node.str() + "'" + id_node.str();                  \
+        }
+#endif // struct_type_modifer_EXTRAS
+
+#ifndef extend_struct_st_EXTRAS
+#define extend_struct_st_EXTRAS                                     \
+    private:                                                        \
+    public:                                                         \
+        auto getFullStructName() -> std::string {                   \
+            std::string full_name = "";                             \
+            for(auto& child : struct_type_name->children()) {       \
+                switch(child.lock()->type()) {                      \
+                    case elex::SpecmanCtorKind::IdExpr: {           \
+                        auto& id_expr_node =                        \
+                            dynamic_cast<elex::id_expr_class&>(*child.lock()); \
+                                                                    \
+                        full_name += id_expr_node.str();            \
+                        break;                                      \
+                    }                                               \
+                    case elex::SpecmanCtorKind::StructTypeModifier: { \
+                        auto& struct_type_modifier_node =           \
+                            dynamic_cast<elex::struct_type_modifier_class&>(*child.lock()); \
+                                                                    \
+                        full_name += struct_type_modifier_node.str(); \
+                        break;                                      \
+                    }                                               \
+                    default: break;                                 \
+                }                                                   \
+                                                                    \
+                full_name += " ";                                   \
+            }                                                       \
+            trim(full_name);                                        \
+            return full_name;                                       \
+        }
+#endif //extend_struct_st_EXTRAS
+
 namespace elex {
     using Boolean = bool;
 }

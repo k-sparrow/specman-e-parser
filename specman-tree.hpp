@@ -16,6 +16,8 @@ namespace elex {
     
 enum class SpecmanCtorKind {
     Module = 0,
+    IdExpr,
+    StructTypeModifier,
     Package,
     UnitSt,
     UnitLikeSt,
@@ -128,7 +130,6 @@ enum class SpecmanCtorKind {
     WhenCgio,
     TrueLiteralExpr,
     FalseLiteralExpr,
-    IdExpr,
     EnumTypeExpr,
     EnumListItem,
     BitwiseNotExpr,
@@ -179,7 +180,6 @@ enum class SpecmanCtorKind {
     StructTypeExprWithOptActionBlock,
     NamedActionBlock,
     StructTypeId,
-    StructTypeModifier,
     DefinedTypeIdentifierExpr,
     StructHierRefExpr,
     HdlPathNameExpr,
@@ -674,6 +674,91 @@ class module__class : public Module_class {
 };
 
 auto module_(Statements stmts) -> Module;
+
+class id_expr_class : public Expression_class {
+    protected:
+        ast::Symbol__leaf id;
+    public:
+        id_expr_class(Symbol_ id){
+            // initialize the members & tie them to me (the parent)
+            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
+            this->tie(this->id);
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(id),
+            };
+        }
+
+        // -------------- Getters ------------------ //
+        auto getId() const ->
+            ast::Symbol__leaf
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
+
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef id_expr_EXTRAS
+    id_expr_EXTRAS
+#endif
+};
+
+auto id_expr(Symbol_ id) -> Expression;
+
+class struct_type_modifier_class : public Expression_class {
+    protected:
+        Expression value;
+        Expression id;
+    public:
+        struct_type_modifier_class(Expression value, Expression id){
+            // initialize the members & tie them to me (the parent)
+            this->value = value;
+            if(value){ // non-terminal might be null due to error reduction rules
+                this->tie(this->value);
+            }
+            this->id = id;
+            if(id){ // non-terminal might be null due to error reduction rules
+                this->tie(this->id);
+            }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(value),
+                THIS_MAPIFY(id),
+            };
+        }
+
+        // -------------- Getters ------------------ //
+        auto getValue() const ->
+            Expression
+        {
+            return value;
+        }
+        auto getId() const ->
+            Expression
+        {
+            return id;
+        }
+        // -------------- Getters ------------------ //
+
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef struct_type_modifier_EXTRAS
+    struct_type_modifier_EXTRAS
+#endif
+};
+
+auto struct_type_modifier(Expression value, Expression id) -> Expression;
 
 class package_class : public Statement_class {
     protected:
@@ -5854,42 +5939,6 @@ class false_literal_expr_class : public Expression_class {
 
 auto false_literal_expr() -> Expression;
 
-class id_expr_class : public Expression_class {
-    protected:
-        ast::Symbol__leaf id;
-    public:
-        id_expr_class(Symbol_ id){
-            // initialize the members & tie them to me (the parent)
-            this->id = ast::Symbol__leaf(new ast::Symbol__leaf_node(id));
-            this->tie(this->id);
-
-            // initialize the children pool for easy & fast lookup by get_child_by_name
-            this->m_children_pool = {
-                THIS_MAPIFY(id),
-            };
-        }
-
-        // -------------- Getters ------------------ //
-        auto getId() const ->
-            ast::Symbol__leaf
-        {
-            return id;
-        }
-        // -------------- Getters ------------------ //
-
-        auto dump(std::ostream& stream, int n) -> void override;
-        auto type() const -> SpecmanCtorKind override;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef id_expr_EXTRAS
-    id_expr_EXTRAS
-#endif
-};
-
-auto id_expr(Symbol_ id) -> Expression;
-
 class enum_type_expr_class : public Expression_class {
     protected:
         Expressions enum_list_expr;
@@ -8225,55 +8274,6 @@ class struct_type_id_class : public Expression_class {
 };
 
 auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression;
-
-class struct_type_modifier_class : public Expression_class {
-    protected:
-        Expression value;
-        Expression id;
-    public:
-        struct_type_modifier_class(Expression value, Expression id){
-            // initialize the members & tie them to me (the parent)
-            this->value = value;
-            if(value){ // non-terminal might be null due to error reduction rules
-                this->tie(this->value);
-            }
-            this->id = id;
-            if(id){ // non-terminal might be null due to error reduction rules
-                this->tie(this->id);
-            }
-
-            // initialize the children pool for easy & fast lookup by get_child_by_name
-            this->m_children_pool = {
-                THIS_MAPIFY(value),
-                THIS_MAPIFY(id),
-            };
-        }
-
-        // -------------- Getters ------------------ //
-        auto getValue() const ->
-            Expression
-        {
-            return value;
-        }
-        auto getId() const ->
-            Expression
-        {
-            return id;
-        }
-        // -------------- Getters ------------------ //
-
-        auto dump(std::ostream& stream, int n) -> void override;
-        auto type() const -> SpecmanCtorKind override;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef struct_type_modifier_EXTRAS
-    struct_type_modifier_EXTRAS
-#endif
-};
-
-auto struct_type_modifier(Expression value, Expression id) -> Expression;
 
 class defined_type_identifier_expr_class : public Expression_class {
     protected:

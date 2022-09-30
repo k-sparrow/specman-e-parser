@@ -52,22 +52,7 @@ namespace ast {
         {
         // stop condition
 
-        // NOTE: the natural stop condition is a leaf node
-        case elex::SpecmanCtorKind::StructSt: {
-            auto& struct_stmt_node = dynamic_cast<elex::struct_st_class &>(node);
-            auto struct_name = struct_stmt_node.getStructName();
-
-            // dump the struct name
-            visitLeaf(*struct_name);
-
-            // then, recurse through the struct members
-            auto members_node = struct_stmt_node.getMembers();
-            
-            // recurse through the struct members
-            members_node->accept(*this);
-            break;
-        }
-
+        // handle a field
         case elex::SpecmanCtorKind::FieldSm : {
             auto field = node.get_child_by_name("field");
             if (field != nullptr) {
@@ -106,6 +91,163 @@ namespace ast {
                     return;
                 }
             }
+            break;
+        }
+
+        case elex::SpecmanCtorKind::Package: {
+            auto& pkg_node = dynamic_cast<elex::package_class&>(node);
+            auto pkg_id = pkg_node.getPkgName();
+
+            visitLeaf(*pkg_id);
+            break;
+        }
+
+        // NOTE: the natural stop condition is a leaf node
+        case elex::SpecmanCtorKind::StructSt: {
+            auto& struct_stmt_node = dynamic_cast<elex::struct_st_class &>(node);
+            auto struct_name = struct_stmt_node.getStructName();
+
+            // dump the struct name
+            visitLeaf(*struct_name);
+
+            // then, recurse through the struct members
+            auto members_node = struct_stmt_node.getMembers();
+            
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::StructLikeSt: {
+            auto& struct_stmt_node = dynamic_cast<elex::struct_like_st_class &>(node);
+            auto struct_name = struct_stmt_node.getStructName();
+
+            // dump the struct name
+            visitLeaf(*struct_name);
+
+            // then, recurse through the struct members
+            auto members_node = struct_stmt_node.getMembers();
+            
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::UnitSt: {
+            auto& unit_stmt_node = dynamic_cast<elex::unit_st_class &>(node);
+            auto unit_name = unit_stmt_node.getUnitName();
+
+            // dump the struct name
+            visitLeaf(*unit_name);
+
+            // then, recurse through the struct members
+            auto members_node = unit_stmt_node.getMembers();
+            
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::UnitLikeSt: {
+            auto& unit_stmt_node = dynamic_cast<elex::unit_like_st_class &>(node);
+            auto unit_name = unit_stmt_node.getUnitName();
+
+            // dump the struct name
+            visitLeaf(*unit_name);
+
+            // then, recurse through the struct members
+            auto members_node = unit_stmt_node.getMembers();
+            
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::ExtendStructSt: {
+            auto& extend_stmt = dynamic_cast<elex::extend_struct_st_class&>(node);
+            
+            // TODO: refactor this out to a function, it will come around again
+            auto extend_id_tag = extend_stmt.getFullStructName();
+            auto tag_location = extend_stmt.getStructTypeName()->get_source_location();
+
+            ctags_entry entry = {
+                extend_id_tag,
+                *tag_location.begin.filename,
+                tag_location.begin.line
+            };
+
+            m_stream << entry << std::endl;
+
+            // then, recurse through the struct members
+            auto members_node = extend_stmt.getMembers();
+            
+            // recurse through the struct members
+            members_node->accept(*this);
+            break;
+        }    
+
+        case elex::SpecmanCtorKind::EnumTypeSt: {
+            auto& type_node = dynamic_cast<elex::enum_type_st_class&>(node);
+            auto type_id = type_node.getId();
+
+            visitLeaf(*type_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::ExtendEnumTypeSt: {
+            auto& type_node = dynamic_cast<elex::extend_enum_type_st_class&>(node);
+            auto type_id = type_node.getTypeId();
+
+            visitLeaf(*type_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::ScalarSubtypeSt: {
+            auto& type_node = dynamic_cast<elex::scalar_subtype_st_class&>(node);
+            auto type_id = type_node.getSubtypeId();
+
+            visitLeaf(*type_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::ScalarSizedTypeSt: {
+            auto& type_node = dynamic_cast<elex::scalar_sized_type_st_class&>(node);
+            auto type_id = type_node.getTypeId();
+
+            visitLeaf(*type_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::VirtualSequenceSt: {
+            auto& vseq_node = dynamic_cast<elex::virtual_sequence_st_class&>(node);
+            auto vseq_id = vseq_node.getId();
+
+            // handle id
+            visitLeaf(*vseq_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::SequenceSt: {
+            auto& seq_node = dynamic_cast<elex::sequence_st_class&>(node);
+            auto seq_id = seq_node.getId();
+
+            // handle id
+            visitLeaf(*seq_id);
+            break;        }
+
+        case elex::SpecmanCtorKind::DefineAsSt: {
+            break;
+        }
+
+        case elex::SpecmanCtorKind::DefineAsComputedSt: {
+            break;
+        }
+
+        case elex::SpecmanCtorKind::CExportSt: {
+            break;
+        }
+
+        case elex::SpecmanCtorKind::CRoutineSt: {
             break;
         }
 
