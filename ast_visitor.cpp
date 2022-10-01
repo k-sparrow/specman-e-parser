@@ -52,47 +52,6 @@ namespace ast {
         {
         // stop condition
 
-        // handle a field
-        case elex::SpecmanCtorKind::FieldSm : {
-            auto field = node.get_child_by_name("field");
-            if (field != nullptr) {
-                switch (field->type())
-                {
-                // scalar
-                case elex::SpecmanCtorKind::StructFieldSm: {
-                    auto& field_sm = dynamic_cast<elex::struct_field_sm_class&>(*field);
-                    auto field_id = field_sm.getId();
-
-                    // fill the entry for the node name
-                    visitLeaf(*field_id);
-                    break;
-                }
-                
-                // listed 
-                case elex::SpecmanCtorKind::StructFieldListSm: {
-                    auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
-                    auto field_id = field_sm.getId();
-
-                    // fill the entry for the node name
-                    visitLeaf(*field_id);
-                    break;
-                }
-
-                // associative listed
-                case elex::SpecmanCtorKind::StructFieldAssocListSm: {
-                    auto& field_sm = dynamic_cast<elex::struct_field_assoc_list_sm_class&>(*field);
-                    auto field_id = field_sm.getId();
-
-                    // fill the entry for the node name
-                    visitLeaf(*field_id);
-                    break;
-                }
-                default: // do noting, and return
-                    return;
-                }
-            }
-            break;
-        }
 
         case elex::SpecmanCtorKind::Package: {
             auto& pkg_node = dynamic_cast<elex::package_class&>(node);
@@ -256,6 +215,110 @@ namespace ast {
             break;
         }
 
+        // members
+        // handle a field
+        case elex::SpecmanCtorKind::FieldSm : {
+            auto field = node.get_child_by_name("field");
+            if (field != nullptr) {
+                switch (field->type())
+                {
+                // scalar
+                case elex::SpecmanCtorKind::StructFieldSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_sm_class&>(*field);
+                    auto field_id = field_sm.getId();
+
+                    // fill the entry for the node name
+                    visitLeaf(*field_id);
+                    break;
+                }
+                
+                // listed 
+                case elex::SpecmanCtorKind::StructFieldListSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
+                    auto field_id = field_sm.getId();
+
+                    // fill the entry for the node name
+                    visitLeaf(*field_id);
+                    break;
+                }
+
+                // associative listed
+                case elex::SpecmanCtorKind::StructFieldAssocListSm: {
+                    auto& field_sm = dynamic_cast<elex::struct_field_assoc_list_sm_class&>(*field);
+                    auto field_id = field_sm.getId();
+
+                    // fill the entry for the node name
+                    visitLeaf(*field_id);
+                    break;
+                }
+                default: // do noting, and return
+                    return;
+                }
+            }
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecSm: {
+            auto& method_dec_node = dynamic_cast<elex::method_dec_sm_class&>(node);
+            auto method_name = method_dec_node.getId();
+
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecOnlySm: {
+            auto& method_only_node = dynamic_cast<elex::method_dec_only_sm_class&>(node);
+            auto method_name = method_only_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecAlsoSm: {
+            auto& method_also_node = dynamic_cast<elex::method_dec_also_sm_class&>(node);
+            auto method_name = method_also_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecFirstSm: {
+            auto& method_first_node = dynamic_cast<elex::method_dec_first_sm_class&>(node);
+            auto method_name = method_first_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecEmptySm: {
+            auto& method_empty_node = dynamic_cast<elex::method_dec_empty_sm_class&>(node);
+            auto method_name = method_empty_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::MethodDecUndefSm: {
+            auto& method_undef_node = dynamic_cast<elex::method_dec_undef_sm_class&>(node);
+            auto method_name = method_undef_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*method_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::TcmDecSm: {
+            auto& tcm_dec_node = dynamic_cast<elex::tcm_dec_sm_class&>(node);
+            auto tcm_name = tcm_dec_node.getId();
+
+            visitLeaf(*tcm_name);
+            break;
+        }
+
         case elex::SpecmanCtorKind::TcmDecOnlySm: {
             auto& tcm_only_node = dynamic_cast<elex::tcm_dec_only_sm_class&>(node);
             auto tcm_name = tcm_only_node.getId();
@@ -265,12 +328,39 @@ namespace ast {
             break;
         }
 
-        case elex::SpecmanCtorKind::MethodDecAlsoSm: {
-            auto& method_decl_also_node = dynamic_cast<elex::method_dec_also_sm_class&>(node);
-            auto method_name = method_decl_also_node.getId();
-            
+        case elex::SpecmanCtorKind::TcmDecAlsoSm: {
+            auto& tcm_also_node = dynamic_cast<elex::tcm_dec_also_sm_class&>(node);
+            auto tcm_name = tcm_also_node.getId();
+
             // fill the entry for the node name
-            visitLeaf(*method_name);
+            visitLeaf(*tcm_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::TcmDecFirstSm: {
+            auto& tcm_first_node = dynamic_cast<elex::tcm_dec_first_sm_class&>(node);
+            auto tcm_name = tcm_first_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*tcm_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::TcmDecEmptySm: {
+            auto& tcm_empty_node = dynamic_cast<elex::tcm_dec_empty_sm_class&>(node);
+            auto tcm_name = tcm_empty_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*tcm_name);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::TcmDecUndefSm: {
+            auto& tcm_undef_node = dynamic_cast<elex::tcm_dec_undef_sm_class&>(node);
+            auto tcm_name = tcm_undef_node.getId();
+
+            // fill the entry for the node name
+            visitLeaf(*tcm_name);
             break;
         }
 
