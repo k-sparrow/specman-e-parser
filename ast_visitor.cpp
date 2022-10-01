@@ -80,7 +80,7 @@ namespace ast {
 
                 // associative listed
                 case elex::SpecmanCtorKind::StructFieldAssocListSm: {
-                    auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
+                    auto& field_sm = dynamic_cast<elex::struct_field_assoc_list_sm_class&>(*field);
                     auto field_id = field_sm.getId();
 
                     // fill the entry for the node name
@@ -233,7 +233,8 @@ namespace ast {
 
             // handle id
             visitLeaf(*seq_id);
-            break;        }
+            break;        
+        }
 
         case elex::SpecmanCtorKind::DefineAsSt: {
             break;
@@ -248,6 +249,10 @@ namespace ast {
         }
 
         case elex::SpecmanCtorKind::CRoutineSt: {
+            auto& c_routine_node = dynamic_cast<elex::c_routine_st_class&>(node);
+            auto routine_name = c_routine_node.getERoutineName();
+
+            visitLeaf(*routine_name);
             break;
         }
 
