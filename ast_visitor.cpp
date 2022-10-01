@@ -22,7 +22,7 @@ namespace ast {
 
     // printing operator for helper entry
     auto operator<<(std::ostream& stream, ctags_entry const& entry) -> std::ostream& {
-        stream << entry.tag << "\t" << entry.tag_file << "\t" << entry.tag_location;
+        stream << entry.tag << "\t" << entry.tag_file << "\t" << entry.tag_location << ";\"";
         return stream;
     }
 
@@ -387,14 +387,15 @@ namespace ast {
             if (tag_location.begin.filename == nullptr){
                 throw std::runtime_error("Missing source file path for input. Please check a file path is supplied to the lexer!");
             }
-            entry.tag_location  = tag_location.begin.line;
-            entry.tag_file      = *tag_location.begin.filename;
 
             // get the concrete leaf type
             auto& symbol_leaf = dynamic_cast<ast::Symbol__leaf_node&>(node);
 
-            // dump the symbol
-            entry.tag = symbol_leaf.value().lock()->Str();
+            entry = {
+                .tag          = symbol_leaf.value().lock()->Str(),
+                .tag_file     = *tag_location.begin.filename,
+                .tag_location =  tag_location.begin.line
+            };
             break;
         }
         
