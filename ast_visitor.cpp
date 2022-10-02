@@ -7,7 +7,65 @@
 
 namespace ast {
 
-    // helper struct
+    // initialization of static map
+    CtagsNodeVisitor::kind_lookup_t 
+        CtagsNodeVisitor::elex_to_ctags_type_map = {
+        { elex::SpecmanCtorKind::ImportSt,      "I" },
+        { elex::SpecmanCtorKind::Package,       "P" },
+        { elex::SpecmanCtorKind::StructSt,      "S" },
+        { elex::SpecmanCtorKind::StructLikeSt,  "S" },
+        { elex::SpecmanCtorKind::UnitSt,        "U" },
+        { elex::SpecmanCtorKind::UnitLikeSt,    "U" },
+        { elex::SpecmanCtorKind::ExtendStructSt,"E" },
+        { elex::SpecmanCtorKind::EnumTypeSt,    "T" },
+        { elex::SpecmanCtorKind::ExtendEnumTypeSt,    "T" },
+        { elex::SpecmanCtorKind::ScalarSubtypeSt,     "T" },
+        { elex::SpecmanCtorKind::ScalarSizedTypeSt,   "T" },
+        { elex::SpecmanCtorKind::VirtualSequenceSt,   "Q" },
+        { elex::SpecmanCtorKind::SequenceSt,          "Q" },
+        { elex::SpecmanCtorKind::DefineAsSt,          "D" },
+        { elex::SpecmanCtorKind::DefineAsComputedSt,  "D" },
+        { elex::SpecmanCtorKind::CExportSt,           "e" },
+        { elex::SpecmanCtorKind::CRoutineSt,          "R" },
+        
+        // struct members
+        // fields
+        { elex::SpecmanCtorKind::StructFieldSm,         "p" },
+        { elex::SpecmanCtorKind::StructFieldListSm,     "p" },
+        { elex::SpecmanCtorKind::StructFieldAssocListSm,"p" },
+
+        // functions
+        { elex::SpecmanCtorKind::MethodDecSm,      "f" },
+        { elex::SpecmanCtorKind::MethodDecAlsoSm,  "f" },
+        { elex::SpecmanCtorKind::MethodDecOnlySm,  "f" },
+        { elex::SpecmanCtorKind::MethodDecFirstSm, "f" },
+        { elex::SpecmanCtorKind::MethodDecEmptySm, "f" },
+        { elex::SpecmanCtorKind::MethodDecUndefSm, "f" },
+
+        // tcm
+        { elex::SpecmanCtorKind::TcmDecSm,      "t" },
+        { elex::SpecmanCtorKind::TcmDecAlsoSm,  "t" },
+        { elex::SpecmanCtorKind::TcmDecOnlySm,  "t" },
+        { elex::SpecmanCtorKind::TcmDecFirstSm, "t" },
+        { elex::SpecmanCtorKind::TcmDecEmptySm, "t" },
+        { elex::SpecmanCtorKind::TcmDecUndefSm, "t" },
+
+    };
+
+    // printing operator for helper attribute
+    auto operator<<(std::ostream& stream, ctags_entry_extra_attribute const& extra) -> std::ostream& {
+        stream << extra.key << ":" << extra.value;
+        return stream;
+    }
+
+    auto operator<<(std::ostream& stream, ctags_extras_suite const& extra) -> std::ostream& {
+        stream << extra.cls;
+        for (auto const& extra_attribute : extra.extras)
+            stream << "\t" << extra_attribute;
+        
+        return stream;
+    }
+
     // stores ctags entry data
     struct ctags_entry
     {
@@ -15,6 +73,10 @@ namespace ast {
         std::string tag_file = "";
         size_t tag_location = 0; // a short pattern or line number
 
+        // extras 
+        ctags_extras_suite tag_extras = {};
+
+        // validator
         operator bool() const {
             return !tag.empty() && !tag_file.empty() && tag_location > 0;
         }
@@ -22,7 +84,10 @@ namespace ast {
 
     // printing operator for helper entry
     auto operator<<(std::ostream& stream, ctags_entry const& entry) -> std::ostream& {
-        stream << entry.tag << "\t" << entry.tag_file << "\t" << entry.tag_location << ";\"";
+        stream << entry.tag                   << "\t" << 
+                  entry.tag_file              << "\t" << 
+                  entry.tag_location << ";\"" << "\t" << 
+                  entry.tag_extras;
         return stream;
     }
 
@@ -34,6 +99,7 @@ namespace ast {
     // we let the visitor to handle leaves selectively, only when visiting 
     // specific node types
     auto CtagsNodeVisitor::visit(tree_node_base& node) -> void {
+
         // visit only nodes
         switch (node.kind())
         {
@@ -48,16 +114,33 @@ namespace ast {
 
     }
     auto CtagsNodeVisitor::visitNode(tree_node& node) -> void {
+        // reset attributes
+        m_attributes = {
+            .cls = elex_to_ctags_type_map[node.type()]
+        };
+
         switch (node.type())
         {
         // stop condition
-
-
         case elex::SpecmanCtorKind::Package: {
             auto& pkg_node = dynamic_cast<elex::package_class&>(node);
             auto pkg_id = pkg_node.getPkgName();
 
             visitLeaf(*pkg_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::ImportSt: {
+            auto& import_node = dynamic_cast<elex::import_st_class&>(node);
+            auto import_id = import_node.getPaths();
+
+            // dump all file paths as separate
+            for (auto& path : import_id->children()){
+                auto& path_node = dynamic_cast<elex::file_path_fp_class&>(*(path.lock()));
+                auto path_id = path_node.getFilePath();
+
+                visitLeaf(*path_id);
+            }
             break;
         }
 
@@ -132,7 +215,8 @@ namespace ast {
             ctags_entry entry = {
                 extend_id_tag,
                 *tag_location.begin.filename,
-                tag_location.begin.line
+                tag_location.begin.line,
+                m_attributes
             };
 
             m_stream << entry << std::endl;
@@ -220,6 +304,11 @@ namespace ast {
         case elex::SpecmanCtorKind::FieldSm : {
             auto field = node.get_child_by_name("field");
             if (field != nullptr) {
+
+                m_attributes = {
+                    .cls = elex_to_ctags_type_map[field->type()]
+                };
+
                 switch (field->type())
                 {
                 // scalar
@@ -364,6 +453,35 @@ namespace ast {
             break;
         }
 
+        case elex::SpecmanCtorKind::EventDefSm : {
+            auto& event_def_node = dynamic_cast<elex::event_def_sm_class&>(node);
+            auto event_def_id    = event_def_node.getId();
+
+            visitLeaf(*event_def_id);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::EventDefOverrideSm : {
+            auto& event_def_node = dynamic_cast<elex::event_def_override_sm_class&>(node);
+            auto event_def_id    = event_def_node.getId();
+
+            visitLeaf(*event_def_id);
+            break;
+        }
+        
+        case elex::SpecmanCtorKind::CovergroupSm : {
+            // covergroup name is actually 
+            // the event name that it is triggered upon
+            // like on callback, this should be linked to the id 
+        }
+
+        case elex::SpecmanCtorKind::CovergroupExtensionSm : {
+            // covergroup name is actually 
+            // the event name that it is triggered upon
+            // like on callback, this should be linked to the id 
+            break;
+        }
+
         // recursive step
         // run through all children
         default:
@@ -394,7 +512,8 @@ namespace ast {
             entry = {
                 .tag          = symbol_leaf.value().lock()->Str(),
                 .tag_file     = *tag_location.begin.filename,
-                .tag_location =  tag_location.begin.line
+                .tag_location =  tag_location.begin.line,
+                .tag_extras   =  m_attributes
             };
             break;
         }
