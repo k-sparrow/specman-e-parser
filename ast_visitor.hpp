@@ -55,8 +55,9 @@ namespace ast {
         auto visitLeaf(leaf_node&)  -> void override final;
     
     private:
-        auto visitStatmentNode(tree_node&)  -> void ;
-        auto visitMemberNode(tree_node&)    -> void ;
+        auto visitStatmentNode(tree_node&)      -> void ;
+        auto visitMemberNode(tree_node&)        -> void ;
+        auto visitMemberParentNode(tree_node&)  -> void ;
     };
 }
 
