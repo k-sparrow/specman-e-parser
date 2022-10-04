@@ -127,48 +127,17 @@ namespace ast {
             .cls = elex_to_ctags_type_map[node.type()]
         };
 
-        switch (node.type())
+        switch (node.phytype())
         {
         // stop condition
-        case elex::SpecmanCtorKind::Package:
-        case elex::SpecmanCtorKind::ImportSt: 
-        case elex::SpecmanCtorKind::StructSt: 
-        case elex::SpecmanCtorKind::StructLikeSt: 
-        case elex::SpecmanCtorKind::UnitSt:
-        case elex::SpecmanCtorKind::UnitLikeSt:
-        case elex::SpecmanCtorKind::ExtendStructSt:
-        case elex::SpecmanCtorKind::EnumTypeSt:
-        case elex::SpecmanCtorKind::ExtendEnumTypeSt:
-        case elex::SpecmanCtorKind::ScalarSubtypeSt:
-        case elex::SpecmanCtorKind::ScalarSizedTypeSt: 
-        case elex::SpecmanCtorKind::VirtualSequenceSt: 
-        case elex::SpecmanCtorKind::SequenceSt: 
-        case elex::SpecmanCtorKind::DefineAsSt: 
-        case elex::SpecmanCtorKind::DefineAsComputedSt:
-        case elex::SpecmanCtorKind::CExportSt: 
-        case elex::SpecmanCtorKind::CRoutineSt: {
+        case elex::SpecmanPhylumKind::Statement: {
             visitStatmentNode(node);
             break;
         }
         // members
-        // handle a field
-        case elex::SpecmanCtorKind::FieldSm :
-        case elex::SpecmanCtorKind::MethodDecSm: 
-        case elex::SpecmanCtorKind::MethodDecOnlySm: 
-        case elex::SpecmanCtorKind::MethodDecAlsoSm: 
-        case elex::SpecmanCtorKind::MethodDecFirstSm:
-        case elex::SpecmanCtorKind::MethodDecEmptySm: 
-        case elex::SpecmanCtorKind::MethodDecUndefSm: 
-        case elex::SpecmanCtorKind::TcmDecSm: 
-        case elex::SpecmanCtorKind::TcmDecOnlySm: 
-        case elex::SpecmanCtorKind::TcmDecAlsoSm: 
-        case elex::SpecmanCtorKind::TcmDecFirstSm: 
-        case elex::SpecmanCtorKind::TcmDecEmptySm: 
-        case elex::SpecmanCtorKind::TcmDecUndefSm: 
-        case elex::SpecmanCtorKind::EventDefSm: 
-        case elex::SpecmanCtorKind::EventDefOverrideSm:
-        case elex::SpecmanCtorKind::CovergroupSm:
-        case elex::SpecmanCtorKind::CovergroupExtensionSm: {
+        // handle a struct field/function/tcm/event/cg/temporals
+        case elex::SpecmanPhylumKind::FieldStructMember:
+        case elex::SpecmanPhylumKind::StructMember: {
             visitMemberNode(node);
             break;
         }
@@ -757,6 +726,23 @@ namespace ast {
             // covergroup name is actually 
             // the event name that it is triggered upon
             // like on callback, this should be linked to the id 
+            break;
+        }
+        
+        // WHEN subtype is a special struct member
+        // it's actually a struct level statement equivalent member
+        // and we'll treat it as such
+        // so, for each of the member nodes, recurse
+        case elex::SpecmanCtorKind::WhenSubtypeSm: {
+            auto& when_subtype_node = dynamic_cast<elex::when_subtype_sm_class&>(node);
+
+            // find the name of the subtype and dump it
+            // TODO: do the above
+
+            // recurse through the members of the when subtype
+            auto members = when_subtype_node.getSubtypeMembers();
+
+            members->accept(*this);
             break;
         }
         default:
