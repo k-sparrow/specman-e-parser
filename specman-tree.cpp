@@ -12,6 +12,12 @@
 
 namespace elex { 
     
+auto Module_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Module;
+}
+auto Statement_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Statement;
+}
 
 /* implementations for Statements */
 auto nil_Statements() -> Statements {
@@ -24,6 +30,9 @@ auto single_Statements(Statement p) -> Statements {
 
 auto append_Statements(Statements p1, Statements p2) -> Statements {
     return Statements(new ast::list_tree_node<Statement>(*p1, *p2));
+}
+auto StructMember_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::StructMember;
 }
 
 /* implementations for StructMembers */
@@ -38,6 +47,12 @@ auto single_StructMembers(StructMember p) -> StructMembers {
 auto append_StructMembers(StructMembers p1, StructMembers p2) -> StructMembers {
     return StructMembers(new ast::list_tree_node<StructMember>(*p1, *p2));
 }
+auto FieldStructMember_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::FieldStructMember;
+}
+auto Action_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Action;
+}
 
 /* implementations for Actions */
 auto nil_Actions() -> Actions {
@@ -50,6 +65,9 @@ auto single_Actions(Action p) -> Actions {
 
 auto append_Actions(Actions p1, Actions p2) -> Actions {
     return Actions(new ast::list_tree_node<Action>(*p1, *p2));
+}
+auto Expression_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Expression;
 }
 
 /* implementations for Expressions */
@@ -64,6 +82,12 @@ auto single_Expressions(Expression p) -> Expressions {
 auto append_Expressions(Expressions p1, Expressions p2) -> Expressions {
     return Expressions(new ast::list_tree_node<Expression>(*p1, *p2));
 }
+auto DataType_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::DataType;
+}
+auto Formal_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Formal;
+}
 
 /* implementations for Formals */
 auto nil_Formals() -> Formals {
@@ -76,6 +100,9 @@ auto single_Formals(Formal p) -> Formals {
 
 auto append_Formals(Formals p1, Formals p2) -> Formals {
     return Formals(new ast::list_tree_node<Formal>(*p1, *p2));
+}
+auto Case_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::Case;
 }
 
 /* implementations for Cases */
@@ -90,6 +117,9 @@ auto single_Cases(Case p) -> Cases {
 auto append_Cases(Cases p1, Cases p2) -> Cases {
     return Cases(new ast::list_tree_node<Case>(*p1, *p2));
 }
+auto SequenceItem_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::SequenceItem;
+}
 
 /* implementations for SequenceItems */
 auto nil_SequenceItems() -> SequenceItems {
@@ -102,6 +132,9 @@ auto single_SequenceItems(SequenceItem p) -> SequenceItems {
 
 auto append_SequenceItems(SequenceItems p1, SequenceItems p2) -> SequenceItems {
     return SequenceItems(new ast::list_tree_node<SequenceItem>(*p1, *p2));
+}
+auto CovergroupOption_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::CovergroupOption;
 }
 
 /* implementations for CovergroupOptions */
@@ -116,6 +149,9 @@ auto single_CovergroupOptions(CovergroupOption p) -> CovergroupOptions {
 auto append_CovergroupOptions(CovergroupOptions p1, CovergroupOptions p2) -> CovergroupOptions {
     return CovergroupOptions(new ast::list_tree_node<CovergroupOption>(*p1, *p2));
 }
+auto CovergroupItem_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::CovergroupItem;
+}
 
 /* implementations for CovergroupItems */
 auto nil_CovergroupItems() -> CovergroupItems {
@@ -128,6 +164,9 @@ auto single_CovergroupItems(CovergroupItem p) -> CovergroupItems {
 
 auto append_CovergroupItems(CovergroupItems p1, CovergroupItems p2) -> CovergroupItems {
     return CovergroupItems(new ast::list_tree_node<CovergroupItem>(*p1, *p2));
+}
+auto CovergroupItemOption_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::CovergroupItemOption;
 }
 
 /* implementations for CovergroupItemOptions */
@@ -142,6 +181,12 @@ auto single_CovergroupItemOptions(CovergroupItemOption p) -> CovergroupItemOptio
 auto append_CovergroupItemOptions(CovergroupItemOptions p1, CovergroupItemOptions p2) -> CovergroupItemOptions {
     return CovergroupItemOptions(new ast::list_tree_node<CovergroupItemOption>(*p1, *p2));
 }
+auto CovergroupExtensionID_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::CovergroupExtensionID;
+}
+auto ActionBlock_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::ActionBlock;
+}
 
 /* implementations for ActionBlocks */
 auto nil_ActionBlocks() -> ActionBlocks {
@@ -155,6 +200,9 @@ auto single_ActionBlocks(ActionBlock p) -> ActionBlocks {
 auto append_ActionBlocks(ActionBlocks p1, ActionBlocks p2) -> ActionBlocks {
     return ActionBlocks(new ast::list_tree_node<ActionBlock>(*p1, *p2));
 }
+auto FSMState_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::FSMState;
+}
 
 /* implementations for FSMStates */
 auto nil_FSMStates() -> FSMStates {
@@ -167,6 +215,9 @@ auto single_FSMStates(FSMState p) -> FSMStates {
 
 auto append_FSMStates(FSMStates p1, FSMStates p2) -> FSMStates {
     return FSMStates(new ast::list_tree_node<FSMState>(*p1, *p2));
+}
+auto FilePath_class::phytype() const -> SpecmanPhylumKind {
+    return SpecmanPhylumKind::FilePath;
 }
 
 /* implementations for FilePaths */

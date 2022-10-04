@@ -14,6 +14,26 @@
 
 namespace elex { 
     
+enum class SpecmanPhylumKind {
+    Module = 0,
+    Statement,
+    StructMember,
+    FieldStructMember,
+    Action,
+    Expression,
+    DataType,
+    Formal,
+    Case,
+    SequenceItem,
+    CovergroupOption,
+    CovergroupItem,
+    CovergroupItemOption,
+    CovergroupExtensionID,
+    ActionBlock,
+    FSMState,
+    FilePath
+};
+    
 enum class SpecmanCtorKind {
     Module = 0,
     IdExpr,
@@ -285,6 +305,8 @@ class Module_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef Module_EXTRAS
     Module_EXTRAS
 #endif
@@ -300,6 +322,8 @@ class Statement_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef Statement_EXTRAS
     Statement_EXTRAS
@@ -324,6 +348,8 @@ class StructMember_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef StructMember_EXTRAS
     StructMember_EXTRAS
 #endif
@@ -347,6 +373,8 @@ class FieldStructMember_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef FieldStructMember_EXTRAS
     FieldStructMember_EXTRAS
 #endif
@@ -362,6 +390,8 @@ class Action_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef Action_EXTRAS
     Action_EXTRAS
@@ -386,6 +416,8 @@ class Expression_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef Expression_EXTRAS
     Expression_EXTRAS
 #endif
@@ -409,6 +441,8 @@ class DataType_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef DataType_EXTRAS
     DataType_EXTRAS
 #endif
@@ -424,6 +458,8 @@ class Formal_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef Formal_EXTRAS
     Formal_EXTRAS
@@ -448,6 +484,8 @@ class Case_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef Case_EXTRAS
     Case_EXTRAS
 #endif
@@ -470,6 +508,8 @@ class SequenceItem_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef SequenceItem_EXTRAS
     SequenceItem_EXTRAS
@@ -494,6 +534,8 @@ class CovergroupOption_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef CovergroupOption_EXTRAS
     CovergroupOption_EXTRAS
 #endif
@@ -516,6 +558,8 @@ class CovergroupItem_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef CovergroupItem_EXTRAS
     CovergroupItem_EXTRAS
@@ -540,6 +584,8 @@ class CovergroupItemOption_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef CovergroupItemOption_EXTRAS
     CovergroupItemOption_EXTRAS
 #endif
@@ -563,6 +609,8 @@ class CovergroupExtensionID_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef CovergroupExtensionID_EXTRAS
     CovergroupExtensionID_EXTRAS
 #endif
@@ -578,6 +626,8 @@ class ActionBlock_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef ActionBlock_EXTRAS
     ActionBlock_EXTRAS
@@ -602,6 +652,8 @@ class FSMState_class : public ast::tree_node {
 
         }
 
+        auto phytype() const -> SpecmanPhylumKind override final;
+
 #ifdef FSMState_EXTRAS
     FSMState_EXTRAS
 #endif
@@ -624,6 +676,8 @@ class FilePath_class : public ast::tree_node {
         {
 
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final;
 
 #ifdef FilePath_EXTRAS
     FilePath_EXTRAS

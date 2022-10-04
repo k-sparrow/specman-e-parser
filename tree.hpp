@@ -20,6 +20,7 @@ using std::find_if;
 
 
 namespace elex {
+    enum class SpecmanPhylumKind : int;
     enum class SpecmanCtorKind : int;
 }
 
@@ -88,6 +89,8 @@ namespace ast {
 
         auto children() const -> std::vector<pw_tree_node> { return m_children; } 
         auto get_child_by_name(std::string) const -> p_tree_node;
+
+        virtual auto phytype() const -> elex::SpecmanPhylumKind = 0;
     };
 
     // class for listed parser elements
@@ -169,9 +172,14 @@ namespace ast {
             }
         }
 
-        auto type() const -> elex::SpecmanCtorKind final {
+        auto type() const -> elex::SpecmanCtorKind override final {
             return static_cast<elex::SpecmanCtorKind>(-1);
         }
+
+        auto phytype() const -> SpecmanPhylumKind override final {
+            return static_cast<elex::SpecmanPhylumKind>(-1);
+        }
+
         auto size() const -> size_t { return std::size(m_elems); }
 
         // iterators for container
