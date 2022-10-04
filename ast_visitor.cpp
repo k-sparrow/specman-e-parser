@@ -616,14 +616,22 @@ namespace ast {
             // TODO: refactor this out to a function, it will come around again
             auto extend_parent_id = extend_name_node.getFullName();
             extras = {
-                {.key = "unit", .value = extend_parent_id },
+                { .key = "extend", .value = extend_parent_id },
             };
             break;
         }
 
         case elex::SpecmanCtorKind::WhenSubtypeSm: {
             auto& when_parent = dynamic_cast<elex::when_subtype_sm_class&>(*parent);
-            auto when_parent_id = when_parent.getSubtypeMods();
+            auto p_when_parent_id = when_parent.getSubtypeMods();
+
+            auto& when_parent_id = dynamic_cast<elex::complex_type_modifier_class&>(*p_when_parent_id);
+
+            // get the full name of the when extension parent
+            auto when_parent_id_tag = when_parent_id.getFullName();
+            extras = {
+                { .key = "extend", .value = when_parent_id_tag },
+            };
 
             break;
         }
