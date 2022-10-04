@@ -64,9 +64,12 @@ namespace ast {
         auto get_source_location() const -> source_location_t { return m_loc; }
         auto set(tree_node_base*) -> tree_node_base*;
         auto set_parent(tree_node_base*) -> void;
+        auto get_parent() const -> tree_node_base*;
 
         auto accept(IAstNodeVisitor&) -> void;
     
+    private:
+        auto get_direct_parent() const -> tree_node_base*;
     };
 
     // base class for concrete tree nodes

@@ -18,6 +18,26 @@ namespace ast {
         this->m_parent = parent;
     }
 
+    auto tree_node_base::get_direct_parent() const -> tree_node_base* {
+        return this->m_parent;
+    }
+
+    auto tree_node_base::get_parent() const -> tree_node_base* {
+        // track to the concrete parent which isn't a listed node
+
+        // often, and especially for struct fields,
+        // they will be direct children of a list node which is
+        // on itself a direct child of their concrete enclosing unit/struct/extend statment
+        // so we need to backtrack up the AST hierarchy in order to get 
+        // the REAL parent
+        tree_node_base* parent = this->m_parent;
+        while (parent != nullptr && 
+               static_cast<int>(parent->type()) < 0) {
+            parent = parent->get_direct_parent();
+        } ;
+        
+        return parent;
+    }
 
     auto tree_node_base::kind() const -> NodeKind {
         return NodeKind::kNode; // default implementation, leaves will override

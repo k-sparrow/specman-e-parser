@@ -35,6 +35,7 @@ namespace ast {
     class CtagsNodeVisitor : public IAstNodeVisitor
     {
     private: 
+        // used to populate information when visiting concrete nodes
         ctags_extras_suite m_attributes;
 
         using kind_lookup_t = std::map<elex::SpecmanCtorKind, std::string>;
@@ -52,6 +53,10 @@ namespace ast {
         auto visit(tree_node_base&) -> void override final;
         auto visitNode(tree_node&)  -> void override final;
         auto visitLeaf(leaf_node&)  -> void override final;
+    
+    private:
+        auto visitStatmentNode(tree_node&)  -> void ;
+        auto visitMemberNode(tree_node&)    -> void ;
     };
 }
 

@@ -50,6 +50,14 @@ namespace ast {
         { elex::SpecmanCtorKind::TcmDecEmptySm, "t" },
         { elex::SpecmanCtorKind::TcmDecUndefSm, "t" },
 
+        // events
+        { elex::SpecmanCtorKind::EventDefSm,         "v" },
+        { elex::SpecmanCtorKind::EventDefOverrideSm, "v" },
+        
+        { elex::SpecmanCtorKind::ExpectSm,         "x" },
+        { elex::SpecmanCtorKind::ExpectNamelessSm, "x" },
+        { elex::SpecmanCtorKind::ExpectOverrideSm, "x" },
+
     };
 
     // printing operator for helper attribute
@@ -119,6 +127,66 @@ namespace ast {
             .cls = elex_to_ctags_type_map[node.type()]
         };
 
+        switch (node.type())
+        {
+        // stop condition
+        case elex::SpecmanCtorKind::Package:
+        case elex::SpecmanCtorKind::ImportSt: 
+        case elex::SpecmanCtorKind::StructSt: 
+        case elex::SpecmanCtorKind::StructLikeSt: 
+        case elex::SpecmanCtorKind::UnitSt:
+        case elex::SpecmanCtorKind::UnitLikeSt:
+        case elex::SpecmanCtorKind::ExtendStructSt:
+        case elex::SpecmanCtorKind::EnumTypeSt:
+        case elex::SpecmanCtorKind::ExtendEnumTypeSt:
+        case elex::SpecmanCtorKind::ScalarSubtypeSt:
+        case elex::SpecmanCtorKind::ScalarSizedTypeSt: 
+        case elex::SpecmanCtorKind::VirtualSequenceSt: 
+        case elex::SpecmanCtorKind::SequenceSt: 
+        case elex::SpecmanCtorKind::DefineAsSt: 
+        case elex::SpecmanCtorKind::DefineAsComputedSt:
+        case elex::SpecmanCtorKind::CExportSt: 
+        case elex::SpecmanCtorKind::CRoutineSt: {
+            visitStatmentNode(node);
+            break;
+        }
+        // members
+        // handle a field
+        case elex::SpecmanCtorKind::FieldSm :
+        case elex::SpecmanCtorKind::MethodDecSm: 
+        case elex::SpecmanCtorKind::MethodDecOnlySm: 
+        case elex::SpecmanCtorKind::MethodDecAlsoSm: 
+        case elex::SpecmanCtorKind::MethodDecFirstSm:
+        case elex::SpecmanCtorKind::MethodDecEmptySm: 
+        case elex::SpecmanCtorKind::MethodDecUndefSm: 
+        case elex::SpecmanCtorKind::TcmDecSm: 
+        case elex::SpecmanCtorKind::TcmDecOnlySm: 
+        case elex::SpecmanCtorKind::TcmDecAlsoSm: 
+        case elex::SpecmanCtorKind::TcmDecFirstSm: 
+        case elex::SpecmanCtorKind::TcmDecEmptySm: 
+        case elex::SpecmanCtorKind::TcmDecUndefSm: 
+        case elex::SpecmanCtorKind::EventDefSm: 
+        case elex::SpecmanCtorKind::EventDefOverrideSm:
+        case elex::SpecmanCtorKind::CovergroupSm:
+        case elex::SpecmanCtorKind::CovergroupExtensionSm: {
+            visitMemberNode(node);
+            break;
+        }
+
+        // recursive step
+        // run through all children
+        default:
+            {
+                for (pw_tree_node& child : node.children()){
+                    child.lock()->accept(*this);
+                }
+                break;
+            }
+        }
+    }
+
+    // private specific methods
+    auto CtagsNodeVisitor::visitStatmentNode(tree_node& node) -> void {
         switch (node.type())
         {
         // stop condition
@@ -299,7 +367,16 @@ namespace ast {
             break;
         }
 
+        default:
+            break;
+        }
+    }
+
+    auto CtagsNodeVisitor::visitMemberNode(tree_node& node) -> void {
         // members
+        switch (node.type())
+        {
+        
         // handle a field
         case elex::SpecmanCtorKind::FieldSm : {
             auto field = node.get_child_by_name("field");
@@ -316,6 +393,73 @@ namespace ast {
                     auto& field_sm = dynamic_cast<elex::struct_field_sm_class&>(*field);
                     auto field_id = field_sm.getId();
 
+                    // get info from the parent
+                    {
+                        // remember - the actual field is enclosed inside the FieldSm 
+                        // which lives directly under a unit/struct/extend
+                        auto parent = node.get_parent();
+                        switch (parent->type())
+                        {
+                        case elex::SpecmanCtorKind::StructSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        case elex::SpecmanCtorKind::StructLikeSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_like_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitLikeSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_like_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        
+                        case elex::SpecmanCtorKind::ExtendStructSt: {
+                            auto& extend_parent = dynamic_cast<elex::extend_struct_st_class&>(*parent);
+                            auto extend_parent_id = extend_parent.getFullStructName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = extend_parent_id },
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::WhenSubtypeSm: {
+                            auto& when_parent = dynamic_cast<elex::when_subtype_sm_class&>(*parent);
+                            auto when_parent_id = when_parent.getSubtypeMods();
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+                    }
                     // fill the entry for the node name
                     visitLeaf(*field_id);
                     break;
@@ -326,6 +470,73 @@ namespace ast {
                     auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(*field);
                     auto field_id = field_sm.getId();
 
+                    // get info from the parent
+                    {
+                        // remember - the actual field is enclosed inside the FieldSm 
+                        // which lives directly under a unit/struct/extend
+                        auto parent = node.get_parent();
+                        switch (parent->type())
+                        {
+                        case elex::SpecmanCtorKind::StructSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        case elex::SpecmanCtorKind::StructLikeSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_like_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitLikeSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_like_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        
+                        case elex::SpecmanCtorKind::ExtendStructSt: {
+                            auto& extend_parent = dynamic_cast<elex::extend_struct_st_class&>(*parent);
+                            auto extend_parent_id = extend_parent.getFullStructName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = extend_parent_id },
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::WhenSubtypeSm: {
+                            auto& when_parent = dynamic_cast<elex::when_subtype_sm_class&>(*parent);
+                            auto when_parent_id = when_parent.getSubtypeMods();
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+                    }
                     // fill the entry for the node name
                     visitLeaf(*field_id);
                     break;
@@ -336,6 +547,73 @@ namespace ast {
                     auto& field_sm = dynamic_cast<elex::struct_field_assoc_list_sm_class&>(*field);
                     auto field_id = field_sm.getId();
 
+                    // get info from the parent
+                    {
+                        // remember - the actual field is enclosed inside the FieldSm 
+                        // which lives directly under a unit/struct/extend
+                        auto parent = node.get_parent();
+                        switch (parent->type())
+                        {
+                        case elex::SpecmanCtorKind::StructSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        case elex::SpecmanCtorKind::StructLikeSt: {
+                            auto& struct_parent = dynamic_cast<elex::struct_like_st_class&>(*parent);
+                            auto struct_parent_id = struct_parent.getStructName();
+
+                            m_attributes.extras = {
+                                {.key = "struct", .value = struct_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::UnitLikeSt: {
+                            auto& unit_parent = dynamic_cast<elex::unit_like_st_class&>(*parent);
+                            auto unit_parent_id = unit_parent.getUnitName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = unit_parent_id->value().lock()->Str()},
+                            };
+                            break;
+                        }
+                        
+                        case elex::SpecmanCtorKind::ExtendStructSt: {
+                            auto& extend_parent = dynamic_cast<elex::extend_struct_st_class&>(*parent);
+                            auto extend_parent_id = extend_parent.getFullStructName();
+
+                            m_attributes.extras = {
+                                {.key = "unit", .value = extend_parent_id },
+                            };
+                            break;
+                        }
+
+                        case elex::SpecmanCtorKind::WhenSubtypeSm: {
+                            auto& when_parent = dynamic_cast<elex::when_subtype_sm_class&>(*parent);
+                            auto when_parent_id = when_parent.getSubtypeMods();
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                        }
+                    }
                     // fill the entry for the node name
                     visitLeaf(*field_id);
                     break;
@@ -481,17 +759,10 @@ namespace ast {
             // like on callback, this should be linked to the id 
             break;
         }
-
-        // recursive step
-        // run through all children
         default:
-            {
-                for (pw_tree_node& child : node.children()){
-                    child.lock()->accept(*this);
-                }
-                break;
-            }
+            break;
         }
+
     }
 
     auto CtagsNodeVisitor::visitLeaf(leaf_node& node) -> void {
