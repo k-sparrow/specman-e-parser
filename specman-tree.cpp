@@ -286,6 +286,23 @@ auto struct_type_modifier(Expression value, Expression id) -> Expression {
 }
 
 
+auto complex_type_modifier_class::dump(std::ostream& stream, int n) -> void {
+    stream << pad(n) << "\\complex_type_modifier: " << "<" << get_source_location() << ">" << std::endl;
+    if(modifiers){
+        stream << pad(n+2) << "modifiers: " << std::endl;
+        modifiers->dump(stream, n+4);
+    }
+}
+
+auto complex_type_modifier_class::type() const -> SpecmanCtorKind {
+    return SpecmanCtorKind::ComplexTypeModifier;
+}
+
+auto complex_type_modifier(Expressions modifiers) -> Expression {
+    return Expression(new complex_type_modifier_class(modifiers));
+}
+
+
 auto package_class::dump(std::ostream& stream, int n) -> void {
     stream << pad(n) << "\\package: " << "<" << get_source_location() << ">" << std::endl;
     stream << pad(n+2) << "pkg_name: ";
@@ -397,7 +414,7 @@ auto extend_struct_st_class::type() const -> SpecmanCtorKind {
     return SpecmanCtorKind::ExtendStructSt;
 }
 
-auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement {
+auto extend_struct_st(Expression struct_type_name, StructMembers members) -> Statement {
     return Statement(new extend_struct_st_class(struct_type_name, members));
 }
 
@@ -1204,7 +1221,7 @@ auto when_subtype_sm_class::type() const -> SpecmanCtorKind {
     return SpecmanCtorKind::WhenSubtypeSm;
 }
 
-auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember {
+auto when_subtype_sm(Expression subtype_mods, StructMembers subtype_members) -> StructMember {
     return StructMember(new when_subtype_sm_class(subtype_mods, subtype_members));
 }
 
@@ -3449,7 +3466,7 @@ auto struct_type_id_class::type() const -> SpecmanCtorKind {
     return SpecmanCtorKind::StructTypeId;
 }
 
-auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression {
+auto struct_type_id(Expression struct_type_modifiers, Expression struct_id_expr) -> Expression {
     return Expression(new struct_type_id_class(struct_type_modifiers, struct_id_expr));
 }
 
@@ -3466,7 +3483,7 @@ auto defined_type_identifier_expr_class::type() const -> SpecmanCtorKind {
     return SpecmanCtorKind::DefinedTypeIdentifierExpr;
 }
 
-auto defined_type_identifier_expr(Expressions modifiers) -> Expression {
+auto defined_type_identifier_expr(Expression modifiers) -> Expression {
     return Expression(new defined_type_identifier_expr_class(modifiers));
 }
 
@@ -3935,7 +3952,7 @@ auto defined_struct_type_dt_class::type() const -> SpecmanCtorKind {
     return SpecmanCtorKind::DefinedStructTypeDt;
 }
 
-auto defined_struct_type_dt(Expressions struct_type_modifiers) -> DataType {
+auto defined_struct_type_dt(Expression struct_type_modifiers) -> DataType {
     return DataType(new defined_struct_type_dt_class(struct_type_modifiers));
 }
 
@@ -4998,23 +5015,6 @@ auto do_seq_act_class::type() const -> SpecmanCtorKind {
 
 auto do_seq_act(Expression seq_item, Expressions constraints) -> Action {
     return Action(new do_seq_act_class(seq_item, constraints));
-}
-
-
-auto seq_item_expr_class::dump(std::ostream& stream, int n) -> void {
-    stream << pad(n) << "\\seq_item_expr: " << "<" << get_source_location() << ">" << std::endl;
-    if(field_type_exprs){
-        stream << pad(n+2) << "field_type_exprs: " << std::endl;
-        field_type_exprs->dump(stream, n+4);
-    }
-}
-
-auto seq_item_expr_class::type() const -> SpecmanCtorKind {
-    return SpecmanCtorKind::SeqItemExpr;
-}
-
-auto seq_item_expr(Expressions field_type_exprs) -> Expression {
-    return Expression(new seq_item_expr_class(field_type_exprs));
 }
 
 

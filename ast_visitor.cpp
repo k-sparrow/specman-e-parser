@@ -244,9 +244,12 @@ namespace ast {
 
         case elex::SpecmanCtorKind::ExtendStructSt: {
             auto& extend_stmt = dynamic_cast<elex::extend_struct_st_class&>(node);
-            
+            auto p_extend_name_node = extend_stmt.getStructTypeName();
+
+            auto& extend_name_node = dynamic_cast<elex::complex_type_modifier_class&>(*p_extend_name_node);
+
             // TODO: refactor this out to a function, it will come around again
-            auto extend_id_tag = extend_stmt.getFullStructName();
+            auto extend_id_tag = extend_name_node.getFullName();
             auto tag_location = extend_stmt.getStructTypeName()->get_source_location();
 
             ctags_entry entry = {
@@ -606,8 +609,12 @@ namespace ast {
         
         case elex::SpecmanCtorKind::ExtendStructSt: {
             auto& extend_parent = dynamic_cast<elex::extend_struct_st_class&>(*parent);
-            auto extend_parent_id = extend_parent.getFullStructName();
+            auto p_extend_name_node = extend_parent.getStructTypeName();
 
+            auto& extend_name_node = dynamic_cast<elex::complex_type_modifier_class&>(*p_extend_name_node);
+
+            // TODO: refactor this out to a function, it will come around again
+            auto extend_parent_id = extend_name_node.getFullName();
             extras = {
                 {.key = "unit", .value = extend_parent_id },
             };

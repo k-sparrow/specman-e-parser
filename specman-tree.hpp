@@ -38,6 +38,7 @@ enum class SpecmanCtorKind {
     Module = 0,
     IdExpr,
     StructTypeModifier,
+    ComplexTypeModifier,
     Package,
     UnitSt,
     UnitLikeSt,
@@ -281,7 +282,6 @@ enum class SpecmanCtorKind {
     FirstOfAct,
     GenAct,
     DoSeqAct,
-    SeqItemExpr,
     CheckThatAction,
     AssertAction,
     TryElseAction,
@@ -814,6 +814,44 @@ class struct_type_modifier_class : public Expression_class {
 
 auto struct_type_modifier(Expression value, Expression id) -> Expression;
 
+class complex_type_modifier_class : public Expression_class {
+    protected:
+        Expressions modifiers;
+    public:
+        complex_type_modifier_class(Expressions modifiers){
+            // initialize the members & tie them to me (the parent)
+            this->modifiers = modifiers;
+            if(modifiers){ // non-terminal might be null due to error reduction rules
+                this->tie(this->modifiers);
+            }
+
+            // initialize the children pool for easy & fast lookup by get_child_by_name
+            this->m_children_pool = {
+                THIS_MAPIFY(modifiers),
+            };
+        }
+
+        // -------------- Getters ------------------ //
+        auto getModifiers() const ->
+            Expressions
+        {
+            return modifiers;
+        }
+        // -------------- Getters ------------------ //
+
+        auto dump(std::ostream& stream, int n) -> void override;
+        auto type() const -> SpecmanCtorKind override;
+
+#ifdef Expression_SHARED_EXTRAS
+    Expression_SHARED_EXTRAS
+#endif
+#ifdef complex_type_modifier_EXTRAS
+    complex_type_modifier_EXTRAS
+#endif
+};
+
+auto complex_type_modifier(Expressions modifiers) -> Expression;
+
 class package_class : public Statement_class {
     protected:
         ast::Symbol__leaf pkg_name;
@@ -1058,10 +1096,10 @@ auto struct_like_st(Symbol_ struct_name, Symbol_ base_struct_name, StructMembers
 
 class extend_struct_st_class : public Statement_class {
     protected:
-        Expressions struct_type_name;
+        Expression struct_type_name;
         StructMembers members;
     public:
-        extend_struct_st_class(Expressions struct_type_name, StructMembers members){
+        extend_struct_st_class(Expression struct_type_name, StructMembers members){
             // initialize the members & tie them to me (the parent)
             this->struct_type_name = struct_type_name;
             if(struct_type_name){ // non-terminal might be null due to error reduction rules
@@ -1081,7 +1119,7 @@ class extend_struct_st_class : public Statement_class {
 
         // -------------- Getters ------------------ //
         auto getStructTypeName() const ->
-            Expressions
+            Expression
         {
             return struct_type_name;
         }
@@ -1103,7 +1141,7 @@ class extend_struct_st_class : public Statement_class {
 #endif
 };
 
-auto extend_struct_st(Expressions struct_type_name, StructMembers members) -> Statement;
+auto extend_struct_st(Expression struct_type_name, StructMembers members) -> Statement;
 
 class enum_type_st_class : public Statement_class {
     protected:
@@ -3083,10 +3121,10 @@ auto c_method_dec_only_sm(Symbol_ e_method_name, Formals parameters_list, DataTy
 
 class when_subtype_sm_class : public StructMember_class {
     protected:
-        Expressions subtype_mods;
+        Expression subtype_mods;
         StructMembers subtype_members;
     public:
-        when_subtype_sm_class(Expressions subtype_mods, StructMembers subtype_members){
+        when_subtype_sm_class(Expression subtype_mods, StructMembers subtype_members){
             // initialize the members & tie them to me (the parent)
             this->subtype_mods = subtype_mods;
             if(subtype_mods){ // non-terminal might be null due to error reduction rules
@@ -3106,7 +3144,7 @@ class when_subtype_sm_class : public StructMember_class {
 
         // -------------- Getters ------------------ //
         auto getSubtypeMods() const ->
-            Expressions
+            Expression
         {
             return subtype_mods;
         }
@@ -3128,7 +3166,7 @@ class when_subtype_sm_class : public StructMember_class {
 #endif
 };
 
-auto when_subtype_sm(Expressions subtype_mods, StructMembers subtype_members) -> StructMember;
+auto when_subtype_sm(Expression subtype_mods, StructMembers subtype_members) -> StructMember;
 
 class constraint_def_sm_class : public StructMember_class {
     protected:
@@ -8282,10 +8320,10 @@ auto named_action_block(Expression struct_id_expr, Actions action_block) -> Expr
 
 class struct_type_id_class : public Expression_class {
     protected:
-        Expressions struct_type_modifiers;
+        Expression struct_type_modifiers;
         Expression struct_id_expr;
     public:
-        struct_type_id_class(Expressions struct_type_modifiers, Expression struct_id_expr){
+        struct_type_id_class(Expression struct_type_modifiers, Expression struct_id_expr){
             // initialize the members & tie them to me (the parent)
             this->struct_type_modifiers = struct_type_modifiers;
             if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
@@ -8305,7 +8343,7 @@ class struct_type_id_class : public Expression_class {
 
         // -------------- Getters ------------------ //
         auto getStructTypeModifiers() const ->
-            Expressions
+            Expression
         {
             return struct_type_modifiers;
         }
@@ -8327,13 +8365,13 @@ class struct_type_id_class : public Expression_class {
 #endif
 };
 
-auto struct_type_id(Expressions struct_type_modifiers, Expression struct_id_expr) -> Expression;
+auto struct_type_id(Expression struct_type_modifiers, Expression struct_id_expr) -> Expression;
 
 class defined_type_identifier_expr_class : public Expression_class {
     protected:
-        Expressions modifiers;
+        Expression modifiers;
     public:
-        defined_type_identifier_expr_class(Expressions modifiers){
+        defined_type_identifier_expr_class(Expression modifiers){
             // initialize the members & tie them to me (the parent)
             this->modifiers = modifiers;
             if(modifiers){ // non-terminal might be null due to error reduction rules
@@ -8348,7 +8386,7 @@ class defined_type_identifier_expr_class : public Expression_class {
 
         // -------------- Getters ------------------ //
         auto getModifiers() const ->
-            Expressions
+            Expression
         {
             return modifiers;
         }
@@ -8365,7 +8403,7 @@ class defined_type_identifier_expr_class : public Expression_class {
 #endif
 };
 
-auto defined_type_identifier_expr(Expressions modifiers) -> Expression;
+auto defined_type_identifier_expr(Expression modifiers) -> Expression;
 
 class struct_hier_ref_expr_class : public Expression_class {
     protected:
@@ -9416,9 +9454,9 @@ auto predefined_subtype_dt(DataType pred_type, Expression range_modifier, Expres
 
 class defined_struct_type_dt_class : public DataType_class {
     protected:
-        Expressions struct_type_modifiers;
+        Expression struct_type_modifiers;
     public:
-        defined_struct_type_dt_class(Expressions struct_type_modifiers){
+        defined_struct_type_dt_class(Expression struct_type_modifiers){
             // initialize the members & tie them to me (the parent)
             this->struct_type_modifiers = struct_type_modifiers;
             if(struct_type_modifiers){ // non-terminal might be null due to error reduction rules
@@ -9433,7 +9471,7 @@ class defined_struct_type_dt_class : public DataType_class {
 
         // -------------- Getters ------------------ //
         auto getStructTypeModifiers() const ->
-            Expressions
+            Expression
         {
             return struct_type_modifiers;
         }
@@ -9450,7 +9488,7 @@ class defined_struct_type_dt_class : public DataType_class {
 #endif
 };
 
-auto defined_struct_type_dt(Expressions struct_type_modifiers) -> DataType;
+auto defined_struct_type_dt(Expression struct_type_modifiers) -> DataType;
 
 class list_type_dt_class : public DataType_class {
     protected:
@@ -11905,44 +11943,6 @@ class do_seq_act_class : public Action_class {
 };
 
 auto do_seq_act(Expression seq_item, Expressions constraints) -> Action;
-
-class seq_item_expr_class : public Expression_class {
-    protected:
-        Expressions field_type_exprs;
-    public:
-        seq_item_expr_class(Expressions field_type_exprs){
-            // initialize the members & tie them to me (the parent)
-            this->field_type_exprs = field_type_exprs;
-            if(field_type_exprs){ // non-terminal might be null due to error reduction rules
-                this->tie(this->field_type_exprs);
-            }
-
-            // initialize the children pool for easy & fast lookup by get_child_by_name
-            this->m_children_pool = {
-                THIS_MAPIFY(field_type_exprs),
-            };
-        }
-
-        // -------------- Getters ------------------ //
-        auto getFieldTypeExprs() const ->
-            Expressions
-        {
-            return field_type_exprs;
-        }
-        // -------------- Getters ------------------ //
-
-        auto dump(std::ostream& stream, int n) -> void override;
-        auto type() const -> SpecmanCtorKind override;
-
-#ifdef Expression_SHARED_EXTRAS
-    Expression_SHARED_EXTRAS
-#endif
-#ifdef seq_item_expr_EXTRAS
-    seq_item_expr_EXTRAS
-#endif
-};
-
-auto seq_item_expr(Expressions field_type_exprs) -> Expression;
 
 class check_that_action_class : public Action_class {
     protected:

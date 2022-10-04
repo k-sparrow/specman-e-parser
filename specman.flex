@@ -51,7 +51,6 @@ index	    (index)
 within	    (within)
 gen	        (gen)
 before	    (before)
-in_table    (in_table)
 not	        (not)
 range	    (range)
 empty	    (empty)
@@ -342,7 +341,6 @@ sys_time       (sys\.time)
     {within}	{ return yy::parser::make_WITHIN(Location()); }
     {gen}	    { return yy::parser::make_GEN(Location()); }
     {before}	{ return yy::parser::make_BEFORE(Location()); }
-    {in_table}	{ return yy::parser::make_IN_TABLE(Location()); }
     {not}	    { return yy::parser::make_NOT(Location()); }
     {range}	    { return yy::parser::make_RANGE(Location()); }
     {empty}	    { return yy::parser::make_EMPTY(Location()); }

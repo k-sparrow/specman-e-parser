@@ -46,13 +46,13 @@
         }
 #endif // struct_type_modifer_EXTRAS
 
-#ifndef extend_struct_st_EXTRAS
-#define extend_struct_st_EXTRAS                                     \
-    private:                                                        \
-    public:                                                         \
-        auto getFullStructName() -> std::string {                   \
+#ifndef complex_type_modifier_EXTRAS
+#define complex_type_modifier_EXTRAS                \
+    private:                                        \
+    public:                                         \
+        auto getFullName() const -> std::string {   \
             std::string full_name = "";                             \
-            for(auto& child : struct_type_name->children()) {       \
+            for(auto& child : modifiers->children()) {       \
                 switch(child.lock()->type()) {                      \
                     case elex::SpecmanCtorKind::IdExpr: {           \
                         auto& id_expr_node =                        \
@@ -76,7 +76,7 @@
             trim(full_name);                                        \
             return full_name;                                       \
         }
-#endif //extend_struct_st_EXTRAS
+#endif // complex_type_modifier_EXTRAS
 
 namespace elex {
     using Boolean = bool;

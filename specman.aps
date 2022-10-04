@@ -53,13 +53,14 @@ module Specman begin
 
         constructor id_expr(id: Symbol_) : Expression;
         constructor struct_type_modifier(value: Expression; id: Expression) : Expression;
+        constructor complex_type_modifier(modifiers: Expressions) : Expression;
         
         constructor package(pkg_name: Symbol_) : Statement;
         constructor unit_st(unit_name: Symbol_; members: StructMembers) : Statement;
         constructor unit_like_st(unit_name: Symbol_; base_unit_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_st(struct_name: Symbol_; members: StructMembers) : Statement;
         constructor struct_like_st(struct_name: Symbol_; base_struct_name: Symbol_; members: StructMembers) : Statement;
-        constructor extend_struct_st(struct_type_name: Expressions; members: StructMembers) : Statement;
+        constructor extend_struct_st(struct_type_name: Expression; members: StructMembers) : Statement;
         constructor enum_type_st(id: Symbol_; type_id: DataType)  : Statement;
         constructor extend_enum_type_st(type_id: Symbol_; enum_list_items: Expressions)  : Statement;
         constructor scalar_subtype_st(subtype_id: Symbol_; type_id: Expression; ranges: Expressions)  : Statement;
@@ -105,7 +106,7 @@ module Specman begin
         constructor c_method_dec_sm(e_method_name: Symbol_; parameters_list: Formals; return_type: DataType; c_method_name: Symbol_) : StructMember;
         constructor c_method_dec_only_sm(e_method_name: Symbol_; parameters_list: Formals; return_type: DataType; c_method_name: Symbol_) : StructMember;
 
-        constructor when_subtype_sm(subtype_mods: Expressions; subtype_members: StructMembers) : StructMember;
+        constructor when_subtype_sm(subtype_mods: Expression; subtype_members: StructMembers) : StructMember;
         constructor constraint_def_sm(constraint_expr: Expression) : StructMember;
         constructor on_event_sm(event_name: Expression; action_block: ActionBlock) : StructMember;
 
@@ -246,8 +247,8 @@ module Specman begin
         constructor new_nameless_allocate_expr(struct_type_block : Expression; actions: ActionBlock) : Expression;
         constructor struct_type_expr_with_opt_action_block(struct_id_expr : Expression; opt_action_block_expt : Expression) : Expression;
         constructor named_action_block(struct_id_expr : Expression; action_block: Actions) : Expression;
-        constructor struct_type_id(struct_type_modifiers : Expressions; struct_id_expr : Expression) : Expression;
-        constructor defined_type_identifier_expr(modifiers: Expressions) : Expression;
+        constructor struct_type_id(struct_type_modifiers : Expression; struct_id_expr : Expression) : Expression;
+        constructor defined_type_identifier_expr(modifiers: Expression) : Expression;
         constructor struct_hier_ref_expr(hiers: Expressions) : Expression;
         constructor hdl_path_name_expr(hdl_hier_ref: Symbol_) : Expression;
         constructor ternary_assign_expr(bool_exp : Expression; true_expr: Expression; false_expr: Expression) : Expression;
@@ -285,7 +286,7 @@ module Specman begin
         constructor predefined_subtype_dt(pred_type: DataType; 
                                           range_modifier: Expression; 
                                           width_modifier: Expression) : DataType;
-        constructor defined_struct_type_dt(struct_type_modifiers : Expressions) : DataType;
+        constructor defined_struct_type_dt(struct_type_modifiers : Expression) : DataType;
         constructor list_type_dt(base_type: DataType) : DataType;
         constructor assoc_list_type_dt(key_id: Symbol_; base_type: DataType) : DataType;
         constructor file_dt() : DataType;
@@ -357,7 +358,6 @@ module Specman begin
 
         constructor gen_act(gen_expr: Expression; constraints: Expressions) : Action;
         constructor do_seq_act(seq_item: Expression; constraints: Expressions) : Action;
-        constructor seq_item_expr(field_type_exprs: Expressions) : Expression;
 
         constructor check_that_action(condition: Expression; dut_error_block: Expression) : Action;
         constructor assert_action(condition: Expression; error_block: Expression) : Action;

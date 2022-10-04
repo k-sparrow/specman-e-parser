@@ -204,7 +204,6 @@
 %token WITHIN	  
 %token GEN	     
 %token BEFORE	  
-%token IN_TABLE 
 %token IS_A	       
 %token IS_NOT_A	       
 %token IS	      
@@ -702,6 +701,7 @@
 %nterm <elex::DataType>     scoped_type_identifier_data_type
 %nterm <elex::DataType>     scoped_scalar_type_identifier_data_type
 
+%nterm <elex::Expression>   complex_type_modifier 
 %nterm <elex::Expressions>  struct_type_modifiers
 %nterm <elex::Expression>   struct_type_modifier
 %nterm <elex::Expression>   opt_iterated_id_expr
@@ -859,7 +859,7 @@ package_statement :
     ;
 
 extend_struct_unit_statement : 
-    EXTEND struct_type_modifiers[modifiers] 
+    EXTEND complex_type_modifier[modifiers] 
     struct_member_block[members]
     { $$ = elex::extend_struct_st($modifiers, $members); }
     ;
@@ -1664,7 +1664,7 @@ opt_method_introduction_modifier :
 
 // when VALUE'id,... [base-struct-type] { member; ...}
 when_subtype_declaration :
-    WHEN struct_type_modifiers[subtype_mods] LBRACE struct_members[members] RBRACE 
+    WHEN complex_type_modifier[subtype_mods] LBRACE struct_members[members] RBRACE 
     {
         // base-type should be the last element, but is optional
         // if it exists, semantic analysis should be checking that the last element id
@@ -1869,19 +1869,19 @@ struct_allocate_expression :
     // NON_LPAREN is used here in order to solve the shift reduce conflict with the 
     // LPAREN of the next two rules when lookahead token is LPAREN, and since NON_LPAREN < LPAREN, the action
     // will be to shift LPAREN
-  | NEW struct_type_modifiers %prec NON_LPAREN
+  | NEW complex_type_modifier %prec NON_LPAREN
     { 
       auto struct_type_id = elex::defined_type_identifier_expr($2);
       $$ = elex::new_nameless_allocate_expr(struct_type_id, nullptr);   
     }
   
-  | NEW struct_type_modifiers[type_id] WITH action_block[actions]
+  | NEW complex_type_modifier[type_id] WITH action_block[actions]
     { 
       auto struct_type_id = elex::defined_type_identifier_expr($type_id);
       $$ = elex::new_nameless_allocate_expr(struct_type_id, $actions);
     }
 
-  | NEW struct_type_modifiers[type_id] LPAREN ID[name] RPAREN WITH action_block[actions]
+  | NEW complex_type_modifier[type_id] LPAREN ID[name] RPAREN WITH action_block[actions]
     {  
       auto struct_type_id = elex::defined_type_identifier_expr($type_id);
       $$ = elex::new_allocate_expr(struct_type_id, $name, $actions);
@@ -2400,8 +2400,8 @@ gen_action :
   ;
 
 do_action : 
-  DO struct_type_modifiers[seq_item] opt_keeping_constraints_branch[constraints]
-  { $$ = elex::do_seq_act(elex::seq_item_expr($seq_item), $constraints); }
+  DO complex_type_modifier[seq_item] opt_keeping_constraints_branch[constraints]
+  { $$ = elex::do_seq_act($seq_item, $constraints); }
   ;
 
 opt_keeping_constraints_branch :
@@ -2729,15 +2729,21 @@ predefined_scalar_datatype :
   ;
 
 
+// VALUE1'id1|id1 VALUE1'id2|id2 ...
+// concrete (not listed) node 
+complex_type_modifier :
+  struct_type_modifiers { $$ = elex::complex_type_modifier($1); }
+  ;
+
 struct_type_modifiers : // VALUE1'id1|id1 VALUE1'id2|id2 ...
-      struct_type_modifier                       { $$ = elex::single_Expressions($1); }
-    | struct_type_modifiers struct_type_modifier { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
-    ;
+    struct_type_modifier                       { $$ = elex::single_Expressions($1); }
+  | struct_type_modifiers struct_type_modifier { $$ = elex::append_Expressions($1, elex::single_Expressions($2)); }
+  ;
 
 struct_type_modifier : // VALUE'id | id
-      id_expr[value] SNG_QUOTE id_expr[id] { $$ = elex::struct_type_modifier($value, $id); }
-    | id_expr                              { $$ = $1; }
-    ;
+    id_expr[value] SNG_QUOTE id_expr[id] { $$ = elex::struct_type_modifier($value, $id); }
+  | id_expr                              { $$ = $1; }
+  ;
 
 iterated_id_expr : LPAREN id_expr RPAREN { $$ = $2; };
 
@@ -2929,7 +2935,7 @@ scoped_type_identifier_data_type:
   ;
 
 scoped_scalar_type_identifier_data_type :
-    struct_type_modifiers %prec LT_ID       
+    complex_type_modifier %prec LT_ID       
     { $$ = elex::defined_struct_type_dt($1); }
 
   | scalar_or_enum_data_type
