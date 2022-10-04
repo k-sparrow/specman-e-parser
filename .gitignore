@@ -9,3 +9,5 @@ scanner.cpp
 *.html
 ectags*
 tags
+example*
+*.swp
