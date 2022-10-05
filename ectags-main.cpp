@@ -20,7 +20,8 @@ private:
 
     std::vector<std::string> arguments;
 public:
-    EctagsManager(int argc, char **argv) : ctags_node_visitor(ctags_dump_stream), arguments(argv, argv + argc) {
+    EctagsManager(int argc, char **argv) : ctags_node_visitor(ctags_dump_stream, &input_file_stream), 
+                                           arguments(argv, argv + argc) {
 
     }
     ~EctagsManager(){
@@ -65,6 +66,7 @@ public:
 
         // initialize the output file
         ctags_dump_stream = std::ofstream(output_dump_file_path, std::ios_base::out);
+        ctags_node_visitor.switch_source_stream(*yyin);
 
         // parse the input
         auto i = drv.parse();

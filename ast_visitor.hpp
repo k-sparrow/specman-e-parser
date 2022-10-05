@@ -42,13 +42,20 @@ namespace ast {
         static kind_lookup_t elex_to_ctags_type_map;
 
     protected:
+        // the stream we dump our ctags info to
         std::ostream& m_stream;
+
+        // the stream that holds the source code
+        std::istream* m_source_stream;
     public:
         CtagsNodeVisitor() = delete;
         CtagsNodeVisitor(CtagsNodeVisitor const&) = delete;
         CtagsNodeVisitor(CtagsNodeVisitor&&) = delete;
     public:
         explicit CtagsNodeVisitor(std::ostream&);
+        explicit CtagsNodeVisitor(std::ostream&, std::istream*);
+
+        auto switch_source_stream(std::istream&) -> void;
 
         auto visit(tree_node_base&) -> void override final;
         auto visitNode(tree_node&)  -> void override final;
@@ -58,6 +65,10 @@ namespace ast {
         auto visitStatmentNode(tree_node&)      -> void ;
         auto visitMemberNode(tree_node&)        -> void ;
         auto visitMemberParentNode(tree_node&)  -> void ;
+        auto visitMemberDataTypeRefNode(tree_node&)   -> void ;
+        auto visitDataTypeRefNode(tree_node&)   -> void ;
+
+        auto extractTagPattern(int) -> std::string;
     };
 }
 

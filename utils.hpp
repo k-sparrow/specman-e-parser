@@ -21,3 +21,5 @@ auto dump_Symbol_(std::ostream& stream, int n, elex::Symbol_ sym) -> void;
 auto dump_Boolean(std::ostream& stream, int n, elex::Boolean sym) -> void;
 
 auto trim(std::string&) -> void;
+
+auto get_line_by_number(std::istream&, int) -> std::string;

@@ -3,6 +3,9 @@
 #include "ast_visitor.hpp"
 #include "tree.hpp"
 #include "specman-tree.hpp"
+#include "utils.hpp"
+
+#include <variant>
 
 
 namespace ast {
@@ -77,31 +80,49 @@ namespace ast {
     // stores ctags entry data
     struct ctags_entry
     {
+        using ctags_pattern = std::variant<unsigned int, std::string>;
+
         std::string tag = "";
         std::string tag_file = "";
-        size_t tag_location = 0; // a short pattern or line number
+        ctags_pattern tag_location = 0; // a short pattern or line number
 
         // extras 
         ctags_extras_suite tag_extras = {};
 
         // validator
         operator bool() const {
-            return !tag.empty() && !tag_file.empty() && tag_location > 0;
+            auto is_valid_pattern = [](ctags_pattern const& pat) -> bool {
+                return  std::get_if<unsigned int>(&pat) != nullptr ||
+                        std::get_if<std::string>(&pat)  != nullptr;
+            };
+            return !tag.empty() && !tag_file.empty() && is_valid_pattern(tag_location);
         }
     };
 
     // printing operator for helper entry
     auto operator<<(std::ostream& stream, ctags_entry const& entry) -> std::ostream& {
+        // dump the tag and tag file
         stream << entry.tag                   << "\t" << 
-                  entry.tag_file              << "\t" << 
-                  entry.tag_location << ";\"" << "\t" << 
-                  entry.tag_extras;
+                  entry.tag_file              << "\t";
+
+        // dump the tag pattern
+        std::visit([&stream](auto const& v){ stream << v << ";\"" << "\t"; }, entry.tag_location);
+
+        // dump the tag extra attributes
+        stream << entry.tag_extras;
         return stream;
     }
 
     // Ctags printer
-    CtagsNodeVisitor::CtagsNodeVisitor(std::ostream& stream) : m_stream(stream){}
+    CtagsNodeVisitor::CtagsNodeVisitor(std::ostream& stream) : m_stream(stream), m_source_stream(nullptr) {}
 
+    // ctags printer with access to source stream (for pattern extraction)
+    CtagsNodeVisitor::CtagsNodeVisitor(std::ostream& stream, std::istream* source) : m_stream(stream), m_source_stream(source) {}
+
+    // changes the source stream
+    auto CtagsNodeVisitor::switch_source_stream(std::istream& source) -> void {
+        this->m_source_stream = &source;
+    }
     // override implementation of base interface
     // as opposed to the interface which handles leaves directly,
     // we let the visitor to handle leaves selectively, only when visiting 
@@ -116,7 +137,7 @@ namespace ast {
             break;
         }
         
-        default: // handling leaf nodes as a part of specific node types
+        default: // handling leaf nodes as a part of specific node types, not here
             break;
         }
 
@@ -352,6 +373,7 @@ namespace ast {
 
         // continue with filling the enclosing unit (parent) information 
         visitMemberParentNode(node);
+        visitMemberDataTypeRefNode(node);
 
         // work directly to extract the tag from the node
         switch (node.type())
@@ -648,6 +670,96 @@ namespace ast {
         attribute_extras.insert(std::end(attribute_extras), std::begin(extras), std::end(extras));
     }
 
+    auto CtagsNodeVisitor::visitMemberDataTypeRefNode(tree_node& node) -> void {
+        switch (node.type())
+        {
+        case elex::SpecmanCtorKind::FieldSm: {
+            auto field = node.get_child_by_name("field");
+            visitMemberDataTypeRefNode(dynamic_cast<ast::tree_node&>(*field));
+            break;
+        }
+
+        case elex::SpecmanCtorKind::StructFieldSm: {
+            auto& field_sm = dynamic_cast<elex::struct_field_sm_class&>(node);
+            auto type_expr = field_sm.getType();
+
+            visitDataTypeRefNode(*type_expr);
+            break;
+        }
+        
+        case elex::SpecmanCtorKind::StructFieldListSm: {
+            auto& field_sm = dynamic_cast<elex::struct_field_list_sm_class&>(node);
+            auto type_expr = field_sm.getType();
+
+            visitDataTypeRefNode(*type_expr);
+            break;
+        }
+
+        case elex::SpecmanCtorKind::StructFieldAssocListSm: {
+            auto& field_sm = dynamic_cast<elex::struct_field_assoc_list_sm_class&>(node);
+            auto type_expr = field_sm.getType();
+
+            visitDataTypeRefNode(*type_expr);
+            break;
+        }
+
+        default:
+            return;
+        }
+    }
+
+    auto CtagsNodeVisitor::visitDataTypeRefNode(tree_node& node) -> void {
+        ctags_entry_extra_attribute attribute = { .key = "typeref:typename", .value = ""};
+        switch (node.type())
+        {
+        // predefined types
+        case elex::SpecmanCtorKind::FileDt:
+            attribute.value = "file";
+            break;
+        
+        case elex::SpecmanCtorKind::BitPredefinedType:
+            attribute.value = "bit";
+            break;
+        
+        case elex::SpecmanCtorKind::BytePredefinedType:
+            attribute.value = "byte";
+            break;
+
+        case elex::SpecmanCtorKind::IntPredefinedType:
+            attribute.value = "int";
+            break;
+        
+        case elex::SpecmanCtorKind::UintPredefinedType:
+            attribute.value = "uint";
+            break;
+
+        case elex::SpecmanCtorKind::BoolPredefinedType:
+            attribute.value = "bool";
+            break;
+
+        case elex::SpecmanCtorKind::TimePredefinedType:
+            attribute.value = "time";
+            break;
+
+        case elex::SpecmanCtorKind::NibblePredefinedType:
+            attribute.value = "nibble";
+            break;
+
+        // defined enumerated types
+        case elex::SpecmanCtorKind::ComplexTypeModifier: {
+            auto& complex_type_modifier = dynamic_cast<elex::complex_type_modifier_class&>(node);
+
+            attribute.value = complex_type_modifier.getFullName();
+            break;
+        }
+        // defined struct type names
+        
+        default:
+            return;
+        }
+        m_attributes.extras.push_back(attribute);
+    }
+
     auto CtagsNodeVisitor::visitLeaf(leaf_node& node) -> void {
         ctags_entry entry = {};
 
@@ -663,12 +775,33 @@ namespace ast {
             // get the concrete leaf type
             auto& symbol_leaf = dynamic_cast<ast::Symbol__leaf_node&>(node);
 
+            // populate the tag location with the collected info
             entry = {
                 .tag          = symbol_leaf.value().lock()->Str(),
                 .tag_file     = *tag_location.begin.filename,
-                .tag_location =  tag_location.begin.line,
                 .tag_extras   =  m_attributes
             };
+
+            // populate the tag location pattern
+            // can't do it in the struct initialization up there because of the variant
+            // so doint it here instead
+
+            // here, if we have a valid source stream, extract the line as a string pattern
+            // if not, just dump the line number as the location of the tag
+            if(m_source_stream != nullptr)
+                entry.tag_location = extractTagPattern(tag_location.begin.line);
+            else 
+                entry.tag_location = tag_location.begin.line;
+
+            // dump extra line information 
+            ctags_extra_attributes line_extra_info = {
+                {.key = "line", .value = std::to_string(tag_location.begin.line) },
+                {.key = "end",  .value = std::to_string(tag_location.end.line) }
+            };
+
+            auto& entry_extras = entry.tag_extras.extras;
+            entry_extras.reserve(entry_extras.size() + line_extra_info.size());
+            entry_extras.insert(std::end(entry_extras), std::begin(line_extra_info), std::end(line_extra_info));
             break;
         }
         
@@ -682,4 +815,13 @@ namespace ast {
         }
     }
 
+    auto CtagsNodeVisitor::extractTagPattern(int line_number) -> std::string {
+        // get the full line from the source stream
+        // and append with /^ at the beginning and $/ at the end
+
+        // NOTE: get_line_by_number considers beginning of the file at line #0
+        // Bison location tracking considers beginning of the file at line #1
+        // so have to make the adjustment
+        return "/^" + get_line_by_number(*m_source_stream, line_number - 1) + "$/";
+    }
 }
