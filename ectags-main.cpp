@@ -10,12 +10,12 @@
 
 #include "ast_visitor.hpp"
 
+// CLI
+#include "CLI11.hpp"
+
 class EctagsManager
 {
 private:
-    std::string file_path;
-    std::vector<std::string> arguments;
-
     const std::string ctags_header = 
     "!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;\" to lines/\n"
     "!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/\n"
@@ -29,52 +29,36 @@ private:
     ;
     
 public:
-    EctagsManager(int argc, char **argv) : arguments(argv, argv + argc) {
+    EctagsManager(){}
+    ~EctagsManager(){}
 
-    }
-    ~EctagsManager(){
-    }
+    auto main(int argc, char **argv) -> int {
+        // initialize a command line
+        CLI::App app{"ctags generator for Specman e language", "ectags"};
 
-    auto main() -> int {
-        std::ifstream source_stream;
-        // find if using an input file supplied by the user
-        auto found_input_file_iter = std::find(std::begin(arguments), 
-                                               std::end(arguments), 
-                                               "-i");
+        std::string output_file_path;
+        app.add_option("-o", output_file_path, "Output file for ctags dump");
+
+        std::string input_source_path;
+        app.add_option("i", input_source_path, "Input source file")
+                        ->required(true)->check(CLI::ExistingFile);
         
-        // if not, use std::cin
-        bool use_cin = found_input_file_iter == std::end(arguments);
-        if (!use_cin) {
-        // if supplied, initialize a new input file stream buffer
-            found_input_file_iter++;
-            this->file_path = std::filesystem::absolute(*found_input_file_iter).string();
-            source_stream = std::ifstream(this->file_path, std::ios_base::in);
+        // parser the input arguments
+        CLI11_PARSE(app, argc, argv);
 
-            if (source_stream.fail())
-                throw std::runtime_error("File not found: " + this->file_path + ", current path is: " + std::filesystem::current_path().string());
-        }
-
-        // find if using a custom tags file path, otherwise use std::cout
-        auto found_output_file_iter = std::find(std::begin(arguments), 
-                                                std::end(arguments), 
-                                                "-o");
+        // get input and output streams
+        std::ifstream yyin = std::ifstream(std::filesystem::absolute(input_source_path));
+        if (yyin.fail())
+            std::runtime_error("Cannot open file at path " + input_source_path + ". Please check why");
         
-        bool use_cout = (found_output_file_iter == std::end(arguments));
-        std::string output_dump_file_path = use_cout ? "" : *(++found_output_file_iter);
-        std::ofstream ctags_file_dump_stream;
-        if (!use_cout)
-            ctags_file_dump_stream = std::ofstream(output_dump_file_path, std::ios::out);
-        
-
-        // set the reference out stream and source stream
-        std::ostream& ctags_out = use_cout ? std::cout : ctags_file_dump_stream;
-        std::istream& yyin      = use_cin  ? std::cin : source_stream;
+        std::ofstream ctags_output_stream(output_file_path, std::ios::out);
+        std::ostream& ctags_out = output_file_path.empty() ? std::cout : ctags_output_stream;
 
         // initialize the node visitor
         ast::CtagsNodeVisitor ctags_node_visitor(ctags_out, &yyin);
 
         // Main driver (lexer & parser)
-        yy::driver drv(file_path, &yyin);
+        yy::driver drv(input_source_path, &yyin);
 
         // parse the input
         auto i = drv.parse();
@@ -90,8 +74,8 @@ public:
 
 
 int main(int argc, char **argv) {
-    EctagsManager manager(argc - 1, argv + 1); // no need for argv[0] (name of the process)
+    EctagsManager manager; // no need for argv[0] (name of the process)
 
     // parse & dump ctags
-    return manager.main();
+    return manager.main(argc, argv);
 }
