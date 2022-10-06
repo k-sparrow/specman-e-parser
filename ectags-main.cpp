@@ -16,6 +16,8 @@
 class EctagsManager
 {
 private:
+    std::vector<std::string> arguments;
+
     const std::string ctags_header = 
     "!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;\" to lines/\n"
     "!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/\n"
@@ -29,33 +31,29 @@ private:
     ;
     
 public:
-    EctagsManager(){}
-    ~EctagsManager(){}
-
-    auto main(int argc, char **argv) -> int {
-        std::vector<std::string> raw_arguments(argv, argv + argc), arguments;
-        arguments.reserve(raw_arguments.size());
-
+    EctagsManager(int argc, char **argv) : arguments(argv, argv + argc) {
         bool use_std_cout = false;
         unsigned int arg_idx = 0;
         // filter the arguments passes by any tool calling this program
         // narrow it down to the optional output dump file and the positional input
         // file (last argument)  
-        std::copy_if(std::begin(raw_arguments), 
-                     std::end(raw_arguments), 
-                     std::back_inserter(arguments), 
-                     [&](std::string const& arg) {
-                        bool result = (arg_idx == raw_arguments.size() - 1 ||  // last argument  (input file [positional])
-                                       arg == "-o"                         ||  // optional output file path 
-                                       use_std_cout);                          // next argument after '-o'
-                        arg_idx++; // update the loop index
-                        use_std_cout = (arg == "-o"); // update for next iteration
-                        // if argument is the program name
-                        return result;
-                     });
-        arguments.shrink_to_fit();
+        auto new_end = std::remove_if(std::begin(arguments), 
+                                      std::end(arguments), 
+                                      [&](std::string const& arg) {
+                                            bool result = !(arg_idx == this->arguments.size() - 1   ||  // last argument  (input file [positional])
+                                                            arg == "-o"                             ||  // optional output file path 
+                                                            use_std_cout);                              // next argument after '-o'
+                                            arg_idx++; // update the loop index
+                                            use_std_cout = (arg == "-o"); // update for next iteration
+                                            // if argument is the program name
+                                            return result;
+                                      });
+        
+        arguments.erase(new_end, std::end(arguments));
+    }
+    ~EctagsManager(){}
 
-
+    auto main() -> int {
         // initialize a command line
         CLI::App app{"ctags generator for Specman e language", "ectags"};
 
@@ -63,7 +61,7 @@ public:
         app.add_option("-o", output_file_path, "Output file for ctags dump");
 
         std::string input_source_path;
-        app.add_option("i", input_source_path, "Input source file")
+        app.add_option("input", input_source_path, "Input source file")
                         ->required(true)->check(CLI::ExistingFile);
         
         // parse the input arguments
@@ -71,6 +69,8 @@ public:
         // comply with CLI11_PARSE macro (which uses (argc, argv) directly)
         // so using this construct instead
         try{
+            // app.parse(arg&&) assumes reversed argument order
+            std::reverse(std::begin(arguments), std::end(arguments));
             app.parse(arguments);
         }
         catch(const CLI::ParseError& e){
@@ -105,8 +105,8 @@ public:
 
 
 int main(int argc, char **argv) {
-    EctagsManager manager; // no need for argv[0] (name of the process)
+    EctagsManager manager(argc, argv); 
 
     // parse & dump ctags
-    return manager.main(argc, argv);
+    return manager.main();
 }
