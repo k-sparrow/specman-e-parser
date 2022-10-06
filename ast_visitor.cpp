@@ -69,6 +69,7 @@ namespace ast {
         return stream;
     }
 
+    // printing operator for ctags extras
     auto operator<<(std::ostream& stream, ctags_extras_suite const& extra) -> std::ostream& {
         stream << extra.cls;
         for (auto const& extra_attribute : extra.extras)
