@@ -14,10 +14,6 @@ class EctagsManager
 {
 private:
     std::string file_path;
-    std::ofstream ctags_dump_stream;
-    std::ifstream input_file_stream;
-    ast::CtagsNodeVisitor ctags_node_visitor;
-
     std::vector<std::string> arguments;
 
     const std::string ctags_header = 
@@ -33,60 +29,59 @@ private:
     ;
     
 public:
-    EctagsManager(int argc, char **argv) : ctags_node_visitor(ctags_dump_stream, &input_file_stream), 
-                                           arguments(argv, argv + argc) {
+    EctagsManager(int argc, char **argv) : arguments(argv, argv + argc) {
 
     }
     ~EctagsManager(){
-        ctags_dump_stream.close();
-        input_file_stream.close();
     }
 
     auto main() -> int {
-        std::istream* yyin;
-
+        std::ifstream source_stream;
         // find if using an input file supplied by the user
         auto found_input_file_iter = std::find(std::begin(arguments), 
                                                std::end(arguments), 
                                                "-i");
         
         // if not, use std::cin
-        if (found_input_file_iter == std::end(arguments))
-            yyin = &std::cin;
-        
+        bool use_cin = found_input_file_iter == std::end(arguments);
+        if (!use_cin) {
         // if supplied, initialize a new input file stream buffer
-        else {
             found_input_file_iter++;
             this->file_path = std::filesystem::absolute(*found_input_file_iter).string();
-            input_file_stream = std::ifstream(this->file_path, std::ios_base::in);
+            source_stream = std::ifstream(this->file_path, std::ios_base::in);
 
-            if (input_file_stream.fail())
+            if (source_stream.fail())
                 throw std::runtime_error("File not found: " + this->file_path + ", current path is: " + std::filesystem::current_path().string());
-            
-            yyin = &input_file_stream;
         }
 
-        // find if using a custom tags file path
+        // find if using a custom tags file path, otherwise use std::cout
         auto found_output_file_iter = std::find(std::begin(arguments), 
                                                 std::end(arguments), 
                                                 "-o");
-        // if not, use default "tags" file path as output
-        std::string output_dump_file_path = 
-            (found_output_file_iter == std::end(arguments)) ? "tags" : *(++found_output_file_iter);
         
-        // Main 
-        yy::driver drv(file_path, yyin);
+        bool use_cout = (found_output_file_iter == std::end(arguments));
+        std::string output_dump_file_path = use_cout ? "" : *(++found_output_file_iter);
+        std::ofstream ctags_file_dump_stream;
+        if (!use_cout)
+            ctags_file_dump_stream = std::ofstream(output_dump_file_path, std::ios::out);
+        
 
-        // initialize the output file
-        ctags_dump_stream = std::ofstream(output_dump_file_path, std::ios_base::out);
-        ctags_node_visitor.switch_source_stream(*yyin);
+        // set the reference out stream and source stream
+        std::ostream& ctags_out = use_cout ? std::cout : ctags_file_dump_stream;
+        std::istream& yyin      = use_cin  ? std::cin : source_stream;
+
+        // initialize the node visitor
+        ast::CtagsNodeVisitor ctags_node_visitor(ctags_out, &yyin);
+
+        // Main driver (lexer & parser)
+        yy::driver drv(file_path, &yyin);
 
         // parse the input
         auto i = drv.parse();
         // std::cout << drv.str()  << std::endl;
 
         // walk down the AST
-        ctags_dump_stream << this->ctags_header;
+        ctags_out << this->ctags_header;
         drv.get_root()->accept(ctags_node_visitor);
 
         return 0;
