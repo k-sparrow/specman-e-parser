@@ -33,6 +33,29 @@ public:
     ~EctagsManager(){}
 
     auto main(int argc, char **argv) -> int {
+        std::vector<std::string> raw_arguments(argv, argv + argc), arguments;
+        arguments.reserve(raw_arguments.size());
+
+        bool use_std_cout = false;
+        unsigned int arg_idx = 0;
+        // filter the arguments passes by any tool calling this program
+        // narrow it down to the optional output dump file and the positional input
+        // file (last argument)  
+        std::copy_if(std::begin(raw_arguments), 
+                     std::end(raw_arguments), 
+                     std::back_inserter(arguments), 
+                     [&](std::string const& arg) {
+                        bool result = (arg_idx == raw_arguments.size() - 1 ||  // last argument  (input file [positional])
+                                       arg == "-o"                         ||  // optional output file path 
+                                       use_std_cout);                          // next argument after '-o'
+                        arg_idx++; // update the loop index
+                        use_std_cout = (arg == "-o"); // update for next iteration
+                        // if argument is the program name
+                        return result;
+                     });
+        arguments.shrink_to_fit();
+
+
         // initialize a command line
         CLI::App app{"ctags generator for Specman e language", "ectags"};
 
@@ -43,9 +66,17 @@ public:
         app.add_option("i", input_source_path, "Input source file")
                         ->required(true)->check(CLI::ExistingFile);
         
-        // parser the input arguments
-        CLI11_PARSE(app, argc, argv);
-
+        // parse the input arguments
+        // using a parse overloaded call which does not 
+        // comply with CLI11_PARSE macro (which uses (argc, argv) directly)
+        // so using this construct instead
+        try{
+            app.parse(arguments);
+        }
+        catch(const CLI::ParseError& e){
+            return app.exit(e);   
+        }
+        
         // get input and output streams
         std::ifstream yyin = std::ifstream(std::filesystem::absolute(input_source_path));
         if (yyin.fail())
