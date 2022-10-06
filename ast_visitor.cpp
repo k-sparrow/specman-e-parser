@@ -85,7 +85,7 @@ namespace ast {
 
         std::string tag = "";
         std::string tag_file = "";
-        ctags_pattern tag_location = 0; // a short pattern or line number
+        ctags_pattern tag_location = 0u; // a short pattern or line number
 
         // extras 
         ctags_extras_suite tag_extras = {};
