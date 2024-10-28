@@ -11,3 +11,12 @@ ectags*
 tags
 example*
 *.swp
+bazel-bin/
+/bazel-*
+.nvmlog*
+*.cfg
+/.idea*
+MODULE.bazel.lock
+/.venv*
+/venv*
+__pycache__
