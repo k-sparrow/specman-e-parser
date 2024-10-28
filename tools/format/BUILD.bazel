@@ -1,0 +1,23 @@
+
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun", "format_test")
+
+
+format_multirun(
+    name = "format",
+    # You can use standard gofmt instead of stricter gofumpt:
+    # go = "@go_sdk//:bin/gofmt",
+    python = "@aspect_rules_lint//format:ruff",
+    # Note, older rules_rust versions may need
+    # @rules_rust//tools/rustfmt:upstream_rustfmt
+    # which was later deprecated in
+    # https://github.com/bazelbuild/rules_rust/pull/2703
+    visibility = ["//:__subpackages__"],
+)
+
+format_test(
+    name = "format_test",
+    size = "small",
+    no_sandbox = True,  # Enables formatting the entire workspace, paired with 'workspace' attribute
+    python = "@aspect_rules_lint//format:ruff",
+    workspace = "//:WORKSPACE.bazel",  # A file in the workspace root, where the no_sandbox mode will run the formatter
+)

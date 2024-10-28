@@ -1,0 +1,62 @@
+# GENERATED FILE - DO NOT EDIT!
+#
+# To update this file, run:
+#   bazel run //:gazelle_python_manifest.update
+
+manifest:
+  modules_mapping:
+    flake8: flake8
+    flake8.api: flake8
+    flake8.api.legacy: flake8
+    flake8.checker: flake8
+    flake8.defaults: flake8
+    flake8.discover_files: flake8
+    flake8.exceptions: flake8
+    flake8.formatting: flake8
+    flake8.formatting.base: flake8
+    flake8.formatting.default: flake8
+    flake8.main: flake8
+    flake8.main.application: flake8
+    flake8.main.cli: flake8
+    flake8.main.debug: flake8
+    flake8.main.options: flake8
+    flake8.options: flake8
+    flake8.options.aggregator: flake8
+    flake8.options.config: flake8
+    flake8.options.manager: flake8
+    flake8.options.parse_args: flake8
+    flake8.plugins: flake8
+    flake8.plugins.finder: flake8
+    flake8.plugins.pycodestyle: flake8
+    flake8.plugins.pyflakes: flake8
+    flake8.plugins.reporter: flake8
+    flake8.processor: flake8
+    flake8.statistics: flake8
+    flake8.style_guide: flake8
+    flake8.utils: flake8
+    flake8.violation: flake8
+    mccabe: mccabe
+    pycodestyle: pycodestyle
+    pyflakes: pyflakes
+    pyflakes.api: pyflakes
+    pyflakes.checker: pyflakes
+    pyflakes.messages: pyflakes
+    pyflakes.reporter: pyflakes
+    pyflakes.scripts: pyflakes
+    pyflakes.scripts.pyflakes: pyflakes
+    pyflakes.test: pyflakes
+    pyflakes.test.harness: pyflakes
+    pyflakes.test.test_api: pyflakes
+    pyflakes.test.test_builtin: pyflakes
+    pyflakes.test.test_code_segment: pyflakes
+    pyflakes.test.test_dict: pyflakes
+    pyflakes.test.test_doctests: pyflakes
+    pyflakes.test.test_imports: pyflakes
+    pyflakes.test.test_is_literal: pyflakes
+    pyflakes.test.test_match: pyflakes
+    pyflakes.test.test_other: pyflakes
+    pyflakes.test.test_type_annotations: pyflakes
+    pyflakes.test.test_undefined_names: pyflakes
+  pip_repository:
+    name: pip
+integrity: 9cf4439610c87d6c892ef29bb26b9c13672985aae3085c63ea111abfce1d5394
