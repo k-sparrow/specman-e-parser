@@ -1,0 +1,20 @@
+module Specman begin
+        type Symbol_;
+        type Boolean;
+
+        phylum Module;
+
+        phylum Statement;
+        phylum Statements = LIST[Statement];
+
+        phylum Expression;
+        phylum Expressions = LIST[Expression];
+
+        phylum StructMember;
+
+        constructor module_(stmt: Statement; other: Statement) : Module;
+        constructor unit(unit_name: Symbol_) : Statement;
+        constructor struct_(struct_name: Symbol_; ubt_name: Symbol_) : Statement;
+        constructor extend_like(uos_name: Symbol_; base_uos_name: Symbol_) : Statement;
+
+end;

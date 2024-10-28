@@ -1,0 +1,1 @@
+{% for decl in declarations %}{{ decl.__repr__() }}{% endfor %}
